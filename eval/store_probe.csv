@@ -1,0 +1,318 @@
+﻿name,category,domain,platform,search_url,items,prices,jsonld,robots_ok,status,verdict
+Transcom Digital,Home Appliances & White Goods,transcomdigital.com,nextjs-js,https://transcomdigital.com/?s=fan&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Singer Bangladesh,Home Appliances & White Goods,singerbd.com,,,0,0,0,,,unreachable: ConnectTimeout
+Best Electronics,Home Appliances & White Goods,bestelectronics.com.bd,,,0,0,0,,403,blocked (403)
+Rangs eMart,Home Appliances & White Goods,rangsemart.com.bd,unknown,https://rangsemart.com.bd/?s=fan&post_type=product,0,62,0,True,200,"prices present, selectors need work (unknown)"
+Butterfly Group,Home Appliances & White Goods,butterflygroupbd.com,magento,https://butterflygroupbd.com/catalogsearch/result/?q=fan,0,0,0,True,200,no products found (magento) - check manually
+Jamuna Electronics,Home Appliances & White Goods,estorejamuna.com,unknown,https://estorejamuna.com/?s=fan&post_type=product,0,324,0,True,200,"prices present, selectors need work (unknown)"
+Vision Emporium,Home Appliances & White Goods,vision.com.bd,nextjs-js,https://vision.com.bd/?s=fan&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Minister Hi-Tech Park,Home Appliances & White Goods,ministerbd.com,magento,https://ministerbd.com/catalogsearch/result/?q=fan,12,19,0,True,200,scrapeable (magento)
+Electronics Bangladesh,Home Appliances & White Goods,electronicsbangladesh.com,nextjs-js,https://electronicsbangladesh.com/?s=fan&post_type=product,0,180,0,True,200,needs JS rendering (nextjs-js)
+Lavishta,"Beauty, Skincare & Lifestyle Stores",lavishta.com,,,0,0,0,,403,blocked (403)
+Beauty Booth,"Beauty, Skincare & Lifestyle Stores",beautybooth.com.bd,nextjs-js,https://beautybooth.com.bd/?s=cream&post_type=product,0,98,0,True,200,needs JS rendering (nextjs-js)
+Taupe Notch,"Beauty, Skincare & Lifestyle Stores",taupenotch.com,shopify,https://taupenotch.com/search?q=cream&type=product,25,32,0,True,200,scrapeable (shopify)
+Go Go Gorgeous,"Beauty, Skincare & Lifestyle Stores",gogogorgeous.com.bd,woocommerce,https://gogogorgeous.com.bd/?s=cream&post_type=product,20,57,1,True,200,scrapeable (woocommerce)
+Korean Mart Bangladesh,"Beauty, Skincare & Lifestyle Stores",koreanmartbd.com,unknown,https://koreanmartbd.com/?s=cream&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Makeup Chari,"Beauty, Skincare & Lifestyle Stores",makeupchari.com,woocommerce,https://makeupchari.com/?s=cream&post_type=product,20,77,0,True,200,scrapeable (woocommerce)
+Prezento BD,"Beauty, Skincare & Lifestyle Stores",prezentobd.com,shopify,https://prezentobd.com/search?q=cream&type=product,72,30,0,True,200,scrapeable (shopify)
+Azzorra,"Beauty, Skincare & Lifestyle Stores",,,,0,0,0,,,link-only (no website)
+Shajgoj,"Beauty, Skincare & Lifestyle Stores",shajgoj.com,unknown,https://shajgoj.com/?s=cream&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+OHSOGO,"Beauty, Skincare & Lifestyle Stores",ohsogo.com,shopify,https://ohsogo.com/search?q=cream&type=product,19,37,0,True,200,scrapeable (shopify)
+BanglaShoppers,"Beauty, Skincare & Lifestyle Stores",banglashoppers.com,magento,https://banglashoppers.com/catalogsearch/result/?q=cream,97,191,0,True,200,scrapeable (magento)
+The celeste,"Beauty, Skincare & Lifestyle Stores",thecelestebd.com,shopify,https://thecelestebd.com/search?q=cream&type=product,43,89,0,True,200,scrapeable (shopify)
+FANTORA (@fantora.net),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Cresol Bangladesh (@cresolbangladesh),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Johrot BD (@johrotBD),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Sparkle & Shine BD (@SparkleshineBD),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Ayosh - আয়স (@Ayosh.bd),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Imitation Jewellery Bangladesh (@imitationjewellerybangladesh),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Alif Imitation (@alifimitation),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+T&T Regalia (@tntregalia),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Simplicy BD (@simplicy.bd),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Jewellery Accessories and Other Collections (@hizabicaccessories),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Glitz & Glamour BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Nabila Jewellery,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Shathi Jewellers (@shathijewellers),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Sparkle Fashion Jewellery,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Aura Jewellery BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Prestige Jewellery,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Traditional Jewellery BD (@TraditionalJewelleryBD),"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Chic Accessories BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Bling Bling Bangladesh,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Boho Bangladesh,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Adorn BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Ornate Elements,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Vogue Ornaments BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Glow Kraft,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Little Things BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+The Jewelry Box BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Velvet Box BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Charm Haven,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Pearl Drop BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Oxidized Jewellery BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Bijoux Bangladesh,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Aura Craft BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Stone & Silver BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+The Pink Box,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Glitz BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Shine Bright BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Diva Ornaments,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Minimalist BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Urban Charms,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Bangle Hub Bangladesh,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Princess Galleria,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Anika's Creation,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Silver Lining BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Sparkling Diva,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Gilded BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+The Accessory Bar,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Dazzle & Glow,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Classy Curves BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Gems & Co. BD,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Jewel House Bangladesh,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Zarova,"Budget, Casual & Imitation Jewelry Targets",,,,0,0,0,,,link-only (no website)
+Arnariz,"Budget, Casual & Imitation Jewelry Targets",arnariz.com,,,0,0,0,,,unreachable: ConnectError
+Emeso,"Budget, Casual & Imitation Jewelry Targets",emeso.com.bd,,,0,0,0,,,unreachable: ConnectError
+Jafrose,"Budget, Casual & Imitation Jewelry Targets",jafrose.store,shopify,https://jafrose.store/search?q=ring&type=product,72,60,0,True,200,scrapeable (shopify)
+Lion Cycle,Cycles & Electric Vehicles (EVs),,,,0,0,0,,,link-only (no website)
+CycleLife Exclusive,Cycles & Electric Vehicles (EVs),,,,0,0,0,,,link-only (no website)
+Duranta Sports,Cycles & Electric Vehicles (EVs),durantabikes.com,unknown,https://durantabikes.com/?s=cycle&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Reevo,Cycles & Electric Vehicles (EVs),revoo-ev.com.bd,unknown,,0,0,0,True,200,no products found (unknown) - check manually
+Runner Automobiles (E-Bikes),Cycles & Electric Vehicles (EVs),runnerautomobiles.com,unknown,https://runnerautomobiles.com/?s=cycle&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Veloce Bicycles,Cycles & Electric Vehicles (EVs),velocebike.com,,,0,0,0,,403,blocked (403)
+Walton E-Bikes,Cycles & Electric Vehicles (EVs),waltonbd.com,opencart,https://waltonbd.com/index.php?route=product/search&search=cycle,0,0,0,True,200,no products found (opencart) - check manually
+Dream Cycle Store,Cycles & Electric Vehicles (EVs),dreamcycle.store,woocommerce,https://dreamcycle.store/?s=cycle&post_type=product,7,0,0,True,200,no products found (woocommerce) - check manually
+Yadea Zyromotors,Cycles & Electric Vehicles (EVs),yadearunner.com,nextjs-js,https://yadearunner.com/?s=cycle&post_type=product,0,4,0,True,200,needs JS rendering (nextjs-js)
+TailG Bangladesh,Cycles & Electric Vehicles (EVs),edison-tailg.com,,,0,0,0,,403,blocked (403)
+Sumato E-Bikes,Cycles & Electric Vehicles (EVs),,,,0,0,0,,,link-only (no website)
+Revon,Cycles & Electric Vehicles (EVs),,,,0,0,0,,,link-only (no website)
+Vmoto,Cycles & Electric Vehicles (EVs),vmoto.com.bd,,,0,0,0,,,unreachable: ConnectError
+Ridevo Bangladesh,Cycles & Electric Vehicles (EVs),ridevo.com,,,0,0,0,,,unreachable: ConnectError
+Zeeho,Cycles & Electric Vehicles (EVs),cfmotobd.com,nextjs-js,https://cfmotobd.com/?s=cycle&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Aarong,Mainstream Fashion & Apparel Brands,aarong.com,nextjs-js,https://aarong.com/?s=shirt&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Yellow,Mainstream Fashion & Apparel Brands,yellowclothing.net,shopify,https://yellowclothing.net/search?q=shirt&type=product,28,55,0,True,200,scrapeable (shopify)
+Sailor,Mainstream Fashion & Apparel Brands,sailor.clothing,nextjs-js,https://sailor.clothing/?s=shirt&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Le Reve,Mainstream Fashion & Apparel Brands,lerevecraze.com,woocommerce,https://lerevecraze.com/?s=shirt&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+Twelve Clothing,Mainstream Fashion & Apparel Brands,twelvebd.com,shopify,https://twelvebd.com/search?q=shirt&type=product,51,72,0,True,200,scrapeable (shopify)
+Cats Eye,Mainstream Fashion & Apparel Brands,catseye.com.bd,,,0,0,0,,403,blocked (403)
+Richman / Lubnan,Mainstream Fashion & Apparel Brands,lubnanbd.com,woocommerce,https://lubnanbd.com/?s=shirt&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+Ecstasy,Mainstream Fashion & Apparel Brands,ecstasybd.com,unknown,https://ecstasybd.com/?s=shirt&post_type=product,10,11,0,True,200,scrapeable (unknown)
+Kay Kraft,Mainstream Fashion & Apparel Brands,kaykraft.com,woocommerce,https://kaykraft.com/?s=shirt&post_type=product,13,12,0,True,200,scrapeable (woocommerce)
+Klubhaus,Mainstream Fashion & Apparel Brands,klubhaus.com.bd,shopify,https://klubhaus.com.bd/search?q=shirt&type=product,72,86,0,True,200,scrapeable (shopify)
+Fabrilife,Mainstream Fashion & Apparel Brands,fabrilife.com,unknown,https://fabrilife.com/?s=shirt&post_type=product,0,154,0,True,200,"prices present, selectors need work (unknown)"
+Illiyeen,Mainstream Fashion & Apparel Brands,ilyn.global,nextjs-js,https://ilyn.global/?s=shirt&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Easy Fashion,Mainstream Fashion & Apparel Brands,easyfashion.com.bd,woocommerce,https://easyfashion.com.bd/?s=shirt&post_type=product,16,16,0,True,200,scrapeable (woocommerce)
+SaRa Lifestyle,Mainstream Fashion & Apparel Brands,saralifestyle.com,,,0,0,0,,403,blocked (403)
+Dorjibari,Mainstream Fashion & Apparel Brands,dorjibari.com.bd,shopify,https://dorjibari.com.bd/search?q=shirt&type=product,106,106,0,True,200,scrapeable (shopify)
+Blucheez,Mainstream Fashion & Apparel Brands,blucheez.fashion,shopify,https://blucheez.fashion/search?q=shirt&type=product,0,0,0,True,200,no products found (shopify) - check manually
+Anjan's,Mainstream Fashion & Apparel Brands,anjans.com,opencart,https://anjans.com/index.php?route=product/search&search=shirt,32,40,0,True,200,scrapeable (opencart)
+Peplos,Mainstream Fashion & Apparel Brands,peplos.shop,,,0,0,0,,403,blocked (403)
+O2,Mainstream Fashion & Apparel Brands,o2fashions.com,shopify,https://o2fashions.com/search?q=shirt&type=product,0,16,1,True,200,"prices present, selectors need work (shopify)"
+Freeland,Mainstream Fashion & Apparel Brands,freelandbd.com,,,0,0,0,,,unreachable: ConnectError
+Rise,Mainstream Fashion & Apparel Brands,rise-brand.com,shopify,https://rise-brand.com/search?q=shirt&type=product,61,40,0,True,200,scrapeable (shopify)
+Plus Point,Mainstream Fashion & Apparel Brands,pluspointbd.com.bd,,,0,0,0,,,unreachable: ConnectError
+Gentle Park,Mainstream Fashion & Apparel Brands,gentlepark.com,nextjs-js,https://gentlepark.com/?s=shirt&post_type=product,3,80,0,True,200,scrapeable (nextjs-js)
+Manhood BD,Mainstream Fashion & Apparel Brands,manhoodbd.com,,,0,0,0,,,unreachable: ConnectError
+Menz Klub,Mainstream Fashion & Apparel Brands,menzklub.com,,,0,0,0,,,unreachable: ConnectError
+Live Shopping,Mainstream Fashion & Apparel Brands,liveshopping.com.bd,unknown,https://liveshopping.com.bd/?s=shirt&post_type=product,31,62,0,True,200,scrapeable (unknown)
+Arjo,Mainstream Fashion & Apparel Brands,arjobd.com,unknown,https://arjobd.com/?s=shirt&post_type=product,0,42,0,True,200,"prices present, selectors need work (unknown)"
+Voyage,Mainstream Fashion & Apparel Brands,voyagetm.com,shopify,https://voyagetm.com/search?q=shirt&type=product,48,74,0,True,200,scrapeable (shopify)
+Gorur Ghash,Mainstream Fashion & Apparel Brands,gorurghash.com,woocommerce,https://gorurghash.com/?s=shirt&post_type=product,16,16,0,True,200,scrapeable (woocommerce)
+Turaag Active,Mainstream Fashion & Apparel Brands,turaag.com,shopify,https://turaag.com/search?q=shirt&type=product,48,0,0,True,200,no products found (shopify) - check manually
+Raw Nation,Mainstream Fashion & Apparel Brands,rawnation.net,unknown,https://rawnation.net/?s=shirt&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Spotlight attires,Mainstream Fashion & Apparel Brands,spotlightattires.com,unknown,https://spotlightattires.com/?s=shirt&post_type=product,66,100,0,True,200,scrapeable (unknown)
+Get Goosebumps,Mainstream Fashion & Apparel Brands,getgoosebumps.shop,shopify,https://getgoosebumps.shop/search?q=shirt&type=product,0,18,0,True,200,"prices present, selectors need work (shopify)"
+Diamond World Limited,Fine Jewelry & Premium Fashion Jewelry Stores,diamondworldltd.com,unknown,https://diamondworldltd.com/?s=ring&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Al-Amin Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,alaminjewellers.com,woocommerce,https://alaminjewellers.com/?s=ring&post_type=product,0,37,0,True,200,"prices present, selectors need work (woocommerce)"
+Apan Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,apanjewellers.com.bd,woocommerce,https://apanjewellers.com.bd/?s=ring&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+Gaurav Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,gauravjewellers.com,,,0,0,0,,403,blocked (403)
+Kohinoor Diamond & Gold,Fine Jewelry & Premium Fashion Jewelry Stores,kohinoordiamondbd.com,unknown,https://kohinoordiamondbd.com/?s=ring&post_type=product,33,41,0,True,200,scrapeable (unknown)
+Kunjo Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,kunjojewellers.com,,,0,0,0,,403,blocked (403)
+Venus Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,venusjewellersltd.com,,,0,0,0,,,unreachable: ConnectError
+Aarong Fine Jewellery,Fine Jewelry & Premium Fashion Jewelry Stores,aarong.com,nextjs-js,https://aarong.com/?s=ring&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Jarwa House,Fine Jewelry & Premium Fashion Jewelry Stores,jarwahouse.com.bd,woocommerce,https://jarwahouse.com.bd/?s=ring&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+D'Damas Bangladesh,Fine Jewelry & Premium Fashion Jewelry Stores,ddamas.com.bd,woocommerce,https://ddamas.com.bd/?s=ring&post_type=product,16,0,0,True,200,no products found (woocommerce) - check manually
+Senco Gold Bangladesh,Fine Jewelry & Premium Fashion Jewelry Stores,sencobd.com,unknown,https://sencobd.com/?s=ring&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Royal Malabar Jewellers,Fine Jewelry & Premium Fashion Jewelry Stores,,,,0,0,0,,,link-only (no website)
+Gitanjali Jewellers BD,Fine Jewelry & Premium Fashion Jewelry Stores,gitanjalijewellers.com,,,0,0,0,,,unreachable: ConnectError
+Khaas Food,"Snacks, Dry Foods & Grocery Marketplaces",khaasfood.com,woocommerce,https://khaasfood.com/?s=rice&post_type=product,0,16,0,True,200,"prices present, selectors need work (woocommerce)"
+Neofarmers,"Snacks, Dry Foods & Grocery Marketplaces",neofarmers.com.bd,woocommerce,https://neofarmers.com.bd/?s=rice&post_type=product,6,0,0,True,200,no products found (woocommerce) - check manually
+Organic Online Bangladesh,"Snacks, Dry Foods & Grocery Marketplaces",organiconline.com.bd,woocommerce,https://organiconline.com.bd/?s=rice&post_type=product,16,20,0,True,200,scrapeable (woocommerce)
+Parmeeda Organic,"Snacks, Dry Foods & Grocery Marketplaces",parmeeda.com,,,0,0,0,,,unreachable: ConnectError
+Shwapno,"Snacks, Dry Foods & Grocery Marketplaces",shwapno.com,nextjs-js,https://shwapno.com/?s=rice&post_type=product,0,96,0,True,200,needs JS rendering (nextjs-js)
+Chaldal,"Snacks, Dry Foods & Grocery Marketplaces",chaldal.com,unknown,,0,0,0,True,200,unreachable: ReadTimeout
+Falaq Food,"Snacks, Dry Foods & Grocery Marketplaces",falaqfood.com,unknown,https://falaqfood.com/?s=rice&post_type=product,0,18,0,True,200,"prices present, selectors need work (unknown)"
+Green Grocery,"Snacks, Dry Foods & Grocery Marketplaces",greengrocery.com.bd,unknown,https://greengrocery.com.bd/?s=rice&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Daily Shopping,"Snacks, Dry Foods & Grocery Marketplaces",dailyshoppingbd.com,unknown,https://dailyshoppingbd.com/?s=rice&post_type=product,40,0,0,True,200,no products found (unknown) - check manually
+Meena Bazar,"Snacks, Dry Foods & Grocery Marketplaces",,,,0,0,0,,,link-only (no website)
+Healthy Eats,"Snacks, Dry Foods & Grocery Marketplaces",healthyeatsbd.shop,woocommerce,https://healthyeatsbd.shop/?s=rice&post_type=product,0,3,0,True,200,"prices present, selectors need work (woocommerce)"
+Rokomari,"Snacks, Dry Foods & Grocery Marketplaces",rokomari.com,nextjs-js,https://rokomari.com/catalogsearch/result/?q=rice,0,298,0,True,200,needs JS rendering (nextjs-js)
+Sindabad,"Snacks, Dry Foods & Grocery Marketplaces",sindabad.com,unknown,https://sindabad.com/?s=rice&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Ghorer Bazar,"Snacks, Dry Foods & Grocery Marketplaces",ghorerbazarbd.com,unknown,https://ghorerbazarbd.com/?s=rice&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Takhfee,"Snacks, Dry Foods & Grocery Marketplaces",takhfee.com,woocommerce,https://takhfee.com/?s=rice&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+Sotter Bazar,"Snacks, Dry Foods & Grocery Marketplaces",sotterbazarbd.com,woocommerce,https://sotterbazarbd.com/?s=rice&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+La Organika,"Snacks, Dry Foods & Grocery Marketplaces",laorganika.com,nextjs-js,https://laorganika.com/?s=rice&post_type=product,0,30,0,True,200,needs JS rendering (nextjs-js)
+Star Tech,"Laptops, Desktops & Computer Components",startech.com.bd,opencart,https://startech.com.bd/product/search?search=laptop,20,30,0,True,200,scrapeable (opencart)
+Ryans Computers,"Laptops, Desktops & Computer Components",ryans.com,,,0,0,0,,403,blocked (403)
+TechLand BD,"Laptops, Desktops & Computer Components",techlandbd.com,,,0,0,0,,403,blocked (403)
+PC House BD,"Laptops, Desktops & Computer Components",pchouse.com.bd,opencart,https://pchouse.com.bd/product/search?search=laptop,0,29,0,True,200,"prices present, selectors need work (opencart)"
+Ultra Technology,"Laptops, Desktops & Computer Components",ultratech.com.bd,opencart,https://ultratech.com.bd/product/search?search=laptop,0,0,0,True,200,no products found (opencart) - check manually
+Global Brand PLC,"Laptops, Desktops & Computer Components",globalbrand.com.bd,opencart,https://globalbrand.com.bd/index.php?route=product/search&search=laptop,40,17,0,True,200,scrapeable (opencart)
+Creatus Computer,"Laptops, Desktops & Computer Components",creatus.com.bd,opencart,https://creatus.com.bd/product/search?search=laptop,0,0,0,True,200,no products found (opencart) - check manually
+Potaka IT,"Laptops, Desktops & Computer Components",potakait.com,opencart,https://potakait.com/product/search?search=laptop,0,37,0,True,200,"prices present, selectors need work (opencart)"
+Universal Computer BD (UCC),"Laptops, Desktops & Computer Components",universal.com.bd,opencart,https://universal.com.bd/index.php?route=product/search&search=laptop,32,36,0,True,200,scrapeable (opencart)
+Skyland Computer BD,"Laptops, Desktops & Computer Components",skyland.com.bd,opencart,https://skyland.com.bd/index.php?route=product/search&search=laptop,30,45,0,True,200,scrapeable (opencart)
+Nexus Computer BD,"Laptops, Desktops & Computer Components",nexus.com.bd,unknown,https://nexus.com.bd/?s=laptop&post_type=product,0,1,0,True,200,"prices present, selectors need work (unknown)"
+Computer Zone,"Laptops, Desktops & Computer Components",computerzone.com.bd,nextjs-js,https://computerzone.com.bd/?s=laptop&post_type=product,0,171,0,True,200,needs JS rendering (nextjs-js)
+Binary Logic,"Laptops, Desktops & Computer Components",binarylogic.com.bd,unknown,https://binarylogic.com.bd/?s=laptop&post_type=product,0,34,0,True,200,"prices present, selectors need work (unknown)"
+One Tech,"Laptops, Desktops & Computer Components",1tech.com.bd,nextjs-js,https://1tech.com.bd/?s=laptop&post_type=product,0,157,0,True,200,needs JS rendering (nextjs-js)
+AG Compuers,"Laptops, Desktops & Computer Components",applegadgetsbd.com,nextjs-js,https://applegadgetsbd.com/?s=laptop&post_type=product,0,130,0,True,200,needs JS rendering (nextjs-js)
+RM Computer,"Laptops, Desktops & Computer Components",rmcomputerbd.com,woocommerce,https://rmcomputerbd.com/?s=laptop&post_type=product,11,0,0,True,200,no products found (woocommerce) - check manually
+Tech Marvels,"Laptops, Desktops & Computer Components",techmarvels.com.bd,woocommerce,https://techmarvels.com.bd/?s=laptop&post_type=product,12,0,0,True,200,no products found (woocommerce) - check manually
+Smart Technologies (BD) Ltd,"Laptops, Desktops & Computer Components",smartbd.com,woocommerce,https://smartbd.com/?s=laptop&post_type=product,20,18,0,True,200,scrapeable (woocommerce)
+PCB Store Bangladesh,"Laptops, Desktops & Computer Components",pcbstore.com.bd,nextjs-js,https://pcbstore.com.bd/?s=laptop&post_type=product,0,74,0,True,200,needs JS rendering (nextjs-js)
+Computer Mania BD,"Laptops, Desktops & Computer Components",computermania.com.bd,,,0,0,0,,403,blocked (403)
+Bytecity BD,"Laptops, Desktops & Computer Components",bytecity.com.bd,woocommerce,https://bytecity.com.bd/?s=laptop&post_type=product,120,275,0,True,200,scrapeable (woocommerce)
+IT PLACE BD,"Laptops, Desktops & Computer Components",itplacebd.com,woocommerce,https://itplacebd.com/?s=laptop&post_type=product,12,45,0,True,200,scrapeable (woocommerce)
+Walton Computer,"Laptops, Desktops & Computer Components",waltondigitech.com,nextjs-js,https://waltondigitech.com/?s=laptop&post_type=product,1,0,0,True,200,needs JS rendering (nextjs-js)
+Oasis Gadgets,"Laptops, Desktops & Computer Components",oasisgadget.com,,,0,0,0,,,unreachable: ConnectError
+Gadget & Gear (G&G),Mobile Phones & Consumer Gadgets,gadgetandgear.com,woocommerce,https://gadgetandgear.com/?s=phone&post_type=product,0,126,0,True,200,"prices present, selectors need work (woocommerce)"
+Sumash Tech,Mobile Phones & Consumer Gadgets,sumashtech.com,unknown,https://sumashtech.com/?s=phone&post_type=product,0,105,0,True,200,"prices present, selectors need work (unknown)"
+Apple Gadgets BD,Mobile Phones & Consumer Gadgets,applegadgetsbd.com,nextjs-js,https://applegadgetsbd.com/?s=phone&post_type=product,0,130,0,True,200,needs JS rendering (nextjs-js)
+Pickaboo,Mobile Phones & Consumer Gadgets,pickaboo.com,,,0,0,0,,403,blocked (403)
+Motion View,Mobile Phones & Consumer Gadgets,motionview.com.bd,nextjs-js,https://motionview.com.bd/?s=phone&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+iStock BD,Mobile Phones & Consumer Gadgets,istockbd.com,shopify,https://istockbd.com/search?q=phone&type=product,0,0,0,False,200,robots.txt disallows search
+Baseus Bangladesh,Mobile Phones & Consumer Gadgets,baseus.com.bd,woocommerce,https://baseus.com.bd/?s=phone&post_type=product,20,50,0,True,200,scrapeable (woocommerce)
+Gadget Studio BD,Mobile Phones & Consumer Gadgets,gadgetstudiobd.com,woocommerce,https://gadgetstudiobd.com/?s=phone&post_type=product,20,56,0,True,200,scrapeable (woocommerce)
+Gears For Ears,Mobile Phones & Consumer Gadgets,gearsforears.com,shopify,https://gearsforears.com/search?q=phone&type=product,0,35,0,True,200,"prices present, selectors need work (shopify)"
+KRY International,Mobile Phones & Consumer Gadgets,kryinternational.com,nextjs-js,https://kryinternational.com/?s=phone&post_type=product,0,38,0,True,200,needs JS rendering (nextjs-js)
+Rio International,Mobile Phones & Consumer Gadgets,riointernational.com.bd,unknown,https://riointernational.com.bd/?s=phone&post_type=product,110,210,0,True,200,scrapeable (unknown)
+Take & Talk BD,Mobile Phones & Consumer Gadgets,,,,0,0,0,,,link-only (no website)
+Salextra,Mobile Phones & Consumer Gadgets,salextra.com.bd,nextjs-js,https://salextra.com.bd/?s=phone&post_type=product,0,241,0,True,200,needs JS rendering (nextjs-js)
+Custom Mac BD,Mobile Phones & Consumer Gadgets,custommacbd.com,shopify,https://custommacbd.com/search?q=phone&type=product,0,23,0,True,200,"prices present, selectors need work (shopify)"
+Dazzle Mobile,Mobile Phones & Consumer Gadgets,dazzle.com.bd,nextjs-js,https://dazzle.com.bd/?s=phone&post_type=product,0,2,0,True,200,needs JS rendering (nextjs-js)
+Zymak,Mobile Phones & Consumer Gadgets,zymak.com.bd,,,0,0,0,,403,blocked (403)
+Gadget Next,Mobile Phones & Consumer Gadgets,gadgetnext.com.bd,woocommerce,https://gadgetnext.com.bd/?s=phone&post_type=product,24,112,0,True,200,scrapeable (woocommerce)
+Walton Plaza Online,Mobile Phones & Consumer Gadgets,waltonplaza.com.bd,,,0,0,0,,403,blocked (403)
+Yellow Mart,Mobile Phones & Consumer Gadgets,yellowmart24.com,unknown,https://yellowmart24.com/?s=phone&post_type=product,141,280,0,True,200,scrapeable (unknown)
+Liliput Shop,Mobile Phones & Consumer Gadgets,liliputshop.com.bd,woocommerce,https://liliputshop.com.bd/?s=phone&post_type=product,0,24,0,True,200,"prices present, selectors need work (woocommerce)"
+Goriber Gadget,Mobile Phones & Consumer Gadgets,goribergadget.com,woocommerce,https://goribergadget.com/?s=phone&post_type=product,12,0,0,True,200,no products found (woocommerce) - check manually
+Raduga International,Mobile Phones & Consumer Gadgets,,,,0,0,0,,,link-only (no website)
+Raduga,Mobile Phones & Consumer Gadgets,,,,0,0,0,,,link-only (no website)
+Mobile Buzz,Mobile Phones & Consumer Gadgets,mobilebuzzbd.com,woocommerce,https://mobilebuzzbd.com/?s=phone&post_type=product,36,123,0,True,200,scrapeable (woocommerce)
+Rahimer Dokan,Mobile Phones & Consumer Gadgets,rahimerdokanbd.com,woocommerce,https://rahimerdokanbd.com/?s=phone&post_type=product,12,30,0,True,200,scrapeable (woocommerce)
+ICE,Mobile Phones & Consumer Gadgets,iceworld.tech,shopify,https://iceworld.tech/search?q=phone&type=product,46,65,0,True,200,scrapeable (shopify)
+Gadget Monkey BD,Mobile Phones & Consumer Gadgets,gadgetmonkeybd.com,unknown,https://gadgetmonkeybd.com/?s=phone&post_type=product,0,128,0,True,200,"prices present, selectors need work (unknown)"
+Oraimo,Mobile Phones & Consumer Gadgets,oraimo.com,nextjs-js,https://oraimo.com/?s=phone&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Anker Bangladesh,Mobile Phones & Consumer Gadgets,anker.com.bd,woocommerce,https://anker.com.bd/?s=phone&post_type=product,20,0,0,True,200,no products found (woocommerce) - check manually
+WomanhooD (@WomanhooDbd),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Poroshmoni Saree (@Poroshmonisaree),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+T R I B E (@tribe.bangladesh),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Sareez by Mehzabeens' (@sareezbymehzabeens),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Shopping Zone BD (@ShoppingZoneBD15),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Lace Saree Online (@lacesareeonline),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Authentic By Samah (@AuthenticBySamah),Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Jamdani Ville,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Story Bangladesh,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Moner Moto Saree,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Katan Kutir,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Neelambari,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Gallery BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Boutique Sneh,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Chaarulatha,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Kavya BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Maya Saree House,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Parijat Saree Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Satyajit's Jamdani House,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Bunaan,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Closet Bangladesh,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Rong Berong Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Zeenat's Attire,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Aanchal Saree House,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Oishi's Saree Collection,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Nandini Saree BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Sufiana Saree Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Dhaka Jamdani Store,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Station,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Shuruchi Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+The Saree Studio BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Drape Elegance,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Aura Saree Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Poshak Bangladesh,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Box BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Kapor Chopor,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Benarosi Palace BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Memsaheb Saree Collection,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Borno Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Corner Dhaka,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Suits & Sarees BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Dhakaiya Saree Hub,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Nila's Fashion Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Market Bangladesh,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+The Jamdani Heritage,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Silk Route BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Style Craft Saree,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Ronger Mela Boutique,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Saree Zone BD,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Boutique Purnima,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Modest Fusion,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+The Lavender Bliss,Small & Medium Saree & Boutique Pages,,,,0,0,0,,,link-only (no website)
+Rich Kid,Sneakers & Footwear Stores,richkidbd.com,woocommerce,https://richkidbd.com/?s=shoes&post_type=product,20,80,0,True,200,scrapeable (woocommerce)
+Sneakers BD,Sneakers & Footwear Stores,sneakersbdofficial.com,unknown,https://sneakersbdofficial.com/?s=shoes&post_type=product,0,24,0,True,200,"prices present, selectors need work (unknown)"
+Sneaker Zone,Sneakers & Footwear Stores,sneakerzonebd.com,shopify,https://sneakerzonebd.com/search?q=shoes&type=product,48,64,0,True,200,scrapeable (shopify)
+Three's,Sneakers & Footwear Stores,threesbd.com,woocommerce,https://threesbd.com/?s=shoes&post_type=product,12,58,0,True,200,scrapeable (woocommerce)
+Zapatos Bangladesh,Sneakers & Footwear Stores,zapatos.com.bd,woocommerce,https://zapatos.com.bd/?s=shoes&post_type=product,2,0,0,True,200,no products found (woocommerce) - check manually
+Zuqo,Sneakers & Footwear Stores,zuqo.shop,shopify,https://zuqo.shop/search?q=shoes&type=product,301,30,0,True,200,scrapeable (shopify)
+Sneakerbumb,Sneakers & Footwear Stores,,,,0,0,0,,,link-only (no website)
+Kicks Heaven,Sneakers & Footwear Stores,,,,0,0,0,,,link-only (no website)
+Apex Footwear (Apex4u),Sneakers & Footwear Stores,apex4u.com,nextjs-js,https://apex4u.com/?s=shoes&post_type=product,18,19,0,True,200,scrapeable (nextjs-js)
+Bata Bangladesh,Sneakers & Footwear Stores,batabd.com,shopify,https://batabd.com/search?q=shoes&type=product,50,152,0,True,200,scrapeable (shopify)
+Lotto Bangladesh,Sneakers & Footwear Stores,lottobd.com,shopify,https://lottobd.com/search?q=shoes&type=product,0,0,0,False,200,robots.txt disallows search
+Bay Emporium,Sneakers & Footwear Stores,amarbay.com,unknown,https://amarbay.com/?s=shoes&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Xie Jiang Sneakers,Sneakers & Footwear Stores,xiejiang.com.bd,woocommerce,https://xiejiang.com.bd/?s=shoes&post_type=product,50,201,0,True,200,scrapeable (woocommerce)
+Step Footwear,Sneakers & Footwear Stores,stepfootwear.com,unknown,https://stepfootwear.com/?s=shoes&post_type=product,0,42,0,True,200,"prices present, selectors need work (unknown)"
+Walkar Footwear,Sneakers & Footwear Stores,walkarfootwear.com,unknown,https://walkarfootwear.com/?s=shoes&post_type=product,40,0,0,True,200,no products found (unknown) - check manually
+Brand Atrium,Sneakers & Footwear Stores,,,,0,0,0,,,link-only (no website)
+Fly Kicks BD,Sneakers & Footwear Stores,,,,0,0,0,,,link-only (no website)
+Urban Men,Sneakers & Footwear Stores,mensvibes.shop,nextjs-js,https://mensvibes.shop/?s=shoes&post_type=product,0,0,0,True,200,needs JS rendering (nextjs-js)
+Sole Mates BD,Sneakers & Footwear Stores,,,,0,0,0,,,link-only (no website)
+La Mode,Sneakers & Footwear Stores,lamodebd.com,shopify,https://lamodebd.com/search?q=shoes&type=product,0,45,0,True,200,"prices present, selectors need work (shopify)"
+Splayd,Sneakers & Footwear Stores,splayd.com.bd,shopify,https://splayd.com.bd/search?q=shoes&type=product,0,12,10,True,200,"prices present, selectors need work (shopify)"
+Errumbd,Sneakers & Footwear Stores,errumbd.com,nextjs-js,https://errumbd.com/?s=shoes&post_type=product,0,49,0,True,200,needs JS rendering (nextjs-js)
+Live Shopping,Sneakers & Footwear Stores,liveshopping.com.bd,unknown,https://liveshopping.com.bd/?s=shoes&post_type=product,31,62,0,True,200,scrapeable (unknown)
+Emboss BD,Sneakers & Footwear Stores,embossbd.com,woocommerce,https://embossbd.com/?s=shoes&post_type=product,0,0,0,True,200,no products found (woocommerce) - check manually
+Friction BD,Sneakers & Footwear Stores,frictionbd.com,unknown,https://frictionbd.com/?s=shoes&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Dour,"Sportswear, Activewear & Gym Gear",dour.store,woocommerce,https://dour.store/?s=shirt&post_type=product,12,12,0,True,200,scrapeable (woocommerce)
+Brave Heart Sports,"Sportswear, Activewear & Gym Gear",braveheartsports.store,,,0,0,0,,,unreachable: ConnectError
+Jersey Freak BD,"Sportswear, Activewear & Gym Gear",jerseyfreakbd.com,nextjs-js,https://jerseyfreakbd.com/?s=shirt&post_type=product,0,77,0,True,200,needs JS rendering (nextjs-js)
+Jersey Loco BD,"Sportswear, Activewear & Gym Gear",jl.sellbd.shop,unknown,https://jl.sellbd.shop/?s=shirt&post_type=product,0,73,0,True,200,"prices present, selectors need work (unknown)"
+Sports Station BD,"Sportswear, Activewear & Gym Gear",,,,0,0,0,,,link-only (no website)
+Match Fit BD,"Sportswear, Activewear & Gym Gear",,,,0,0,0,,,link-only (no website)
+Jersey Frenzy Sportswear,"Sportswear, Activewear & Gym Gear",jerseyfrenzybd.com,woocommerce,https://jerseyfrenzybd.com/?s=shirt&post_type=product,16,65,0,True,200,scrapeable (woocommerce)
+Jersey.com.bd,"Sportswear, Activewear & Gym Gear",jersey.com.bd,unknown,https://jersey.com.bd/?s=shirt&post_type=product,25,50,0,True,200,scrapeable (unknown)
+Jersey Valley,"Sportswear, Activewear & Gym Gear",,,,0,0,0,,,link-only (no website)
+ONEUP,"Sportswear, Activewear & Gym Gear",toponejersey.myshopify.com,shopify,https://toponejersey.myshopify.com/search?q=shirt&type=product,72,30,0,True,200,scrapeable (shopify)
+Fabrilife,"Sportswear, Activewear & Gym Gear",fabrilife.com,unknown,https://fabrilife.com/?s=shirt&post_type=product,0,154,0,True,200,"prices present, selectors need work (unknown)"
+Time Zone (Kallol Group),Watches & Horology Retailers,timezonebd.com,unknown,https://timezonebd.com/?s=watch&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Watch Shop BD,Watches & Horology Retailers,watchshopbd.com,nextjs-js,https://watchshopbd.com/?s=watch&post_type=product,0,59,0,True,200,needs JS rendering (nextjs-js)
+Watch Zone BD,Watches & Horology Retailers,watchzonebd.com,unknown,https://watchzonebd.com/?s=watch&post_type=product,36,72,0,True,200,scrapeable (unknown)
+Mohammad & Sons,Watches & Horology Retailers,mohammadandsons.com,,,0,0,0,,403,blocked (403)
+Watch Gallery BD,Watches & Horology Retailers,watchgallerybd.com,woocommerce,https://watchgallerybd.com/?s=watch&post_type=product,10,0,0,True,200,no products found (woocommerce) - check manually
+Time Trend BD,Watches & Horology Retailers,timetrendbd.com,,,0,0,0,,,unreachable: ConnectError
+Casio Bangladesh Store,Watches & Horology Retailers,casiobangladesh.com,,,0,0,0,,,unreachable: ConnectError
+Watch House BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Premium Watches BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Swiss Watch Boutique,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Titan Watch Showroom,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Watch World BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Hourglass Bangladesh,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Luxury Watches BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Smart Watch Shop,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Time Square BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Watch Planet,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Authentic Watches BD,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+4 O'clock,Watches & Horology Retailers,4oclockofficial.com,shopify,https://4oclockofficial.com/search?q=watch&type=product,51,57,0,True,200,scrapeable (shopify)
+Chumro,Watches & Horology Retailers,chumro.com,unknown,https://chumro.com/?s=watch&post_type=product,0,0,0,True,200,no products found (unknown) - check manually
+Watch Movement,Watches & Horology Retailers,watchmovement.sellbd.shop,unknown,https://watchmovement.sellbd.shop/?s=watch&post_type=product,0,90,0,True,200,"prices present, selectors need work (unknown)"
+Prohorique,Watches & Horology Retailers,,,,0,0,0,,,link-only (no website)
+Loftique,Watches & Horology Retailers,loftique.com.bd,shopify,https://loftique.com.bd/search?q=watch&type=product,0,82,0,True,200,"prices present, selectors need work (shopify)"

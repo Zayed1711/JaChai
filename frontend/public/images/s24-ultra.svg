@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+    <defs>
+      <linearGradient id="s24Bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#020617"/>
+        <stop offset="100%" stop-color="#0F172A"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#s24Bg)"/>
+    <!-- Boxy Sharp Titanium Edge -->
+    <rect x="280" y="80" width="240" height="440" rx="14" fill="#334155" stroke="#94A3B8" stroke-width="4"/>
+    <rect x="286" y="86" width="228" height="428" rx="10" fill="#020617"/>
+    <!-- Punch-hole Camera -->
+    <circle cx="400" cy="110" r="6" fill="#000000" stroke="#1E293B" stroke-width="1"/>
+    <!-- Display Glow -->
+    <circle cx="400" cy="300" r="70" fill="#A855F7" opacity="0.15"/>
+    <text x="400" y="305" fill="#F8FAFC" font-family="'Oswald', sans-serif" font-weight="700" font-size="26" letter-spacing="3" text-anchor="middle">S24 ULTRA</text>
+    <text x="400" y="335" fill="#A855F7" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="12" letter-spacing="3" text-anchor="middle">GALAXY AI IS HERE</text>
+    <text x="400" y="565" fill="#64748B" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="18" letter-spacing="3" text-anchor="middle">SAMSUNG GALAXY S24 ULTRA (12/256GB)</text>
+  
+</svg>

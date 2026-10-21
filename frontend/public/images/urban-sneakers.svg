@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+    <defs>
+      <linearGradient id="snkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#18181B"/>
+        <stop offset="100%" stop-color="#09090B"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#snkBg)"/>
+    <!-- Streetwear Low-Top Sneaker Silhouette -->
+    <path d="M 170,390 L 190,320 C 230,280 290,260 360,250 L 420,240 C 470,240 510,270 540,310 C 580,350 630,360 660,370 L 660,420 C 660,435 640,440 600,440 L 200,440 C 170,440 160,420 170,390 Z" fill="#E4E4E7"/>
+    <!-- Suede Accent Overlays -->
+    <path d="M 180,390 C 210,340 260,310 320,300 L 320,430 L 190,430 Z" fill="#71717A"/>
+    <path d="M 520,310 C 560,340 610,360 655,370 L 655,420 L 520,420 Z" fill="#71717A"/>
+    <!-- Signature Stripe -->
+    <path d="M 330,320 C 400,320 480,360 560,410 L 530,425 C 460,380 390,345 330,345 Z" fill="#10B981"/>
+    <!-- Sole & Cushion Line -->
+    <rect x="160" y="420" width="510" height="35" rx="8" fill="#FFFFFF" stroke="#D4D4D8" stroke-width="2"/>
+    <text x="400" y="520" fill="#A1A1AA" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="18" letter-spacing="3" text-anchor="middle">URBAN SUEDE & LEATHER STREETWEAR SNEAKERS</text>
+  
+</svg>

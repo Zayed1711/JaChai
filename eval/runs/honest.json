@@ -1,0 +1,314 @@
+[
+ {
+  "id": "q001",
+  "q": "electric bike",
+  "latency_ms": 915.9293999998681,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q002",
+  "q": "electronic bikes",
+  "latency_ms": 475.0859999999193,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q003",
+  "q": "betari saikel",
+  "latency_ms": 429.8483000000033,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q004",
+  "q": "electric scooter",
+  "latency_ms": 472.11650000008376,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q005",
+  "q": "ই-বাইক",
+  "latency_ms": 471.176000000014,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q006",
+  "q": "ইলেকট্রিক সাইকেল",
+  "latency_ms": 563.7294000000566,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q007",
+  "q": "mountain bike",
+  "latency_ms": 690.5764999999064,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q008",
+  "q": "bicycle",
+  "latency_ms": 670.7555000000411,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q009",
+  "q": "e-bike battery monitor",
+  "latency_ms": 443.42329999994945,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q010",
+  "q": "iphone 15 without charger",
+  "latency_ms": 1252.2619999999733,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q011",
+  "q": "samsung s24 chara charger",
+  "latency_ms": 1576.3069000001906,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q012",
+  "q": "s24 ultra case and screen protector",
+  "latency_ms": 1736.876299999949,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q013",
+  "q": "gaming laptop under 85000",
+  "latency_ms": 1990.3245000000425,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q014",
+  "q": "laptop under 60000",
+  "latency_ms": 1900.312700000086,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q015",
+  "q": "panjabi 1500 taka",
+  "latency_ms": 983.9256999998724,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q016",
+  "q": "বাজেট ২৫০০০ মোবাইল",
+  "latency_ms": 1604.011299999911,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q017",
+  "q": "cotton saree under 3000",
+  "latency_ms": 957.4099999999817,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q018",
+  "q": "laptop 2024",
+  "latency_ms": 1885.178900000028,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q019",
+  "q": "10000 mah power bank",
+  "latency_ms": 1491.6132999999263,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q020",
+  "q": "macbook air m2",
+  "latency_ms": 2299.3693000000803,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q021",
+  "q": "ac",
+  "latency_ms": 942.809600000146,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q022",
+  "q": "tv",
+  "latency_ms": 951.6734999999699,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q023",
+  "q": "pc",
+  "latency_ms": 1807.1766999999,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q024",
+  "q": "জামদানি শাড়ি",
+  "latency_ms": 994.6331999999529,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q025",
+  "q": "সরিষার তেল",
+  "latency_ms": 970.2557999999044,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q026",
+  "q": "লাল পাঞ্জাবি",
+  "latency_ms": 1436.8501999999808,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q027",
+  "q": "rtx 4060 laptop",
+  "latency_ms": 2020.5832999999984,
+  "error": null,
+  "products": [
+   {
+    "slug": "walton-acc-waxjambu-gl714hx-core-i7-14th-gen-rtx-4-8401",
+    "title_en": "Walton ACC WAXJAMBU GL714HX Core i7 14th Gen RTX 4060 8GB Graphics 16\" 2.5K 240Hz Gaming Laptop",
+    "title_bn": "Walton ACC WAXJAMBU GL714HX Core i7 14th Gen RTX 4060 8GB Graphics 16\" 2.5K 240Hz Gaming Laptop (বাংলাদেশ)",
+    "category": "Laptops & PC",
+    "image_url": "https://www.startech.com.bd/image/cache/catalog/laptop/walton/acc-waxjambu-gl714hx/acc-waxjambu-gl714hx-01-228x228.webp",
+    "specs_summary": "Walton ACC WAXJAMBU GL714HX Core i7 14th Gen RTX 4060 8GB Graphics 16\" 2.5K 240Hz Gaming Laptop · Verified authentic BD warranty · Best market price index",
+    "price_30d_ago": 165360,
+    "price_15d_ago": 160680,
+    "is_pinned_homepage": false,
+    "homepage_slot_order": 0,
+    "id": 37,
+    "created_at": "2026-10-20T08:36:56.710360",
+    "offers": [
+     {
+      "product_id": 37,
+      "store_name": "Star Tech",
+      "source_type": "crawler",
+      "target_url": "https://www.startech.com.bd/walton-acc-waxjambu-gl714hx-gaming-laptop",
+      "website_url": "https://www.startech.com.bd/product/search?search=Walton+ACC+WAXJAMBU+GL714HX",
+      "facebook_url": "https://www.facebook.com/startech.com.bd",
+      "css_selector": null,
+      "current_price": 156000,
+      "original_price": 156000,
+      "cod_terms_en": "Cash on Delivery Available",
+      "cod_terms_bn": "ক্যাশ অন ডেলিভারি প্রযোজ্য",
+      "warranty_text": "Original Quality Checked",
+      "in_stock": true,
+      "spider_status": "healthy",
+      "last_synced_at": "Live Sync",
+      "is_preseeded": true,
+      "trust_score": 99,
+      "trust_badge": "✓ 98% Verified Safe",
+      "risk_level": "low",
+      "discount_tag": null,
+      "discount_pct": null,
+      "id": 26,
+      "clicks": 0
+     }
+    ],
+    "lowest_price": 156000,
+    "highest_original_price": 156000,
+    "discount_percent": 0,
+    "store_count": 1
+   }
+  ]
+ },
+ {
+  "id": "q028",
+  "q": "redmi note 13",
+  "latency_ms": 1136.1536999997952,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q029",
+  "q": "samsung a55",
+  "latency_ms": 1127.533000000085,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q030",
+  "q": "iphone 15 pro max price in bangladesh",
+  "latency_ms": 1510.1266000001488,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q031",
+  "q": "walton refrigerator",
+  "latency_ms": 620.3035000000909,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q032",
+  "q": "sunscreen",
+  "latency_ms": 762.73470000001,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q033",
+  "q": "ghee",
+  "latency_ms": 598.0131999999685,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q034",
+  "q": "nike running shoes",
+  "latency_ms": 693.8695999999709,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q035",
+  "q": "gold necklace",
+  "latency_ms": 629.4737000000623,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q036",
+  "q": "casio watch",
+  "latency_ms": 723.6103000000185,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q037",
+  "q": "yoga mat",
+  "latency_ms": 629.7508999998627,
+  "error": null,
+  "products": []
+ },
+ {
+  "id": "q038",
+  "q": "asdfghjk qwertyzx",
+  "latency_ms": 12.391099999831567,
+  "error": null,
+  "products": []
+ }
+]

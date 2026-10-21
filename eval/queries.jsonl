@@ -1,0 +1,38 @@
+{"id": "q001", "q": "electric bike", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["motherboard", "ryzen", "ssd", "monitor", "laptop", "processor"], "note": "M9 EV leak"}
+{"id": "q002", "q": "electronic bikes", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["motherboard", "ryzen", "ssd", "monitor", "laptop", "processor"], "note": "M9 EV leak"}
+{"id": "q003", "q": "betari saikel", "lang": "banglish", "expected_category": "Cycles", "must_not_contain": ["motherboard", "ryzen", "ssd", "monitor", "laptop"], "note": "M9 Banglish EV"}
+{"id": "q004", "q": "electric scooter", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["motherboard", "monitor", "laptop"], "note": ""}
+{"id": "q005", "q": "ই-বাইক", "lang": "bn", "expected_category": "Cycles", "must_not_contain": ["motherboard", "monitor", "laptop"], "note": "Bangla EV"}
+{"id": "q006", "q": "ইলেকট্রিক সাইকেল", "lang": "bn", "expected_category": "Cycles", "must_not_contain": ["motherboard", "monitor", "laptop"], "note": "Bangla EV"}
+{"id": "q007", "q": "mountain bike", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["laptop", "motherboard"], "note": ""}
+{"id": "q008", "q": "bicycle", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["laptop", "motherboard"], "note": ""}
+{"id": "q009", "q": "e-bike battery monitor", "lang": "en", "expected_category": "Cycles", "must_not_contain": ["motherboard", "ryzen"], "note": "Legit e-bike part; keyword firewalls wrongly reject 'monitor'"}
+{"id": "q010", "q": "iphone 15 without charger", "lang": "en", "expected_category": "Mobile", "must_not_contain": ["charger", "case", "cover"], "note": "M9 SQA-01 negation"}
+{"id": "q011", "q": "samsung s24 chara charger", "lang": "banglish", "expected_category": "Mobile", "must_not_contain": ["charger", "case", "cover"], "note": "M9 Banglish negation"}
+{"id": "q012", "q": "s24 ultra case and screen protector", "lang": "en", "expected_category": "Mobile", "must_not_contain": [], "note": "M9 SQA-04 multi-accessory; expect results"}
+{"id": "q013", "q": "gaming laptop under 85000", "lang": "en", "expected_category": "Laptops", "must_not_contain": [], "max_price": 85000, "note": "M9 SQA-02 budget"}
+{"id": "q014", "q": "laptop under 60000", "lang": "en", "expected_category": "Laptops", "must_not_contain": [], "max_price": 60000, "note": ""}
+{"id": "q015", "q": "panjabi 1500 taka", "lang": "en", "expected_category": "Fashion", "must_not_contain": ["laptop", "motherboard"], "max_price": 1500, "note": "M9 SQA-02 budget"}
+{"id": "q016", "q": "বাজেট ২৫০০০ মোবাইল", "lang": "bn", "expected_category": "Mobile", "must_not_contain": [], "max_price": 25000, "note": "Bengali digits + budget"}
+{"id": "q017", "q": "cotton saree under 3000", "lang": "en", "expected_category": "Saree", "must_not_contain": ["laptop"], "max_price": 3000, "note": ""}
+{"id": "q018", "q": "laptop 2024", "lang": "en", "expected_category": "Laptops", "must_not_contain": [], "note": "Year must NOT become a 2,024 taka ceiling"}
+{"id": "q019", "q": "10000 mah power bank", "lang": "en", "expected_category": "Mobile", "must_not_contain": [], "note": "Capacity must NOT become a 10,000 taka ceiling"}
+{"id": "q020", "q": "macbook air m2", "lang": "en", "expected_category": "Laptops", "must_not_contain": ["air conditioner", "split ac"], "note": "M9 SQA-03 substring"}
+{"id": "q021", "q": "ac", "lang": "en", "expected_category": "Appliances", "must_not_contain": ["macbook"], "note": "Short token"}
+{"id": "q022", "q": "tv", "lang": "en", "expected_category": "Appliances", "must_not_contain": [], "note": "Short token"}
+{"id": "q023", "q": "pc", "lang": "en", "expected_category": "Laptops", "must_not_contain": [], "note": "Short token"}
+{"id": "q024", "q": "জামদানি শাড়ি", "lang": "bn", "expected_category": "Saree", "must_not_contain": ["laptop"], "note": "M9 Bengali normalization"}
+{"id": "q025", "q": "সরিষার তেল", "lang": "bn", "expected_category": "Grocer", "must_not_contain": ["laptop"], "note": "M9 Bengali normalization"}
+{"id": "q026", "q": "লাল পাঞ্জাবি", "lang": "bn", "expected_category": "Fashion", "must_not_contain": ["laptop"], "note": ""}
+{"id": "q027", "q": "rtx 4060 laptop", "lang": "en", "expected_category": "Laptops", "must_not_contain": ["saree"], "note": "Model number must stay in anchors"}
+{"id": "q028", "q": "redmi note 13", "lang": "en", "expected_category": "Mobile", "must_not_contain": [], "note": ""}
+{"id": "q029", "q": "samsung a55", "lang": "en", "expected_category": "Mobile", "must_not_contain": [], "note": ""}
+{"id": "q030", "q": "iphone 15 pro max price in bangladesh", "lang": "en", "expected_category": "Mobile", "must_not_contain": ["case", "cover"], "note": "Filler words"}
+{"id": "q031", "q": "walton refrigerator", "lang": "en", "expected_category": "Appliances", "must_not_contain": [], "note": ""}
+{"id": "q032", "q": "sunscreen", "lang": "en", "expected_category": "Beauty", "must_not_contain": ["laptop", "motherboard"], "note": ""}
+{"id": "q033", "q": "ghee", "lang": "en", "expected_category": "Grocer", "must_not_contain": ["laptop"], "note": ""}
+{"id": "q034", "q": "nike running shoes", "lang": "en", "expected_category": "Sneakers", "must_not_contain": [], "note": ""}
+{"id": "q035", "q": "gold necklace", "lang": "en", "expected_category": "Jewel", "must_not_contain": ["laptop"], "note": ""}
+{"id": "q036", "q": "casio watch", "lang": "en", "expected_category": "Watch", "must_not_contain": [], "note": ""}
+{"id": "q037", "q": "yoga mat", "lang": "en", "expected_category": "Sport", "must_not_contain": [], "note": ""}
+{"id": "q038", "q": "asdfghjk qwertyzx", "lang": "en", "expected_category": "", "must_not_contain": [], "expect_results": false, "note": "Garbage: should return nothing, not random items"}

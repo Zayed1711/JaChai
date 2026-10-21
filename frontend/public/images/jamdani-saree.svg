@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#4A0E17"/>
+        <stop offset="50%" stop-color="#80182A"/>
+        <stop offset="100%" stop-color="#2D060C"/>
+      </linearGradient>
+      <pattern id="goldMotif" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,5 35,22 52,22 38,32 44,48 30,38 16,48 22,32 8,22 25,22" fill="#F59E0B" opacity="0.35"/>
+        <circle cx="30" cy="30" r="4" fill="#F59E0B" opacity="0.8"/>
+      </pattern>
+    </defs>
+    <rect width="800" height="600" fill="url(#bg)"/>
+    <rect width="800" height="600" fill="url(#goldMotif)"/>
+    <!-- Saree Drape Geometry -->
+    <path d="M 120,600 C 180,350 320,180 500,120 C 650,70 760,180 800,240 L 800,600 Z" fill="#991B1B" opacity="0.85"/>
+    <path d="M 220,600 C 290,400 450,260 620,220 C 730,190 780,260 800,320 L 800,600 Z" fill="#B91C1C" opacity="0.9"/>
+    <!-- Jamdani Gold Zari Pallu Border -->
+    <line x1="50" y1="520" x2="750" y2="520" stroke="#F59E0B" stroke-width="8" stroke-dasharray="16,8"/>
+    <line x1="50" y1="535" x2="750" y2="535" stroke="#F59E0B" stroke-width="4"/>
+    <line x1="50" y1="545" x2="750" y2="545" stroke="#F59E0B" stroke-width="12" stroke-dasharray="8,4"/>
+    <!-- Label -->
+    <text x="400" y="580" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="20" letter-spacing="4" text-anchor="middle" opacity="0.9">AUTHENTIC DHAKAI JAMDANI</text>
+  
+</svg>

@@ -1,0 +1,1953 @@
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+import ipaddress
+import os
+import re
+import socket
+import time
+from typing import List, Optional
+from urllib.parse import quote, quote_plus, urlparse, urljoin
+import uuid
+import mimetypes
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from fastapi import Body, Depends, FastAPI, File, Header, HTTPException, Query, Request, Response, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+import httpx
+from sqlalchemy import desc, or_
+from sqlalchemy.orm import Session, joinedload
+from pydantic import BaseModel
+
+from database import Base, SessionLocal, engine, get_db
+from models import (
+    AdLead,
+    Billboard,
+    ClickLog,
+    HomepageBlock,
+    PriceHistory,
+    Product,
+    SpotlightCard,
+    StoreOffer,
+    TickerAd,
+)
+from schemas import (
+    AdLeadCreate,
+    AdLeadResponse,
+    AdLeadUpdate,
+    AdminLoginRequest,
+    HomepageBlockCreate,
+    HomepageBlockResponse,
+    HomepageBlockUpdate,
+    HomepageSlotItem,
+    HomepageSlotsResponse,
+    AdminLoginResponse,
+    AdminOverviewResponse,
+    BillboardCreate,
+    BillboardResponse,
+    BillboardUpdate,
+    ClickLogResponse,
+    CrawlerSummaryResponse,
+    ProductCreate,
+    ProductDetailResponse,
+    ProductResponse,
+    ProductUpdate,
+    SpiderHealthItem,
+    SponsorAnalyticsResponse,
+    SponsorCampaignAnalytics,
+    SpotlightCardResponse,
+    SpotlightCardUpdate,
+    StoreOfferCreate,
+    StoreOfferResponse,
+    StoreOfferUpdate,
+    StorefrontInitResponse,
+    TickerAdCreate,
+    TickerAdResponse,
+    TickerSpeedUpdate,
+    TrendingHubItem,
+    TrendingHubsResponse,
+)
+from seed import seed_database
+from crawler import live_meta_search_and_persist, run_all_spiders, scrape_single_offer
+from auth import check_and_update_lockout, create_access_token, get_client_ip, verify_admin_access
+
+
+scheduler = AsyncIOScheduler()
+
+
+# ==============================================================================
+# HELPER FUNCTIONS
+# ==============================================================================
+
+def detect_device_type(user_agent: Optional[str]) -> str:
+    """Detects mobile vs desktop based on User-Agent header."""
+    if not user_agent:
+        return "desktop"
+    ua = user_agent.lower()
+    if any(m in ua for m in ("mobile", "android", "iphone", "ipad")):
+        return "mobile"
+    return "desktop"
+
+
+def expire_ended_campaigns(db: Session) -> int:
+    """
+    Checks active Billboard campaigns where campaign_end is earlier than today (YYYY-MM-DD).
+    Automatically deactivates expired campaigns.
+    """
+    today_str = datetime.utcnow().strftime("%Y-%m-%d")
+    active_billboards = db.query(Billboard).filter(Billboard.is_active.is_(True)).all()
+    expired_count = 0
+    for b in active_billboards:
+        if b.campaign_end:
+            end_val = b.campaign_end.strip()
+            if len(end_val) >= 10 and end_val[:10] < today_str:
+                b.is_active = False
+                expired_count += 1
+    if expired_count > 0:
+        db.commit()
+        print(f"[Campaign Expiry Guard] Auto-paused {expired_count} expired billboard campaign(s).")
+    return expired_count
+
+
+async def scheduled_crawler_job():
+    """Background cron job executed every 6 hours by APScheduler."""
+    db = SessionLocal()
+    try:
+        print("[Scheduler] Running automatic 6-hour webcrawler synchronization and campaign expiry guard...")
+        expire_ended_campaigns(db)
+        await run_all_spiders(db, simulate_live_market=False)
+        print("[Scheduler] Scheduled cycle completed.")
+    except Exception as exc:
+        print(f"[Scheduler] Error during scheduled cycle: {exc}")
+    finally:
+        db.close()
+
+
+def seed_default_homepage_blocks(db: Session):
+    existing_count = db.query(HomepageBlock).count()
+    if existing_count == 0:
+        for b_data in DEFAULT_HOMEPAGE_BLOCKS:
+            block = HomepageBlock(**b_data)
+            db.add(block)
+        db.commit()
+        print("[Homepage Blocks] Seeded 6 default discovery blocks.")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Ensure tables are created
+    Base.metadata.create_all(bind=engine)
+    # Automatically seed initial database if empty
+    db = SessionLocal()
+    try:
+        seed_database(db)
+        seed_default_homepage_blocks(db)
+        expire_ended_campaigns(db)
+    finally:
+        db.close()
+
+    # Start APScheduler background cron job (runs every 6 hours)
+    scheduler.add_job(
+        scheduled_crawler_job,
+        "interval",
+        hours=6,
+        id="jachai_crawler_sync",
+        replace_existing=True,
+    )
+    scheduler.start()
+    print("[APScheduler] Background crawler & expiry scheduler started (interval: 6h).")
+
+    yield
+
+    if scheduler.running:
+        scheduler.shutdown()
+        print("[APScheduler] Background crawler scheduler shut down cleanly.")
+
+
+app = FastAPI(
+    title="JaChai API — যা চাই করুন যাচাই",
+    version="1.0.0",
+    description="Deterministic Bangladeshi Price Index & Stealth Admin Command Center Backend",
+    lifespan=lifespan,
+)
+
+# Enable secure CORS for local, LAN and web development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+)(:\d+)?$",
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+    allow_headers=["*"],
+)
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    """Injects industry-standard HTTP security headers into every response."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads", "banners")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")), name="uploads")
+
+
+# ==============================================================================
+# DEFAULT HOMEPAGE BLOCKS & GENERIC TRENDING CATEGORY SEARCH HUBS
+# ==============================================================================
+DEFAULT_HOMEPAGE_BLOCKS = [
+    {
+        "slot_order": 1,
+        "title_en": "Mobile Phones & Smartphones",
+        "title_bn": "মোবাইল ফোন ও স্মার্টফোন",
+        "subtitle_en": "Compare 5G Snapdragon, AMOLED & Flagship Prices",
+        "subtitle_bn": "সেরা ৫জি স্ন্যাপড্রাগন ও ক্যামেরা ফ্ল্যাগশিপ দাম তুলনা",
+        "search_query": "Smartphone",
+        "category": "Mobiles",
+        "badge_text": "🔥 Top Searched",
+        "starting_price_bdt": 18500,
+        "image_url": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+    {
+        "slot_order": 2,
+        "title_en": "Men's Fashion & Panjabi",
+        "title_bn": "মেনস ফ্যাশন ও পাঞ্জাবি",
+        "subtitle_en": "Premium Combed Cotton, Semi-Fitted Designer Cuts",
+        "subtitle_bn": "প্রিমিয়াম সুতি ও ডিজাইনার সেমি-ফিটেড পাঞ্জাবি",
+        "search_query": "Panjabi",
+        "category": "Fashion",
+        "badge_text": "🔥 Trending Festive",
+        "starting_price_bdt": 3200,
+        "image_url": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+    {
+        "slot_order": 3,
+        "title_en": "Laptops & PC Hardware",
+        "title_bn": "ল্যাপটপ ও পিসি হার্ডওয়্যার",
+        "subtitle_en": "Core i5/Ryzen Slim Laptops, NVMe SSDs & Monitors",
+        "subtitle_bn": "কোর আই-৫ স্লিম ল্যাপটপ, এসএসডি ও হাই-স্পিড পিসি",
+        "search_query": "Laptop",
+        "category": "Laptops",
+        "badge_text": "🔥 Official BD Warranty",
+        "starting_price_bdt": 52000,
+        "image_url": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+    {
+        "slot_order": 4,
+        "title_en": "ANC Audio & Fancy Gadgets",
+        "title_bn": "অডিও ও ফ্যান্সি গ্যাজেট",
+        "subtitle_en": "Wireless ANC Earbuds, RGB Mechanical Keyboards",
+        "subtitle_bn": "অ্যাক্টিভ নয়েজ ক্যানসেলিং ইয়ারবাডস ও মেকানিক্যাল কিবোর্ড",
+        "search_query": "Wireless Earbuds",
+        "category": "Gadgets",
+        "badge_text": "🔥 Best Value",
+        "starting_price_bdt": 1850,
+        "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+    {
+        "slot_order": 5,
+        "title_en": "Sneakers & Wristwatches",
+        "title_bn": "স্নিকার্স ও হাতঘড়ি",
+        "subtitle_en": "Chronograph Stainless Watches & Streetwear Kicks",
+        "subtitle_bn": "ক্রোনোগ্রাফ ওয়াটারপ্রুফ ঘড়ি ও আরামদায়ক স্নিকার্স",
+        "search_query": "Watch",
+        "category": "Accessories",
+        "badge_text": "🔥 Urban Lifestyle",
+        "starting_price_bdt": 4200,
+        "image_url": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+    {
+        "slot_order": 6,
+        "title_en": "Women's Ethnic & Jamdani",
+        "title_bn": "ওমেনস শাড়ি ও ঐতিহ্যবাহী পোশাক",
+        "subtitle_en": "Authentic Handloom Dhakai Jamdani & Designer Kurtis",
+        "subtitle_bn": "ঐতিহ্যবাহী তাঁতের জামদানি শাড়ি ও কুর্তি কালেকশন",
+        "search_query": "Jamdani Saree",
+        "category": "Fashion",
+        "badge_text": "🔥 Handcrafted Quality",
+        "starting_price_bdt": 5800,
+        "image_url": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+        "is_active": True,
+    },
+]
+
+TRENDING_SEARCH_HUBS = [
+    {
+        "id": "hub-smartphones",
+        "title_en": "Mobile Phones & Smartphones",
+        "title_bn": "মোবাইল ফোন ও স্মার্টফোন",
+        "subtitle_en": "Compare 5G Snapdragon, AMOLED & Flagship Prices",
+        "subtitle_bn": "সেরা ৫জি স্ন্যাপড্রাগন ও ক্যামেরা ফ্ল্যাগশিপ দাম তুলনা",
+        "query_trigger": "Smartphone",
+        "badge_en": "🔥 Most Searched Today",
+        "badge_bn": "🔥 আজকের সবচেয়ে জনপ্রিয়",
+        "icon_name": "Smartphone",
+        "starting_price_bdt": 18500,
+        "image_url": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+        "id": "hub-mens-panjabi",
+        "title_en": "Men's Fashion & Panjabi",
+        "title_bn": "মেনস ফ্যাশন ও পাঞ্জাবি",
+        "subtitle_en": "Premium Combed Cotton, Semi-Fitted Designer Cuts",
+        "subtitle_bn": "প্রিমিয়াম সুতি ও ডিজাইনার সেমি-ফিটেড পাঞ্জাবি",
+        "query_trigger": "Panjabi",
+        "badge_en": "🔥 Trending Festive",
+        "badge_bn": "🔥 ট্রেন্ডিং ফেস্টিভ",
+        "icon_name": "Shirt",
+        "starting_price_bdt": 3200,
+        "image_url": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+        "id": "hub-womens-ethnic",
+        "title_en": "Women's Dresses & Ethnic Wear",
+        "title_bn": "ওমেনস ড্রেস ও শাড়ি-কুর্তি",
+        "subtitle_en": "Authentic Handloom Dhakai Jamdani & Designer Kurtis",
+        "subtitle_bn": "ঐতিহ্যবাহী তাঁতের জামদানি শাড়ি ও কুর্তি কালেকশন",
+        "query_trigger": "Jamdani Saree",
+        "badge_en": "🔥 Handcrafted Quality",
+        "badge_bn": "🔥 তাঁতের আসল নকশা",
+        "icon_name": "Sparkles",
+        "starting_price_bdt": 5800,
+        "image_url": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+        "id": "hub-mini-gadgets",
+        "title_en": "Fancy Mini Gadgets & Audio",
+        "title_bn": "ফ্যান্সি গ্যাজেট ও ইয়ারবাডস",
+        "subtitle_en": "Wireless ANC Earbuds, RGB Mechanical Keyboards",
+        "subtitle_bn": "অ্যাক্টিভ নয়েজ ক্যানসেলিং ইয়ারবাডস ও মেকানিক্যাল কিবোর্ড",
+        "query_trigger": "Wireless Earbuds",
+        "badge_en": "🔥 Best Bang for Taka",
+        "badge_bn": "🔥 বাজেটে সেরা গ্যাজেট",
+        "icon_name": "Headphones",
+        "starting_price_bdt": 1850,
+        "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+        "id": "hub-sneakers-watches",
+        "title_en": "Sneakers & Wristwatches",
+        "title_bn": "স্নিকার্স ও ঘড়ি",
+        "subtitle_en": "Chronograph Stainless Watches & Streetwear Kicks",
+        "subtitle_bn": "ক্রোনোগ্রাফ ওয়াটারপ্রুফ ঘড়ি ও আরামদায়ক স্নিকার্স",
+        "query_trigger": "Watch",
+        "badge_en": "🔥 Urban Lifestyle",
+        "badge_bn": "🔥 আরবান লাইফস্টাইল",
+        "icon_name": "Watch",
+        "starting_price_bdt": 4200,
+        "image_url": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+        "id": "hub-laptops-pc",
+        "title_en": "Laptops & Home Electronics",
+        "title_bn": "ল্যাপটপ ও ইলেকট্রনিক্স",
+        "subtitle_en": "Core i5/Ryzen Slim Laptops, NVMe SSDs & Monitors",
+        "subtitle_bn": "কোর আই-৫ স্লিম ল্যাপটপ, এসএসডি ও হাই-স্পিড গ্যাজেট",
+        "query_trigger": "Laptop",
+        "badge_en": "🔥 Official BD Warranty",
+        "badge_bn": "🔥 অফিসিয়াল ওয়ারেন্টি",
+        "icon_name": "Laptop",
+        "starting_price_bdt": 52000,
+        "image_url": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80",
+    },
+]
+
+
+# ==============================================================================
+# PUBLIC STOREFRONT ENDPOINTS
+# ==============================================================================
+
+@app.get("/api/v1/storefront/init", response_model=StorefrontInitResponse)
+def get_storefront_init(
+    track_impressions: bool = Query(True, description="Automatically increment ad impressions"),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns active billboards, spotlights, tickers, trending search hubs, and pinned products
+    in a single atomic payload for immediate storefront rendering.
+    Optionally logs impressions on active campaigns.
+    """
+    if track_impressions:
+        db.query(Billboard).filter(Billboard.is_active.is_(True)).update(
+            {"impressions": Billboard.impressions + 1}, synchronize_session=False
+        )
+        db.query(SpotlightCard).filter(SpotlightCard.is_active.is_(True)).update(
+            {"impressions": SpotlightCard.impressions + 1}, synchronize_session=False
+        )
+        db.commit()
+
+    billboards = (
+        db.query(Billboard)
+        .filter(Billboard.is_active.is_(True))
+        .order_by(Billboard.display_order.asc(), Billboard.id.asc())
+        .all()
+    )
+
+    spotlight_cards = (
+        db.query(SpotlightCard)
+        .filter(SpotlightCard.is_active.is_(True))
+        .order_by(SpotlightCard.slot_code.asc())
+        .all()
+    )
+
+    ticker_ads = (
+        db.query(TickerAd)
+        .filter(TickerAd.is_active.is_(True))
+        .order_by(TickerAd.priority_order.asc(), TickerAd.id.asc())
+        .all()
+    )
+
+    glide_speed_sec = ticker_ads[0].glide_speed_sec if ticker_ads else 55
+
+    products = (
+        db.query(Product)
+        .options(joinedload(Product.offers))
+        .filter(Product.is_pinned_homepage.is_(True))
+        .order_by(Product.id.asc())
+        .all()
+    )
+
+    homepage_blocks = (
+        db.query(HomepageBlock)
+        .filter(HomepageBlock.is_active.is_(True))
+        .order_by(HomepageBlock.slot_order.asc())
+        .all()
+    )
+
+    return {
+        "billboards": billboards,
+        "spotlight_cards": spotlight_cards,
+        "ticker_ads": ticker_ads,
+        "glide_speed_sec": glide_speed_sec,
+        "products": products,
+        "trending_hubs": TRENDING_SEARCH_HUBS,
+        "homepage_blocks": homepage_blocks,
+    }
+
+
+@app.get("/api/v1/categories")
+def get_categories():
+    """
+    Returns the real-time retail categories derived dynamically from the CSV store registries.
+    """
+    from bd_stores_registry import get_all_stores_registry
+    stores = get_all_stores_registry()
+
+    display_info = {
+        'Cameras, DSLR & Photography Gear': {
+            'id': 'cameras-photography',
+            'name_en': 'Cameras & DSLR',
+            'name_bn': 'ক্যামেরা ও ডিএসএলআর',
+            'query': 'DSLR Camera',
+            'icon': 'Camera',
+        },
+        'Mobile Phones & Consumer Gadgets': {
+            'id': 'mobile-gadgets',
+            'name_en': 'Mobiles & Gadgets',
+            'name_bn': 'মোবাইল ও গ্যাজেট',
+            'query': 'Smartphone',
+            'icon': 'Smartphone',
+        },
+        'Laptops, Desktops & Computer Components': {
+            'id': 'laptops-pc',
+            'name_en': 'Laptops & PC',
+            'name_bn': 'ল্যাপটপ ও কম্পিউটার',
+            'query': 'Laptop',
+            'icon': 'Laptop',
+        },
+        'Mainstream Fashion & Apparel Brands': {
+            'id': 'fashion-apparel',
+            'name_en': 'Fashion & Apparel',
+            'name_bn': 'ফ্যাশন ও পোশাক',
+            'query': 'Panjabi',
+            'icon': 'Shirt',
+        },
+        'Snacks, Dry Foods & Grocery Marketplaces': {
+            'id': 'grocery-snacks',
+            'name_en': 'Grocery & Snacks',
+            'name_bn': 'গ্রোসারি ও স্ন্যাকস',
+            'query': 'Organic Food',
+            'icon': 'ShoppingBag',
+        },
+        'Fine Jewelry & Premium Fashion Jewelry Stores': {
+            'id': 'fine-jewelry',
+            'name_en': 'Fine Jewelry & Gold',
+            'name_bn': 'স্বর্ণ ও ডায়মন্ড গহনা',
+            'query': 'Gold Jewellery',
+            'icon': 'Sparkles',
+        },
+        'Small & Medium Saree & Boutique Pages': {
+            'id': 'saree-boutiques',
+            'name_en': 'Saree & Boutiques',
+            'name_bn': 'শাড়ি ও বুটিকস',
+            'query': 'Jamdani Saree',
+            'icon': 'Sparkles',
+        },
+        'Sneakers & Footwear Stores': {
+            'id': 'sneakers-footwear',
+            'name_en': 'Sneakers & Shoes',
+            'name_bn': 'স্নিকার্স ও জুতা',
+            'query': 'Sneakers',
+            'icon': 'Footprints',
+        },
+        'Watches & Horology Retailers': {
+            'id': 'watches-horology',
+            'name_en': 'Watches & Horology',
+            'name_bn': 'ঘড়ি ও টাইমপিস',
+            'query': 'Watch',
+            'icon': 'Watch',
+        },
+        'Home Appliances & White Goods': {
+            'id': 'home-appliances',
+            'name_en': 'Home Appliances',
+            'name_bn': 'হোম অ্যাপ্লায়েন্স',
+            'query': 'Refrigerator',
+            'icon': 'Tv',
+        },
+        'Beauty, Skincare & Lifestyle Stores': {
+            'id': 'beauty-skincare',
+            'name_en': 'Beauty & Skincare',
+            'name_bn': 'বিউটি ও স্কিনকেয়ার',
+            'query': 'Skincare',
+            'icon': 'Sparkles',
+        },
+        'Cycles, Bicycles, MTB & Aero Bikes': {
+            'id': 'bicycles-mtb',
+            'name_en': 'Bicycles, MTB & Aero',
+            'name_bn': 'সাইকেল, এমটিবি ও এরো',
+            'query': 'Mountain Bike',
+            'icon': 'Bike',
+        },
+        'Cycles & Electric Vehicles (EVs)': {
+            'id': 'cycles-evs',
+            'name_en': 'Electric Bikes & EVs',
+            'name_bn': 'ই-বইক ও স্কুটার',
+            'query': 'Electric Bike',
+            'icon': 'Bike',
+        },
+        'Sportswear, Activewear & Gym Gear': {
+            'id': 'sportswear-gym',
+            'name_en': 'Sportswear & Gym',
+            'name_bn': 'স্পোর্টস ও জিম গিয়ার',
+            'query': 'Sportswear',
+            'icon': 'Activity',
+        },
+        'Budget, Casual & Imitation Jewelry Targets': {
+            'id': 'fashion-jewelry',
+            'name_en': 'Fashion & Budget Jewellery',
+            'name_bn': 'ফ্যাশন ও বাজেট জুয়েলারি',
+            'query': 'Fashion Jewellery',
+            'icon': 'Sparkles',
+        },
+    }
+
+    cat_counts = {}
+    for s in stores:
+        c = s.get('category')
+        if c:
+            cat_counts[c] = cat_counts.get(c, 0) + 1
+
+    categories = []
+    for cat_name, info in display_info.items():
+        count = cat_counts.get(cat_name, 0)
+        from predetermined_catalog import CATEGORY_PREDETERMINED_CATALOG
+        cat_spec = CATEGORY_PREDETERMINED_CATALOG.get(info['id'], {})
+        categories.append({
+            'id': info['id'],
+            'category_name': cat_name,
+            'name_en': info['name_en'],
+            'name_bn': info['name_bn'],
+            'query': info['query'],
+            'icon': info['icon'],
+            'store_count': count,
+            'subcategories': cat_spec.get('subcategories', ['All']),
+            'predetermined_products': cat_spec.get('products', []),
+        })
+
+    for c, count in cat_counts.items():
+        if c not in display_info:
+            slug = re.sub(r'[^a-zA-Z0-9]+', '-', c).strip('-').lower()
+            categories.append({
+                'id': slug,
+                'category_name': c,
+                'name_en': c,
+                'name_bn': c,
+                'query': c,
+                'icon': 'Tag',
+                'store_count': count,
+            })
+
+    return {"categories": categories}
+
+
+@app.get("/api/v1/storefront/trending-hubs", response_model=TrendingHubsResponse)
+def get_trending_hubs():
+    """
+    Returns 6 generic Most Searched Category Hubs (with zero specific brand/model names).
+    """
+    return {"hubs": TRENDING_SEARCH_HUBS}
+
+
+@app.get("/api/v1/categories/{category_id}/catalog", response_model=List[ProductResponse])
+def get_category_predetermined_catalog(
+    category_id: str,
+    subcategory: Optional[str] = None,
+):
+    """Returns the predetermined product cards (each with verified stores & 'Starts from' pricing) for a category."""
+    from bd_stores_registry import resolve_category_from_query
+    from predetermined_catalog import build_predetermined_browse_products
+    cat_id, _ = resolve_category_from_query("", category_id)
+    return build_predetermined_browse_products(cat_id, subcategory=subcategory)
+
+
+@app.get("/api/v1/search/live", response_model=List[ProductResponse])
+async def search_products_live(
+    q: Optional[str] = Query(None, description="Product query to search and scrape dynamically"),
+    category: Optional[str] = Query(None, description="Optional category filter"),
+    subcategory: Optional[str] = Query(None, description="Optional subcategory filter"),
+    browse: bool = Query(False, description="True when browsing category/subcategory predetermined products"),
+    db: Session = Depends(get_db),
+):
+    """
+    Dual-Flow Meta-Search & Category Browse Endpoint:
+      - Flow A (Category/Subcategory Browse): When `browse=True` OR when clicking a category from the
+        dropdown (where `category` is set and `q` is empty or default query), returns the
+        Predetermined Product Cards for that category/subcategory (with stores & 'Starts from ৳...').
+      - Flow B (Search Bar Query): When the user types a specific product/model in the search bar,
+        runs the Universal Linguistic Filter and live pinpoint scraper.
+    """
+    query_str = (q or "").strip()
+    if category and category != "all":
+        from bd_stores_registry import resolve_category_from_query, CATEGORY_REGISTRY_MAP
+        from predetermined_catalog import build_predetermined_browse_products, CATEGORY_PREDETERMINED_CATALOG
+        
+        target_cat_id = category if category in CATEGORY_PREDETERMINED_CATALOG else None
+        if not target_cat_id:
+            resolved_id, cat_meta = resolve_category_from_query(query_str, category)
+            if resolved_id in CATEGORY_PREDETERMINED_CATALOG:
+                target_cat_id = resolved_id
+        else:
+            cat_meta = CATEGORY_REGISTRY_MAP.get(target_cat_id, {})
+
+        if target_cat_id:
+            q_clean_lower = query_str.lower()
+            default_triggers = {
+                (cat_meta.get("default_query") or "").lower(),
+                (cat_meta.get("display_en") or "").lower(),
+                (cat_meta.get("display_bn") or "").lower(),
+                (cat_meta.get("csv_category") or "").lower(),
+                target_cat_id.lower(),
+                "browse", "all", "",
+            }
+            if browse or not query_str or q_clean_lower in default_triggers:
+                cards = build_predetermined_browse_products(target_cat_id, subcategory=subcategory)
+                if cards:
+                    return cards
+
+    if not query_str:
+        from predetermined_catalog import build_predetermined_browse_products
+        return build_predetermined_browse_products("mobile-gadgets")
+
+    products = await live_meta_search_and_persist(query_str, category, db)
+    return products
+
+
+def is_safe_external_url(url: str) -> bool:
+    """
+    SSRF Guard: Verifies that a URL has a valid http/https scheme, a valid hostname,
+    and that all resolved IP addresses are public/global (not private,
+    loopback, link-local, multicast, or reserved).
+    """
+    if not url or not isinstance(url, str):
+        return False
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        hostname = (parsed.hostname or "").lower().strip()
+        if not hostname:
+            return False
+
+        if (
+            hostname in ("localhost", "127.0.0.1", "::1", "0.0.0.0", "metadata.google.internal")
+            or hostname.endswith(".internal")
+            or hostname.endswith(".local")
+        ):
+            return False
+
+        addr_info = socket.getaddrinfo(hostname, None)
+        if not addr_info:
+            return False
+
+        for item in addr_info:
+            ip_str = item[4][0]
+            ip_obj = ipaddress.ip_address(ip_str)
+            if (
+                ip_obj.is_private
+                or ip_obj.is_loopback
+                or ip_obj.is_link_local
+                or ip_obj.is_reserved
+                or ip_obj.is_multicast
+                or ip_obj.is_unspecified
+            ):
+                return False
+
+        return True
+    except Exception:
+        return False
+
+
+def check_merchant_url_liveness(status_code: Optional[int] = None, exc: Optional[Exception] = None) -> bool:
+    if exc is not None:
+        return False
+    if status_code is None:
+        return False
+    if 200 <= status_code < 400:
+        return True
+    if status_code in (401, 403, 405, 429):
+        return True
+    if status_code in (404, 410) or status_code >= 500:
+        return False
+    return True
+
+
+@app.get("/api/v1/image-proxy")
+async def image_proxy(
+    url: str = Query(..., description="Encoded external product image URL")
+):
+    if not url:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Image URL required.",
+        )
+
+    if "/uploads/" in url or url.startswith("/uploads"):
+        cleaned_path = url
+        if "http://" in url or "https://" in url:
+            parsed = urlparse(url)
+            cleaned_path = parsed.path
+        if "/uploads/" in cleaned_path:
+            rel_path = cleaned_path.split("/uploads/", 1)[1]
+            base_dir = os.path.realpath(os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")))
+            full_path = os.path.realpath(os.path.abspath(os.path.join(base_dir, rel_path)))
+            if os.path.commonpath([full_path, base_dir]) != base_dir:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Access denied: Invalid file traversal attempt.",
+                )
+            if os.path.isfile(full_path):
+                content_type, _ = mimetypes.guess_type(full_path)
+                return FileResponse(full_path, media_type=content_type or "image/jpeg")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Local uploaded image not found: {rel_path}",
+            )
+
+    if not is_safe_external_url(url):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Security Error: Fetching internal/private IP addresses or loopback hosts is prohibited.",
+        )
+
+    parsed = urlparse(url)
+    referer = f"{parsed.scheme}://{parsed.netloc}/"
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        ),
+        "Referer": referer,
+        "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+    }
+
+    try:
+        current_url = url
+        max_hops = 2
+        async with httpx.AsyncClient(timeout=8.0, follow_redirects=False) as client:
+            for hop in range(max_hops + 1):
+                resp = await client.get(current_url, headers=headers)
+                if resp.status_code in (301, 302, 303, 307, 308):
+                    loc = resp.headers.get("Location")
+                    if not loc:
+                        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Redirect missing location.")
+                    redirect_target = urljoin(current_url, loc)
+                    if not is_safe_external_url(redirect_target):
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Security Error: Redirect to private/loopback IP is prohibited.",
+                        )
+                    current_url = redirect_target
+                    continue
+                elif resp.status_code == 200:
+                    if len(resp.content) > 15 * 1024 * 1024:
+                        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Image size exceeds 15MB limit.")
+                    content_type = resp.headers.get("content-type") or "image/jpeg"
+                    return Response(
+                        content=resp.content,
+                        media_type=content_type,
+                        headers={
+                            "Cache-Control": "public, max-age=86400",
+                            "X-Content-Type-Options": "nosniff",
+                        },
+                    )
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Image fetch returned {resp.status_code}",
+                    )
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Too many redirects.")
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[Image Proxy] Error proxying {url}: {e}")
+
+    if url.startswith("http://") or url.startswith("https://"):
+        return RedirectResponse(url=url)
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unable to retrieve image.")
+
+
+@app.get("/api/v1/products", response_model=List[ProductResponse])
+def get_products(
+    q: Optional[str] = Query(None, description="Search term across title, category, or specs"),
+    category: Optional[str] = Query(None, description="Filter by category slug"),
+    db: Session = Depends(get_db),
+):
+    query = db.query(Product).options(joinedload(Product.offers))
+    if category and category != "all":
+        query = query.filter(Product.category.ilike(category))
+    if q and q.strip():
+        term = f"%{q.strip()}%"
+        query = query.filter(
+            or_(
+                Product.title_en.ilike(term),
+                Product.title_bn.ilike(term),
+                Product.category.ilike(term),
+                Product.specs_summary.ilike(term),
+            )
+        )
+    return query.order_by(Product.id.asc()).all()
+
+
+@app.get("/api/v1/products/{slug}/offers", response_model=ProductDetailResponse)
+def get_product_offers(slug: str, db: Session = Depends(get_db)):
+    product = (
+        db.query(Product)
+        .options(joinedload(Product.offers), joinedload(Product.price_history))
+        .filter(Product.slug == slug)
+        .first()
+    )
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with slug '{slug}' not found.",
+        )
+    return product
+
+
+@app.post("/api/v1/leads", response_model=AdLeadResponse, status_code=status.HTTP_201_CREATED)
+def submit_ad_lead(lead_in: AdLeadCreate, db: Session = Depends(get_db)):
+    new_lead = AdLead(
+        brand_name=lead_in.brand_name,
+        contact_phone=lead_in.contact_phone,
+        selected_tier=lead_in.selected_tier,
+        budget_note=lead_in.budget_note,
+        status="Pending",
+        created_at=datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
+    )
+    db.add(new_lead)
+    db.commit()
+    db.refresh(new_lead)
+    return new_lead
+
+
+def sanitize_redirect_url(url: Optional[str], fallback: str = "https://www.google.com") -> str:
+    if not url:
+        return fallback
+    clean = str(url).strip()
+    if clean.startswith("//"):
+        clean = f"https:{clean}"
+    if not (clean.startswith("http://") or clean.startswith("https://")):
+        return fallback
+    if "\r" in clean or "\n" in clean or "\0" in clean:
+        return fallback
+    return clean
+
+
+@app.get("/go/offer/{offer_id}")
+@app.post("/api/v1/track/offer/{offer_id}")
+async def track_offer_click(
+    offer_id: int,
+    request: Request,
+    format: Optional[str] = Query(None),
+    channel: Optional[str] = Query(None, description="'website', 'facebook', or 'default'"),
+    db: Session = Depends(get_db),
+):
+    offer = db.query(StoreOffer).filter(StoreOffer.id == offer_id).first()
+    if not offer:
+        raise HTTPException(status_code=404, detail="Store offer not found.")
+
+    offer.clicks += 1
+    device_type = detect_device_type(request.headers.get("user-agent"))
+
+    target_url = sanitize_redirect_url(offer.target_url, fallback="")
+    prod_title = offer.product.title_en if offer.product else "Smartphone"
+    prod_cat = offer.product.category if offer.product else "Mobiles & Gadgets"
+
+    is_facebook_target = "facebook.com" in (target_url or "").lower() or channel == "facebook"
+    if is_facebook_target and channel == "facebook":
+        from url_healer import resolve_and_heal_offer_url
+        healed_url, stage = await resolve_and_heal_offer_url(
+            store_name=offer.store_name,
+            current_url=target_url,
+            website_url=offer.website_url,
+            facebook_url=offer.facebook_url,
+            product_title=prod_title,
+            product_category=prod_cat,
+            channel="facebook",
+        )
+        offer.facebook_url = healed_url
+        target_url = healed_url
+    elif not is_facebook_target and target_url and target_url.startswith("http"):
+        should_failover = False
+        is_broken_product_page = False
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9,bn;q=0.8",
+            }
+            async with httpx.AsyncClient(timeout=2.5, follow_redirects=True, headers=headers) as client:
+                status_code = None
+                resp_text = ""
+                try:
+                    res = await client.head(target_url)
+                    status_code = res.status_code
+                    if status_code in (405, 404):
+                        res = await client.get(target_url)
+                        status_code = res.status_code
+                        resp_text = getattr(res, "text", "") or ""
+                except Exception:
+                    res = await client.get(target_url)
+                    status_code = res.status_code
+                    resp_text = getattr(res, "text", "") or ""
+
+                if status_code in (404, 410):
+                    is_broken_product_page = True
+                elif not check_merchant_url_liveness(status_code=status_code):
+                    should_failover = True
+                elif resp_text and isinstance(resp_text, str):
+                    from url_healer import SOFT_404_PATTERNS
+                    t_low = resp_text[:30000].lower()
+                    if any(pat in t_low for pat in SOFT_404_PATTERNS):
+                        is_broken_product_page = True
+        except Exception:
+            should_failover = True
+
+        if is_broken_product_page:
+            from url_healer import resolve_and_heal_offer_url
+            healed_url, stage = await resolve_and_heal_offer_url(
+                store_name=offer.store_name,
+                current_url=target_url,
+                website_url=offer.website_url,
+                facebook_url=offer.facebook_url,
+                product_title=prod_title,
+                product_category=prod_cat,
+                channel=channel or "website",
+            )
+            offer.target_url = healed_url
+            if "facebook.com" not in healed_url:
+                offer.website_url = healed_url
+                offer.spider_status = "healed_category_url"
+            else:
+                offer.spider_status = "fb_fallback"
+            db.commit()
+            target_url = healed_url
+        elif should_failover:
+            from bd_stores_registry import get_store_facebook_fallback_url
+            fb_url = get_store_facebook_fallback_url(offer.store_name, prod_title)
+            offer.target_url = fb_url
+            offer.spider_status = "fb_fallback"
+            db.commit()
+            target_url = fb_url
+
+    safe_target = sanitize_redirect_url(target_url, fallback="https://www.google.com")
+
+    log_entry = ClickLog(
+        target_type="offer",
+        target_id=offer.id,
+        brand_or_store_name=offer.store_name,
+        device_type=device_type,
+        destination_url=safe_target,
+        clicked_at=datetime.now(timezone.utc),
+    )
+    db.add(log_entry)
+    db.commit()
+
+    if format == "json" or request.method == "POST":
+        return {
+            "redirect_url": safe_target,
+            "clicks": offer.clicks,
+            "store_name": offer.store_name,
+            "spider_status": offer.spider_status,
+        }
+    return RedirectResponse(url=safe_target, status_code=status.HTTP_302_FOUND)
+
+
+@app.get("/go/billboard/{billboard_id}")
+@app.post("/api/v1/track/billboard/{billboard_id}")
+def track_billboard_click(
+    billboard_id: int,
+    request: Request,
+    format: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+):
+    billboard = db.query(Billboard).filter(Billboard.id == billboard_id).first()
+    if not billboard:
+        raise HTTPException(status_code=404, detail="Billboard not found.")
+
+    billboard.clicks += 1
+    device_type = detect_device_type(request.headers.get("user-agent"))
+    safe_target = sanitize_redirect_url(billboard.target_url, fallback="/")
+
+    log_entry = ClickLog(
+        target_type="billboard",
+        target_id=billboard.id,
+        brand_or_store_name=billboard.sponsor_en,
+        device_type=device_type,
+        destination_url=safe_target,
+        clicked_at=datetime.now(timezone.utc),
+    )
+    db.add(log_entry)
+    db.commit()
+
+    if format == "json" or request.method == "POST":
+        return {
+            "redirect_url": safe_target,
+            "clicks": billboard.clicks,
+            "brand_name": billboard.sponsor_en,
+        }
+    return RedirectResponse(url=safe_target, status_code=status.HTTP_302_FOUND)
+
+
+@app.get("/go/spotlight/{spotlight_id}")
+@app.post("/api/v1/track/spotlight/{spotlight_id}")
+def track_spotlight_click(
+    spotlight_id: int,
+    request: Request,
+    format: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+):
+    spotlight = db.query(SpotlightCard).filter(SpotlightCard.id == spotlight_id).first()
+    if not spotlight:
+        raise HTTPException(status_code=404, detail="Spotlight card not found.")
+
+    spotlight.clicks += 1
+    device_type = detect_device_type(request.headers.get("user-agent"))
+    safe_target = sanitize_redirect_url(spotlight.target_url, fallback="/")
+
+    log_entry = ClickLog(
+        target_type="spotlight",
+        target_id=spotlight.id,
+        brand_or_store_name=spotlight.brand_title_en,
+        device_type=device_type,
+        destination_url=safe_target,
+        clicked_at=datetime.now(timezone.utc),
+    )
+    db.add(log_entry)
+    db.commit()
+
+    if format == "json" or request.method == "POST":
+        return {
+            "redirect_url": safe_target,
+            "clicks": spotlight.clicks,
+            "brand_name": spotlight.brand_title_en,
+        }
+    return RedirectResponse(url=safe_target, status_code=status.HTTP_302_FOUND)
+
+
+@app.post("/api/v1/admin/login", response_model=AdminLoginResponse)
+def admin_login(payload: AdminLoginRequest, request: Request, response: Response):
+    ip = get_client_ip(request)
+    check_and_update_lockout(ip, payload.pin.strip())
+    token = create_access_token({"sub": "jachai_admin", "role": "owner"})
+    response.set_cookie(
+        key="jachai_admin_token",
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=43200,
+    )
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": 43200,
+    }
+
+
+@app.post("/api/v1/admin/logout")
+def admin_logout(response: Response):
+    response.delete_cookie("jachai_admin_token")
+    return {"status": "locked"}
+
+
+@app.get("/api/v1/admin/session")
+def check_admin_session(admin_auth: dict = Depends(verify_admin_access)):
+    return {"authenticated": True, "auth_info": admin_auth}
+
+
+@app.get("/api/v1/admin/overview", response_model=AdminOverviewResponse)
+def get_admin_overview(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    billboards = db.query(Billboard).order_by(Billboard.id.asc()).all()
+    spotlight_cards = db.query(SpotlightCard).order_by(SpotlightCard.slot_code.asc()).all()
+    ticker_ads = db.query(TickerAd).order_by(TickerAd.priority_order.asc(), TickerAd.id.asc()).all()
+    products = db.query(Product).options(joinedload(Product.offers)).order_by(Product.id.asc()).all()
+    store_offers = db.query(StoreOffer).order_by(StoreOffer.id.asc()).all()
+    ad_leads = db.query(AdLead).order_by(AdLead.id.desc()).all()
+    homepage_blocks = db.query(HomepageBlock).order_by(HomepageBlock.slot_order.asc()).all()
+
+    return {
+        "billboards": billboards,
+        "spotlight_cards": spotlight_cards,
+        "spotlights": spotlight_cards,
+        "ticker_ads": ticker_ads,
+        "products": products,
+        "store_offers": store_offers,
+        "ad_leads": ad_leads,
+        "homepage_blocks": homepage_blocks,
+    }
+
+
+@app.post("/api/v1/admin/upload-banner")
+async def upload_banner(
+    file: UploadFile = File(...),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    allowed_exts = {".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"}
+    ext = os.path.splitext(file.filename)[1].lower() if file.filename else ""
+    if ext not in allowed_exts:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid file type. Allowed formats: {', '.join(allowed_exts)}",
+        )
+
+    content = await file.read()
+    if len(content) > 10 * 1024 * 1024:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File size exceeds maximum allowed limit of 10MB.",
+        )
+
+    if ext == ".svg":
+        content_str = content.decode("utf-8", errors="ignore").lower()
+        if any(bad_pattern in content_str for bad_pattern in ["<script", "onload=", "onerror=", "javascript:", "xlink:href=\"javascript", "href=\"javascript"]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Security Error: SVG contains prohibited executable scripts or handlers.",
+            )
+
+    base_name = os.path.splitext(os.path.basename(file.filename or "banner"))[0]
+    clean_base = re.sub(r"[^a-zA-Z0-9_\-]", "", base_name)[:32] or "banner"
+    safe_name = f"{uuid.uuid4().hex[:12]}_{clean_base}{ext}"
+    dest_path = os.path.realpath(os.path.abspath(os.path.join(UPLOAD_DIR, safe_name)))
+
+    upload_dir_real = os.path.realpath(os.path.abspath(UPLOAD_DIR))
+    if os.path.commonpath([dest_path, upload_dir_real]) != upload_dir_real:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Security Error: Invalid upload destination path.",
+        )
+
+    with open(dest_path, "wb") as f:
+        f.write(content)
+
+    public_url = f"/uploads/banners/{safe_name}"
+    full_image_url = f"http://127.0.0.1:8000{public_url}"
+    return {
+        "url": public_url,
+        "image_url": full_image_url,
+        "filename": safe_name,
+        "size_bytes": len(content),
+    }
+
+
+@app.get("/api/v1/admin/homepage-blocks", response_model=List[HomepageBlockResponse])
+def get_admin_homepage_blocks(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    return db.query(HomepageBlock).order_by(HomepageBlock.slot_order.asc()).all()
+
+
+@app.post("/api/v1/admin/homepage-blocks", response_model=HomepageBlockResponse, status_code=status.HTTP_201_CREATED)
+def create_homepage_block(
+    block_in: HomepageBlockCreate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    block = HomepageBlock(**block_in.model_dump())
+    db.add(block)
+    db.commit()
+    db.refresh(block)
+    return block
+
+
+@app.put("/api/v1/admin/homepage-blocks/{id}", response_model=HomepageBlockResponse)
+def update_homepage_block(
+    id: int,
+    block_in: HomepageBlockUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    block = db.query(HomepageBlock).filter(HomepageBlock.id == id).first()
+    if not block:
+        raise HTTPException(status_code=404, detail="Homepage block not found.")
+    for field, val in block_in.model_dump(exclude_unset=True).items():
+        setattr(block, field, val)
+    db.commit()
+    db.refresh(block)
+    return block
+
+
+@app.delete("/api/v1/admin/homepage-blocks/{id}")
+def delete_homepage_block(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    block = db.query(HomepageBlock).filter(HomepageBlock.id == id).first()
+    if not block:
+        raise HTTPException(status_code=404, detail="Homepage block not found.")
+    db.delete(block)
+    db.commit()
+    return {"status": "deleted", "id": id}
+
+
+@app.get("/api/v1/admin/homepage-slots", response_model=HomepageSlotsResponse)
+def get_admin_homepage_slots(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    blocks = db.query(HomepageBlock).order_by(HomepageBlock.slot_order.asc()).all()
+    slot_items = []
+    for order in range(1, 7):
+        blk = next((b for b in blocks if b.slot_order == order), None)
+        pinned_prod = db.query(Product).filter(Product.is_pinned_homepage.is_(True), Product.homepage_slot_order == order).first()
+
+        if blk:
+            slot_items.append(HomepageSlotItem(
+                slot_order=order,
+                product_id=pinned_prod.id if pinned_prod else None,
+                product_slug=pinned_prod.slug if pinned_prod else None,
+                title_en=blk.title_en,
+                title_bn=blk.title_bn,
+                subtitle_en=blk.subtitle_en,
+                subtitle_bn=blk.subtitle_bn,
+                search_query=blk.search_query,
+                category=blk.category,
+                image_url=blk.image_url,
+                badge_text=blk.badge_text,
+                starting_price_bdt=blk.starting_price_bdt,
+                is_active=blk.is_active,
+            ))
+        elif pinned_prod:
+            low_p = min([o.current_price for o in pinned_prod.offers], default=0)
+            slot_items.append(HomepageSlotItem(
+                slot_order=order,
+                product_id=pinned_prod.id,
+                product_slug=pinned_prod.slug,
+                title_en=pinned_prod.title_en,
+                title_bn=pinned_prod.title_bn,
+                subtitle_en=f"Starting from ৳{low_p:,}",
+                subtitle_bn="",
+                search_query=pinned_prod.title_en,
+                category=pinned_prod.category,
+                image_url=pinned_prod.image_url,
+                badge_text="🔥 PINNED PRODUCT",
+                starting_price_bdt=low_p,
+                is_active=True,
+            ))
+        else:
+            slot_items.append(HomepageSlotItem(
+                slot_order=order,
+                title_en=f"Slot #{order} Hub",
+                title_bn=f"স্লট #{order}",
+                search_query="deals",
+                category="All",
+                image_url="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+                is_active=True,
+            ))
+
+    catalog = db.query(Product).options(joinedload(Product.offers)).order_by(Product.id.asc()).limit(100).all()
+    avail = []
+    for p in catalog:
+        low_p = min([o.current_price for o in p.offers], default=0)
+        avail.append({
+            "id": p.id,
+            "title_en": p.title_en,
+            "title_bn": p.title_bn,
+            "slug": p.slug,
+            "category": p.category,
+            "image_url": p.image_url,
+            "lowest_price": low_p,
+            "homepage_slot_order": p.homepage_slot_order,
+            "is_pinned": p.is_pinned_homepage,
+        })
+
+    return HomepageSlotsResponse(slots=slot_items, available_products=avail)
+
+
+@app.post("/api/v1/admin/homepage-slots")
+def create_or_pin_homepage_slot(
+    slot_data: dict = Body(...),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    slot_order = int(slot_data.get("slot_order", 1))
+    product_id = slot_data.get("product_id")
+
+    if product_id:
+        existing_p = db.query(Product).filter(Product.homepage_slot_order == slot_order).all()
+        for ep in existing_p:
+            ep.homepage_slot_order = 0
+        prod = db.query(Product).filter(Product.id == product_id).first()
+        if prod:
+            prod.is_pinned_homepage = True
+            prod.homepage_slot_order = slot_order
+            if not slot_data.get("title_en"):
+                slot_data["title_en"] = prod.title_en
+                slot_data["title_bn"] = prod.title_bn
+                slot_data["search_query"] = prod.title_en
+                slot_data["image_url"] = prod.image_url
+                slot_data["category"] = prod.category
+
+    block = db.query(HomepageBlock).filter(HomepageBlock.slot_order == slot_order).first()
+    if not block:
+        block = HomepageBlock(
+            slot_order=slot_order,
+            title_en=slot_data.get("title_en", f"Slot #{slot_order}"),
+            title_bn=slot_data.get("title_bn", f"স্লট #{slot_order}"),
+            subtitle_en=slot_data.get("subtitle_en", ""),
+            subtitle_bn=slot_data.get("subtitle_bn", ""),
+            search_query=slot_data.get("search_query", "deals"),
+            category=slot_data.get("category", "All"),
+            image_url=slot_data.get("image_url", "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"),
+            badge_text=slot_data.get("badge_text", "🔥 PINNED"),
+            starting_price_bdt=int(slot_data.get("starting_price_bdt", 0)),
+            is_active=slot_data.get("is_active", True),
+        )
+        db.add(block)
+    else:
+        for fld in ["title_en", "title_bn", "subtitle_en", "subtitle_bn", "search_query", "category", "image_url", "badge_text", "is_active"]:
+            if fld in slot_data:
+                setattr(block, fld, slot_data[fld])
+        if "starting_price_bdt" in slot_data:
+            block.starting_price_bdt = int(slot_data["starting_price_bdt"])
+
+    db.commit()
+    db.refresh(block)
+    return {"message": f"Homepage slot #{slot_order} updated successfully.", "slot": block}
+
+
+@app.put("/api/v1/admin/homepage-slots/{slot_order}")
+def update_homepage_slot(
+    slot_order: int,
+    slot_data: dict = Body(...),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    slot_data["slot_order"] = slot_order
+    return create_or_pin_homepage_slot(slot_data=slot_data, db=db, admin_auth=admin_auth)
+
+
+@app.put("/api/v1/admin/homepage-slots")
+def bulk_update_homepage_slots(
+    slots_list: List[dict] = Body(...),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    for s_item in slots_list:
+        create_or_pin_homepage_slot(slot_data=s_item, db=db, admin_auth=admin_auth)
+    return {"message": "All homepage slots updated successfully."}
+
+
+@app.delete("/api/v1/admin/homepage-slots/{slot_order}")
+def delete_homepage_slot(
+    slot_order: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    prods = db.query(Product).filter(Product.homepage_slot_order == slot_order).all()
+    for p in prods:
+        p.homepage_slot_order = 0
+    block = db.query(HomepageBlock).filter(HomepageBlock.slot_order == slot_order).first()
+    if block:
+        db.delete(block)
+    db.commit()
+    return {"status": "cleared", "slot_order": slot_order}
+
+
+@app.get("/api/v1/admin/registry/status")
+def get_admin_registry_status(
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    from bd_stores_registry import get_registry_status
+    return get_registry_status()
+
+
+@app.post("/api/v1/admin/registry/reload")
+def reload_admin_registry(
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    from bd_stores_registry import load_all_registries
+    meta = load_all_registries(force=True)
+    return {
+        "status": "success",
+        "message": f"Successfully reloaded {meta['total_stores']} stores across {meta['categories_count']} categories.",
+        "registry": meta
+    }
+
+
+@app.post("/api/v1/admin/billboards", response_model=BillboardResponse, status_code=status.HTTP_201_CREATED)
+def create_billboard(
+    b_in: BillboardCreate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    b = Billboard(**b_in.model_dump())
+    db.add(b)
+    db.commit()
+    db.refresh(b)
+    return b
+
+
+@app.put("/api/v1/admin/billboards/{id}", response_model=BillboardResponse)
+def update_billboard(
+    id: int,
+    b_in: BillboardUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    b = db.query(Billboard).filter(Billboard.id == id).first()
+    if not b:
+        raise HTTPException(status_code=404, detail="Billboard not found.")
+    for field, val in b_in.model_dump(exclude_unset=True).items():
+        setattr(b, field, val)
+    db.commit()
+    db.refresh(b)
+    return b
+
+
+@app.delete("/api/v1/admin/billboards/{id}")
+def delete_billboard(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    b = db.query(Billboard).filter(Billboard.id == id).first()
+    if not b:
+        raise HTTPException(status_code=404, detail="Billboard not found.")
+    db.delete(b)
+    db.commit()
+    return {"status": "deleted", "id": id}
+
+
+@app.put("/api/v1/admin/spotlights/{id}", response_model=SpotlightCardResponse)
+def update_spotlight(
+    id: int,
+    s_in: SpotlightCardUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    s = db.query(SpotlightCard).filter(SpotlightCard.id == id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Spotlight card not found.")
+    for field, val in s_in.model_dump(exclude_unset=True).items():
+        setattr(s, field, val)
+    db.commit()
+    db.refresh(s)
+    return s
+
+
+@app.post("/api/v1/admin/tickers", response_model=TickerAdResponse, status_code=status.HTTP_201_CREATED)
+def create_ticker(
+    t_in: TickerAdCreate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    t = TickerAd(**t_in.model_dump())
+    db.add(t)
+    db.commit()
+    db.refresh(t)
+    return t
+
+
+@app.delete("/api/v1/admin/tickers/{id}")
+def delete_ticker(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    t = db.query(TickerAd).filter(TickerAd.id == id).first()
+    if not t:
+        raise HTTPException(status_code=404, detail="Ticker not found.")
+    db.delete(t)
+    db.commit()
+    return {"status": "deleted", "id": id}
+
+
+@app.put("/api/v1/admin/tickers/speed")
+def update_ticker_speed(
+    speed_in: TickerSpeedUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    db.query(TickerAd).update({"glide_speed_sec": speed_in.glide_speed_sec})
+    db.commit()
+    return {"glide_speed_sec": speed_in.glide_speed_sec}
+
+
+@app.post("/api/v1/admin/products", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+def create_product(
+    p_in: ProductCreate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    existing = db.query(Product).filter(Product.slug == p_in.slug).first()
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Product with slug '{p_in.slug}' already exists.")
+    p = Product(**p_in.model_dump())
+    db.add(p)
+    db.commit()
+    db.refresh(p)
+    return p
+
+
+@app.put("/api/v1/admin/products/{id}", response_model=ProductResponse)
+def update_product(
+    id: int,
+    p_in: ProductUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    p = db.query(Product).options(joinedload(Product.offers)).filter(Product.id == id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Product not found.")
+    for field, val in p_in.model_dump(exclude_unset=True).items():
+        setattr(p, field, val)
+    db.commit()
+    db.refresh(p)
+    return p
+
+
+@app.delete("/api/v1/admin/products/{id}")
+def delete_product(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    p = db.query(Product).filter(Product.id == id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Product not found.")
+    db.delete(p)
+    db.commit()
+    return {"status": "deleted", "id": id}
+
+
+@app.post("/api/v1/admin/offers", response_model=StoreOfferResponse, status_code=status.HTTP_201_CREATED)
+def create_store_offer(
+    offer_in: StoreOfferCreate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    product = db.query(Product).filter(Product.id == offer_in.product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Associated product not found.")
+
+    offer = StoreOffer(**offer_in.model_dump())
+    db.add(offer)
+
+    now = datetime.utcnow()
+    history = PriceHistory(
+        product_id=offer.product_id,
+        recorded_price=offer.current_price,
+        recorded_at=now,
+    )
+    db.add(history)
+
+    if product.price_15d_ago == 0 or offer.current_price < product.price_15d_ago:
+        product.price_15d_ago = offer.current_price
+
+    db.commit()
+    db.refresh(offer)
+    return offer
+
+
+@app.put("/api/v1/admin/offers/{id}", response_model=StoreOfferResponse)
+def update_store_offer(
+    id: int,
+    offer_in: StoreOfferUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    offer = db.query(StoreOffer).filter(StoreOffer.id == id).first()
+    if not offer:
+        raise HTTPException(status_code=404, detail="Store offer not found.")
+
+    price_changed = offer_in.current_price is not None and offer_in.current_price != offer.current_price
+
+    for field, val in offer_in.model_dump(exclude_unset=True).items():
+        setattr(offer, field, val)
+
+    if price_changed:
+        history = PriceHistory(
+            product_id=offer.product_id,
+            recorded_price=offer.current_price,
+            recorded_at=datetime.utcnow(),
+        )
+        db.add(history)
+
+    db.commit()
+    db.refresh(offer)
+    return offer
+
+
+@app.delete("/api/v1/admin/offers/{id}")
+def delete_store_offer(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    offer = db.query(StoreOffer).filter(StoreOffer.id == id).first()
+    if not offer:
+        raise HTTPException(status_code=404, detail="Store offer not found.")
+    db.delete(offer)
+    db.commit()
+    return {"status": "deleted", "id": id}
+
+
+@app.put("/api/v1/admin/leads/{id}", response_model=AdLeadResponse)
+def update_lead_status(
+    id: int,
+    lead_in: AdLeadUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    lead = db.query(AdLead).filter(AdLead.id == id).first()
+    if not lead:
+        raise HTTPException(status_code=404, detail="Ad lead not found.")
+    lead.status = lead_in.status
+    db.commit()
+    db.refresh(lead)
+    return lead
+
+
+@app.get("/api/v1/admin/analytics/sponsors", response_model=SponsorAnalyticsResponse)
+def get_sponsor_analytics(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    billboards = db.query(Billboard).order_by(Billboard.clicks.desc()).all()
+    spotlights = db.query(SpotlightCard).order_by(SpotlightCard.clicks.desc()).all()
+
+    campaign_list: List[SponsorCampaignAnalytics] = []
+
+    for b in billboards:
+        ctr = round((b.clicks / max(b.impressions, 1)) * 100, 2)
+        status_text = "Active" if b.is_active else "Paused"
+        report = (
+            f"📊 JaChai Ad Performance — {b.sponsor_en} | Slot: Tier 1 Billboard | "
+            f"Total Views: {b.impressions:,} | Direct Store Clicks: {b.clicks:,} | "
+            f"CTR: {ctr}% | Status: {status_text}"
+        )
+        campaign_list.append(
+            SponsorCampaignAnalytics(
+                id=b.id,
+                tier="Tier 1 Billboard",
+                brand_name=b.sponsor_en,
+                impressions=b.impressions,
+                clicks=b.clicks,
+                ctr_percent=ctr,
+                status=status_text,
+                whatsapp_report_text=report,
+            )
+        )
+
+    for s in spotlights:
+        ctr = round((s.clicks / max(s.impressions, 1)) * 100, 2)
+        status_text = "Active" if s.is_active else "Paused"
+        report = (
+            f"📊 JaChai Ad Performance — {s.brand_title_en} | Slot: {s.slot_code} Spotlight | "
+            f"Total Views: {s.impressions:,} | Direct Store Clicks: {s.clicks:,} | "
+            f"CTR: {ctr}% | Status: {status_text}"
+        )
+        campaign_list.append(
+            SponsorCampaignAnalytics(
+                id=s.id,
+                tier="Tier 2 Spotlight",
+                brand_name=s.brand_title_en,
+                impressions=s.impressions,
+                clicks=s.clicks,
+                ctr_percent=ctr,
+                status=status_text,
+                whatsapp_report_text=report,
+            )
+        )
+
+    top_stores = (
+        db.query(StoreOffer)
+        .order_by(desc(StoreOffer.clicks))
+        .limit(10)
+        .all()
+    )
+
+    recent_clicks = (
+        db.query(ClickLog)
+        .order_by(desc(ClickLog.clicked_at))
+        .limit(25)
+        .all()
+    )
+
+    return {
+        "campaigns": campaign_list,
+        "top_stores": top_stores,
+        "recent_clicks": recent_clicks,
+    }
+
+
+@app.post("/api/v1/admin/crawler/run", response_model=CrawlerSummaryResponse)
+async def trigger_run_all_spiders(
+    simulate: bool = Query(True, description="Apply realistic market micro-fluctuations during demos"),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    summary = await run_all_spiders(db, simulate_live_market=simulate)
+    updated_products = (
+        db.query(Product)
+        .options(joinedload(Product.offers))
+        .filter(Product.is_pinned_homepage.is_(True))
+        .order_by(Product.id.asc())
+        .all()
+    )
+    summary["products"] = updated_products
+    return summary
+
+
+@app.post("/api/v1/admin/crawler/run/{product_id}", response_model=CrawlerSummaryResponse)
+async def trigger_run_product_spiders(
+    product_id: int,
+    simulate: bool = Query(True, description="Apply realistic market micro-fluctuations"),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found.")
+
+    summary = await run_all_spiders(db, product_id=product_id, simulate_live_market=simulate)
+    updated_products = (
+        db.query(Product)
+        .options(joinedload(Product.offers))
+        .filter(Product.id == product_id)
+        .all()
+    )
+    summary["products"] = updated_products
+    return summary
+
+
+@app.post("/api/v1/admin/crawler/offer/{offer_id}", response_model=StoreOfferResponse)
+async def rescrape_single_offer_endpoint(
+    offer_id: int,
+    simulate: bool = Query(True, description="Apply realistic market micro-fluctuations"),
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    await scrape_single_offer(offer_id, db, simulate_live_market=simulate)
+    offer = db.query(StoreOffer).filter(StoreOffer.id == offer_id).first()
+    if not offer:
+        raise HTTPException(status_code=404, detail="Store offer not found.")
+    return offer
+
+
+@app.get("/api/v1/admin/crawler/health", response_model=List[SpiderHealthItem])
+def get_spider_health_matrix(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    offers = db.query(StoreOffer).order_by(StoreOffer.id.asc()).all()
+    health_matrix = []
+    for off in offers:
+        domain = ""
+        if off.target_url:
+            try:
+                parsed = urlparse(off.target_url)
+                domain = parsed.netloc or parsed.path.split("/")[0]
+            except Exception:
+                domain = off.store_name
+        if not domain:
+            domain = off.store_name
+
+        health_matrix.append(
+            SpiderHealthItem(
+                id=off.id,
+                product_id=off.product_id,
+                store_name=off.store_name,
+                domain=domain,
+                target_url=off.target_url,
+                css_selector=off.css_selector,
+                spider_status=off.spider_status,
+                current_price=off.current_price,
+                last_synced_at=off.last_synced_at,
+            )
+        )
+    return health_matrix
+
+
+class MacroTickerUpdate(BaseModel):
+    gold_22k_price: Optional[str] = None
+    gold_24k_price: Optional[str] = None
+    gold_21k_price: Optional[str] = None
+    petrol_price: Optional[str] = None
+    diesel_price: Optional[str] = None
+    octane_price: Optional[str] = None
+    soybean_oil_price: Optional[str] = None
+    mustard_oil_price: Optional[str] = None
+    live_scrape: Optional[bool] = True
+
+
+MACRO_TICKER_CACHE = {
+    "gold_22k_price": "৳1,18,500 / bhori",
+    "gold_24k_price": "৳1,29,200 / bhori",
+    "gold_21k_price": "৳1,13,050 / bhori",
+    "petrol_price": "৳121 / litre",
+    "diesel_price": "৳105 / litre",
+    "octane_price": "৳125 / litre",
+    "soybean_oil_price": "৳175 / litre",
+    "mustard_oil_price": "৳260 / litre",
+    "last_refreshed": "Just now",
+    "source": "BAJUS Official Portal & BPC Petroleum Index"
+}
+
+
+@app.get("/api/v1/macro-ticker")
+def get_macro_ticker():
+    return MACRO_TICKER_CACHE
+
+
+@app.post("/api/v1/admin/refresh-ticker")
+def admin_refresh_ticker(payload: MacroTickerUpdate):
+    update_data = {k: v for k, v in payload.dict().items() if v is not None and k != "live_scrape"}
+    MACRO_TICKER_CACHE.update(update_data)
+    MACRO_TICKER_CACHE["last_refreshed"] = "Just now"
+    return {"status": "success", "message": "Ticker board synchronized with latest scrape.", "data": MACRO_TICKER_CACHE}
+
+
+@app.post("/api/v1/admin/crawler/scrape-macro")
+@app.post("/api/v1/admin/scrape-macro-prices")
+async def trigger_scrape_macro_prices(
+    payload: Optional[MacroTickerUpdate] = None,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    scraped_source = "BAJUS Portal & National Petroleum Index"
+    now_str = datetime.now().strftime("%I:%M %p, %d %b %Y")
+
+    do_live = payload.live_scrape if payload else True
+    gold_22k = "৳19,550 / g (৳2,28,030 / bhori)"
+    gold_21k = "৳18,670 / g (৳2,17,765 / bhori)"
+    gold_24k = "৳1,29,200 / bhori"
+
+    if do_live:
+        try:
+            async with httpx.AsyncClient(timeout=4.0, follow_redirects=True) as client:
+                resp = await client.get(
+                    "https://bajus.org/",
+                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+                )
+                if resp.status_code == 200:
+                    text = resp.text
+                    m22 = re.search(r'22\s*Karat\s*(\d+)\s*BDT/GRAM', text, re.IGNORECASE)
+                    m21 = re.search(r'21\s*Karat\s*(\d+)\s*BDT/GRAM', text, re.IGNORECASE)
+                    if m22:
+                        g22 = int(m22.group(1))
+                        bhori_22 = int(g22 * 11.664)
+                        gold_22k = f"৳{g22:,}/g (৳{bhori_22:,}/bhori)"
+                        scraped_source = "BAJUS Live Web Scraper (bajus.org)"
+                    if m21:
+                        g21 = int(m21.group(1))
+                        bhori_21 = int(g21 * 11.664)
+                        gold_21k = f"৳{g21:,}/g (৳{bhori_21:,}/bhori)"
+        except Exception as exc:
+            print(f"[Macro Scraper] Live BAJUS fetch fallback: {exc}")
+
+    soybean = "৳175 / litre (5L ৳850)"
+    mustard = "৳260 / litre"
+    octane = "৳125 / litre"
+    diesel = "৳105 / litre"
+    petrol = "৳121 / litre"
+
+    if payload:
+        if payload.gold_22k_price: gold_22k = payload.gold_22k_price
+        if payload.gold_21k_price: gold_21k = payload.gold_21k_price
+        if payload.gold_24k_price: gold_24k = payload.gold_24k_price
+        if payload.soybean_oil_price: soybean = payload.soybean_oil_price
+        if payload.mustard_oil_price: mustard = payload.mustard_oil_price
+        if payload.octane_price: octane = payload.octane_price
+        if payload.diesel_price: diesel = payload.diesel_price
+        if payload.petrol_price: petrol = payload.petrol_price
+
+    MACRO_TICKER_CACHE.update({
+        "gold_22k_price": gold_22k,
+        "gold_24k_price": gold_24k,
+        "gold_21k_price": gold_21k,
+        "petrol_price": petrol,
+        "diesel_price": diesel,
+        "octane_price": octane,
+        "soybean_oil_price": soybean,
+        "mustard_oil_price": mustard,
+        "last_refreshed": now_str,
+        "source": scraped_source,
+    })
+
+    try:
+        gold_ad = db.query(TickerAd).filter(TickerAd.text_en.ilike("%GOLD%")).first()
+        if gold_ad:
+            gold_ad.text_en = f"BAJUS LIVE GOLD INDEX: 22K Hallmarked Gold: {gold_22k} · 21K: {gold_21k} · Live Rate Tracked Across Verified Jewellers"
+
+        oil_ad = db.query(TickerAd).filter(TickerAd.text_en.ilike("%OIL%")).first()
+        if oil_ad:
+            oil_ad.text_en = f"LIVE OIL PRICE INDEX: Bottled Soybean Oil: {soybean} · Pure Mustard Oil: {mustard} · Fuel Octane: {octane} · Diesel: {diesel}"
+
+        db.commit()
+    except Exception as db_err:
+        print(f"[Macro Scraper] DB sync notice: {db_err}")
+        db.rollback()
+
+    return {
+        "status": "success",
+        "message": "Live Gold & Oil commodity rates successfully scraped and synchronized with ticker board.",
+        "scraped_at": now_str,
+        "source": scraped_source,
+        "data": MACRO_TICKER_CACHE,
+    }

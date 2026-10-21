@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+    <defs>
+      <linearGradient id="pjBg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#18181B"/>
+        <stop offset="100%" stop-color="#09090B"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#pjBg)"/>
+    <!-- Panjabi Silhouette -->
+    <path d="M 310,100 L 360,170 L 440,170 L 490,100 L 590,220 L 530,270 L 520,540 L 280,540 L 270,270 L 210,220 Z" fill="#F4F4F5"/>
+    <!-- Mandarin/Band Collar -->
+    <path d="M 360,170 C 380,185 420,185 440,170 L 435,145 C 415,155 385,155 365,145 Z" fill="#E4E4E7"/>
+    <!-- Embroidered Button Placket -->
+    <rect x="390" y="180" width="20" height="150" fill="#D4D4D8" stroke="#A1A1AA" stroke-width="1"/>
+    <circle cx="400" cy="205" r="3" fill="#D97706"/>
+    <circle cx="400" cy="240" r="3" fill="#D97706"/>
+    <circle cx="400" cy="275" r="3" fill="#D97706"/>
+    <circle cx="400" cy="310" r="3" fill="#D97706"/>
+    <text x="400" y="575" fill="#A1A1AA" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="18" letter-spacing="3" text-anchor="middle">PREMIUM EGYPTIAN GIZA COTTON PANJABI</text>
+  
+</svg>

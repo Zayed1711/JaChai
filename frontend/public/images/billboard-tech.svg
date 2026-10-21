@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+
+    <defs>
+      <linearGradient id="bb3" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0F172A"/>
+        <stop offset="50%" stop-color="#1E293B"/>
+        <stop offset="100%" stop-color="#0A0B0E"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="600" fill="url(#bb3)"/>
+    <!-- Dynamic Glowing Titanium Bevels -->
+    <circle cx="900" cy="300" r="280" fill="#38BDF8" opacity="0.12"/>
+    <rect x="750" y="80" width="300" height="520" rx="40" fill="#1E293B" stroke="#64748B" stroke-width="4" opacity="0.6"/>
+  
+</svg>

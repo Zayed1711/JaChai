@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="goldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1015"/>
+      <stop offset="50%" stop-color="#1A1505"/>
+      <stop offset="100%" stop-color="#0A0B0E"/>
+    </linearGradient>
+    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="25%" stop-color="#FBBF24"/>
+      <stop offset="50%" stop-color="#D97706"/>
+      <stop offset="75%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#goldBg)"/>
+  <circle cx="400" cy="270" r="220" fill="url(#goldGlow)"/>
+
+  <!-- 22K Gold Bar Hallmark Ingot -->
+  <g transform="translate(400, 260) rotate(-8)">
+    <rect x="-140" y="-85" width="280" height="170" rx="14" fill="url(#goldShine)" stroke="#FEF3C7" stroke-width="3" filter="drop-shadow(0 15px 30px rgba(0,0,0,0.8))"/>
+    <rect x="-125" y="-72" width="250" height="144" rx="8" fill="none" stroke="#92400E" stroke-width="1.5" stroke-dasharray="4,3"/>
+    
+    <!-- Hallmark Stamping -->
+    <text x="0" y="-35" font-family="'Oswald', sans-serif" font-weight="700" font-size="20" fill="#78350F" letter-spacing="4" text-anchor="middle">BAJUS STANDARD</text>
+    <text x="0" y="5" font-family="'Oswald', sans-serif" font-weight="800" font-size="34" fill="#451A03" letter-spacing="3" text-anchor="middle">22K 916</text>
+    <text x="0" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#78350F" letter-spacing="2" text-anchor="middle">1 BHORI · 11.664g</text>
+    <text x="0" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="10" fill="#92400E" letter-spacing="1" text-anchor="middle">★ HALLMARKED GUARANTEED ★</text>
+  </g>
+
+  <!-- Gold Ring Ornament Accent -->
+  <ellipse cx="230" cy="360" rx="55" ry="32" fill="none" stroke="url(#goldShine)" stroke-width="12" filter="drop-shadow(0 10px 20px rgba(0,0,0,0.7))"/>
+  <ellipse cx="570" cy="340" rx="45" ry="26" fill="none" stroke="url(#goldShine)" stroke-width="10" filter="drop-shadow(0 10px 20px rgba(0,0,0,0.7))"/>
+
+  <text x="400" y="475" font-family="'Oswald', sans-serif" font-weight="700" font-size="22" fill="#FBBF24" letter-spacing="4" text-anchor="middle">LIVE GOLD RATE TRACKING</text>
+  <text x="400" y="505" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="13" fill="#A1A1AA" letter-spacing="1" text-anchor="middle">REAL-TIME BANGLADESH JEWELLERY INDEX</text>
+</svg>
+

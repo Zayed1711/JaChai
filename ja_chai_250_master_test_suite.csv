@@ -1,0 +1,251 @@
+Test_ID,Category_Group,Query,Expected_Category,Min_Price_BDT,Max_Price_BDT
+TC_001,Cat_01_Mobile_Gadgets,iphone 11,mobile-gadgets,15000,250000
+TC_002,Cat_01_Mobile_Gadgets,iphone 12,mobile-gadgets,15000,250000
+TC_003,Cat_01_Mobile_Gadgets,iphone 13,mobile-gadgets,15000,250000
+TC_004,Cat_01_Mobile_Gadgets,iphone 14,mobile-gadgets,15000,250000
+TC_005,Cat_01_Mobile_Gadgets,iphone 14 pro max,mobile-gadgets,15000,250000
+TC_006,Cat_01_Mobile_Gadgets,iphone 15,mobile-gadgets,15000,250000
+TC_007,Cat_01_Mobile_Gadgets,iphone 15 pro,mobile-gadgets,15000,250000
+TC_008,Cat_01_Mobile_Gadgets,iphone 16,mobile-gadgets,15000,250000
+TC_009,Cat_01_Mobile_Gadgets,iphone 16 pro max,mobile-gadgets,15000,250000
+TC_010,Cat_01_Mobile_Gadgets,samsung galaxy s23,mobile-gadgets,15000,250000
+TC_011,Cat_01_Mobile_Gadgets,samsung galaxy s24 ultra,mobile-gadgets,15000,250000
+TC_012,Cat_01_Mobile_Gadgets,google pixel 7,mobile-gadgets,15000,250000
+TC_013,Cat_01_Mobile_Gadgets,google pixel 8 pro,mobile-gadgets,15000,250000
+TC_014,Cat_01_Mobile_Gadgets,xiaomi redmi note 13,mobile-gadgets,15000,250000
+TC_015,Cat_01_Mobile_Gadgets,oneplus 12,mobile-gadgets,15000,250000
+TC_016,Cat_01_Mobile_Gadgets,realme c55,mobile-gadgets,15000,250000
+TC_017,Cat_01_Mobile_Gadgets,vivo v30,mobile-gadgets,15000,250000
+TC_018,Cat_01_Mobile_Gadgets,oppo reno 11,mobile-gadgets,15000,250000
+TC_019,Cat_01_Mobile_Gadgets,poco x6 pro,mobile-gadgets,15000,250000
+TC_020,Cat_01_Mobile_Gadgets,infinix note 30,mobile-gadgets,15000,250000
+TC_021,Cat_01_Mobile_Gadgets,tecno spark 20,mobile-gadgets,15000,250000
+TC_022,Cat_01_Mobile_Gadgets,asus rog phone 8,mobile-gadgets,15000,250000
+TC_023,Cat_01_Mobile_Gadgets,nothing phone 2,mobile-gadgets,15000,250000
+TC_024,Cat_01_Mobile_Gadgets,iqoo 12,mobile-gadgets,15000,250000
+TC_025,Cat_01_Mobile_Gadgets,huawei nova 11,mobile-gadgets,15000,250000
+TC_026,Cat_02_Mobile_Accessories,iphone 14 back cover,mobile-gadgets,100,15000
+TC_027,Cat_02_Mobile_Accessories,iphone 15 silicone case,mobile-gadgets,100,15000
+TC_028,Cat_02_Mobile_Accessories,tempered glass protector,mobile-gadgets,100,15000
+TC_029,Cat_02_Mobile_Accessories,20w usb-c fast charger,mobile-gadgets,100,15000
+TC_030,Cat_02_Mobile_Accessories,magsafe wireless charger,mobile-gadgets,100,15000
+TC_031,Cat_02_Mobile_Accessories,type-c to type-c cable,mobile-gadgets,100,15000
+TC_032,Cat_02_Mobile_Accessories,airpods pro 2,mobile-gadgets,100,15000
+TC_033,Cat_02_Mobile_Accessories,anker power bank 20000mah,mobile-gadgets,100,15000
+TC_034,Cat_02_Mobile_Accessories,bluetooth neckband,mobile-gadgets,100,15000
+TC_035,Cat_02_Mobile_Accessories,wireless earbuds tws,mobile-gadgets,100,15000
+TC_036,Cat_02_Mobile_Accessories,rog gaming trigger,mobile-gadgets,100,15000
+TC_037,Cat_02_Mobile_Accessories,phone cooling fan,mobile-gadgets,100,15000
+TC_038,Cat_02_Mobile_Accessories,apple 35w dual charger,mobile-gadgets,100,15000
+TC_039,Cat_02_Mobile_Accessories,samsung 25w wall adapter,mobile-gadgets,100,15000
+TC_040,Cat_02_Mobile_Accessories,baseus car charger,mobile-gadgets,100,15000
+TC_041,Cat_02_Mobile_Accessories,samsung s24 ultra case,mobile-gadgets,100,15000
+TC_042,Cat_02_Mobile_Accessories,redmi note 13 cover,mobile-gadgets,100,15000
+TC_043,Cat_02_Mobile_Accessories,camera lens protector,mobile-gadgets,100,15000
+TC_044,Cat_02_Mobile_Accessories,magsafe wallet,mobile-gadgets,100,15000
+TC_045,Cat_02_Mobile_Accessories,type-c OTG adapter,mobile-gadgets,100,15000
+TC_046,Cat_02_Mobile_Accessories,lightning cable mfi,mobile-gadgets,100,15000
+TC_047,Cat_02_Mobile_Accessories,smart phone stand,mobile-gadgets,100,15000
+TC_048,Cat_02_Mobile_Accessories,mobile gimbal holder,mobile-gadgets,100,15000
+TC_049,Cat_02_Mobile_Accessories,universal bike phone mount,mobile-gadgets,100,15000
+TC_050,Cat_02_Mobile_Accessories,bluetooth selfie stick,mobile-gadgets,100,15000
+TC_051,Cat_03_Smartwatches,smartwatch,mobile-gadgets,800,120000
+TC_052,Cat_03_Smartwatches,smart watch,mobile-gadgets,800,120000
+TC_053,Cat_03_Smartwatches,apple watch series 9,mobile-gadgets,800,120000
+TC_054,Cat_03_Smartwatches,apple watch ultra 2,mobile-gadgets,800,120000
+TC_055,Cat_03_Smartwatches,samsung galaxy watch 6,mobile-gadgets,800,120000
+TC_056,Cat_03_Smartwatches,samsung galaxy watch 6 classic,mobile-gadgets,800,120000
+TC_057,Cat_03_Smartwatches,amazfit bip 5,mobile-gadgets,800,120000
+TC_058,Cat_03_Smartwatches,amazfit gtr 4,mobile-gadgets,800,120000
+TC_059,Cat_03_Smartwatches,haylou solar plus,mobile-gadgets,800,120000
+TC_060,Cat_03_Smartwatches,colmi p71 smartwatch,mobile-gadgets,800,120000
+TC_061,Cat_03_Smartwatches,kieslect kr pro,mobile-gadgets,800,120000
+TC_062,Cat_03_Smartwatches,xiaomi mi band 8,mobile-gadgets,800,120000
+TC_063,Cat_03_Smartwatches,mibro watch a2,mobile-gadgets,800,120000
+TC_064,Cat_03_Smartwatches,imiki sf1,mobile-gadgets,800,120000
+TC_065,Cat_03_Smartwatches,fire-boltt ninja,mobile-gadgets,800,120000
+TC_066,Cat_03_Smartwatches,noise colorfit pro 5,mobile-gadgets,800,120000
+TC_067,Cat_03_Smartwatches,garmin forerunner 55,mobile-gadgets,800,120000
+TC_068,Cat_03_Smartwatches,fitbit sense 2,mobile-gadgets,800,120000
+TC_069,Cat_03_Smartwatches,huawei watch gt 4,mobile-gadgets,800,120000
+TC_070,Cat_03_Smartwatches,amoled bluetooth calling smartwatch,mobile-gadgets,800,120000
+TC_071,Cat_03_Smartwatches,fitness tracking smart band,mobile-gadgets,800,120000
+TC_072,Cat_03_Smartwatches,rugged military smartwatch,mobile-gadgets,800,120000
+TC_073,Cat_03_Smartwatches,square dial smartwatch,mobile-gadgets,800,120000
+TC_074,Cat_03_Smartwatches,round dial metal smartwatch,mobile-gadgets,800,120000
+TC_075,Cat_03_Smartwatches,kids gps tracker smartwatch,mobile-gadgets,800,120000
+TC_076,Cat_04_Watches_Horology,casio edifice chronograph,watches-horology,1500,80000
+TC_077,Cat_04_Watches_Horology,seiko 5 automatic watch,watches-horology,1500,80000
+TC_078,Cat_04_Watches_Horology,titan mens analog watch,watches-horology,1500,80000
+TC_079,Cat_04_Watches_Horology,fossil leather chronograph,watches-horology,1500,80000
+TC_080,Cat_04_Watches_Horology,citizen eco-drive watch,watches-horology,1500,80000
+TC_081,Cat_04_Watches_Horology,tissot prx automatic,watches-horology,1500,80000
+TC_082,Cat_04_Watches_Horology,rolex submariner homage,watches-horology,1500,80000
+TC_083,Cat_04_Watches_Horology,fastrackgents watch,watches-horology,1500,80000
+TC_084,Cat_04_Watches_Horology,sonata formal watch,watches-horology,1500,80000
+TC_085,Cat_04_Watches_Horology,orient bambino mechanical,watches-horology,1500,80000
+TC_086,Cat_04_Watches_Horology,timex expedition watch,watches-horology,1500,80000
+TC_087,Cat_04_Watches_Horology,diesel mega chief watch,watches-horology,1500,80000
+TC_088,Cat_04_Watches_Horology,armani exchange chronograph,watches-horology,1500,80000
+TC_089,Cat_04_Watches_Horology,michael kors womens watch,watches-horology,1500,80000
+TC_090,Cat_04_Watches_Horology,guess gold watch,watches-horology,1500,80000
+TC_091,Cat_04_Watches_Horology,police stainless steel watch,watches-horology,1500,80000
+TC_092,Cat_04_Watches_Horology,casio g-shock digital,watches-horology,1500,80000
+TC_093,Cat_04_Watches_Horology,casio vintage gold watch,watches-horology,1500,80000
+TC_094,Cat_04_Watches_Horology,invicta pro diver,watches-horology,1500,80000
+TC_095,Cat_04_Watches_Horology,boss black dial watch,watches-horology,1500,80000
+TC_096,Cat_04_Watches_Horology,tommy hilfiger leather watch,watches-horology,1500,80000
+TC_097,Cat_04_Watches_Horology,skmei waterproof watch,watches-horology,1500,80000
+TC_098,Cat_04_Watches_Horology,bonest Gatti automatic,watches-horology,1500,80000
+TC_099,Cat_04_Watches_Horology,lobor heritage watch,watches-horology,1500,80000
+TC_100,Cat_04_Watches_Horology,classic dress watch,watches-horology,1500,80000
+TC_101,Cat_05_Laptops_PC,macbook air m2,laptops-pc,500,300000
+TC_102,Cat_05_Laptops_PC,macbook pro m3,laptops-pc,500,300000
+TC_103,Cat_05_Laptops_PC,hp pavilion 15 laptop,laptops-pc,500,300000
+TC_104,Cat_05_Laptops_PC,asus tuf gaming a15,laptops-pc,500,300000
+TC_105,Cat_05_Laptops_PC,lenovo ideapad slim 3,laptops-pc,500,300000
+TC_106,Cat_05_Laptops_PC,dell latitude 5420,laptops-pc,500,300000
+TC_107,Cat_05_Laptops_PC,rtx 4060 graphics card,laptops-pc,500,300000
+TC_108,Cat_05_Laptops_PC,rtx 4070 ti super,laptops-pc,500,300000
+TC_109,Cat_05_Laptops_PC,samsung 980 pro 1tb ssd,laptops-pc,500,300000
+TC_110,Cat_05_Laptops_PC,corsair vengeance 16gb ram,laptops-pc,500,300000
+TC_111,Cat_05_Laptops_PC,nzxt h510 pc case,laptops-pc,500,300000
+TC_112,Cat_05_Laptops_PC,deepcool ak400 cpu cooler,laptops-pc,500,300000
+TC_113,Cat_05_Laptops_PC,intel core i5 13400,laptops-pc,500,300000
+TC_114,Cat_05_Laptops_PC,amd ryzen 5 7600,laptops-pc,500,300000
+TC_115,Cat_05_Laptops_PC,msi pro b650m motherboard,laptops-pc,500,300000
+TC_116,Cat_05_Laptops_PC,corsair cv650 power supply,laptops-pc,500,300000
+TC_117,Cat_05_Laptops_PC,logitech g102 mouse,laptops-pc,500,300000
+TC_118,Cat_05_Laptops_PC,redragon mechanical keyboard,laptops-pc,500,300000
+TC_119,Cat_05_Laptops_PC,acer 24 inch ips monitor,laptops-pc,500,300000
+TC_120,Cat_05_Laptops_PC,lg ultragear gaming monitor,laptops-pc,500,300000
+TC_121,Cat_05_Laptops_PC,tp-link wifi router,laptops-pc,500,300000
+TC_122,Cat_05_Laptops_PC,synology nas enclosure,laptops-pc,500,300000
+TC_123,Cat_05_Laptops_PC,external hard drive 1tb,laptops-pc,500,300000
+TC_124,Cat_05_Laptops_PC,kingston 512gb nvme ssd,laptops-pc,500,300000
+TC_125,Cat_05_Laptops_PC,thermal grizzly paste,laptops-pc,500,300000
+TC_126,Cat_06_Home_Appliances,walton direct cool refrigerator,home-appliances,1200,150000
+TC_127,Cat_06_Home_Appliances,gree 1.5 ton inverter ac,home-appliances,1200,150000
+TC_128,Cat_06_Home_Appliances,vision room air cooler,home-appliances,1200,150000
+TC_129,Cat_06_Home_Appliances,microwave oven digital,home-appliances,1200,150000
+TC_130,Cat_06_Home_Appliances,blender and grinder 3 jar,home-appliances,1200,150000
+TC_131,Cat_06_Home_Appliances,top load washing machine,home-appliances,1200,150000
+TC_132,Cat_06_Home_Appliances,automatic water purifier ro,home-appliances,1200,150000
+TC_133,Cat_06_Home_Appliances,electric kettle 1.8l,home-appliances,1200,150000
+TC_134,Cat_06_Home_Appliances,automatic rice cooker,home-appliances,1200,150000
+TC_135,Cat_06_Home_Appliances,induction cooker touch,home-appliances,1200,150000
+TC_136,Cat_06_Home_Appliances,room heater fan,home-appliances,1200,150000
+TC_137,Cat_06_Home_Appliances,exhaust fan kitchen,home-appliances,1200,150000
+TC_138,Cat_06_Home_Appliances,heavy duty iron box,home-appliances,1200,150000
+TC_139,Cat_06_Home_Appliances,toaster sandwich maker,home-appliances,1200,150000
+TC_140,Cat_06_Home_Appliances,multi cooker electric,home-appliances,1200,150000
+TC_141,Cat_06_Home_Appliances,deep freezer chest,home-appliances,1200,150000
+TC_142,Cat_06_Home_Appliances,wall mounted ac 1 ton,home-appliances,1200,150000
+TC_143,Cat_06_Home_Appliances,air fryer 5l,home-appliances,1200,150000
+TC_144,Cat_06_Home_Appliances,water dispenser hot and cold,home-appliances,1200,150000
+TC_145,Cat_06_Home_Appliances,hand blender set,home-appliances,1200,150000
+TC_146,Cat_06_Home_Appliances,vacuum cleaner home,home-appliances,1200,150000
+TC_147,Cat_06_Home_Appliances,electric pressure cooker,home-appliances,1200,150000
+TC_148,Cat_06_Home_Appliances,garment steamer iron,home-appliances,1200,150000
+TC_149,Cat_06_Home_Appliances,smart tv 43 inch,home-appliances,1200,150000
+TC_150,Cat_06_Home_Appliances,portable air conditioner,home-appliances,1200,150000
+TC_151,Cat_07_Cameras,canon eos 200d dslr,cameras-photography,500,220000
+TC_152,Cat_07_Cameras,sony a6400 mirrorless body,cameras-photography,500,220000
+TC_153,Cat_07_Cameras,nikon d5600 kit,cameras-photography,500,220000
+TC_154,Cat_07_Cameras,fujifilm xt30 ii,cameras-photography,500,220000
+TC_155,Cat_07_Cameras,dji osmo action 4,cameras-photography,500,220000
+TC_156,Cat_07_Cameras,dji mini 3 drone,cameras-photography,500,220000
+TC_157,Cat_07_Cameras,professional tripod stand,cameras-photography,500,220000
+TC_158,Cat_07_Cameras,camera gimbal stabilizer,cameras-photography,500,220000
+TC_159,Cat_07_Cameras,50mm f1.8 prime lens,cameras-photography,500,220000
+TC_160,Cat_07_Cameras,gopro hero 12 black,cameras-photography,500,220000
+TC_161,Cat_07_Cameras,sony zv-e10 vlogging camera,cameras-photography,500,220000
+TC_162,Cat_07_Cameras,canon 50mm lens,cameras-photography,500,220000
+TC_163,Cat_07_Cameras,camera cleaning kit,cameras-photography,500,220000
+TC_164,Cat_07_Cameras,studio ring light,cameras-photography,500,220000
+TC_165,Cat_07_Cameras,wireless microphone for video,cameras-photography,500,220000
+TC_166,Cat_07_Cameras,godox flash speedlite,cameras-photography,500,220000
+TC_167,Cat_07_Cameras,camera shoulder bag,cameras-photography,500,220000
+TC_168,Cat_07_Cameras,sd card 128gb v30,cameras-photography,500,220000
+TC_169,Cat_07_Cameras,battery grip dslr,cameras-photography,500,220000
+TC_170,Cat_07_Cameras,telephoto zoom lens,cameras-photography,500,220000
+TC_171,Cat_07_Cameras,action camera mount,cameras-photography,500,220000
+TC_172,Cat_07_Cameras,overhead desk mount,cameras-photography,500,220000
+TC_173,Cat_07_Cameras,reflector disc 5in1,cameras-photography,500,220000
+TC_174,Cat_07_Cameras,green screen backdrop,cameras-photography,500,220000
+TC_175,Cat_07_Cameras,cinema camera cage,cameras-photography,500,220000
+TC_176,Cat_08_Cycles_EVs,duranta mtb gear cycle,bicycles-mtb,200,180000
+TC_177,Cat_08_Cycles_EVs,walton takyon electric bike,bicycles-mtb,200,180000
+TC_178,Cat_08_Cycles_EVs,veloce speedster cycle,bicycles-mtb,200,180000
+TC_179,Cat_08_Cycles_EVs,phoenix hybrid bicycle,bicycles-mtb,200,180000
+TC_180,Cat_08_Cycles_EVs,electric scooter for adults,bicycles-mtb,200,180000
+TC_181,Cat_08_Cycles_EVs,lithium battery e-bike,bicycles-mtb,200,180000
+TC_182,Cat_08_Cycles_EVs,21 speed gear cycle,bicycles-mtb,200,180000
+TC_183,Cat_08_Cycles_EVs,aluminum frame bicycle,bicycles-mtb,200,180000
+TC_184,Cat_08_Cycles_EVs,bicycle helmet safety,bicycles-mtb,200,180000
+TC_185,Cat_08_Cycles_EVs,rechargeable bicycle headlight,bicycles-mtb,200,180000
+TC_186,Cat_08_Cycles_EVs,cycle combination lock,bicycles-mtb,200,180000
+TC_187,Cat_08_Cycles_EVs,tubeless bicycle tire,bicycles-mtb,200,180000
+TC_188,Cat_08_Cycles_EVs,hydraulic disc brake set,bicycles-mtb,200,180000
+TC_189,Cat_08_Cycles_EVs,kids bicycle 16 inch,bicycles-mtb,200,180000
+TC_190,Cat_08_Cycles_EVs,fat bike 26 inch,bicycles-mtb,200,180000
+TC_191,Cat_08_Cycles_EVs,folding city cycle,bicycles-mtb,200,180000
+TC_192,Cat_08_Cycles_EVs,electric bicycle conversion kit,bicycles-mtb,200,180000
+TC_193,Cat_08_Cycles_EVs,motorcycle helmet,bicycles-mtb,200,180000
+TC_194,Cat_08_Cycles_EVs,scooter rain cover,bicycles-mtb,200,180000
+TC_195,Cat_08_Cycles_EVs,heavy duty bicycle pump,bicycles-mtb,200,180000
+TC_196,Cat_08_Cycles_EVs,gel saddle bicycle cover,bicycles-mtb,200,180000
+TC_197,Cat_08_Cycles_EVs,rear luggage carrier rack,bicycles-mtb,200,180000
+TC_198,Cat_08_Cycles_EVs,cycling gloves half finger,bicycles-mtb,200,180000
+TC_199,Cat_08_Cycles_EVs,mudguard set cycle,bicycles-mtb,200,180000
+TC_200,Cat_08_Cycles_EVs,pedal bearing set,bicycles-mtb,200,180000
+TC_201,Cat_09_Jewelry,22k gold chain necklace,fine-jewelry,100,350000
+TC_202,Cat_09_Jewelry,gold wedding band ring,fine-jewelry,100,350000
+TC_203,Cat_09_Jewelry,hallmark diamond ring,fine-jewelry,100,350000
+TC_204,Cat_09_Jewelry,oxidised jhumka earrings,fashion-jewelry,100,350000
+TC_205,Cat_09_Jewelry,fashion choker necklace set,fashion-jewelry,100,350000
+TC_206,Cat_09_Jewelry,silver plated charm bracelet,fashion-jewelry,100,350000
+TC_207,Cat_09_Jewelry,diamante party necklace,fashion-jewelry,100,350000
+TC_208,Cat_09_Jewelry,traditional gold bala,fine-jewelry,100,350000
+TC_209,Cat_09_Jewelry,nose pin gold 22k,fine-jewelry,100,350000
+TC_210,Cat_09_Jewelry,kundan bridal set,fashion-jewelry,100,350000
+TC_211,Cat_09_Jewelry,pearl choker necklace,fashion-jewelry,100,350000
+TC_212,Cat_09_Jewelry,temple jewelry set,fashion-jewelry,100,350000
+TC_213,Cat_09_Jewelry,anti tarnish bracelet,fashion-jewelry,100,350000
+TC_214,Cat_09_Jewelry,cz stone finger ring,fashion-jewelry,100,350000
+TC_215,Cat_09_Jewelry,long haram necklace,fashion-jewelry,100,350000
+TC_216,Cat_09_Jewelry,bali hoop earrings,fashion-jewelry,100,350000
+TC_217,Cat_09_Jewelry,maang tikka bridal,fashion-jewelry,100,350000
+TC_218,Cat_09_Jewelry,anklet silver payal,fashion-jewelry,100,350000
+TC_219,Cat_09_Jewelry,brooch pin coat,fashion-jewelry,100,350000
+TC_220,Cat_09_Jewelry,mens titanium ring,fashion-jewelry,100,350000
+TC_221,Cat_09_Jewelry,crystal pendant chain,fashion-jewelry,100,350000
+TC_222,Cat_09_Jewelry,german silver necklace,fashion-jewelry,100,350000
+TC_223,Cat_09_Jewelry,brass oxidized bangles,fashion-jewelry,100,350000
+TC_224,Cat_09_Jewelry,solitaire diamond ring,fine-jewelry,100,350000
+TC_225,Cat_09_Jewelry,layered waist chain,fashion-jewelry,100,350000
+TC_226,Cat_10_Lifestyle_Grocery,jamdani saree handloom,saree-boutiques,150,50000
+TC_227,Cat_10_Lifestyle_Grocery,katan silk bridal saree,saree-boutiques,150,50000
+TC_228,Cat_10_Lifestyle_Grocery,tant cotton saree,saree-boutiques,150,50000
+TC_229,Cat_10_Lifestyle_Grocery,mens cotton panjabi,fashion-apparel,150,50000
+TC_230,Cat_10_Lifestyle_Grocery,nike air max running shoes,sneakers-footwear,150,50000
+TC_231,Cat_10_Lifestyle_Grocery,barca home kit jersey,sportswear-gym,150,50000
+TC_232,Cat_10_Lifestyle_Grocery,rupchanda mustard oil 1l,grocery-snacks,150,50000
+TC_233,Cat_10_Lifestyle_Grocery,khati gawa ghee organic,grocery-snacks,150,50000
+TC_234,Cat_10_Lifestyle_Grocery,pure honey 500g,grocery-snacks,150,50000
+TC_235,Cat_10_Lifestyle_Grocery,bridal facial kit,beauty-skincare,150,50000
+TC_236,Cat_10_Lifestyle_Grocery,onion hair oil herbal,grocery-snacks,150,50000
+TC_237,Cat_10_Lifestyle_Grocery,sunscreen spf 50 pa+++,beauty-skincare,150,50000
+TC_238,Cat_10_Lifestyle_Grocery,hydrating face wash,beauty-skincare,150,50000
+TC_239,Cat_10_Lifestyle_Grocery,snail mucin essence,beauty-skincare,150,50000
+TC_240,Cat_10_Lifestyle_Grocery,matte liquid lipstick,beauty-skincare,150,50000
+TC_241,Cat_10_Lifestyle_Grocery,herbal shampoo anti hairfall,beauty-skincare,150,50000
+TC_242,Cat_10_Lifestyle_Grocery,body lotion moisturizing,beauty-skincare,150,50000
+TC_243,Cat_10_Lifestyle_Grocery,vitamin c face serum,beauty-skincare,150,50000
+TC_244,Cat_10_Lifestyle_Grocery,leather formal shoes,sneakers-footwear,150,50000
+TC_245,Cat_10_Lifestyle_Grocery,casual polo shirt,fashion-apparel,150,50000
+TC_246,Cat_10_Lifestyle_Grocery,denim jeans for men,fashion-apparel,150,50000
+TC_247,Cat_10_Lifestyle_Grocery,hoodie winter wear,fashion-apparel,150,50000
+TC_248,Cat_10_Lifestyle_Grocery,cotton bed sheet set,beauty-skincare,150,50000
+TC_249,Cat_10_Lifestyle_Grocery,mosquito net double bed,beauty-skincare,150,50000
+TC_250,Cat_10_Lifestyle_Grocery,organic black cumin seed oil,grocery-snacks,150,50000

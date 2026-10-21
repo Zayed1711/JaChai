@@ -1,0 +1,942 @@
+{
+ "ready": [
+  {
+   "name": "Minister Hi-Tech Park",
+   "category": "Home Appliances & White Goods",
+   "domain": "ministerbd.com",
+   "platform": "magento",
+   "search_url_template": "https://ministerbd.com/catalogsearch/result/?q={q}",
+   "sample_term": "fan"
+  },
+  {
+   "name": "Taupe Notch",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "taupenotch.com",
+   "platform": "shopify",
+   "search_url_template": "https://taupenotch.com/search?q={q}&type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "Go Go Gorgeous",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "gogogorgeous.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://gogogorgeous.com.bd/?s={q}&post_type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "Makeup Chari",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "makeupchari.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://makeupchari.com/?s={q}&post_type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "Prezento BD",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "prezentobd.com",
+   "platform": "shopify",
+   "search_url_template": "https://prezentobd.com/search?q={q}&type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "OHSOGO",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "ohsogo.com",
+   "platform": "shopify",
+   "search_url_template": "https://ohsogo.com/search?q={q}&type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "BanglaShoppers",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "banglashoppers.com",
+   "platform": "magento",
+   "search_url_template": "https://banglashoppers.com/catalogsearch/result/?q={q}",
+   "sample_term": "cream"
+  },
+  {
+   "name": "The celeste",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "thecelestebd.com",
+   "platform": "shopify",
+   "search_url_template": "https://thecelestebd.com/search?q={q}&type=product",
+   "sample_term": "cream"
+  },
+  {
+   "name": "Jafrose",
+   "category": "Budget, Casual & Imitation Jewelry Targets",
+   "domain": "jafrose.store",
+   "platform": "shopify",
+   "search_url_template": "https://jafrose.store/search?q={q}&type=product",
+   "sample_term": "ring"
+  },
+  {
+   "name": "Yellow",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "yellowclothing.net",
+   "platform": "shopify",
+   "search_url_template": "https://yellowclothing.net/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Twelve Clothing",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "twelvebd.com",
+   "platform": "shopify",
+   "search_url_template": "https://twelvebd.com/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Ecstasy",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "ecstasybd.com",
+   "platform": "generic",
+   "search_url_template": "https://ecstasybd.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Kay Kraft",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "kaykraft.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://kaykraft.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Klubhaus",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "klubhaus.com.bd",
+   "platform": "shopify",
+   "search_url_template": "https://klubhaus.com.bd/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Easy Fashion",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "easyfashion.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://easyfashion.com.bd/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Dorjibari",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "dorjibari.com.bd",
+   "platform": "shopify",
+   "search_url_template": "https://dorjibari.com.bd/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Anjan's",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "anjans.com",
+   "platform": "opencart",
+   "search_url_template": "https://anjans.com/index.php?route=product/search&search={q}",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Rise",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "rise-brand.com",
+   "platform": "shopify",
+   "search_url_template": "https://rise-brand.com/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Gentle Park",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "gentlepark.com",
+   "platform": "generic",
+   "search_url_template": "https://gentlepark.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Live Shopping",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "liveshopping.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://liveshopping.com.bd/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Voyage",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "voyagetm.com",
+   "platform": "shopify",
+   "search_url_template": "https://voyagetm.com/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Gorur Ghash",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "gorurghash.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://gorurghash.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Spotlight attires",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "spotlightattires.com",
+   "platform": "generic",
+   "search_url_template": "https://spotlightattires.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Kohinoor Diamond & Gold",
+   "category": "Fine Jewelry & Premium Fashion Jewelry Stores",
+   "domain": "kohinoordiamondbd.com",
+   "platform": "generic",
+   "search_url_template": "https://kohinoordiamondbd.com/?s={q}&post_type=product",
+   "sample_term": "ring"
+  },
+  {
+   "name": "Organic Online Bangladesh",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "organiconline.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://organiconline.com.bd/?s={q}&post_type=product",
+   "sample_term": "rice"
+  },
+  {
+   "name": "Star Tech",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "startech.com.bd",
+   "platform": "opencart",
+   "search_url_template": "https://startech.com.bd/product/search?search={q}",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Global Brand PLC",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "globalbrand.com.bd",
+   "platform": "opencart",
+   "search_url_template": "https://globalbrand.com.bd/index.php?route=product/search&search={q}",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Universal Computer BD (UCC)",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "universal.com.bd",
+   "platform": "opencart",
+   "search_url_template": "https://universal.com.bd/index.php?route=product/search&search={q}",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Skyland Computer BD",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "skyland.com.bd",
+   "platform": "opencart",
+   "search_url_template": "https://skyland.com.bd/index.php?route=product/search&search={q}",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Smart Technologies (BD) Ltd",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "smartbd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://smartbd.com/?s={q}&post_type=product",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Bytecity BD",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "bytecity.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://bytecity.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "IT PLACE BD",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "itplacebd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://itplacebd.com/?s={q}&post_type=product",
+   "sample_term": "laptop"
+  },
+  {
+   "name": "Baseus Bangladesh",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "baseus.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://baseus.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Gadget Studio BD",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "gadgetstudiobd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://gadgetstudiobd.com/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Rio International",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "riointernational.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://riointernational.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Gadget Next",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "gadgetnext.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://gadgetnext.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Yellow Mart",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "yellowmart24.com",
+   "platform": "generic",
+   "search_url_template": "https://yellowmart24.com/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Mobile Buzz",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "mobilebuzzbd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://mobilebuzzbd.com/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Rahimer Dokan",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "rahimerdokanbd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://rahimerdokanbd.com/?s={q}&post_type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "ICE",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "iceworld.tech",
+   "platform": "shopify",
+   "search_url_template": "https://iceworld.tech/search?q={q}&type=product",
+   "sample_term": "phone"
+  },
+  {
+   "name": "Rich Kid",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "richkidbd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://richkidbd.com/?s={q}&post_type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Sneaker Zone",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "sneakerzonebd.com",
+   "platform": "shopify",
+   "search_url_template": "https://sneakerzonebd.com/search?q={q}&type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Three's",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "threesbd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://threesbd.com/?s={q}&post_type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Zuqo",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "zuqo.shop",
+   "platform": "shopify",
+   "search_url_template": "https://zuqo.shop/search?q={q}&type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Apex Footwear (Apex4u)",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "apex4u.com",
+   "platform": "generic",
+   "search_url_template": "https://apex4u.com/?s={q}&post_type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Bata Bangladesh",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "batabd.com",
+   "platform": "shopify",
+   "search_url_template": "https://batabd.com/search?q={q}&type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Xie Jiang Sneakers",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "xiejiang.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://xiejiang.com.bd/?s={q}&post_type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Live Shopping",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "liveshopping.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://liveshopping.com.bd/?s={q}&post_type=product",
+   "sample_term": "shoes"
+  },
+  {
+   "name": "Dour",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "dour.store",
+   "platform": "woocommerce",
+   "search_url_template": "https://dour.store/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Jersey Frenzy Sportswear",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "jerseyfrenzybd.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://jerseyfrenzybd.com/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Jersey.com.bd",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "jersey.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://jersey.com.bd/?s={q}&post_type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "ONEUP",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "toponejersey.myshopify.com",
+   "platform": "shopify",
+   "search_url_template": "https://toponejersey.myshopify.com/search?q={q}&type=product",
+   "sample_term": "shirt"
+  },
+  {
+   "name": "Watch Zone BD",
+   "category": "Watches & Horology Retailers",
+   "domain": "watchzonebd.com",
+   "platform": "generic",
+   "search_url_template": "https://watchzonebd.com/?s={q}&post_type=product",
+   "sample_term": "watch"
+  },
+  {
+   "name": "4 O'clock",
+   "category": "Watches & Horology Retailers",
+   "domain": "4oclockofficial.com",
+   "platform": "shopify",
+   "search_url_template": "https://4oclockofficial.com/search?q={q}&type=product",
+   "sample_term": "watch"
+  }
+ ],
+ "pending": [
+  {
+   "name": "Transcom Digital",
+   "category": "Home Appliances & White Goods",
+   "domain": "transcomdigital.com",
+   "platform": "generic",
+   "search_url_template": "https://transcomdigital.com/?s={q}&post_type=product",
+   "sample_term": "fan",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Rangs eMart",
+   "category": "Home Appliances & White Goods",
+   "domain": "rangsemart.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://rangsemart.com.bd/?s={q}&post_type=product",
+   "sample_term": "fan",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Jamuna Electronics",
+   "category": "Home Appliances & White Goods",
+   "domain": "estorejamuna.com",
+   "platform": "generic",
+   "search_url_template": "https://estorejamuna.com/?s={q}&post_type=product",
+   "sample_term": "fan",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Vision Emporium",
+   "category": "Home Appliances & White Goods",
+   "domain": "vision.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://vision.com.bd/?s={q}&post_type=product",
+   "sample_term": "fan",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Electronics Bangladesh",
+   "category": "Home Appliances & White Goods",
+   "domain": "electronicsbangladesh.com",
+   "platform": "generic",
+   "search_url_template": "https://electronicsbangladesh.com/?s={q}&post_type=product",
+   "sample_term": "fan",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Beauty Booth",
+   "category": "Beauty, Skincare & Lifestyle Stores",
+   "domain": "beautybooth.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://beautybooth.com.bd/?s={q}&post_type=product",
+   "sample_term": "cream",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Yadea Zyromotors",
+   "category": "Cycles & Electric Vehicles (EVs)",
+   "domain": "yadearunner.com",
+   "platform": "generic",
+   "search_url_template": "https://yadearunner.com/?s={q}&post_type=product",
+   "sample_term": "cycle",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Zeeho",
+   "category": "Cycles & Electric Vehicles (EVs)",
+   "domain": "cfmotobd.com",
+   "platform": "generic",
+   "search_url_template": "https://cfmotobd.com/?s={q}&post_type=product",
+   "sample_term": "cycle",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Aarong",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "aarong.com",
+   "platform": "generic",
+   "search_url_template": "https://aarong.com/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Sailor",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "sailor.clothing",
+   "platform": "generic",
+   "search_url_template": "https://sailor.clothing/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Fabrilife",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "fabrilife.com",
+   "platform": "generic",
+   "search_url_template": "https://fabrilife.com/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Illiyeen",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "ilyn.global",
+   "platform": "generic",
+   "search_url_template": "https://ilyn.global/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "O2",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "o2fashions.com",
+   "platform": "shopify",
+   "search_url_template": "https://o2fashions.com/search?q={q}&type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "Arjo",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "arjobd.com",
+   "platform": "generic",
+   "search_url_template": "https://arjobd.com/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Get Goosebumps",
+   "category": "Mainstream Fashion & Apparel Brands",
+   "domain": "getgoosebumps.shop",
+   "platform": "shopify",
+   "search_url_template": "https://getgoosebumps.shop/search?q={q}&type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "Al-Amin Jewellers",
+   "category": "Fine Jewelry & Premium Fashion Jewelry Stores",
+   "domain": "alaminjewellers.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://alaminjewellers.com/?s={q}&post_type=product",
+   "sample_term": "ring",
+   "verdict": "prices present, selectors need work (woocommerce)"
+  },
+  {
+   "name": "Aarong Fine Jewellery",
+   "category": "Fine Jewelry & Premium Fashion Jewelry Stores",
+   "domain": "aarong.com",
+   "platform": "generic",
+   "search_url_template": "https://aarong.com/?s={q}&post_type=product",
+   "sample_term": "ring",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Khaas Food",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "khaasfood.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://khaasfood.com/?s={q}&post_type=product",
+   "sample_term": "rice",
+   "verdict": "prices present, selectors need work (woocommerce)"
+  },
+  {
+   "name": "Shwapno",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "shwapno.com",
+   "platform": "generic",
+   "search_url_template": "https://shwapno.com/?s={q}&post_type=product",
+   "sample_term": "rice",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Falaq Food",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "falaqfood.com",
+   "platform": "generic",
+   "search_url_template": "https://falaqfood.com/?s={q}&post_type=product",
+   "sample_term": "rice",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Healthy Eats",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "healthyeatsbd.shop",
+   "platform": "woocommerce",
+   "search_url_template": "https://healthyeatsbd.shop/?s={q}&post_type=product",
+   "sample_term": "rice",
+   "verdict": "prices present, selectors need work (woocommerce)"
+  },
+  {
+   "name": "Rokomari",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "rokomari.com",
+   "platform": "generic",
+   "search_url_template": "https://rokomari.com/catalogsearch/result/?q={q}",
+   "sample_term": "rice",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "La Organika",
+   "category": "Snacks, Dry Foods & Grocery Marketplaces",
+   "domain": "laorganika.com",
+   "platform": "generic",
+   "search_url_template": "https://laorganika.com/?s={q}&post_type=product",
+   "sample_term": "rice",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "PC House BD",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "pchouse.com.bd",
+   "platform": "opencart",
+   "search_url_template": "https://pchouse.com.bd/product/search?search={q}",
+   "sample_term": "laptop",
+   "verdict": "prices present, selectors need work (opencart)"
+  },
+  {
+   "name": "Potaka IT",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "potakait.com",
+   "platform": "opencart",
+   "search_url_template": "https://potakait.com/product/search?search={q}",
+   "sample_term": "laptop",
+   "verdict": "prices present, selectors need work (opencart)"
+  },
+  {
+   "name": "Nexus Computer BD",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "nexus.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://nexus.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Computer Zone",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "computerzone.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://computerzone.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Binary Logic",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "binarylogic.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://binarylogic.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "One Tech",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "1tech.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://1tech.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "AG Compuers",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "applegadgetsbd.com",
+   "platform": "generic",
+   "search_url_template": "https://applegadgetsbd.com/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "PCB Store Bangladesh",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "pcbstore.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://pcbstore.com.bd/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Walton Computer",
+   "category": "Laptops, Desktops & Computer Components",
+   "domain": "waltondigitech.com",
+   "platform": "generic",
+   "search_url_template": "https://waltondigitech.com/?s={q}&post_type=product",
+   "sample_term": "laptop",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Gadget & Gear (G&G)",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "gadgetandgear.com",
+   "platform": "woocommerce",
+   "search_url_template": "https://gadgetandgear.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (woocommerce)"
+  },
+  {
+   "name": "Sumash Tech",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "sumashtech.com",
+   "platform": "generic",
+   "search_url_template": "https://sumashtech.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Apple Gadgets BD",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "applegadgetsbd.com",
+   "platform": "generic",
+   "search_url_template": "https://applegadgetsbd.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Motion View",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "motionview.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://motionview.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Gears For Ears",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "gearsforears.com",
+   "platform": "shopify",
+   "search_url_template": "https://gearsforears.com/search?q={q}&type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "KRY International",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "kryinternational.com",
+   "platform": "generic",
+   "search_url_template": "https://kryinternational.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Salextra",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "salextra.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://salextra.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Custom Mac BD",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "custommacbd.com",
+   "platform": "shopify",
+   "search_url_template": "https://custommacbd.com/search?q={q}&type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "Dazzle Mobile",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "dazzle.com.bd",
+   "platform": "generic",
+   "search_url_template": "https://dazzle.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Liliput Shop",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "liliputshop.com.bd",
+   "platform": "woocommerce",
+   "search_url_template": "https://liliputshop.com.bd/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (woocommerce)"
+  },
+  {
+   "name": "Gadget Monkey BD",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "gadgetmonkeybd.com",
+   "platform": "generic",
+   "search_url_template": "https://gadgetmonkeybd.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Oraimo",
+   "category": "Mobile Phones & Consumer Gadgets",
+   "domain": "oraimo.com",
+   "platform": "generic",
+   "search_url_template": "https://oraimo.com/?s={q}&post_type=product",
+   "sample_term": "phone",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Sneakers BD",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "sneakersbdofficial.com",
+   "platform": "generic",
+   "search_url_template": "https://sneakersbdofficial.com/?s={q}&post_type=product",
+   "sample_term": "shoes",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Step Footwear",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "stepfootwear.com",
+   "platform": "generic",
+   "search_url_template": "https://stepfootwear.com/?s={q}&post_type=product",
+   "sample_term": "shoes",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Urban Men",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "mensvibes.shop",
+   "platform": "generic",
+   "search_url_template": "https://mensvibes.shop/?s={q}&post_type=product",
+   "sample_term": "shoes",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "La Mode",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "lamodebd.com",
+   "platform": "shopify",
+   "search_url_template": "https://lamodebd.com/search?q={q}&type=product",
+   "sample_term": "shoes",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "Splayd",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "splayd.com.bd",
+   "platform": "shopify",
+   "search_url_template": "https://splayd.com.bd/search?q={q}&type=product",
+   "sample_term": "shoes",
+   "verdict": "prices present, selectors need work (shopify)"
+  },
+  {
+   "name": "Errumbd",
+   "category": "Sneakers & Footwear Stores",
+   "domain": "errumbd.com",
+   "platform": "generic",
+   "search_url_template": "https://errumbd.com/?s={q}&post_type=product",
+   "sample_term": "shoes",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Jersey Freak BD",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "jerseyfreakbd.com",
+   "platform": "generic",
+   "search_url_template": "https://jerseyfreakbd.com/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Jersey Loco BD",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "jl.sellbd.shop",
+   "platform": "generic",
+   "search_url_template": "https://jl.sellbd.shop/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Fabrilife",
+   "category": "Sportswear, Activewear & Gym Gear",
+   "domain": "fabrilife.com",
+   "platform": "generic",
+   "search_url_template": "https://fabrilife.com/?s={q}&post_type=product",
+   "sample_term": "shirt",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Watch Shop BD",
+   "category": "Watches & Horology Retailers",
+   "domain": "watchshopbd.com",
+   "platform": "generic",
+   "search_url_template": "https://watchshopbd.com/?s={q}&post_type=product",
+   "sample_term": "watch",
+   "verdict": "needs JS rendering (nextjs-js)"
+  },
+  {
+   "name": "Watch Movement",
+   "category": "Watches & Horology Retailers",
+   "domain": "watchmovement.sellbd.shop",
+   "platform": "generic",
+   "search_url_template": "https://watchmovement.sellbd.shop/?s={q}&post_type=product",
+   "sample_term": "watch",
+   "verdict": "prices present, selectors need work (unknown)"
+  },
+  {
+   "name": "Loftique",
+   "category": "Watches & Horology Retailers",
+   "domain": "loftique.com.bd",
+   "platform": "shopify",
+   "search_url_template": "https://loftique.com.bd/search?q={q}&type=product",
+   "sample_term": "watch",
+   "verdict": "prices present, selectors need work (shopify)"
+  }
+ ]
+}

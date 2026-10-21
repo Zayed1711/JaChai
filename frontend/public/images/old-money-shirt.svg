@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+    <defs>
+      <linearGradient id="shBg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1F2937"/>
+        <stop offset="100%" stop-color="#111827"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#shBg)"/>
+    <!-- Cuban Collar Shirt Silhouette -->
+    <path d="M 280,140 L 360,210 L 440,210 L 520,140 L 610,230 L 550,290 L 540,520 L 260,520 L 250,290 L 190,230 Z" fill="#F8FAFC"/>
+    <!-- Open Cuban Lapels -->
+    <polygon points="360,210 330,280 400,290" fill="#E2E8F0"/>
+    <polygon points="440,210 470,280 400,290" fill="#E2E8F0"/>
+    <!-- Natural Shell Buttons -->
+    <circle cx="400" cy="340" r="5" fill="#CBD5E1" stroke="#94A3B8"/>
+    <circle cx="400" cy="400" r="5" fill="#CBD5E1" stroke="#94A3B8"/>
+    <circle cx="400" cy="460" r="5" fill="#CBD5E1" stroke="#94A3B8"/>
+    <text x="400" y="565" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="18" letter-spacing="3" text-anchor="middle">OLD MONEY TEXTURED CUBAN COLLAR LINEN SHIRT</text>
+  
+</svg>

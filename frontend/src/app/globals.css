@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F5F7FA;
+  --foreground: #334155;
+  --heading: #101B2D;
+  --card: #FFFFFF;
+  --border: #DDE3EA;
+  --cta: #FFC857;
+  --accent: #14B8A6;
+  --link: #0F766E;
+  --navbar: #101B2D;
+}
+
+body {
+  color: #334155;
+  background-color: #F5F7FA;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.font-display {
+  font-family: 'Oswald', -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-sans-clean {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes marqueeGlide {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeGlide 55s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Backward compatibility */
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: marqueeGlide 55s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

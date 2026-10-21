@@ -1,0 +1,201 @@
+Test_ID,Group,Query,Expected_Category,Min_Price_BDT,Max_Price_BDT
+TC_001,Group_1_Smartphones,iphone 11,mobile-gadgets,20000,250000
+TC_002,Group_1_Smartphones,samsung galaxy 12,mobile-gadgets,20000,250000
+TC_003,Group_1_Smartphones,google pixel 13,mobile-gadgets,20000,250000
+TC_004,Group_1_Smartphones,xiaomi 14,mobile-gadgets,20000,250000
+TC_005,Group_1_Smartphones,oneplus 14 pro max,mobile-gadgets,20000,250000
+TC_006,Group_1_Smartphones,iphone 15,mobile-gadgets,20000,250000
+TC_007,Group_1_Smartphones,samsung galaxy 15 pro,mobile-gadgets,20000,250000
+TC_008,Group_1_Smartphones,google pixel 16,mobile-gadgets,20000,250000
+TC_009,Group_1_Smartphones,xiaomi s23 ultra,mobile-gadgets,20000,250000
+TC_010,Group_1_Smartphones,oneplus s24 ultra,mobile-gadgets,20000,250000
+TC_011,Group_1_Smartphones,iphone pixel 7,mobile-gadgets,20000,250000
+TC_012,Group_1_Smartphones,samsung galaxy pixel 8 pro,mobile-gadgets,20000,250000
+TC_013,Group_1_Smartphones,google pixel note 13,mobile-gadgets,20000,250000
+TC_014,Group_1_Smartphones,xiaomi nord 3,mobile-gadgets,20000,250000
+TC_015,Group_1_Smartphones,oneplus 11,mobile-gadgets,20000,250000
+TC_016,Group_1_Smartphones,iphone 12,mobile-gadgets,20000,250000
+TC_017,Group_1_Smartphones,samsung galaxy 13,mobile-gadgets,20000,250000
+TC_018,Group_1_Smartphones,google pixel 14,mobile-gadgets,20000,250000
+TC_019,Group_1_Smartphones,xiaomi 14 pro max,mobile-gadgets,20000,250000
+TC_020,Group_1_Smartphones,oneplus 15,mobile-gadgets,20000,250000
+TC_021,Group_1_Smartphones,iphone 15 pro,mobile-gadgets,20000,250000
+TC_022,Group_1_Smartphones,samsung galaxy 16,mobile-gadgets,20000,250000
+TC_023,Group_1_Smartphones,google pixel s23 ultra,mobile-gadgets,20000,250000
+TC_024,Group_1_Smartphones,xiaomi s24 ultra,mobile-gadgets,20000,250000
+TC_025,Group_1_Smartphones,oneplus pixel 7,mobile-gadgets,20000,250000
+TC_026,Group_2_Accessories,iphone 14 back cover,mobile-gadgets,150,15000
+TC_027,Group_2_Accessories,iphone 15 silicone case,mobile-gadgets,150,15000
+TC_028,Group_2_Accessories,samsung s24 tempered glass,mobile-gadgets,150,15000
+TC_029,Group_2_Accessories,redmi note 20w fast charger,mobile-gadgets,150,15000
+TC_030,Group_2_Accessories,oneplus magsafe charger,mobile-gadgets,150,15000
+TC_031,Group_2_Accessories,iphone 14 usb-c cable,mobile-gadgets,150,15000
+TC_032,Group_2_Accessories,iphone 15 wireless earbuds,mobile-gadgets,150,15000
+TC_033,Group_2_Accessories,samsung s24 airpods pro,mobile-gadgets,150,15000
+TC_034,Group_2_Accessories,redmi note power bank 20000mah,mobile-gadgets,150,15000
+TC_035,Group_2_Accessories,oneplus neckband,mobile-gadgets,150,15000
+TC_036,Group_2_Accessories,iphone 14 back cover,mobile-gadgets,150,15000
+TC_037,Group_2_Accessories,iphone 15 silicone case,mobile-gadgets,150,15000
+TC_038,Group_2_Accessories,samsung s24 tempered glass,mobile-gadgets,150,15000
+TC_039,Group_2_Accessories,redmi note 20w fast charger,mobile-gadgets,150,15000
+TC_040,Group_2_Accessories,oneplus magsafe charger,mobile-gadgets,150,15000
+TC_041,Group_2_Accessories,iphone 14 usb-c cable,mobile-gadgets,150,15000
+TC_042,Group_2_Accessories,iphone 15 wireless earbuds,mobile-gadgets,150,15000
+TC_043,Group_2_Accessories,samsung s24 airpods pro,mobile-gadgets,150,15000
+TC_044,Group_2_Accessories,redmi note power bank 20000mah,mobile-gadgets,150,15000
+TC_045,Group_2_Accessories,oneplus neckband,mobile-gadgets,150,15000
+TC_046,Group_3_Smartwatches,smartwatch,mobile-gadgets,1000,120000
+TC_047,Group_3_Smartwatches,smart watch,mobile-gadgets,1000,120000
+TC_048,Group_3_Smartwatches,apple watch series 9,mobile-gadgets,1000,120000
+TC_049,Group_3_Smartwatches,samsung galaxy watch 6,mobile-gadgets,1000,120000
+TC_050,Group_3_Smartwatches,amazfit bip 5,mobile-gadgets,1000,120000
+TC_051,Group_3_Smartwatches,haylou solar plus,mobile-gadgets,1000,120000
+TC_052,Group_3_Smartwatches,colmi p71,mobile-gadgets,1000,120000
+TC_053,Group_3_Smartwatches,kieslect kr pro,mobile-gadgets,1000,120000
+TC_054,Group_3_Smartwatches,xiaomi mi band 8,mobile-gadgets,1000,120000
+TC_055,Group_3_Smartwatches,amoled smartwatch,mobile-gadgets,1000,120000
+TC_056,Group_3_Smartwatches,smartwatch 11,mobile-gadgets,1000,120000
+TC_057,Group_3_Smartwatches,smart watch 12,mobile-gadgets,1000,120000
+TC_058,Group_3_Smartwatches,apple watch series 9 13,mobile-gadgets,1000,120000
+TC_059,Group_3_Smartwatches,samsung galaxy watch 6 14,mobile-gadgets,1000,120000
+TC_060,Group_3_Smartwatches,amazfit bip 5 15,mobile-gadgets,1000,120000
+TC_061,Group_3_Smartwatches,haylou solar plus 16,mobile-gadgets,1000,120000
+TC_062,Group_3_Smartwatches,colmi p71 17,mobile-gadgets,1000,120000
+TC_063,Group_3_Smartwatches,kieslect kr pro 18,mobile-gadgets,1000,120000
+TC_064,Group_3_Smartwatches,xiaomi mi band 8 19,mobile-gadgets,1000,120000
+TC_065,Group_3_Smartwatches,amoled smartwatch 20,mobile-gadgets,1000,120000
+TC_066,Group_3_Smartwatches,smartwatch 21,mobile-gadgets,1000,120000
+TC_067,Group_3_Smartwatches,smart watch 22,mobile-gadgets,1000,120000
+TC_068,Group_3_Smartwatches,apple watch series 9 23,mobile-gadgets,1000,120000
+TC_069,Group_3_Smartwatches,samsung galaxy watch 6 24,mobile-gadgets,1000,120000
+TC_070,Group_3_Smartwatches,amazfit bip 5 25,mobile-gadgets,1000,120000
+TC_071,Group_4_Traditional_Watches,casio edifice,watches-horology,2000,70000
+TC_072,Group_4_Traditional_Watches,seiko 5 automatic,watches-horology,2000,70000
+TC_073,Group_4_Traditional_Watches,titan mens watch,watches-horology,2000,70000
+TC_074,Group_4_Traditional_Watches,fossil chronograph,watches-horology,2000,70000
+TC_075,Group_4_Traditional_Watches,citizen eco-drive,watches-horology,2000,70000
+TC_076,Group_4_Traditional_Watches,tissot prx,watches-horology,2000,70000
+TC_077,Group_4_Traditional_Watches,rolex submariner homage,watches-horology,2000,70000
+TC_078,Group_4_Traditional_Watches,fastrack analog,watches-horology,2000,70000
+TC_079,Group_4_Traditional_Watches,sonata leather watch,watches-horology,2000,70000
+TC_080,Group_4_Traditional_Watches,orient Bambino,watches-horology,2000,70000
+TC_081,Group_4_Traditional_Watches,casio edifice,watches-horology,2000,70000
+TC_082,Group_4_Traditional_Watches,seiko 5 automatic,watches-horology,2000,70000
+TC_083,Group_4_Traditional_Watches,titan mens watch,watches-horology,2000,70000
+TC_084,Group_4_Traditional_Watches,fossil chronograph,watches-horology,2000,70000
+TC_085,Group_4_Traditional_Watches,citizen eco-drive,watches-horology,2000,70000
+TC_086,Group_5_Laptops_PC,macbook air m2,laptops-pc,3000,280000
+TC_087,Group_5_Laptops_PC,hp pavilion 15,laptops-pc,3000,280000
+TC_088,Group_5_Laptops_PC,asus tuf gaming,laptops-pc,3000,280000
+TC_089,Group_5_Laptops_PC,rtx 4060 gpu,laptops-pc,3000,280000
+TC_090,Group_5_Laptops_PC,samsung 980 pro 1tb,laptops-pc,3000,280000
+TC_091,Group_5_Laptops_PC,nzxt h510 case,laptops-pc,3000,280000
+TC_092,Group_5_Laptops_PC,deepcool ak400,laptops-pc,3000,280000
+TC_093,Group_5_Laptops_PC,dell latitude,laptops-pc,3000,280000
+TC_094,Group_5_Laptops_PC,lenovo thinkpad,laptops-pc,3000,280000
+TC_095,Group_5_Laptops_PC,corsair vengeance 16gb,laptops-pc,3000,280000
+TC_096,Group_5_Laptops_PC,intel i5 13400,laptops-pc,3000,280000
+TC_097,Group_5_Laptops_PC,ryzen 5 7600,laptops-pc,3000,280000
+TC_098,Group_5_Laptops_PC,macbook air m2,laptops-pc,3000,280000
+TC_099,Group_5_Laptops_PC,hp pavilion 15,laptops-pc,3000,280000
+TC_100,Group_5_Laptops_PC,asus tuf gaming,laptops-pc,3000,280000
+TC_101,Group_5_Laptops_PC,rtx 4060 gpu,laptops-pc,3000,280000
+TC_102,Group_5_Laptops_PC,samsung 980 pro 1tb,laptops-pc,3000,280000
+TC_103,Group_5_Laptops_PC,nzxt h510 case,laptops-pc,3000,280000
+TC_104,Group_5_Laptops_PC,deepcool ak400,laptops-pc,3000,280000
+TC_105,Group_5_Laptops_PC,dell latitude,laptops-pc,3000,280000
+TC_106,Group_5_Laptops_PC,lenovo thinkpad,laptops-pc,3000,280000
+TC_107,Group_5_Laptops_PC,corsair vengeance 16gb,laptops-pc,3000,280000
+TC_108,Group_5_Laptops_PC,intel i5 13400,laptops-pc,3000,280000
+TC_109,Group_5_Laptops_PC,ryzen 5 7600,laptops-pc,3000,280000
+TC_110,Group_5_Laptops_PC,macbook air m2,laptops-pc,3000,280000
+TC_111,Group_6_Home_Appliances,walton refrigerator,home-appliances,4000,140000
+TC_112,Group_6_Home_Appliances,gree 1.5 ton ac,home-appliances,4000,140000
+TC_113,Group_6_Home_Appliances,vision room air cooler,home-appliances,4000,140000
+TC_114,Group_6_Home_Appliances,microwave oven,home-appliances,4000,140000
+TC_115,Group_6_Home_Appliances,blender grinder,home-appliances,4000,140000
+TC_116,Group_6_Home_Appliances,inverter ac 1 ton,home-appliances,4000,140000
+TC_117,Group_6_Home_Appliances,washing machine top load,home-appliances,4000,140000
+TC_118,Group_6_Home_Appliances,water purifier,home-appliances,4000,140000
+TC_119,Group_6_Home_Appliances,electric kettle,home-appliances,4000,140000
+TC_120,Group_6_Home_Appliances,rice cooker,home-appliances,4000,140000
+TC_121,Group_6_Home_Appliances,walton refrigerator,home-appliances,4000,140000
+TC_122,Group_6_Home_Appliances,gree 1.5 ton ac,home-appliances,4000,140000
+TC_123,Group_6_Home_Appliances,vision room air cooler,home-appliances,4000,140000
+TC_124,Group_6_Home_Appliances,microwave oven,home-appliances,4000,140000
+TC_125,Group_6_Home_Appliances,blender grinder,home-appliances,4000,140000
+TC_126,Group_6_Home_Appliances,inverter ac 1 ton,home-appliances,4000,140000
+TC_127,Group_6_Home_Appliances,washing machine top load,home-appliances,4000,140000
+TC_128,Group_6_Home_Appliances,water purifier,home-appliances,4000,140000
+TC_129,Group_6_Home_Appliances,electric kettle,home-appliances,4000,140000
+TC_130,Group_6_Home_Appliances,rice cooker,home-appliances,4000,140000
+TC_131,Group_7_Cameras,canon eos 200d,cameras-photography,2000,200000
+TC_132,Group_7_Cameras,sony a6400,cameras-photography,2000,200000
+TC_133,Group_7_Cameras,nikon d5600,cameras-photography,2000,200000
+TC_134,Group_7_Cameras,fujifilm xt30,cameras-photography,2000,200000
+TC_135,Group_7_Cameras,dji osmo action 4,cameras-photography,2000,200000
+TC_136,Group_7_Cameras,tripod stand,cameras-photography,2000,200000
+TC_137,Group_7_Cameras,camera gimbal,cameras-photography,2000,200000
+TC_138,Group_7_Cameras,50mm prime lens,cameras-photography,2000,200000
+TC_139,Group_7_Cameras,gopro hero 12,cameras-photography,2000,200000
+TC_140,Group_7_Cameras,sony zv-e10,cameras-photography,2000,200000
+TC_141,Group_7_Cameras,canon eos 200d,cameras-photography,2000,200000
+TC_142,Group_7_Cameras,sony a6400,cameras-photography,2000,200000
+TC_143,Group_7_Cameras,nikon d5600,cameras-photography,2000,200000
+TC_144,Group_7_Cameras,fujifilm xt30,cameras-photography,2000,200000
+TC_145,Group_7_Cameras,dji osmo action 4,cameras-photography,2000,200000
+TC_146,Group_8_Cycles_EVs,duranta mtb gear cycle,bicycles-mtb,7000,160000
+TC_147,Group_8_Cycles_EVs,walton takyon electric bike,bicycles-mtb,7000,160000
+TC_148,Group_8_Cycles_EVs,veloce speedster,bicycles-mtb,7000,160000
+TC_149,Group_8_Cycles_EVs,phoenix bicycle,bicycles-mtb,7000,160000
+TC_150,Group_8_Cycles_EVs,e-scooter,bicycles-mtb,7000,160000
+TC_151,Group_8_Cycles_EVs,lithium battery e-bike,bicycles-mtb,7000,160000
+TC_152,Group_8_Cycles_EVs,gear cycle 21 speed,bicycles-mtb,7000,160000
+TC_153,Group_8_Cycles_EVs,electric cycle for adults,bicycles-mtb,7000,160000
+TC_154,Group_8_Cycles_EVs,duranta mtb gear cycle,bicycles-mtb,7000,160000
+TC_155,Group_8_Cycles_EVs,walton takyon electric bike,bicycles-mtb,7000,160000
+TC_156,Group_8_Cycles_EVs,veloce speedster,bicycles-mtb,7000,160000
+TC_157,Group_8_Cycles_EVs,phoenix bicycle,bicycles-mtb,7000,160000
+TC_158,Group_8_Cycles_EVs,e-scooter,bicycles-mtb,7000,160000
+TC_159,Group_8_Cycles_EVs,lithium battery e-bike,bicycles-mtb,7000,160000
+TC_160,Group_8_Cycles_EVs,gear cycle 21 speed,bicycles-mtb,7000,160000
+TC_161,Group_9_Jewelry,22k gold chain,fine-jewelry,200,350000
+TC_162,Group_9_Jewelry,gold wedding band,fine-jewelry,200,350000
+TC_163,Group_9_Jewelry,diamond ring,fine-jewelry,200,350000
+TC_164,Group_9_Jewelry,oxidised jhumka earrings,fashion-jewelry,200,350000
+TC_165,Group_9_Jewelry,fashion choker set,fashion-jewelry,200,350000
+TC_166,Group_9_Jewelry,silver plated bracelet,fashion-jewelry,200,350000
+TC_167,Group_9_Jewelry,diamante necklace,fashion-jewelry,200,350000
+TC_168,Group_9_Jewelry,traditional bala,fashion-jewelry,200,350000
+TC_169,Group_9_Jewelry,nose pin gold,fine-jewelry,200,350000
+TC_170,Group_9_Jewelry,22k gold chain,fine-jewelry,200,350000
+TC_171,Group_9_Jewelry,gold wedding band,fine-jewelry,200,350000
+TC_172,Group_9_Jewelry,diamond ring,fine-jewelry,200,350000
+TC_173,Group_9_Jewelry,oxidised jhumka earrings,fashion-jewelry,200,350000
+TC_174,Group_9_Jewelry,fashion choker set,fashion-jewelry,200,350000
+TC_175,Group_9_Jewelry,silver plated bracelet,fashion-jewelry,200,350000
+TC_176,Group_9_Jewelry,diamante necklace,fashion-jewelry,200,350000
+TC_177,Group_9_Jewelry,traditional bala,fashion-jewelry,200,350000
+TC_178,Group_9_Jewelry,nose pin gold,fine-jewelry,200,350000
+TC_179,Group_9_Jewelry,22k gold chain,fine-jewelry,200,350000
+TC_180,Group_9_Jewelry,gold wedding band,fine-jewelry,200,350000
+TC_181,Group_10_Lifestyle,jamdani saree,saree-boutiques,150,45000
+TC_182,Group_10_Lifestyle,katan silk saree,saree-boutiques,150,45000
+TC_183,Group_10_Lifestyle,mens cotton panjabi,fashion-apparel,150,45000
+TC_184,Group_10_Lifestyle,nike running shoes,sneakers-footwear,150,45000
+TC_185,Group_10_Lifestyle,barca home kit,True,150,45000
+TC_186,Group_10_Lifestyle,rupchanda mustard oil,grocery-snacks,150,45000
+TC_187,Group_10_Lifestyle,khati gawa ghee,grocery-snacks,150,45000
+TC_188,Group_10_Lifestyle,organic honey,grocery-snacks,150,45000
+TC_189,Group_10_Lifestyle,bridal facial kit,True,150,45000
+TC_190,Group_10_Lifestyle,onion hair oil,grocery-snacks,150,45000
+TC_191,Group_10_Lifestyle,jamdani saree,saree-boutiques,150,45000
+TC_192,Group_10_Lifestyle,katan silk saree,saree-boutiques,150,45000
+TC_193,Group_10_Lifestyle,mens cotton panjabi,fashion-apparel,150,45000
+TC_194,Group_10_Lifestyle,nike running shoes,sneakers-footwear,150,45000
+TC_195,Group_10_Lifestyle,barca home kit,True,150,45000
+TC_196,Group_10_Lifestyle,rupchanda mustard oil,grocery-snacks,150,45000
+TC_197,Group_10_Lifestyle,khati gawa ghee,grocery-snacks,150,45000
+TC_198,Group_10_Lifestyle,organic honey,grocery-snacks,150,45000
+TC_199,Group_10_Lifestyle,bridal facial kit,True,150,45000
+TC_200,Group_10_Lifestyle,onion hair oil,grocery-snacks,150,45000

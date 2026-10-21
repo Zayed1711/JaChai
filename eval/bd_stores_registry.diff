@@ -1,0 +1,631 @@
+--- /tmp/claude-0/-home-claude/80148b20-589b-57ef-8ea4-0777f6465424/scratchpad/orig/backend/bd_stores_registry.py	2026-10-20 09:20:24.071181603 +0600
++++ work/backend/bd_stores_registry.py	2026-10-20 09:24:47.553522273 +0600
+@@ -235,20 +235,25 @@
+     return d
+ 
+ 
++_FB_HANDLE_RE = re.compile(r"^[A-Za-z0-9._\-]{3,}$")
++
++
+ def _format_facebook_url(fb_name_or_url: str, store_name: str) -> str:
++    """
++    Accepts a full URL, an '@handle', or 'Display Name (@handle)'. A bare display name is NOT a page
++    address, so it becomes a Facebook search link instead of an invented page URL.
++    """
+     raw = (fb_name_or_url or "").strip()
+     if not raw:
+         clean_name = quote_plus(store_name.strip())
+         return f"https://www.facebook.com/marketplace/dhaka/search/?query={clean_name}"
+-    if raw.startswith("http://") or raw.startswith("https://"):
++    if raw.lower().startswith(("http://", "https://")):
+         return raw
+-    # If it's a page slug or handle
+-    clean_slug = raw.lstrip("@").replace(" ", "")
+-    # Check if handle contains parentheses
+-    clean_slug = re.sub(r"[()]", "", clean_slug).strip()
+-    if clean_slug and ("/" not in clean_slug) and (" " not in clean_slug):
+-        return f"https://www.facebook.com/{clean_slug}"
+-    # Otherwise fallback to top search
++    m = re.search(r"\(@([A-Za-z0-9._\-]+)\)\s*$", raw)
++    if m:
++        return f"https://www.facebook.com/{m.group(1)}"
++    if raw.startswith("@") and _FB_HANDLE_RE.match(raw[1:]):
++        return f"https://www.facebook.com/{raw[1:]}"
+     return f"https://www.facebook.com/search/top/?q={quote_plus(raw)}"
+ 
+ 
+@@ -278,7 +283,7 @@
+     )
+     category = (
+         store.get("Category") or store.get("category") or
+-        store.get("Retail Category") or "Mobile Phones & Consumer Gadgets"
++        store.get("Retail Category") or "Uncategorized"
+     )
+     website_raw = (
+         store.get("Website") or store.get("website") or
+@@ -326,6 +331,7 @@
+         "search_url_template": search_url_template,
+         "source_type": source_type,
+         "fb_page": fb_raw or name,
++        "fb_verified": "/search/" not in facebook_page_url and "/marketplace/" not in facebook_page_url,
+     })
+ 
+     return store
+@@ -334,12 +340,12 @@
+ # ==============================================================================
+ # DYNAMIC REGISTRY LOADER
+ # ==============================================================================
+-def load_all_registries(force: bool = False) -> Dict[str, Any]:
++def load_all_registries(force: bool = False, guard: bool = False) -> Dict[str, Any]:
+     """
+     Scans the registries folder or master CSV, extracts all stores,
+     preserves all dynamic columns, and populates module-level registry variables.
+     """
+-    global _LAST_MTIMES, _LAST_CHECK_TIMESTAMP
++    global _LAST_MTIMES, _LAST_CHECK_TIMESTAMP, _LAST_MTIME_CHECK_TS
+ 
+     reg_dir = _get_registries_dir()
+     master_csv = _get_master_csv_fallback()
+@@ -348,6 +354,7 @@
+     detected_cols: Set[str] = set()
+     current_mtimes: Dict[str, float] = {}
+     csv_paths: List[str] = []
++    read_errors: List[str] = []
+ 
+     # Priority 1: Read all category CSV files in registries/
+     if reg_dir and os.path.isdir(reg_dir):
+@@ -368,7 +375,7 @@
+             norm_p = os.path.normcase(os.path.abspath(path))
+             mtime = os.path.getmtime(path)
+             current_mtimes[norm_p] = mtime
+-            with open(path, "r", encoding="utf-8", errors="ignore") as f:
++            with open(path, "r", encoding="utf-8-sig", errors="replace", newline="") as f:
+                 reader = csv.DictReader(f)
+                 for row in reader:
+                     if not any(row.values()):
+@@ -377,6 +384,7 @@
+                     if store.get("name"):
+                         loaded_stores.append(store)
+         except Exception as e:
++            read_errors.append(path)
+             print(f"[JaChai Dynamic Registry] Warning: Error reading '{path}': {e}")
+ 
+     # Build grouped collections
+@@ -388,7 +396,9 @@
+     for store in loaded_stores:
+         name = store["name"]
+         cat_lower = store["category"].lower().strip()
+-        v_key = CATEGORY_VERTICAL_MAP.get(cat_lower, "MOBILE_GADGET")
++        v_key = (CATEGORY_VERTICAL_MAP.get(cat_lower)
++                 or re.sub(r"[^A-Z0-9]+", "_", store["category"].upper()).strip("_")
++                 or "UNCATEGORIZED")
+ 
+         # Vertical grouping
+         verticals.setdefault(v_key, []).append(store)
+@@ -408,16 +418,28 @@
+ 
+     # Atomic thread-safe update of module exports
+     with _REGISTRY_RELOAD_LOCK:
++        # Hot-reload guard: a half-saved or broken CSV must not wipe the live registry.
++        old_n = len(ALL_STORES_REGISTRY)
++        if guard and old_n and (read_errors or len(loaded_stores) < 0.5 * old_n):
++            print(f"[JaChai Dynamic Registry] Reload rejected: {len(loaded_stores)} stores parsed vs {old_n} live "
++                  f"(read errors: {read_errors or 'none'}). Keeping the previous registry until the files change again.")
++            _LAST_MTIMES = current_mtimes
++            _LAST_CHECK_TIMESTAMP = _LAST_MTIME_CHECK_TS = time.time()
++            return REGISTRY_METADATA
++
+         ALL_STORES_REGISTRY[:] = loaded_stores
+ 
+-        RETAIL_VERTICALS.clear()
++        # Update in place, then drop stale keys. Never clear() first: readers would see an empty dict.
+         RETAIL_VERTICALS.update(verticals)
++        for k in [k for k in RETAIL_VERTICALS if k not in verticals]:
++            RETAIL_VERTICALS.pop(k, None)
+ 
+         FCOMMERCE_JEWELRY_BOUTIQUES[:] = jewelry_boutiques
+         FCOMMERCE_SAREE_BOUTIQUES[:] = saree_boutiques
+ 
+-        STORE_FACEBOOK_PAGES.clear()
+         STORE_FACEBOOK_PAGES.update(fb_pages)
++        for k in [k for k in STORE_FACEBOOK_PAGES if k not in fb_pages]:
++            STORE_FACEBOOK_PAGES.pop(k, None)
+ 
+         DETECTED_COLUMNS[:] = sorted(list(detected_cols))
+ 
+@@ -485,7 +507,7 @@
+                     continue
+ 
+         if needs_reload or force:
+-            load_all_registries(force=True)
++            load_all_registries(force=True, guard=True)
+             return True
+ 
+     return False
+@@ -572,78 +594,101 @@
+     return " ".join(words[:4]).strip()
+ 
+ 
++def _name_key(name: str) -> str:
++    """Comparable form of a store name: drops '(@handle)', punctuation, case and spacing."""
++    n = re.sub(r"\(@[^)]*\)", " ", name or "")
++    n = canon_text(n.lower())
++    n = re.sub(r"[^\w\s\u0980-\u09FF]", " ", n)
++    return " ".join(n.split())
++
++
++_MIN_ALIAS_LEN = 7  # shorter aliases ('yellow', 'walton', 'dazzle') are only accepted as an exact match
++
++
++def _find_store(store_name: str) -> Optional[Dict[str, Any]]:
++    """
++    Resolve a store by identity, never by loose substring. Order: exact registry name, exact domain,
++    exact alias, then whole-word containment (longest wins). Returns None rather than guessing.
++    """
++    key = _name_key(store_name)
++    if not key:
++        return None
++    stores = list(ALL_STORES_REGISTRY)
++    for s in stores:
++        if _name_key(s.get("name", "")) == key:
++            return s
++    raw = (store_name or "").strip()
++    if "." in raw and " " not in raw:
++        dom = _clean_domain(raw)
++        for s in stores:
++            if s.get("domain") and s["domain"] == dom:
++                return s
++
++    def by_domain(domain: str, prefer: str) -> Optional[Dict[str, Any]]:
++        cands = [s for s in stores if s.get("domain") == domain]
++        for s in cands:
++            if _name_key(s.get("name", "")).startswith(prefer):
++                return s
++        return cands[0] if cands else None
++
++    alias_dom = MERCHANT_ALIASES.get(key)
++    if alias_dom:
++        hit = by_domain(alias_dom, key)
++        if hit:
++            return hit
++    padded = f" {key} "
++    best, best_len = None, 0
++    for s in stores:
++        nk = _name_key(s.get("name", ""))
++        if len(nk) >= 5 and f" {nk} " in padded and len(nk) > best_len:
++            best, best_len = s, len(nk)
++    for alias, dom in MERCHANT_ALIASES.items():
++        if (len(alias) >= _MIN_ALIAS_LEN or " " in alias) and f" {alias} " in padded and len(alias) > best_len:
++            hit = by_domain(dom, alias)
++            if hit:
++                best, best_len = hit, len(alias)
++    return best
++
++
+ def get_store_facebook_fallback_url(store_name: str, query: str = "") -> str:
+     """
+-    Returns verified official Facebook page URL for a store.
+-    Never returns &merchant= parameter which breaks Facebook Marketplace.
++    Returns the registry's Facebook URL for a store when it is a real page address; otherwise a
++    Facebook search link. Never returns &merchant= parameter which breaks Facebook Marketplace.
+     """
+     check_and_reload_if_modified()
+-
+     s_norm = (store_name or "").strip().lower()
+     if s_norm in STORE_FACEBOOK_PAGES:
+         return STORE_FACEBOOK_PAGES[s_norm]
+-
+-    for k, fb_url in STORE_FACEBOOK_PAGES.items():
+-        if k in s_norm or s_norm in k:
+-            return fb_url
+-
+-    # Check in ALL_STORES_REGISTRY
+-    for store in ALL_STORES_REGISTRY:
+-        s_name_lower = store.get("name", "").lower()
+-        if s_norm in s_name_lower or s_name_lower in s_norm:
+-            fb = store.get("facebook_page_url") or store.get("Facebook page") or store.get("facebook_page")
+-            if fb:
+-                return _format_facebook_url(fb, store_name)
+-
+-    # Clean official top Facebook search for this store (guaranteed 200, never breaks)
+-    return f"https://www.facebook.com/search/top/?q={quote_plus(store_name.strip())}"
++    store = _find_store(store_name)
++    if store and store.get("facebook_page_url"):
++        return store["facebook_page_url"]
++    return f"https://www.facebook.com/search/top/?q={quote_plus((store_name or '').strip())}"
+ 
+ 
+ def build_store_target_url(store_name: str, query: str, vertical: Optional[str] = None) -> str:
+     """
+-    Generates a guaranteed non-404, merchant-specific URL for any store in Bangladesh.
+-    Never returns dead speculative slugs, broken queries with parentheses, or broken &merchant= URLs.
++    Merchant-specific search URL for a store. Resolves the store by identity (see _find_store) and
++    falls back to a Facebook search link, never to another merchant's site.
+     """
+     check_and_reload_if_modified()
+ 
+     clean_term = sanitize_search_query_for_store(query)
+-    clean_q = quote_plus(clean_term) if clean_term else quote_plus(query.strip())
+-    s_norm = (store_name or "").strip().lower()
+-
+-    # Priority 0: Check known merchant aliases (e.g. 'Star Tech' -> 'startech.com.bd')
+-    if s_norm in MERCHANT_ALIASES:
+-        domain = MERCHANT_ALIASES[s_norm]
+-        if domain in MERCHANT_SEARCH_TEMPLATES:
+-            return MERCHANT_SEARCH_TEMPLATES[domain].format(q=clean_q)
++    clean_q = quote_plus(clean_term) if clean_term else quote_plus((query or "").strip())
+ 
+-    for alias, dom in MERCHANT_ALIASES.items():
+-        if alias in s_norm or s_norm in alias:
+-            if dom in MERCHANT_SEARCH_TEMPLATES:
+-                return MERCHANT_SEARCH_TEMPLATES[dom].format(q=clean_q)
+-
+-    # Priority 1: Check known merchant search templates
+-    for m_key, tpl in MERCHANT_SEARCH_TEMPLATES.items():
+-        m_base = m_key.split(".")[0]
+-        if m_key in s_norm or s_norm in m_key or (len(m_base) > 3 and m_base in s_norm):
+-            return tpl.format(q=clean_q)
+-
+-    # Priority 2: Check structured retail verticals & all stores
+-    for store in ALL_STORES_REGISTRY:
+-        s_name_lower = store.get("name", "").lower()
+-        s_dom = store.get("domain", "").lower()
+-        if s_norm in s_name_lower or s_name_lower in s_norm or (s_dom and s_dom in s_norm):
+-            website_url = store.get("website_url")
+-            if website_url:
+-                return website_url.format(q=clean_q)
+-            fb_url = store.get("facebook_page_url")
+-            if fb_url:
+-                return fb_url
+-
+-    # Priority 3: Fallback - Official Facebook search for store name (zero 404s, never &merchant=)
+-    fb_fallback = get_store_facebook_fallback_url(store_name, query)
+-    if fb_fallback and "marketplace" not in fb_fallback:
+-        return fb_fallback
+-    return f"https://www.facebook.com/search/top/?q={quote_plus(store_name.strip())}"
++    store = _find_store(store_name)
++    if store:
++        dom = store.get("domain", "")
++        if dom in MERCHANT_SEARCH_TEMPLATES:
++            return MERCHANT_SEARCH_TEMPLATES[dom].format(q=clean_q)
++        if store.get("website_url"):
++            return store["website_url"].format(q=clean_q)
++        if store.get("facebook_page_url"):
++            return store["facebook_page_url"]
++
++    alias_dom = MERCHANT_ALIASES.get(_name_key(store_name))  # e.g. 'daraz' is templated but not in the CSVs
++    if alias_dom in MERCHANT_SEARCH_TEMPLATES:
++        return MERCHANT_SEARCH_TEMPLATES[alias_dom].format(q=clean_q)
++    return get_store_facebook_fallback_url(store_name, query)
+ 
+ 
+ def get_registry_status() -> Dict[str, Any]:
+@@ -658,66 +703,45 @@
+     website URL, Facebook page URL, location, and pre-seeded status.
+     """
+     check_and_reload_if_modified()
+-    s_norm = (store_name or "").strip().lower()
+     clean_term = sanitize_search_query_for_store(query)
+     clean_q = quote_plus(clean_term) if clean_term else (quote_plus(query.strip()) if query else "")
+ 
+-    # Match via MERCHANT_ALIASES first
+-    target_dom = MERCHANT_ALIASES.get(s_norm)
+-    if not target_dom:
+-        for alias, dom in MERCHANT_ALIASES.items():
+-            if alias in s_norm or s_norm in alias:
+-                target_dom = dom
+-                break
+-
+-    # Match in ALL_STORES_REGISTRY
+-    for store in ALL_STORES_REGISTRY:
+-        s_name_lower = store.get("name", "").lower()
+-        s_dom = store.get("domain", "").lower()
+-        matched = False
+-        if target_dom and s_dom == target_dom:
+-            matched = True
+-        elif s_norm in s_name_lower or s_name_lower in s_norm or (s_dom and s_dom in s_norm):
+-            matched = True
+-
+-        if matched:
+-            website = ""
+-            raw_website = store.get("Website") or store.get("website") or store.get("website_url") or ""
+-            if s_dom in MERCHANT_SEARCH_TEMPLATES:
+-                website = MERCHANT_SEARCH_TEMPLATES[s_dom].format(q=clean_q) if clean_q else f"https://{s_dom}"
+-            elif raw_website:
+-                if clean_q and store.get("website_url"):
+-                    website = store.get("website_url").format(q=clean_q)
+-                elif raw_website.startswith("http"):
+-                    website = raw_website
+-                else:
+-                    website = f"https://{store.get('domain', raw_website)}"
+-            
+-            fb_url = store.get("facebook_page_url", "")
+-            raw_fb = store.get("Facebook page") or store.get("facebook_page") or ""
+-            if not fb_url and raw_fb:
+-                fb_url = _format_facebook_url(raw_fb, store.get("name", store_name))
+-            if not fb_url:
+-                fb_url = STORE_FACEBOOK_PAGES.get(s_name_lower, "")
+-            if not fb_url:
+-                fb_url = f"https://www.facebook.com/search/top/?q={quote_plus(store.get('name', store_name))}"
+-
+-            return {
+-                "name": store.get("name", store_name),
+-                "website_url": website,
+-                "facebook_url": fb_url,
+-                "location": store.get("Location") or store.get("location") or "Bangladesh",
+-                "category": store.get("category", ""),
+-                "is_preseeded": True,
+-                "architecture_mode": store.get("architecture_mode", "Engine A (Direct SKU Match)")
+-            }
++    store = _find_store(store_name)
++    if store:
++        s_dom = store.get("domain", "")
++        raw_website = store.get("Website") or store.get("website") or store.get("website_url") or ""
++        website = ""
++        if s_dom in MERCHANT_SEARCH_TEMPLATES:
++            website = MERCHANT_SEARCH_TEMPLATES[s_dom].format(q=clean_q) if clean_q else f"https://{s_dom}"
++        elif raw_website:
++            if clean_q and store.get("website_url"):
++                website = store["website_url"].format(q=clean_q)
++            elif raw_website.startswith("http"):
++                website = raw_website
++            else:
++                website = f"https://{store.get('domain', raw_website)}"
++
++        fb_url = (store.get("facebook_page_url")
++                  or STORE_FACEBOOK_PAGES.get(store.get("name", "").lower(), "")
++                  or f"https://www.facebook.com/search/top/?q={quote_plus(store.get('name', store_name))}")
++        return {
++            "name": store.get("name", store_name),
++            "website_url": website,
++            "facebook_url": fb_url,
++            "fb_verified": bool(store.get("fb_verified")),
++            "location": store.get("Location") or store.get("location") or "Bangladesh",
++            "category": store.get("category", ""),
++            "is_preseeded": True,
++            "architecture_mode": store.get("architecture_mode", "Engine A (Direct SKU Match)")
++        }
+ 
+     # Store not in pre-seeded registry (Open Market Discovery)
+-    fb_top = f"https://www.facebook.com/search/top/?q={quote_plus(store_name.strip())}"
++    fb_top = f"https://www.facebook.com/search/top/?q={quote_plus((store_name or '').strip())}"
+     return {
+         "name": store_name,
+         "website_url": "",
+         "facebook_url": fb_top,
++        "fb_verified": False,
+         "location": "Bangladesh",
+         "category": "",
+         "is_preseeded": False,
+@@ -961,7 +985,7 @@
+             "silk saree", "raw silk saree", "party wear saree", "georgette saree", "chiffon saree",
+             "daily wear saree", "cotton saree", "handloom saree", "taant saree", "monipuri saree",
+             "tangail saree", "khadi saree", "organza saree", "sequin saree", "lawn three piece",
+-            "pakistani lawn suit", "chiffon suit", "velvet three piece", "festive suit", "saree", "sari",
++            "pakistani lawn suit", "chiffon suit", "velvet three piece", "festive suit", "saree", "sari", "শাড়ি",
+             "jamdhani shari", "katan shari", "benarosi", "shari", "sharee", "tater shari", "pakistani thri pis",
+             "জামদানি শাড়ি", "ঢাকাই জামদানি", "হাফ সিল্ক জামদানি", "মসলিন জামদানি", "বিয়ে জামদানি",
+             "লাল জামদানি", "আসল জামদানি", "হাতে বোনা জামদানি", "কাতান শাড়ি", "বেনারসি শাড়ি",
+@@ -1338,95 +1362,79 @@
+ CATEGORY_REGISTRY_MAP["gadgets"] = CATEGORY_REGISTRY_MAP["mobile-gadgets"]
+ 
+ 
++# One canonical Unicode form for Bengali text. NFC *decomposes* ড় ঢ় য় (they are composition
++# exclusions), so every query, keyword and title must go through this same function.
++_BN_NUKTA_CANONICAL = {
++    "\u09a1\u09bc": "\u09dc",  # ড + ় -> ড়
++    "\u09a2\u09bc": "\u09dd",  # ঢ + ় -> ঢ়
++    "\u09af\u09bc": "\u09df",  # য + ় -> য়
++}
++_HAS_BENGALI = re.compile(r"[\u0980-\u09FF]")
++
++
++def canon_text(s: str) -> str:
++    s = unicodedata.normalize("NFC", s or "")
++    for decomposed, composed in _BN_NUKTA_CANONICAL.items():
++        s = s.replace(decomposed, composed)
++    return s
++
++
++def _word_hit(kw_norm: str, spaced: str) -> bool:
++    """Whole-word match for English keywords (optional plural s/es), so 'dates' never fires inside 'updates'."""
++    return re.search(rf"(?<![a-z0-9]){re.escape(kw_norm)}(?:s|es)?(?![a-z0-9])", spaced) is not None
++
++
+ def normalize_search_query(q: str) -> str:
+     """
+     Sub-string safe and Bengali Unicode-safe query normalizer.
+-    Preserves Bengali characters (\u0980-\u09FF) and combining vowel signs (kar / কার).
+-    Canonicalizes decomposed Bengali nukta characters (e.g. ড + ় -> ড়).
+-    Converts English to lowercase, strips noisy punctuation, and normalizes spacing.
++    Preserves Bengali characters (\u0980-\u09FF) and combining vowel signs (kar / কার),
++    canonicalizes nukta forms, lowercases English, strips noisy punctuation and spacing.
+     """
+     if not q:
+         return ""
+-    # Unicode NFC normalization
+-    normalized = unicodedata.normalize("NFC", q)
+-    # Strip symbols and punctuation while preserving Bengali characters (\u0980-\u09FF) and English alphanumerics
+-    cleaned = re.sub(r'[^\w\s\u0980-\u09FF-]', ' ', normalized.lower())
+-    # Replace hyphens and underscores with space
++    cleaned = re.sub(r'[^\w\s\u0980-\u09FF-]', ' ', canon_text(q).lower())
+     cleaned = cleaned.replace("-", " ").replace("_", " ")
++    return " ".join(cleaned.split()).strip()
+ 
+-    # Canonicalize decomposed Bengali nukta characters to standard single codepoints
+-    bengali_nukta_canonical = {
+-        "\u09a1\u09bc": "\u09dc",  # ড + ় -> ড়
+-        "\u09a2\u09bc": "\u09dd",  # ঢ + ় -> ঢ়
+-        "\u09af\u09bc": "\u09df",  # য + ় -> য়
+-    }
+-    for decomp, comp in bengali_nukta_canonical.items():
+-        cleaned = cleaned.replace(decomp, comp)
+ 
+-    return " ".join(cleaned.split()).strip()
++_DIG = "0-9\u09e6-\u09ef"  # ASCII and Bengali digits
++_BN_DIGITS = str.maketrans("০১২৩৪৫৬৭৮৯", "0123456789")
++_CURW = r"bdt|tk|taka|৳|টাকা"
++_NUMW = rf"[{_DIG}][{_DIG},]*(?:\.[0-9]+)?"
++# Whitespace/punctuation boundaries, not \b: \b breaks after Bengali vowel signs (া, ে ...).
++_BUDGET_A = re.compile(
++    rf"(?<!\S)(?P<kw>under|below|less\s+than|within|upto|up\s+to|max|budget|বাজেট)\s*(?P<c1>{_CURW})?\s*"
++    rf"(?P<num>{_NUMW})\s*(?P<k>[kK])?\s*(?P<c2>{_CURW})?(?!\S)", re.I)
++_BUDGET_B = re.compile(
++    rf"(?<!\S)(?P<num>{_NUMW})\s*(?P<k>[kK])?\s*(?P<c2>টাকার\s+নিচে|টাকার\s+মধ্যে|{_CURW}|/-)(?!\S)", re.I)
+ 
+ 
+ def extract_budget_and_clean_query(raw_query: str) -> Tuple[str, Optional[int]]:
+     """
+-    Extracts price ceiling phrases (e.g. 'under 85000', 'below 85k', '1500 taka',
+-    'বাজেট ৮৫০০০', '১৫০০ টাকার নিচে') into (cleaned_query, max_price_bdt).
+-    Guarantees budget numbers do not leak into mandatory anchor tokens.
++    Extracts price-ceiling phrases ('under 85,000', 'below 85k', '1500 taka', 'বাজেট ৮৫০০০',
++    '১৫০০ টাকার নিচে') into (cleaned_query, max_price_bdt), removing exactly the matched phrase.
++    A bare number is never a budget (model numbers, years, 'max 256 gb' stay in the query), and a
++    keyword-only match under 100 needs an explicit currency word.
+     """
+     if not raw_query:
+         return "", None
+-
+-    bn_to_en = str.maketrans("০১২৩৪৫৬৭৮৯", "0123456789")
+-    q = raw_query.translate(bn_to_en)
+-    
+-    max_price: Optional[int] = None
+-    cleaned_query = raw_query
+-
+-    # Pattern A: 'under 85000', 'below 85k', 'less than 85000', 'within 85000', 'max 85000', 'budget 85000', 'বাজেট ৮৫০০০'
+-    m = re.search(
+-        r"(?i)\b(?:under|below|less\s+than|within|max|budget|বাজেট)\s*(?:bdt|tk|taka|৳)?\s*(\d+(?:\s*[kK])?)\b",
+-        q
+-    )
+-    if m:
+-        num_str = m.group(1).lower().replace(" ", "")
+-        if "k" in num_str:
+-            max_price = int(float(num_str.replace("k", "")) * 1000)
+-        else:
+-            max_price = int(num_str)
+-        cleaned_query = re.sub(
+-            r"(?i)\b(?:under|below|less\s+than|within|max|budget|বাজেট)\s*(?:bdt|tk|taka|৳)?\s*" + re.escape(m.group(1)) + r"\b",
+-            " ",
+-            raw_query
+-        )
+-
+-    # Pattern B: '1500 taka', '1500 tk', '1500 bdt', '85000/-', '85000 টাকার নিচে', '85000 টাকা'
+-    if max_price is None:
+-        m2 = re.search(
+-            r"(?i)\b(\d+(?:\s*[kK])?)\s*(?:taka|tk|bdt|টাকা|টাকার\s+নিচে|টাকার\s+মধ্যে|\/-)\b",
+-            q
+-        )
+-        if m2:
+-            num_str = m2.group(1).lower().replace(" ", "")
+-            if "k" in num_str:
+-                max_price = int(float(num_str.replace("k", "")) * 1000)
+-            else:
+-                max_price = int(num_str)
+-            cleaned_query = re.sub(
+-                r"(?i)\b" + re.escape(m2.group(1)) + r"\s*(?:taka|tk|bdt|টাকা|টাকার\s+নিচে|টাকার\s+মধ্যে|\/-)\b",
+-                " ",
+-                raw_query
+-            )
+-
+-    # Pattern C: 'বাজেট X'
+-    if max_price is None:
+-        m3 = re.search(r"(?i)(?:বাজেট)\s*[:=]?\s*(\d+)", q)
+-        if m3:
+-            max_price = int(m3.group(1))
+-            cleaned_query = re.sub(r"(?i)(?:বাজেট)\s*[:=]?\s*" + re.escape(m3.group(1)), " ", raw_query)
+-
+-    # Clean leftover stop words from budget phrases
+-    cleaned_query = re.sub(r"(?i)\b(taka|tk|bdt|under|below)\b", " ", cleaned_query)
+-    cleaned_query = " ".join(cleaned_query.split()).strip()
+-    return cleaned_query, max_price
++    for pat in (_BUDGET_A, _BUDGET_B):
++        for m in pat.finditer(raw_query):
++            g = m.groupdict()
++            try:
++                value = float(g["num"].translate(_BN_DIGITS).replace(",", ""))
++            except ValueError:
++                continue
++            if g.get("k"):
++                value *= 1000
++            has_currency = bool(g.get("c1") or g.get("c2"))
++            if value < 100 and not has_currency:
++                continue
++            if (g.get("kw") or "").lower() == "max" and value < 1000 and not has_currency:
++                continue
++            cleaned = raw_query[:m.start()] + " " + raw_query[m.end():]
++            return " ".join(cleaned.split()), int(value)
++    return " ".join(raw_query.split()), None
+ 
+ 
+ def normalize_search_query_variants(text: str):
+@@ -1436,7 +1444,7 @@
+     """
+     if not text:
+         return "", "", "", set()
+-    raw = unicodedata.normalize("NFC", text).strip().lower()
++    raw = canon_text(text).strip().lower()
+     spaced = re.sub(r'[^\w\s\u0980-\u09FF]', ' ', raw).strip()
+     spaced = re.sub(r'\s+', ' ', spaced)
+     collapsed = re.sub(r'[^\w\u0980-\u09FF]', '', raw)
+@@ -1455,7 +1463,7 @@
+ ]
+ 
+ 
+-def resolve_category_from_query(query: str, category_hint: Optional[str] = None) -> tuple:
++def _resolve_category(query: str, category_hint: Optional[str] = None, allow_default: bool = True) -> tuple:
+     """
+     Deterministically resolves the category ID and display metadata from any query or hint.
+     Guarantees 'e-bike' maps strictly to 'cycles-evs', 'refrigerator' maps strictly to 'home-appliances', etc.
+@@ -1500,7 +1508,7 @@
+         all_kw_items.sort(key=lambda x: x[0], reverse=True)
+ 
+         for kw_len, cat_id, meta, kw in all_kw_items:
+-            kw_raw = unicodedata.normalize("NFC", kw.lower())
++            kw_raw = canon_text(kw.lower())
+             kw_norm = normalize_search_query(kw_raw)
+             kw_collapsed = re.sub(r'[^\w\u0980-\u09FF]', '', kw_raw)
+             if not kw_collapsed:
+@@ -1518,11 +1526,18 @@
+                     score = len(kw_norm) * 3
+             else:
+                 # Bengali or multi-word boundary check
+-                if kw_raw in q_raw or kw_norm in q_spaced:
++                if _HAS_BENGALI.search(kw_norm):
++                    direct = kw_raw in q_raw or kw_norm in q_spaced  # Bengali suffixes (শাড়ির) need prefix matching
++                else:
++                    direct = _word_hit(kw_norm, q_spaced)
++                if direct:
+                     matched = True
+                     if kw_raw == q_raw or kw_norm == q_spaced:
+                         score += 60
+-                elif len(kw_collapsed) >= 4 and kw_collapsed in q_collapsed:
++                # Space-insensitive match ('iphone15', 'e bikes') only for multi-word or Bengali keywords;
++                # single English words must match as tokens, or 'dates' fires inside 'updates'.
++                elif (len(kw_collapsed) >= 4 and (' ' in kw_norm or _HAS_BENGALI.search(kw_norm))
++                      and kw_collapsed in q_collapsed):
+                     matched = True
+                     score = len(kw_collapsed)
+                 elif kw_norm in q_tokens:
+@@ -1561,9 +1576,21 @@
+                 return cat_id, meta
+ 
+     # Priority 3: Default fallback
++    if not allow_default:
++        return None, None
+     return "mobile-gadgets", CATEGORY_REGISTRY_MAP["mobile-gadgets"]
+ 
+ 
++def resolve_category_from_query(query: str, category_hint: Optional[str] = None) -> tuple:
++    """Legacy behaviour: anything unmatched falls back to mobile-gadgets."""
++    return _resolve_category(query, category_hint, allow_default=True)
++
++
++def resolve_category_or_none(query: str, category_hint: Optional[str] = None) -> tuple:
++    """Returns (None, None) when nothing matches, so callers can say "no results" instead of guessing."""
++    return _resolve_category(query, category_hint, allow_default=False)
++
++
+ 
+ def get_stores_for_category(category_id: str) -> List[Dict[str, Any]]:
+     """Returns curated verified stores strictly from that category's CSV registry."""
