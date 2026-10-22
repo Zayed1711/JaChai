@@ -246,7 +246,7 @@ export default function StoreLeaderboardModal({
         </div>
 
         {/* STORE LIST BODY */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8 space-y-4">
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center text-center">
               <Loader2 className="w-10 h-10 text-[#FFC857] animate-spin mb-4" />
