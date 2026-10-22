@@ -310,6 +310,8 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
                     return False
             if pb == "iphone" and "iphone" not in t_low:
                 return False
+            elif pb == "samsung" and ("samsung" in t_low or "galaxy" in t_low):
+                pass
             elif pb != "iphone" and not re.search(r"\b" + re.escape(pb) + r"\b", t_low):
                 return False
 
@@ -386,6 +388,8 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
         "tv": ("tv", "television", "bravia", "qled", "oled", "led", "android tv", "smart tv", "inch"),
         "refrigerator": ("refrigerator", "fridge", "freezer", "frost", "liter", "ltr"),
         "fridge": ("fridge", "refrigerator", "freezer", "frost", "liter", "ltr"),
+        "samsung": ("samsung", "galaxy"),
+        "galaxy": ("galaxy", "samsung"),
     })
 
     soft_modifiers = {'fc', 'club', 'home', 'away', 'third', 'kit', 'innerwear', 'boxer', 'briefs', 'galaxy', 'eos', 'alpha', 'inspiron', 'pavilion', 'ideapad', 'vivobook', 'vostro', 'modern', 'aspires', 'aspire', 'pure', 'cow', 'sundarban', 'chinigura', 'dhakai', 'tangail', 'mens', 'womens', 'ladies', 'girls', '5g', 'aero', 'hybrid', 'boys', 'racing', 'global', 'men', 'business', 'full', 'non', 'unofficial', 'series', 'portable', 'luxury', 'manual', 'mens', 'bangladesh', 'kids', 'digital', 'auto', 'commuter', 'road', 'student', '4k', 'premium', 'automatic', 'womens', 'pedal', 'official', 'smart', 'hd', 'office', 'waterproof', 'budget', 'intact', 'gear', 'touch', 'wireless', 'gents', 'edition', 'fhd', 'non-gear', 'women', 'original', 'ladies', 'mountain', 'screen', 'authentic'}
@@ -432,6 +436,12 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
         {"cotton", "panjabi"},
         {"formal", "shirt"},
         {"polo", "shirt"},
+        {"samsung", "galaxy"},
+        {"asus", "vivobook"},
+        {"asus", "zenbook"},
+        {"apple", "macbook"},
+        {"apple", "iphone"},
+        {"apple", "ipad"},
     ]
     for pair in COMPOUND_EQUIVALENTS:
         if pair.issubset(set(hard_anchors)):

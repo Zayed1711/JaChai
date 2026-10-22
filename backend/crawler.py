@@ -1826,7 +1826,11 @@ async def live_meta_search_and_persist(
     scraped_listings: List[dict] = []
 
     # Distill noisy modifiers for store search endpoints
-    distilled_kw = re.sub(r"(?i)\b(manual|pedal|non-gear|non\s+gear|aero)\b", "", search_kw).strip() or search_kw
+    # Strip literal parentheses and special punctuation (e.g. '(44mm)' -> '44mm') so store search bars don't choke
+    clean_search = re.sub(r"\((.*?)\)|\[(.*?)\]", r" \1\2 ", search_kw)
+    clean_search = re.sub(r"[#@$%^&*_+={}\\|~`<>]", " ", clean_search)
+    clean_search = re.sub(r"\s+", " ", clean_search).strip() or search_kw
+    distilled_kw = re.sub(r"(?i)\b(manual|pedal|non-gear|non\s+gear|aero)\b", "", clean_search).strip() or clean_search
     if "aero" in search_kw.lower() and "bike" in search_kw.lower():
         distilled_kw = "road bicycle"
 
@@ -1915,7 +1919,17 @@ async def live_meta_search_and_persist(
             scraped_listings = [c for c in scraped_listings if "macbook" in c.get("title", "").lower()]
         elif "apple watch" in q_norm.lower():
             scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower() and "apple" in c.get("title", "").lower()]
+        elif "galaxy watch" in q_norm.lower() or ("samsung" in q_norm.lower() and "watch" in q_norm.lower()):
+            scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower() and ("galaxy" in c.get("title", "").lower() or "samsung" in c.get("title", "").lower())]
+            gw_num_m = re.search(r"watch\s*(\d+)", q_norm.lower())
+            if gw_num_m:
+                w_num = gw_num_m.group(1)
+                gw_candidates = [c for c in scraped_listings if re.search(rf"\b{w_num}\b", c.get("title", "").lower())]
+                if gw_candidates:
+                    scraped_listings = gw_candidates
         elif "smartwatch" in q_norm.lower() or "smart watch" in q_norm.lower():
+            scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower()]
+        elif "watch" in q_norm.lower():
             scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower()]
 
         watch_series_m = re.search(r"\b(series\s*\d+|ultra\s*\d*|se\s*\d*)\b", q_norm.lower())

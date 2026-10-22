@@ -1697,6 +1697,10 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
         query_disambig = query or ""
     q_raw, q_spaced, q_collapsed, q_tokens = normalize_search_query_variants(query_disambig)
 
+    # Priority 0A: Smartwatch & Wearables MUST route strictly to mobile-gadgets
+    if any(k in q_spaced for k in ("smartwatch", "smart watch", "apple watch", "galaxy watch", "samsung watch", "amazfit", "haylou", "kieslect", "mibro", "kospet")):
+        return "mobile-gadgets", CATEGORY_REGISTRY_MAP["mobile-gadgets"]
+
     # Priority 0: Multi-Word Priority Intent Routing for Cycles & EVs
     # Compound phrases MUST be evaluated before generic single words (e.g. 'electronic') to prevent
     # leaking into tech stores (Star Tech, Ryans, TechLand).
@@ -1719,15 +1723,10 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
             ("bicycles-mtb", CATEGORY_REGISTRY_MAP["bicycles-mtb"]),
             ("cycles-evs", CATEGORY_REGISTRY_MAP["cycles-evs"]),
             ("home-appliances", CATEGORY_REGISTRY_MAP["home-appliances"]),
-            ("fashion-apparel", CATEGORY_REGISTRY_MAP["fashion-apparel"]),
-            ("saree-boutiques", CATEGORY_REGISTRY_MAP["saree-boutiques"]),
             ("fine-jewelry", CATEGORY_REGISTRY_MAP["fine-jewelry"]),
-            ("fashion-jewelry", CATEGORY_REGISTRY_MAP["fashion-jewelry"]),
             ("sneakers-footwear", CATEGORY_REGISTRY_MAP["sneakers-footwear"]),
             ("watches-horology", CATEGORY_REGISTRY_MAP["watches-horology"]),
-            ("beauty-skincare", CATEGORY_REGISTRY_MAP["beauty-skincare"]),
             ("sportswear-gym", CATEGORY_REGISTRY_MAP["sportswear-gym"]),
-            ("grocery-snacks", CATEGORY_REGISTRY_MAP["grocery-snacks"]),
             ("laptops-pc", CATEGORY_REGISTRY_MAP["laptops-pc"]),
             ("mobile-gadgets", CATEGORY_REGISTRY_MAP["mobile-gadgets"]),
         ]

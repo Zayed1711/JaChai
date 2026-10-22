@@ -3998,22 +3998,14 @@ const INITIAL_TRENDING_HUBS = [
 
 const REGISTRY_CATEGORIES = [
   { id: 'all', categoryName: 'all', en: 'All Categories', bn: 'সব ক্যাটাগরি', defaultQuery: '' },
-  { id: 'cameras-photography', categoryName: 'Cameras & DSLR', en: 'Cameras & DSLR', bn: 'ক্যামেরা ও ডিএসএলআর', defaultQuery: 'Cameras & DSLR' },
   { id: 'mobile-gadgets', categoryName: 'Mobiles & Gadgets', en: 'Mobiles & Gadgets', bn: 'মোবাইল ও গ্যাজেট', defaultQuery: 'Mobiles & Gadgets' },
   { id: 'laptops-pc', categoryName: 'Laptops & PC', en: 'Laptops & PC', bn: 'ল্যাপটপ ও কম্পিউটার', defaultQuery: 'Laptops & PC' },
-  { id: 'fashion-apparel', categoryName: 'Fashion & Apparel', en: 'Fashion & Apparel', bn: 'ফ্যাশন ও পোশাক', defaultQuery: 'Fashion & Apparel' },
-  { id: 'grocery-snacks', categoryName: 'Grocery & Snacks', en: 'Grocery & Snacks', bn: 'গ্রোসারি ও স্ন্যাকস', defaultQuery: 'Grocery & Snacks' },
-  { id: 'fine-jewelry', categoryName: 'Fine Jewelry & Gold', en: 'Fine Jewellery & Gold', bn: 'স্বর্ণ ও ডায়মন্ড গহনা', defaultQuery: 'Fine Jewellery & Gold' },
-  { id: 'saree-boutiques', categoryName: 'Saree & Boutiques', en: 'Saree & Boutiques', bn: 'শাড়ি ও বুটিকস', defaultQuery: 'Saree & Boutiques' },
-  { id: 'sneakers-footwear', categoryName: 'Sneakers & Shoes', en: 'Sneakers & Shoes', bn: 'স্নিকার্স ও জুতা', defaultQuery: 'Sneakers & Shoes' },
-  { id: 'watches-horology', categoryName: 'Watches & Horology', en: 'Watches & Horology', bn: 'ঘড়ি ও টাইমপিস', defaultQuery: 'Watches & Horology' },
-  { id: 'home-appliances', categoryName: 'Home Appliances', en: 'Home Appliances', bn: 'হোম অ্যাপ্লায়েন্স', defaultQuery: 'Home Appliances' },
-  { id: 'beauty-skincare', categoryName: 'Beauty, Skincare & Lifestyle Stores', en: 'Beauty & Skincare', bn: 'বিউটি ও স্কিনকেয়ার', defaultQuery: 'Beauty & Skincare' },
-  { id: 'bicycles-mtb', categoryName: 'Bicycles, MTB & Aero', en: 'Bicycles, MTB & Aero', bn: 'সাইকেল, এমটিবি ও এরো', defaultQuery: 'Bicycles, MTB & Aero' },
-  { id: 'cycles-evs', categoryName: 'Electric Bikes & EVs', en: 'Electric Bikes & EVs', bn: 'ই-বাইক ও স্কুটার', defaultQuery: 'Electric Bikes & EVs' },
-  { id: 'sportswear-gym', categoryName: 'Sportswear & Gym', en: 'Sportswear & Gym', bn: 'স্পোর্টস ও জিম গিয়ার', defaultQuery: 'Sportswear & Gym' },
-  { id: 'fashion-jewelry', categoryName: 'Fashion & Budget Jewellery', en: 'Fashion & Budget Jewellery', bn: 'ফ্যাশন ও বাজেট জুয়েলারি', defaultQuery: 'Fashion & Budget Jewellery' },
+  { id: 'watches-horology', categoryName: 'Watches & Horology', en: 'Watches & Horology', bn: 'ঘড়ি ও হরোলজি', defaultQuery: 'Watches & Horology' },
+  { id: 'cameras-photography', categoryName: 'Cameras & DSLR', en: 'Cameras & DSLR', bn: 'ক্যামেরা ও ফটোগ্রাফি', defaultQuery: 'Cameras & DSLR' },
   { id: 'gaming-consoles', categoryName: 'Gaming Consoles & Accessories', en: 'Gaming Consoles & Accessories', bn: 'গেমিং কনসোল ও এক্সেসরিজ', defaultQuery: 'PlayStation 5' },
+  { id: 'home-appliances', categoryName: 'Home Appliances', en: 'Home Appliances', bn: 'হোম অ্যাপ্লায়েন্সেস', defaultQuery: 'Home Appliances' },
+  { id: 'bicycles-mtb', categoryName: 'Bicycles, MTB & Aero', en: 'Bicycles, MTB & Aero', bn: 'সাইকেল, এমটিবি ও এরো', defaultQuery: 'Bicycles, MTB & Aero' },
+  { id: 'cycles-evs', categoryName: 'Electric Bikes & EVs', en: 'Electric Bikes & EVs', bn: 'ই-বাইক ও ইলেকট্রিক', defaultQuery: 'Electric Bikes & EVs' },
 ];
 
 
@@ -7619,82 +7611,42 @@ export default function App() {
 
             </div>
 
-            {/* As-You-Type Suggestions Floating Dropdown */}
-            {showSuggestions && (suggestionsData.suggestions?.length > 0 || suggestionsData.did_you_mean?.length > 0) && (
+            {/* As-You-Type Suggestions Floating Dropdown - 100% Solid Opaque */}
+            {showSuggestions && suggestionsData.suggestions?.length > 0 && (
               <div
                 ref={suggestionsRef}
-                className="absolute left-0 right-0 top-full mt-2.5 bg-[#0E131F]/98 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 text-left py-2 custom-scrollbar text-white animate-in fade-in slide-in-from-top-2 duration-150"
+                className="absolute left-0 right-0 top-full mt-2 bg-[#0B0F19] border border-white/20 rounded-2xl shadow-2xl overflow-hidden z-[9999] text-left py-2 text-white"
+                style={{ backgroundColor: '#0B0F19', opacity: 1 }}
               >
-                {suggestionsData.suggestions?.length > 0 && (
-                  <div className="py-1">
-                    {suggestionsData.suggestions.map((item, idx) => {
-                      const isHighlighted = highlightedIndex === idx;
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onMouseEnter={() => setHighlightedIndex(idx)}
-                          onClick={() => {
-                            setSearchQuery(item.title);
-                            setShowSuggestions(false);
-                            executeLiveSearch(item.title, item.category_id || 'all');
-                          }}
-                          className={`w-full px-4 py-2.5 flex items-center justify-between transition cursor-pointer text-left ${
-                            isHighlighted ? 'bg-[#FFC857]/20 text-[#FFC857]' : 'text-slate-200 hover:bg-white/5'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                            <Search className={`w-3.5 h-3.5 shrink-0 ${isHighlighted ? 'text-[#FFC857]' : 'text-slate-400'}`} />
-                            <span className="text-xs sm:text-sm font-medium truncate">{item.title}</span>
-                          </div>
-                          {item.category_name && (
-                            <span className="shrink-0 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase bg-white/5 text-slate-400 border border-white/10">
-                              {item.category_name}
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {suggestionsData.did_you_mean && suggestionsData.did_you_mean.length > 0 && (
-                  <div className="px-4 py-2.5 mt-1 border-t border-white/10 bg-white/[0.02]">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                      <Sparkles className="w-3 h-3 text-[#FFC857]" />
-                      <span>{lang === 'bn' ? 'সংশ্লিষ্ট বিকল্প:' : 'Did You Mean'}</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {suggestionsData.did_you_mean.map((pill, pIdx) => (
-                        <button
-                          key={pIdx}
-                          type="button"
-                          onClick={() => {
-                            setSearchQuery(pill.query);
-                            setShowSuggestions(false);
-                            executeLiveSearch(pill.query, pill.category || 'all');
-                          }}
-                          className="px-3 py-1 rounded-full text-xs font-semibold bg-[#FFC857]/15 hover:bg-[#FFC857] text-[#FFC857] hover:text-[#0A0D14] border border-[#FFC857]/30 transition-all cursor-pointer"
-                        >
-                          {pill.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <div className="py-1 divide-y divide-white/5">
+                  {suggestionsData.suggestions.map((item, idx) => {
+                    const isHighlighted = highlightedIndex === idx;
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onMouseEnter={() => setHighlightedIndex(idx)}
+                        onClick={() => {
+                          setSearchQuery(item.title);
+                          setShowSuggestions(false);
+                          executeLiveSearch(item.title, 'all');
+                        }}
+                        className={`w-full px-5 py-3 flex items-center justify-between transition cursor-pointer text-left ${
+                          isHighlighted ? 'bg-[#FFC857]/20 text-[#FFC857]' : 'text-slate-100 hover:bg-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0 pr-3">
+                          <Search className={`w-4 h-4 shrink-0 ${isHighlighted ? 'text-[#FFC857]' : 'text-slate-400'}`} />
+                          <span className="text-sm font-semibold truncate tracking-tight">{item.title}</span>
+                        </div>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 opacity-60 shrink-0" />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             )}
-
-
-
-
           </form>
-
-
-
-
-
-
 
           {/* Category Navigation Bar: Valorant Kinetic Fluid Motion */}
 
@@ -9278,30 +9230,6 @@ export default function App() {
 
 
             
-
-            {/* Hybrid Disambiguation Pill Banner (Non-blocking Did-You-Mean) */}
-            {activeDisambiguationPills && activeDisambiguationPills.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-6 p-3 sm:p-3.5 bg-slate-900/5 border border-slate-900/10 rounded-2xl">
-                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5 shrink-0">
-                  <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
-                  <span>{lang === 'bn' ? 'সংশ্লিষ্ট বিকল্প:' : 'Did you mean:'}</span>
-                </span>
-                {activeDisambiguationPills.map((pill, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery(pill.query);
-                      executeLiveSearch(pill.query, pill.category || 'all');
-                    }}
-                    className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#FFC857]/20 hover:bg-[#FFC857] text-[#101B2D] border border-[#FFC857]/50 transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
-                  >
-                    {pill.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
 
             {/* Kinetic Scanning State */}
 
