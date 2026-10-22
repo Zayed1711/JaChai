@@ -4004,6 +4004,7 @@ const REGISTRY_CATEGORIES = [
   { id: 'cameras-photography', categoryName: 'Cameras & DSLR', en: 'Cameras & DSLR', bn: 'ক্যামেরা ও ফটোগ্রাফি', defaultQuery: 'Cameras & DSLR' },
   { id: 'gaming-consoles', categoryName: 'Gaming Consoles & Accessories', en: 'Gaming Consoles & Accessories', bn: 'গেমিং কনসোল ও এক্সেসরিজ', defaultQuery: 'PlayStation 5' },
   { id: 'home-appliances', categoryName: 'Home Appliances', en: 'Home Appliances', bn: 'হোম অ্যাপ্লায়েন্সেস', defaultQuery: 'Home Appliances' },
+  { id: 'beauty-skincare', categoryName: 'Beauty, Skincare & Lifestyle Stores', en: 'Beauty & Skincare', bn: 'বিউটি ও স্কিনকেয়ার', defaultQuery: 'Beauty & Skincare' },
   { id: 'bicycles-mtb', categoryName: 'Bicycles, MTB & Aero', en: 'Bicycles, MTB & Aero', bn: 'সাইকেল, এমটিবি ও এরো', defaultQuery: 'Bicycles, MTB & Aero' },
   { id: 'cycles-evs', categoryName: 'Electric Bikes & EVs', en: 'Electric Bikes & EVs', bn: 'ই-বাইক ও ইলেকট্রিক', defaultQuery: 'Electric Bikes & EVs' },
 ];

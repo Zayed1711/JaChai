@@ -92,6 +92,17 @@ CLEAN_PRODUCT_CATALOG: List[str] = [
     "Veloce Outrage 601 Mountain Bike MTB",
     "Firefox Target 29 D Mountain Cycle",
     "Walton Takyon Electric Bike",
+
+    # Beauty & Skincare
+    "Dr. Althea 345 Relief Cream 50ml",
+    "Dr. Althea Vitamin C Boosting Serum",
+    "Beauty of Joseon Relief Sun Rice Probiotics SPF50",
+    "COSRX Advanced Snail 96 Mucin Power Essence",
+    "Skin1004 Madagascar Centella Ampoule",
+    "Round Lab Birch Juice Moisturizing Sunscreen",
+    "CeraVe Daily Moisturizing Lotion",
+    "Cetaphil Gentle Skin Cleanser",
+    "The Ordinary Niacinamide 10% + Zinc 1%",
 ]
 
 _PRODUCTS_INDEX: List[str] = []
@@ -113,7 +124,7 @@ def initialize_products_index():
             cur.execute("""
                 SELECT DISTINCT title_en FROM products
                 WHERE title_en IS NOT NULL
-                  AND category NOT IN ('Fashion & Apparel', 'Saree & Boutiques', 'Fashion & Budget Jewellery', 'Grocery & Snacks', 'Beauty & Skincare')
+                  AND category NOT IN ('Fashion & Apparel', 'Saree & Boutiques', 'Fashion & Budget Jewellery', 'Grocery & Snacks')
                 LIMIT 300
             """)
             for row in cur.fetchall():

@@ -1726,6 +1726,7 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
             ("fine-jewelry", CATEGORY_REGISTRY_MAP["fine-jewelry"]),
             ("sneakers-footwear", CATEGORY_REGISTRY_MAP["sneakers-footwear"]),
             ("watches-horology", CATEGORY_REGISTRY_MAP["watches-horology"]),
+            ("beauty-skincare", CATEGORY_REGISTRY_MAP["beauty-skincare"]),
             ("sportswear-gym", CATEGORY_REGISTRY_MAP["sportswear-gym"]),
             ("laptops-pc", CATEGORY_REGISTRY_MAP["laptops-pc"]),
             ("mobile-gadgets", CATEGORY_REGISTRY_MAP["mobile-gadgets"]),
