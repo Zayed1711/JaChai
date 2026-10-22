@@ -199,6 +199,7 @@ import {
 
 
 
+  fetchSearchSuggestions,
 } from './api';
 
 
@@ -4667,6 +4668,11 @@ export default function App() {
 
   const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
+  const [suggestionsData, setSuggestionsData] = useState({ suggestions: [], did_you_mean: [] });
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeDisambiguationPills, setActiveDisambiguationPills] = useState([]);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const suggestionsRef = useRef(null);
 
 
 
@@ -4914,6 +4920,43 @@ export default function App() {
 
 
 
+  }, []);
+
+  // --- HYBRID SEARCH AUTOCOMPLETE & TYPEAHEAD EFFECT ---
+  useEffect(() => {
+    if (!searchQuery || searchQuery.trim().length < 2) {
+      setSuggestionsData({ suggestions: [], did_you_mean: [] });
+      setShowSuggestions(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const data = await fetchSearchSuggestions(searchQuery.trim());
+        if (data && ((data.suggestions && data.suggestions.length > 0) || (data.did_you_mean && data.did_you_mean.length > 0))) {
+          setSuggestionsData(data);
+          setShowSuggestions(true);
+          setHighlightedIndex(-1);
+        } else {
+          setSuggestionsData({ suggestions: [], did_you_mean: [] });
+          setShowSuggestions(false);
+        }
+      } catch (err) {
+        setSuggestionsData({ suggestions: [], did_you_mean: [] });
+      }
+    }, 130);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(e.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
 
@@ -6301,6 +6344,14 @@ export default function App() {
 
 
     setIsSearching(true);
+    setShowSuggestions(false);
+    fetchSearchSuggestions(q).then((data) => {
+      if (data && data.did_you_mean && data.did_you_mean.length > 0) {
+        setActiveDisambiguationPills(data.did_you_mean);
+      } else {
+        setActiveDisambiguationPills([]);
+      }
+    }).catch(() => setActiveDisambiguationPills([]));
 
 
 
@@ -6409,6 +6460,8 @@ export default function App() {
 
 
     setSearchResults([]);
+    setActiveDisambiguationPills([]);
+    setShowSuggestions(false);
 
 
 
@@ -7412,15 +7465,7 @@ export default function App() {
 
 
 
-          <form
-
-
-
-            onSubmit={handleSearchSubmit}
-
-
-
-            className="max-w-2xl w-full mx-auto"
+          <form onSubmit={handleSearchSubmit} className="max-w-2xl w-full mx-auto relative"
 
 
 
@@ -7449,6 +7494,30 @@ export default function App() {
 
 
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => {
+                  if ((suggestionsData.suggestions?.length > 0 || suggestionsData.did_you_mean?.length > 0) && searchQuery.trim().length >= 2) {
+                    setShowSuggestions(true);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.min(prev + 1, (suggestionsData.suggestions?.length || 0) - 1));
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.max(prev - 1, -1));
+                  } else if (e.key === 'Escape') {
+                    setShowSuggestions(false);
+                  } else if (e.key === 'Enter') {
+                    if (highlightedIndex >= 0 && suggestionsData.suggestions && suggestionsData.suggestions[highlightedIndex]) {
+                      e.preventDefault();
+                      const item = suggestionsData.suggestions[highlightedIndex];
+                      setSearchQuery(item.title);
+                      setShowSuggestions(false);
+                      executeLiveSearch(item.title, item.category_id || 'all');
+                    }
+                  }
+                }}
 
 
 
@@ -7549,6 +7618,73 @@ export default function App() {
 
 
             </div>
+
+            {/* As-You-Type Suggestions Floating Dropdown */}
+            {showSuggestions && (suggestionsData.suggestions?.length > 0 || suggestionsData.did_you_mean?.length > 0) && (
+              <div
+                ref={suggestionsRef}
+                className="absolute left-0 right-0 top-full mt-2.5 bg-[#0E131F]/98 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 text-left py-2 custom-scrollbar text-white animate-in fade-in slide-in-from-top-2 duration-150"
+              >
+                {suggestionsData.suggestions?.length > 0 && (
+                  <div className="py-1">
+                    {suggestionsData.suggestions.map((item, idx) => {
+                      const isHighlighted = highlightedIndex === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onMouseEnter={() => setHighlightedIndex(idx)}
+                          onClick={() => {
+                            setSearchQuery(item.title);
+                            setShowSuggestions(false);
+                            executeLiveSearch(item.title, item.category_id || 'all');
+                          }}
+                          className={`w-full px-4 py-2.5 flex items-center justify-between transition cursor-pointer text-left ${
+                            isHighlighted ? 'bg-[#FFC857]/20 text-[#FFC857]' : 'text-slate-200 hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                            <Search className={`w-3.5 h-3.5 shrink-0 ${isHighlighted ? 'text-[#FFC857]' : 'text-slate-400'}`} />
+                            <span className="text-xs sm:text-sm font-medium truncate">{item.title}</span>
+                          </div>
+                          {item.category_name && (
+                            <span className="shrink-0 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase bg-white/5 text-slate-400 border border-white/10">
+                              {item.category_name}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {suggestionsData.did_you_mean && suggestionsData.did_you_mean.length > 0 && (
+                  <div className="px-4 py-2.5 mt-1 border-t border-white/10 bg-white/[0.02]">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3 text-[#FFC857]" />
+                      <span>{lang === 'bn' ? 'সংশ্লিষ্ট বিকল্প:' : 'Did You Mean'}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {suggestionsData.did_you_mean.map((pill, pIdx) => (
+                        <button
+                          key={pIdx}
+                          type="button"
+                          onClick={() => {
+                            setSearchQuery(pill.query);
+                            setShowSuggestions(false);
+                            executeLiveSearch(pill.query, pill.category || 'all');
+                          }}
+                          className="px-3 py-1 rounded-full text-xs font-semibold bg-[#FFC857]/15 hover:bg-[#FFC857] text-[#FFC857] hover:text-[#0A0D14] border border-[#FFC857]/30 transition-all cursor-pointer"
+                        >
+                          {pill.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
 
 
 
@@ -9139,6 +9275,32 @@ export default function App() {
 
 
 
+
+
+            
+
+            {/* Hybrid Disambiguation Pill Banner (Non-blocking Did-You-Mean) */}
+            {activeDisambiguationPills && activeDisambiguationPills.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-6 p-3 sm:p-3.5 bg-slate-900/5 border border-slate-900/10 rounded-2xl">
+                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5 shrink-0">
+                  <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                  <span>{lang === 'bn' ? 'সংশ্লিষ্ট বিকল্প:' : 'Did you mean:'}</span>
+                </span>
+                {activeDisambiguationPills.map((pill, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(pill.query);
+                      executeLiveSearch(pill.query, pill.category || 'all');
+                    }}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#FFC857]/20 hover:bg-[#FFC857] text-[#101B2D] border border-[#FFC857]/50 transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
 
             {/* Kinetic Scanning State */}

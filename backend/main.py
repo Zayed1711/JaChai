@@ -799,6 +799,12 @@ def get_category_predetermined_catalog(
     return build_predetermined_browse_products(cat_id, subcategory=subcategory)
 
 
+@app.get("/api/v1/search/suggestions")
+async def search_suggestions(q: Optional[str] = Query(None, description="Prefix string to get instant search suggestions")):
+    from suggestions_engine import get_search_suggestions
+    return get_search_suggestions(q or "")
+
+
 @app.get("/api/v1/search/live", response_model=List[ProductResponse])
 async def search_products_live(
     q: Optional[str] = Query(None, description="Product query to search and scrape dynamically"),

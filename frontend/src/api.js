@@ -959,6 +959,25 @@ export async function fetchAdminLeaderboardStatus() {
   return await res.json();
 }
 
+// ==============================================================================
+// SEARCH SUGGESTIONS & AUTOCOMPLETE API
+// ==============================================================================
+
+export async function fetchSearchSuggestions(prefix = '') {
+  if (!prefix || prefix.trim().length < 2) {
+    return { query: prefix, suggestions: [], did_you_mean: [] };
+  }
+  try {
+    const params = new URLSearchParams({ q: prefix.trim() });
+    const res = await fetch(`${API_BASE_URL}/api/v1/search/suggestions?${params.toString()}`);
+    if (!res.ok) return { query: prefix, suggestions: [], did_you_mean: [] };
+    return await res.json();
+  } catch (err) {
+    return { query: prefix, suggestions: [], did_you_mean: [] };
+  }
+}
+
+
 
 
 
