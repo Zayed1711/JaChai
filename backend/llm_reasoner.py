@@ -42,7 +42,7 @@ ACCESSORY_KEYWORDS = [
     "leather case", "clear case", "protector", "screen protector", "tempered glass",
     "matte protector", "privacy glass", "lens protector",
     "camera lens protector", "cable", "cables", "cord", "adapter", "charger",
-    "strap", "straps", "watch strap", "pouch", "bag", "camera bag", "dslr bag", "backpack", "laptop bag",
+    "strap", "straps", "watch strap", "band", "bands", "watch band", "loop band", "trail loop", "ocean band", "alpine loop", "magnetic link", "sport loop", "sport band", "bumper", "pouch", "bag", "camera bag", "dslr bag", "backpack", "laptop bag",
     "sleeve", "cooling pad", "laptop stand", "phone holder", "skin", "sticker", "dummy", "box only",
     "keyboard protector", "lens cap",
 ]
@@ -350,6 +350,9 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
         "laptop": ("laptop", "notebook", "macbook", "ultrabook", "thinkpad", "ideapad", "vivobook", "zenbook", "pavilion", "victus", "inspiron", "loq"),
         "bicycle": ("bicycle", "cycle", "bike", "mtb", "veloce", "duranta", "phoenix", "trinx"),
         "shoes": ("shoe", "shoes", "sneaker", "sneakers", "loafer", "boot", "sandal", "footwear"),
+        "watch": ("watch", "watches", "smartwatch", "smart-watch", "ghori", "timepiece"),
+        "smartwatch": ("smartwatch", "smart-watch", "smart watch", "watch", "smart ghori"),
+        "cream": ("cream", "crem", "krim", "barrier cream", "cica", "relief cream"),
         "sneakers": ("sneaker", "sneakers", "shoe", "shoes", "kicks"),
     }
 
@@ -386,6 +389,9 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
     })
 
     soft_modifiers = {'fc', 'club', 'home', 'away', 'third', 'kit', 'innerwear', 'boxer', 'briefs', 'galaxy', 'eos', 'alpha', 'inspiron', 'pavilion', 'ideapad', 'vivobook', 'vostro', 'modern', 'aspires', 'aspire', 'pure', 'cow', 'sundarban', 'chinigura', 'dhakai', 'tangail', 'mens', 'womens', 'ladies', 'girls', '5g', 'aero', 'hybrid', 'boys', 'racing', 'global', 'men', 'business', 'full', 'non', 'unofficial', 'series', 'portable', 'luxury', 'manual', 'mens', 'bangladesh', 'kids', 'digital', 'auto', 'commuter', 'road', 'student', '4k', 'premium', 'automatic', 'womens', 'pedal', 'official', 'smart', 'hd', 'office', 'waterproof', 'budget', 'intact', 'gear', 'touch', 'wireless', 'gents', 'edition', 'fhd', 'non-gear', 'women', 'original', 'ladies', 'mountain', 'screen', 'authentic'}
+    # When searching for a watch, band, or ghori, 'smart' is a critical non-negotiable technology anchor
+    if any(w in (raw_query or "").lower() for w in ("watch", "ghori", "band")):
+        soft_modifiers = soft_modifiers - {"smart"}
     # Separate hard brand/model/noun anchors from soft descriptive modifiers
     hard_anchors = [t for t in core_anchors if t not in soft_modifiers]
     if not hard_anchors:
@@ -455,9 +461,14 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
             matched = any(re.search(r"\b" + re.escape(syn) + r"\b", t_low) is not None for syn in SYNONYM_GROUPS[tok])
 
         if not matched:
-            # If the unmatched token is a generic category noun ('laptop', 'phone', 'watch', 'camera', 'shoe', 'saree', 'shirt')
+            # Primary device nouns (watch, tv, monitor, camera, console, tablet, ac, fridge) are NON-NEGOTIABLE!
+            # e.g., 'apple watch' MUST contain 'watch', 'samsung tv' MUST contain 'tv'
+            if tok in ("watch", "smartwatch", "tv", "monitor", "camera", "tablet", "pad", "console", "refrigerator", "fridge", "ac"):
+                return False
+
+            # If the unmatched token is a flexible category noun ('laptop', 'phone', 'saree', etc.)
             # and we already have other specific brand/model tokens in hard_anchors, do not reject the product!
-            if len(hard_anchors) >= 2 and tok in ("laptop", "phone", "smartphone", "mobile", "watch", "camera", "dslr", "shoe", "shoes", "sneakers", "cycle", "bicycle", "saree", "shirt", "panjabi", "refrigerator", "fridge", "ac", "tv", "monitor", "ssd", "ram", "processor", "graphics", "card", "earbuds", "power", "bank"):
+            if len(hard_anchors) >= 2 and tok in ("laptop", "phone", "smartphone", "mobile", "shoe", "shoes", "sneakers", "cycle", "bicycle", "saree", "shirt", "panjabi", "ssd", "ram", "processor", "graphics", "card", "earbuds", "power", "bank"):
                 continue
             return False
 

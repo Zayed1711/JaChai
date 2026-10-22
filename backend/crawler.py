@@ -166,6 +166,10 @@ CATEGORY_NEGATIVE_FIREWALL: Dict[str, Tuple[str, ...]] = {
     "Gaming Consoles & Accessories": (
         "saree", "panjabi", "salwar", "sunscreen", "face wash", "mustard oil", "ghee", "jhumka", "refrigerator", "washing machine",
     ),
+    "Watches & Horology": (
+        "motherboard", "processor", "laptop", "desktop pc", "refrigerator", "washing machine",
+        "microwave", "saree", "panjabi", "salwar", "face wash", "cream", "crem",
+    ),
 }
 
 
@@ -191,6 +195,8 @@ def passes_category_negative_firewall(title: str, category: str, query: str = ""
             or ("cycle" in fc_norm and ("cycle" in cat_norm or "ev" in cat_norm or "bicycle" in cat_norm))
             or ("laptop" in fc_norm and ("laptop" in cat_norm or "computer" in cat_norm or "pc" in cat_norm))
             or ("mobile" in fc_norm and ("mobile" in cat_norm or "phone" in cat_norm or "gadget" in cat_norm))
+            or ("watch" in fc_norm and "watch" in cat_norm)
+            or ("horology" in fc_norm and "horology" in cat_norm)
         ):
             target_blocklist = blocklist
             break
@@ -502,7 +508,9 @@ ACCESSORY_NEGATIVE_TOKENS = [
     "skin", "sticker", "wrap", "cooling pad", "laptop bag", "backpack",
     "sleeve", "stand", "holder", "mount", "cable", "lightning cable",
     "type-c cable", "converter", "adapter", "charger", "power bank",
-    "strap", "watch strap", "band", "pouch", "camera lens protector",
+    "strap", "watch strap", "band", "watch band", "loop band", "trail loop",
+    "ocean band", "alpine loop", "magnetic link", "sport loop", "sport band", "bumper",
+    "pouch", "camera lens protector",
     "lens protector", "protector",
 ]
 
@@ -511,6 +519,7 @@ PRIMARY_HARDWARE_KEYWORDS = [
     "pixel", "galaxy", "redmi", "xiaomi", "oneplus", "realme", "vivo", "oppo",
     "samsung", "apple", "honor", "infinix", "tecno", "motorola", "iqoo",
     "asus", "lenovo", "dell", "hp", "acer", "canon", "nikon", "sony",
+    "watch", "smartwatch", "smart watch",
 ]
 
 
@@ -846,7 +855,22 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str]:
     clean = re.sub(r"\(.*?\)|\[.*?\]", " ", clean)
     clean = re.sub(r"\s+", " ", clean).strip()
 
-    is_accessory = any(acc in clean.lower() for acc in ("controller", "gamepad", "headset", "wheel", "pedal", "dock", "skin", "case", "cover", "disc", "cartridge", "gift card", "cable", "charger"))
+    is_accessory = any(acc in clean.lower() for acc in ("controller", "gamepad", "headset", "wheel", "pedal", "dock", "skin", "case", "cover", "disc", "cartridge", "gift card", "cable", "charger", "strap", "band"))
+
+    # Watch accessory detector - distinguishing "Aluminum Case" / "Titanium Case" from protective covers/straps
+    is_watch_accessory = any(acc in clean.lower() for acc in ("strap", "watch strap", "band", "watch band", "loop", "cable", "charger", "screen protector", "glass", "bumper", "case cover", "protective case"))
+    m_watch = re.search(r"(?i)\b(apple\s*watch\s*(?:ultra\s*\d*|series\s*\d+|se\s*\d*|se)?|galaxy\s*watch\s*(?:\d+\s*(?:classic|pro|ultra|fe)?)|amazfit\s*[a-z0-9]+|haylou\s*[a-z0-9]+)\b", clean)
+    if m_watch and not is_watch_accessory:
+        base_watch = m_watch.group(1).strip().title()
+        size_m = re.search(r"(?i)\b(38|40|41|42|44|45|46|47|49)\s*mm\b", title)
+        size_str = f" {size_m.group(1)}mm" if size_m else ""
+        conn_str = " Cellular" if re.search(r"(?i)\b(lte|cellular)\b", title) else (" GPS" if re.search(r"(?i)\b(gps)\b", title) else "")
+        cond_disp = " - Pre-Owned / Used" if is_used else ""
+        disp_title = f"{base_watch}{size_str}{conn_str}{cond_disp}"
+        size_key = f"-{size_m.group(1)}mm" if size_m else ""
+        conn_key = "-cellular" if "Cellular" in conn_str else ""
+        g_key = f"{base_watch.lower().replace(' ', '-')}{size_key}{conn_key}-{cond}"
+        return disp_title, g_key
 
     m_ip = re.search(r"(?i)\b(iphone\s*\d+\s*(?:pro\s*max|pro|plus|mini|e)?)\b", clean)
     if m_ip:
@@ -1511,8 +1535,21 @@ def compute_min_hardware_floor(cat_id: str, search_kw: str, is_acc: bool, max_bu
                 floor = 20000  # Any genuine iPhone device
         elif any(f in q_en_low for f in ("ultra", "fold", "flip", "s24", "s23", "s25", "pixel 8", "pixel 9")):
             floor = 35000
+        elif any(w in q_en_low for w in ("apple watch", "galaxy watch")):
+            floor = 12000
+        elif any(w in q_en_low for w in ("smartwatch", "smart watch", "amazfit", "haylou", "mibro", "kospet")):
+            floor = 1500
         elif not any(g in q_en_low for g in ("earbud", "earphone", "tws", "airpod", "neckband", "headphone", "headset", "speaker", "jbl", "power bank", "powerbank", "watch", "smartwatch", "case", "cover", "charger", "adapter", "cable", "glass", "protector", "strap")):
             floor = 7500
+        else:
+            floor = 200
+    elif cat_id == "watches-horology":
+        if any(w in q_en_low for w in ("tissot", "seiko", "citizen", "orient", "edifice")):
+            floor = 8000
+        elif any(w in q_en_low for w in ("casio", "g-shock", "g shock", "timex", "fossil")):
+            floor = 2000
+        elif not any(g in q_en_low for g in ("strap", "band", "battery", "box", "case", "tool")):
+            floor = 1200
         else:
             floor = 200
     elif cat_id == "cameras-photography":
@@ -1780,7 +1817,8 @@ async def live_meta_search_and_persist(
 
     user_explicit_wants_used = is_used_or_reconditioned_title(q_norm)
     has_cached_used = any(is_used_or_reconditioned_title(p.title_en) for p in sanitized_cached)
-    has_enough_cached = len(sanitized_cached) >= 2 or (len(sanitized_cached) >= 1 and len(sanitized_cached[0].offers) >= 2)
+    distinct_stores = {off.store_name for p in sanitized_cached for off in p.offers if off.store_name}
+    has_enough_cached = len(sanitized_cached) >= 1 and len(distinct_stores) >= 2
     if has_enough_cached and (not user_explicit_wants_used or has_cached_used):
         return sanitized_cached
 
@@ -1875,6 +1913,18 @@ async def live_meta_search_and_persist(
             scraped_listings = [c for c in scraped_listings if "pixel" in c.get("title", "").lower()]
         elif "macbook" in q_norm.lower():
             scraped_listings = [c for c in scraped_listings if "macbook" in c.get("title", "").lower()]
+        elif "apple watch" in q_norm.lower():
+            scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower() and "apple" in c.get("title", "").lower()]
+        elif "smartwatch" in q_norm.lower() or "smart watch" in q_norm.lower():
+            scraped_listings = [c for c in scraped_listings if "watch" in c.get("title", "").lower()]
+
+        watch_series_m = re.search(r"\b(series\s*\d+|ultra\s*\d*|se\s*\d*)\b", q_norm.lower())
+        if watch_series_m:
+            w_series = watch_series_m.group(1).replace(" ", r"\s*")
+            scraped_listings = [
+                c for c in scraped_listings
+                if re.search(rf"\b{w_series}\b", c.get("title", "").lower())
+            ]
 
     # Step 5: Registry Validation & Priority Boosting (Bubble-sorts verified Tier-1 merchants to top)
     TIER1_BOOST_STORES = {"dazzle bd", "star tech", "sumash tech", "apple gadgets bd", "custom mac bd", "gadget & gear", "pickaboo", "ryans computers"}

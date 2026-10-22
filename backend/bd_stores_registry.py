@@ -1312,13 +1312,12 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "casio watch", "casio vintage", "casio g-shock", "g-shock", "g shock", "gshock",
             "digital watch", "mens metal watch", "luxury watch", "automatic watch", "mechanical watch",
             "analog watch", "leather strap watch", "chronograph", "diver watch", "dress watch",
-            "smartwatch", "bluetooth calling smartwatch", "amoled smartwatch", "fitness tracker",
             "watch strap", "leather watch belt", "metal watch band", "silicon watch strap", "watch",
             "watches", "timepiece",
-            "casio ghori", "ghori", "ghari", "hater ghori", "wacth", "ghorir belt", "smart ghori",
+            "casio ghori", "ghori", "ghari", "hater ghori", "wacth", "ghorir belt",
             "ক্যাসিও ঘড়ি", "ঘড়ি", "হাতঘড়ি", "ডিজিটাল ঘড়ি", "মেটাল ঘড়ি", "ক্যাসিও ভিন্টেজ", "জি শক ঘড়ি",
             "লাক্সারি ঘড়ি", "অটোমেটিক ঘড়ি", "মেকানিক্যাল ঘড়ি", "অ্যানালগ ঘড়ি", "লেদার বেল্ট ঘড়ি",
-            "স্মার্টওয়াচ", "কলিং স্মার্টওয়াচ", "ঘড়ির বেল্ট", "লেদার বেল্ট", "মেটাল বেল্ট", "সিলিকন স্ট্র্যাপ",
+            "ঘড়ির বেল্ট", "লেদার বেল্ট", "মেটাল বেল্ট", "সিলিকন স্ট্র্যাপ",
             "Casio", "Edifice", "Naviforce", "Curren", "Skmei", "Tissot", "Seiko", "Citizen", "Fossil",
             "Orient", "Rolex", "Omega", "Tag Heuer", "Titan", "Fastrack", "Timex", "Time Zone BD",
             "Watch Gallery"
@@ -1343,6 +1342,9 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
         "display_bn": "বিউটি ও স্কিনকেয়ার",
         "vertical": "BEAUTY_SKINCARE",
         "keywords": [
+            "cream", "crem", "krim", "face cream", "barrier cream", "relief cream", "cica cream",
+            "dr althea", "dr. althea", "345 cream", "345 relief cream", "beauty of joseon", "anua",
+            "skin1004", "torriden", "round lab", "cosrx", "axis-y", "innisfree", "laneige", "cerave", "cetaphil",
             "sunscreen", "spf 50 sunblock", "micellar water", "cleansing water", "micellar water", "cleansing water", "micellar water", "cleansing water", "mineral sunscreen", "gel sunscreen", "whitening sunscreen",
             "face wash", "cleanser", "acne face wash", "salicylic acid cleanser", "gentle cleanser",
             "moisturizer", "face cream", "hydrating lotion", "gel moisturizer", "night cream",
@@ -1501,7 +1503,10 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "galaxy z fold", "galaxy z flip", "samsung a15", "redmi note 13", "xiaomi 14", "poco x6 pro",
             "oneplus 12", "oneplus nord", "realme gt", "realme c67", "vivo v30", "oppo reno 11",
             "infinix hot 40", "tecno spark", "wireless earbuds", "tws earbuds", "airpods", "bluetooth headset", "earphone", "earphones", "wired earphone", "neckband", "bluetooth neckband", "headphone", "headphones", "gaming headset", "bluetooth speaker", "portable speaker", "jbl speaker", "jbl bluetooth speaker", "mini speaker", "smart band", "mi band", "action cam", "phone cooler", "ots",
-            "power bank", "powerbank", "portable charger", "fast charger", "smartwatch", "smart watch",
+            "power bank", "powerbank", "portable charger", "fast charger",
+            "smartwatch", "smart watch", "apple watch", "apple watch ultra", "apple watch se", "apple watch series",
+            "galaxy watch", "samsung watch", "amazfit", "haylou", "kospet", "mibro", "huawei watch", "xiaomi watch",
+            "noise smartwatch", "boat smartwatch", "fire-boltt", "colmi", "kieslect", "oraimo watch",
             "fitness band", "iphone 15 back cover", "silicon case", "tempered glass", "screen protector",
             "type c cable", "fast charger cord", "phone", "mobile", "gadget", "charger",
             "mobail", "smatphon", "phone", "fon", "smart phon", "iphon 15", "appel iphone", "aifon",
@@ -1817,6 +1822,37 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
         except Exception:
             pass
 
+    # Priority 2.8: Semantic Domain Taxonomy Router (Eliminate blind mobile-gadgets fallback)
+    q_text_low = (query or "").lower()
+
+    # 1. Cosmetics & Skincare domain keywords & viral brands
+    if any(k in q_text_low for k in ("cream", "crem", "krim", "lotion", "sunscreen", "spf", "serum", "cleanser", "toner", "moisturizer", "lipstick", "perfume", "facewash", "face wash", "body wash", "lip balm", "althea", "athlea", "joseon", "anua", "skin1004", "torriden", "round lab", "cosrx", "axis-y", "cerave", "cetaphil", "innisfree", "laneige")):
+        return "beauty-skincare", CATEGORY_REGISTRY_MAP["beauty-skincare"]
+
+    # 2. Smartwatch & Wearables domain keywords
+    if any(k in q_text_low for k in ("smartwatch", "smart watch", "apple watch", "galaxy watch", "samsung watch", "amazfit", "haylou", "kospet", "mibro", "smart band", "smart ghori", "fitness tracker", "kieslect")):
+        return "mobile-gadgets", CATEGORY_REGISTRY_MAP["mobile-gadgets"]
+
+    # 3. Traditional Horology domain keywords
+    if any(k in q_text_low for k in ("casio", "edifice", "g-shock", "gshock", "tissot", "seiko", "citizen", "orient", "titan", "rolex", "omega", "chronograph", "automatic watch", "mechanical watch", "dress watch")):
+        return "watches-horology", CATEGORY_REGISTRY_MAP["watches-horology"]
+
+    # 4. Laptops & Computers domain keywords
+    if any(k in q_text_low for k in ("laptop", "notebook", "macbook", "vivobook", "zenbook", "thinkpad", "ideapad", "desktop", "gpu", "rtx", "gtx", "processor", "motherboard", "ram", "ssd")):
+        return "laptops-pc", CATEGORY_REGISTRY_MAP["laptops-pc"]
+
+    # 5. Saree & Ethnic apparel keywords
+    if any(k in q_text_low for k in ("saree", "sharee", "shari", "jamdani", "katan", "silk", "boutique", "kurti", "lehenga", "panjabi", "kamiz")):
+        return "saree-boutiques", CATEGORY_REGISTRY_MAP["saree-boutiques"]
+
+    # 6. Home Appliances keywords
+    if any(k in q_text_low for k in ("fridge", "refrigerator", "freezer", "air conditioner", "inverter", "microwave", "oven", "washing machine", "blender", "kettle")):
+        return "home-appliances", CATEGORY_REGISTRY_MAP["home-appliances"]
+
+    # 7. Footwear keywords
+    if any(k in q_text_low for k in ("sneaker", "sneakers", "shoe", "shoes", "boots", "loafers", "sandals", "slide", "slides")):
+        return "sneakers-footwear", CATEGORY_REGISTRY_MAP["sneakers-footwear"]
+
     # Priority 3: Default fallback
     if not allow_default:
         return None, None
@@ -1950,7 +1986,7 @@ def store_matches_department_capability(store_name: str, category_id: str, query
     mob_shops = ("motion view", "gadget studio", "apple gadgets", "sumash tech", "dazzle", "kry international", "goriber gadget", "mobile buzz", "rio international")
     if category_id in ("laptops-pc", "home-appliances", "bicycles-mtb", "cycles-evs", "fashion-apparel", "saree-boutiques", "fine-jewelry", "fashion-jewelry", "grocery-snacks"):
         if any(ms in s_low for ms in mob_shops):
-            if not (category_id == "laptops-pc" and ("macbook" in q_low or "ipad" in q_low) and any(m in s_low for m in ("apple gadgets", "custom mac", "istock", "dazzle"))):
+            if not (category_id == "laptops-pc" and any(l in q_low for l in ("laptop", "notebook", "macbook", "ipad", "vivobook", "zenbook", "asus", "dell", "hp", "lenovo")) and any(m in s_low for m in ("apple gadgets", "custom mac", "istock", "dazzle"))):
                 return False
 
     # Sub-department isolation inside mobile-gadgets (Earphones/Gadgets vs Mobile Handsets)
