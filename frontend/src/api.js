@@ -927,5 +927,21 @@ export async function fetchPrewarmStatus() {
   return await res.json();
 }
 
+// ==============================================================================
+// STORE LEADERBOARD & MERCHANT TRUST INDEX API
+// ==============================================================================
+
+export async function fetchLeaderboard(category = 'all', pillar = 'price', limit = 25) {
+  const params = new URLSearchParams({
+    category: category || 'all',
+    pillar: pillar || 'price',
+    limit: String(limit || 25),
+  });
+  const res = await fetch(`${API_BASE_URL}/api/v1/leaderboard?${params.toString()}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+
 
 

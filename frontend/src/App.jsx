@@ -122,11 +122,16 @@ import {
 
 
 
+  Award,
+
+
+
 } from 'lucide-react';
 
 
 
 import AdminCommandCenter from './components/AdminCommandCenter';
+import StoreLeaderboardModal from './components/StoreLeaderboardModal';
 
 
 
@@ -4661,6 +4666,7 @@ export default function App() {
 
 
   const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
 
 
 
@@ -7806,6 +7812,18 @@ export default function App() {
 
 
 
+              </button>
+
+              {/* 3. National Store Leaderboard Golden Button */}
+              <button
+                type="button"
+                onClick={() => setIsLeaderboardOpen(true)}
+                className="px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer bg-gradient-to-r from-[#FFC857]/20 via-[#FFC857]/30 to-[#F59E0B]/20 text-[#FFC857] hover:text-[#0A0D14] hover:bg-[#FFC857] border border-[#FFC857]/70 hover:border-[#FFC857] shadow-lg shadow-[#FFC857]/15 hover:shadow-[#FFC857]/30 hover:scale-[1.03] active:scale-[0.98]"
+                title={lang === 'bn' ? 'মার্চেন্ট ট্রাস্ট ও ভ্যালু লিডারবোর্ড' : 'Merchant Trust & Value Leaderboard'}
+              >
+                <Award className="w-3.5 h-3.5 text-[#FFC857]" />
+                <span>{lang === 'bn' ? 'শপ লিডারবোর্ড' : 'Store Leaderboard'}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FFC857] animate-pulse" />
               </button>
 
 
@@ -12090,6 +12108,19 @@ export default function App() {
 
 
 
+      {/* STORE LEADERBOARD MODAL */}
+      <StoreLeaderboardModal
+        isOpen={isLeaderboardOpen}
+        onClose={() => setIsLeaderboardOpen(false)}
+        lang={lang}
+        categoriesList={categoriesList}
+        onSelectProductDeal={(productTitle) => {
+          setIsLeaderboardOpen(false);
+          setSearchQuery(productTitle);
+          setSelectedCategory('all');
+          executeLiveSearch(productTitle, 'all');
+        }}
+      />
     </div>
 
 
