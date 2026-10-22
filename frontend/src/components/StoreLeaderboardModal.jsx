@@ -12,7 +12,9 @@ import {
   Building2,
   ArrowRight,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  ChevronDown,
+  Layers
 } from 'lucide-react';
 import { fetchLeaderboard, trackOutboundClick } from '../api';
 
@@ -25,9 +27,37 @@ export default function StoreLeaderboardModal({
 }) {
   const [selectedCat, setSelectedCat] = useState('all');
   const [selectedPillar, setSelectedPillar] = useState('price');
+  const [catDropdownOpen, setCatDropdownOpen] = useState(false);
+  const dropdownRef = React.useRef(null);
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setCatDropdownOpen(false);
+      }
+    }
+    if (catDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [catDropdownOpen]);
+
+  const activeCategoryObj = categoriesList.find((c) => c.id === selectedCat);
+  const activeCatLabel =
+    selectedCat === 'all'
+      ? lang === 'bn'
+        ? 'সব ক্যাটাগরি'
+        : 'All Categories'
+      : activeCategoryObj
+      ? lang === 'bn'
+        ? activeCategoryObj.bn
+        : activeCategoryObj.en
+      : selectedCat;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -148,36 +178,69 @@ export default function StoreLeaderboardModal({
               </button>
             </div>
 
-            {/* CATEGORY SELECTOR */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full text-xs no-scrollbar">
+            {/* CATEGORY DROPDOWN MENU */}
+            <div className="relative shrink-0" ref={dropdownRef}>
               <button
                 type="button"
-                onClick={() => setSelectedCat('all')}
-                className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer font-bold ${
-                  selectedCat === 'all'
-                    ? 'bg-white/20 text-white border border-white/30'
-                    : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
-                }`}
+                onClick={() => setCatDropdownOpen((prev) => !prev)}
+                className="flex items-center justify-between gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/15 transition cursor-pointer text-xs font-semibold min-w-[200px] sm:min-w-[240px] shadow-sm hover:border-[#FFC857]/50"
               >
-                {lang === 'bn' ? 'সব ক্যাটাগরি' : 'All Categories'}
+                <div className="flex items-center gap-2 truncate">
+                  <Layers className="w-3.5 h-3.5 text-[#FFC857] shrink-0" />
+                  <span className="truncate">{activeCatLabel}</span>
+                </div>
+                <ChevronDown
+                  className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
+                    catDropdownOpen ? 'rotate-180 text-[#FFC857]' : ''
+                  }`}
+                />
               </button>
 
-              {categoriesList
-                .filter((c) => c.id !== 'all')
-                .map((cat) => (
+              {catDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-64 max-h-72 overflow-y-auto bg-[#0E131F]/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl py-1.5 z-50 text-xs custom-scrollbar">
                   <button
-                    key={cat.id}
                     type="button"
-                    onClick={() => setSelectedCat(cat.id)}
-                    className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer font-medium ${
-                      selectedCat === cat.id
-                        ? 'bg-[#FFC857]/20 text-[#FFC857] border border-[#FFC857]/40 font-bold'
-                        : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
+                    onClick={() => {
+                      setSelectedCat('all');
+                      setCatDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-3.5 py-2.5 flex items-center justify-between transition cursor-pointer ${
+                      selectedCat === 'all'
+                        ? 'bg-[#FFC857]/20 text-[#FFC857] font-bold'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    {lang === 'bn' ? cat.bn : cat.en}
+                    <span>{lang === 'bn' ? 'সব ক্যাটাগরি' : 'All Categories'}</span>
+                    {selectedCat === 'all' && <span className="w-1.5 h-1.5 rounded-full bg-[#FFC857]" />}
                   </button>
-                ))}
+
+                  <div className="my-1 border-t border-white/10" />
+
+                  {categoriesList
+                    .filter((c) => c.id !== 'all')
+                    .map((cat) => {
+                      const isSelected = selectedCat === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCat(cat.id);
+                            setCatDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3.5 py-2 flex items-center justify-between transition cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FFC857]/20 text-[#FFC857] font-bold'
+                              : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                          }`}
+                        >
+                          <span className="truncate pr-2">{lang === 'bn' ? cat.bn : cat.en}</span>
+                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#FFC857] shrink-0" />}
+                        </button>
+                      );
+                    })}
+                </div>
+              )}
             </div>
           </div>
         </div>
