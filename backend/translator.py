@@ -17,16 +17,12 @@ CACHE_PATH = Path(__file__).resolve().parent / "lingual_cache.json"
 VALID_15_CATEGORIES = {
     "mobile-gadgets": "smartphone mobile phone earbuds smartwatch gadget cover",
     "laptops-pc": "laptop desktop pc component nvme ssd ram gpu cpu cooler monitor casing mouse keyboard",
-    "fashion-apparel": "mens womens clothing panjabi shirt t-shirt polo jeans trouser boxer innerwear underwear belt",
-    "saree-boutiques": "saree sharee jamdani katan silk tantsalwar kameez boutique",
-    "grocery-snacks": "grocery food cooking oil mustard oil soybean oil ghee honey rice dal tea snacks",
     "sportswear-gym": "sportswear football jersey kit cricket jersey gym resistance band dumbbell fitness",
     "cameras-photography": "camera dslr mirrorless lens kit lens camera body tripod gimbal action camera",
     "bicycles-mtb": "bicycle mtb mountain bike gear cycle duranta veloce phoenix",
     "cycles-evs": "electric bike e-bike e-scooter battery cycle takyon ev",
     "home-appliances": "home appliance refrigerator fridge air conditioner ac room air cooler microwave blender",
     "fine-jewelry": "fine jewelry 22k 21k 18k gold ring band chain necklace diamond hallmark",
-    "fashion-jewelry": "fashion jewelry oxidised jhumka earrings choker bracelet imitation",
     "sneakers-footwear": "footwear sneakers running shoes football boots leather formal shoes loafers sandals",
     "watches-horology": "wristwatch analog watch chronograph automatic watch strap watch band casio seiko",
     "beauty-skincare": "beauty skincare face wash body wash facial kit makeup hair oil serum sunscreen cleanser",
@@ -59,9 +55,7 @@ def _normalize_category_hint(raw_hint: str, clean_q: str, attrs: Dict[str, Any])
     # Semantic head-noun & context disambiguation (Polysemy & Domain Principles)
     if re.search(r"\b(facial|skincare|face\s*wash|body\s*wash|hair\s*oil|onion\s*oil|makeup|serum|sunscreen|cleanser)\b", combined):
         return "beauty-skincare"
-    if re.search(r"\b(mustard\s*oil|soybean\s*oil|cooking\s*oil|ghee|honey|rice|grocery|dal|masala)\b", combined):
-        return "grocery-snacks"
-    if re.search(r"\b(dslr|mirrorless|eos|a6400|a7|camera\s*body|kit\s*lens|camera)\b", combined):
+        if re.search(r"\b(dslr|mirrorless|eos|a6400|a7|camera\s*body|kit\s*lens|camera)\b", combined):
         return "cameras-photography"
     if re.search(r"\b(barca|barcelona|real\s*madrid|argentina|brazil|football\s*jersey|home\s*kit|away\s*kit|resistance\s*band|dumbbell|gym)\b", combined):
         return "sportswear-gym"
@@ -75,13 +69,7 @@ def _normalize_category_hint(raw_hint: str, clean_q: str, attrs: Dict[str, Any])
         return "watches-horology"
     if re.search(r"\b(22k|21k|24k|gold\s*band|gold\s*ring|gold\s*chain|diamond|hallmark)\b", combined):
         return "fine-jewelry"
-    if re.search(r"\b(oxidised|jhumka|earrings|choker|imitation|fashion\s*jewelry)\b", combined):
-        return "fashion-jewelry"
-    if re.search(r"\b(saree|sharee|jamdani|katan|tant)\b", combined):
-        return "saree-boutiques"
-    if re.search(r"\b(underwear|boxer|briefs|innerwear|leather\s*belt|panjabi|shirt|t-shirt|jeans|apparel)\b", combined):
-        return "fashion-apparel"
-    if re.search(r"\b(football\s*boots|mercurial|sneakers|running\s*shoes|loafers|footwear)\b", combined):
+                if re.search(r"\b(football\s*boots|mercurial|sneakers|running\s*shoes|loafers|footwear)\b", combined):
         return "sneakers-footwear"
     if re.search(r"\b(takyon|electric\s*bike|e-bike|e-scooter|ev\s*cycle)\b", combined):
         return "cycles-evs"

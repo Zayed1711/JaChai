@@ -189,7 +189,7 @@ BROAD_CATEGORY_QUERIES = {
 
 # Categories that inherently compare by Shop Starting Price Range (Engine B) unless an exact SKU is given
 ENGINE_B_CATEGORIES = {
-    "fashion-apparel", "saree-boutiques", "fine-jewelry", "fashion-jewelry",
+    "fine-jewelry",
     "budget-jewelry", "sportswear-gym",
 }
 
@@ -227,7 +227,7 @@ def classify_comparison_mode(raw_query: str, category_id: str) -> str:
 
     # 2. If query contains an alphanumeric model number (e.g. '15', 's24', 'a55', 'm2', '5600g', 'rtx 4060', 'v200'), use Mode A
     has_model_number = bool(re.search(r"\b(?:[a-z]*\d+[a-z]*)\b", cleaned))
-    if has_model_number and category_id not in ("saree-boutiques", "fashion-jewelry"):
+    if has_model_number and True:
         return "exact_sku"
 
     # 3. If category is inherently non-SKU fashion/saree/jewelry, use Mode B

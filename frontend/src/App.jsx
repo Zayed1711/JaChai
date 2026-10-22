@@ -288,7 +288,7 @@ const LOCAL_FALLBACKS = {
 
 
 
-  'jamdani-saree': '/images/jamdani-saree.jpg',
+  'dr-althea-cream': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
 
 
 
@@ -300,23 +300,11 @@ const LOCAL_FALLBACKS = {
 
 
 
-  'old-money-shirt': '/images/old-money-shirt.jpg',
-
-
-
   'urban-sneakers': '/images/urban-sneakers.jpg',
 
 
 
-  'snacks-food': '/images/snacks-food.jpg',
-
-
-
   'gold-jewellery': '/images/gold-jewellery.svg',
-
-
-
-  'cotton-panjabi': '/images/cotton-panjabi.svg',
 
 
 
@@ -400,26 +388,11 @@ const INITIAL_TICKERS = [
 
 
 
-    brandEn: 'HERITAGE WEAVES',
-
-
-
-    brandBn: 'হেরিটেজ উইভস',
-
-
-
-    textEn: 'Handcrafted Dhakai Jamdani Sarees from ৳7,990 · Open Parcel Trial on Delivery',
-
-
-
-    textBn: 'খাঁটি ঢাকাই জামদানি শাড়ি মাত্র ৳৭,৯৯০ থেকে শুরু · ডেলিভারিতে ট্রায়াল সুবিধা',
-
-
-
-    targetKey: 'jamdani-saree'
-
-
-
+    brandEn: 'KOREAN DERMA',
+    brandBn: 'কোরিয়ান ডার্মা',
+    textEn: 'Authentic Korean Skincare & Cica Barrier Creams from ৳1,450 · 100% Genuine Certified',
+    textBn: 'খাঁটি কোরিয়ান স্কিনকেয়ার ও ব্যারিয়ার ক্রিম মাত্র ৳১,৪৫০ থেকে শুরু · শতভাগ অথেনটিক',
+    targetKey: 'dr-althea-cream'
   },
 
 
@@ -560,70 +533,22 @@ const INITIAL_BILLBOARDS = [
 
 
 
-    productKey: 'jamdani-saree',
-
-
-
-    tagEn: 'SPONSORED · FESTIVE APPAREL',
-
-
-
-    tagBn: 'স্পন্সরড · উইমেন্স ফেস্টিভ কালেকশন',
-
-
-
-    brandEn: 'AAROHI ARTISAN WEAVES',
-
-
-
-    brandBn: 'আরোহী আর্টিসান উইভস',
-
-
-
-    headlineLightEn: 'HANDLOOM',
-
-
-
-    headlineBoldEn: 'DHAKAI JAMDANI',
-
-
-
-    headlineBn: 'হ্যান্ডক্রাফটেড ঢাকাই জামদানি ও অর্গানজা শাড়ি',
-
-
-
-    subtextEn: '100% Hand-woven cotton silk with authentic Dhakai motif. Trial-on-delivery across Bangladesh.',
-
-
-
-    subtextBn: '১০০% হাতে বোনা সুতি সিল্ক। ডেলিভারিতে দেখে ট্রায়াল দিয়ে নেওয়ার বিশেষ সুবিধা।',
-
-
-
-    startingPrice: 7990,
-
-
-
-    originalPrice: 9500,
-
-
-
-    badgeEn: 'Trial on Delivery',
-
-
-
-    badgeBn: 'দেখে নেওয়ার সুবিধা',
-
-
-
-    image: '/images/jamdani-saree.jpg',
-
-
-
+    productKey: 'dr-althea-cream',
+    tagEn: 'FEATURED · KOREAN DERMA SKINCARE',
+    tagBn: 'ফিচার্ড · কোরিয়ান ডার্মা স্কিনকেয়ার',
+    brandEn: 'DR. ALTHEA DERMA RESEARCH',
+    brandBn: 'ডা. আলথিয়া ডার্মা রিসার্চ',
+    headlineLightEn: 'INTENSIVE 345',
+    headlineBoldEn: 'RELIEF CREAM',
+    headlineBn: 'ডা. আলথিয়া ৩৪৫ ইনটেনসিভ রিলিফ ক্রিম ৫০মি.লি.',
+    subtextEn: 'Fast-absorbing soothing barrier cream with resveratrol & centella. 100% verified authentic.',
+    subtextBn: 'রেসভেরাট্রল ও সেন্টেলা সমৃদ্ধ ইনটেনসিভ ব্যারিয়ার ক্রিম। ১০০% খাঁটি ও পরীক্ষিত।',
+    startingPrice: 2200,
+    originalPrice: 2600,
+    badgeEn: 'Verified Korean Authentic',
+    badgeBn: 'ভেরিফায়েড অথেনটিক',
+    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80',
     isActive: true
-
-
-
   },
 
 
@@ -1072,318 +997,23 @@ const INITIAL_PRODUCTS = [
 
 
 
-    key: 'jamdani-saree',
-
-
-
-    category: 'saree-boutiques',
-
-
-
-    categoryEn: 'Saree & Boutiques',
-
-
-
-    categoryBn: 'শাড়ি ও বুটিকস',
-
-
-
-    nameEn: 'Handcrafted Dhakai Jamdani & Organza Festive Saree',
-
-
-
-    nameBn: 'হ্যান্ডক্রাফটেড ঢাকাই জামদানি ও অর্গানজা উৎসবের শাড়ি',
-
-
-
-    price: 7990,
-
-
-
-    originalPrice: 9500,
-
-
-
+    key: 'dr-althea-345-cream',
+    category: 'beauty-skincare',
+    categoryEn: 'Beauty & Skincare',
+    categoryBn: 'বিউটি ও স্কিনকেয়ার',
+    nameEn: 'Dr. Althea 345 Relief Cream 50ml Barrier Soothing Moisturizer',
+    nameBn: 'ডা. আলথিয়া ৩৪৫ রিলিফ ক্রিম ৫০মি.লি. সুদিং ব্যারিয়ার ময়েশ্চারাইজার',
+    price: 2200,
+    originalPrice: 2600,
     storeCount: 4,
-
-
-
-    badgeEn: 'Festive Pick',
-
-
-
-    badgeBn: 'উৎসবের কালেকশন',
-
-
-
-    statusEn: 'Trial on Delivery',
-
-
-
-    statusBn: 'ডেলিভারিতে ট্রায়াল',
-
-
-
-    image: '/images/jamdani-saree.jpg',
-
-
-
+    deliveryBadgeEn: 'Verified In Stock',
+    deliveryBadgeBn: 'স্টকে ভেরিফাইড',
+    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
     pastPrices: [
-
-
-
-      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 9500 },
-
-
-
-      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 8800 },
-
-
-
-      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 7990 }
-
-
-
+      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 2500 },
+      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 2350 },
+      { labelEn: 'Today', labelBn: 'আজকের সেরা রেট', price: 2200 },
     ],
-
-
-
-    offers: [
-
-
-
-      {
-
-
-
-        id: 'js-1',
-
-
-
-        store: 'F-COMMERCE',
-
-
-
-        subStoreEn: 'Aarohi Artisan Handlooms',
-
-
-
-        url: 'https://www.facebook.com/search/top/?q=Aarohi+Handlooms',
-
-
-
-        websiteUrl: null,
-
-
-
-        facebookUrl: 'https://www.facebook.com/search/top/?q=Aarohi+Handlooms',
-
-
-
-        subStoreBn: 'আরোহী হ্যান্ডলুম বুটিক',
-
-
-
-        termsEn: 'Trial on Delivery · 7-Day Easy Exchange · Cash on Delivery',
-
-
-
-        termsBn: 'ডেলিভারিতে ট্রায়াল সুবিধা · ৭ দিনের সহজ এক্সচেঞ্জ · ক্যাশ অন ডেলিভারি',
-
-
-
-        price: 7990,
-
-
-
-        warrantyEn: '100% Handloom Guarantee',
-
-
-
-        warrantyBn: '১০০% আসল তাঁতের শাড়ি'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'js-2',
-
-
-
-        store: 'DIRECT BRAND STORE',
-
-
-
-        subStoreEn: 'Heritage Weaves Plaza',
-
-
-
-        url: 'https://www.facebook.com/search/top/?q=Heritage+Weaves+Dhaka',
-
-
-
-        websiteUrl: null,
-
-
-
-        facebookUrl: 'https://www.facebook.com/search/top/?q=Heritage+Weaves+Dhaka',
-
-
-
-        subStoreBn: 'হেরিটেজ উইভস প্লাজা',
-
-
-
-        termsEn: 'Trial on Delivery · Free Dhaka Delivery · Cash on Delivery',
-
-
-
-        termsBn: 'ডেলিভারিতে ট্রায়াল সুবিধা · ফ্রি ঢাকা ডেলিভারি · ক্যাশ অন ডেলিভারি',
-
-
-
-        price: 8400,
-
-
-
-        isSponsored: true,
-
-
-
-        warrantyEn: 'Authentic Dhakai Certificate',
-
-
-
-        warrantyBn: 'অথেনটিক ঢাকাই সনদ'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'js-3',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Shonar Bangla Silk & Weaves',
-
-
-
-        url: 'https://www.facebook.com/search/top/?q=Shonar+Bangla+Silk',
-
-
-
-        websiteUrl: null,
-
-
-
-        facebookUrl: 'https://www.facebook.com/search/top/?q=Shonar+Bangla+Silk',
-
-
-
-        subStoreBn: 'সোনার বাংলা সিল্ক বুটিক',
-
-
-
-        termsEn: 'Cash on Delivery · ৳70 Delivery',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ৳৭০ ডেলিভারি',
-
-
-
-        price: 8650,
-
-
-
-        warrantyEn: '7-Day Return Policy',
-
-
-
-        warrantyBn: '৭ দিনের রিটার্ন পলিসি'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'js-4',
-
-
-
-        store: 'MARKETPLACE',
-
-
-
-        subStoreEn: 'Verified Fashion Mall',
-
-
-
-        url: 'https://www.daraz.com.bd/catalog/?q=jamdani+saree',
-
-
-
-        websiteUrl: 'https://www.daraz.com.bd/catalog/?q=jamdani+saree',
-
-
-
-        facebookUrl: 'https://www.facebook.com/darazbangladesh',
-
-
-
-        subStoreBn: 'ভেরিফাইড ফ্যাশন মল',
-
-
-
-        termsEn: 'Cash on Delivery · ৳60 Delivery',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ৳৬০ ডেলিভারি',
-
-
-
-        price: 8900,
-
-
-
-        warrantyEn: 'Standard Buyer Protection',
-
-
-
-        warrantyBn: 'বায়ার প্রোটেকশন'
-
-
-
-      }
-
-
-
-    ]
-
-
-
   },
 
 
@@ -1920,262 +1550,23 @@ const INITIAL_PRODUCTS = [
 
 
 
-    key: 'old-money-shirt',
-
-
-
-    category: 'fashion-apparel',
-
-
-
-    categoryEn: 'Fashion & Apparel',
-
-
-
-    categoryBn: 'ফ্যাশন ও পোশাক',
-
-
-
-    nameEn: 'Old Money Textured Cuban Collar Linen Shirt',
-
-
-
-    nameBn: 'ওল্ড মানি টেক্সচার্ড কিউবান কলার লিনেন শার্ট',
-
-
-
-    price: 890,
-
-
-
-    originalPrice: 1250,
-
-
-
-    storeCount: 3,
-
-
-
-    badgeEn: 'Summer Knit',
-
-
-
-    badgeBn: 'সামার টেক্সচার্ড',
-
-
-
-    statusEn: 'Today Lowest',
-
-
-
-    statusBn: 'আজকে দাম কমেছে',
-
-
-
-    image: '/images/old-money-shirt.jpg',
-
-
-
+    key: 'sony-ps5-slim',
+    category: 'gaming-consoles',
+    categoryEn: 'Gaming Consoles & Handhelds',
+    categoryBn: 'গেমিং কনসোল ও হ্যান্ডহেল্ড',
+    nameEn: 'Sony PlayStation 5 Slim 1TB Disc Edition Gaming Console',
+    nameBn: 'সোনি প্লেস্টেশন ৫ স্লিম ১টিবি ডিস্ক এডিশন গেমিং কনসোল',
+    price: 58500,
+    originalPrice: 65000,
+    storeCount: 4,
+    deliveryBadgeEn: 'Verified Gaming Hub',
+    deliveryBadgeBn: 'ভেরিফায়েড গেমিং হাব',
+    image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80',
     pastPrices: [
-
-
-
-      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 1250 },
-
-
-
-      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 1050 },
-
-
-
-      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 890 }
-
-
-
+      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 62000 },
+      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 59900 },
+      { labelEn: 'Today', labelBn: 'আজকের সেরা রেট', price: 58500 },
     ],
-
-
-
-    offers: [
-
-
-
-      {
-
-
-
-        id: 'om-1',
-
-
-
-        store: 'F-COMMERCE',
-
-
-
-        subStoreEn: 'Dhaka Drip Attire Studio',
-
-
-
-        url: 'https://www.facebook.com/search/top/?q=Dhaka+Drip+Attire',
-
-
-
-        websiteUrl: null,
-
-
-
-        facebookUrl: 'https://www.facebook.com/search/top/?q=Dhaka+Drip+Attire',
-
-
-
-        subStoreBn: 'ঢাকা ড্রিপ অ্যাটায়ার স্টুডিও',
-
-
-
-        termsEn: 'Trial on Delivery · 7-Day Free Size Exchange · ৳60 Delivery',
-
-
-
-        termsBn: 'ডেলিভারিতে ট্রায়াল সুবিধা · ৭ দিনের ফ্রি সাইজ এক্সচেঞ্জ · ৳৬০ ডেলিভারি',
-
-
-
-        price: 890,
-
-
-
-        warrantyEn: '100% Breathable Weave',
-
-
-
-        warrantyBn: '১০০% ব্রিদেবল কটন লিনেন'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'om-2',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Urban Dapper Bangladesh',
-
-
-
-        url: 'https://fabrilife.com/search?q=linen+shirt',
-
-
-
-        websiteUrl: 'https://fabrilife.com/search?q=linen+shirt',
-
-
-
-        facebookUrl: 'https://www.facebook.com/fabrilife',
-
-
-
-        subStoreBn: 'আরবান ড্যাপার বাংলাদেশ',
-
-
-
-        termsEn: 'Cash on Delivery · ৳50 Delivery',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ৳৫০ ডেলিভারি',
-
-
-
-        price: 980,
-
-
-
-        isSponsored: true,
-
-
-
-        warrantyEn: '7 Days Exchange Policy',
-
-
-
-        warrantyBn: '৭ দিনের এক্সচেঞ্জ সুবিধা'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'om-3',
-
-
-
-        store: 'MARKETPLACE',
-
-
-
-        subStoreEn: 'Verified Menswear Zone',
-
-
-
-        url: 'https://sailor.clothing/search?q=shirt',
-
-
-
-        websiteUrl: 'https://sailor.clothing/search?q=shirt',
-
-
-
-        facebookUrl: 'https://www.facebook.com/sailorbd',
-
-
-
-        subStoreBn: 'ভেরিফাইড মেনসওয়্যার জোন',
-
-
-
-        termsEn: 'Cash on Delivery · ৳45 Delivery',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ৳৪৫ ডেলিভারি',
-
-
-
-        price: 1050,
-
-
-
-        warrantyEn: 'Standard Return Guarantee',
-
-
-
-        warrantyBn: 'রিটার্ন গ্যারান্টি'
-
-
-
-      }
-
-
-
-    ]
-
-
-
   },
 
 
@@ -2448,262 +1839,23 @@ const INITIAL_PRODUCTS = [
 
 
 
-    key: 'snacks-food',
-
-
-
-    category: 'grocery-snacks',
-
-
-
-    categoryEn: 'Grocery & Snacks',
-
-
-
-    categoryBn: 'গ্রোসারি ও স্ন্যাকস',
-
-
-
-    nameEn: 'Honey Glazed Roasted Nuts & Gourmet Dried Fruit Jar',
-
-
-
-    nameBn: 'প্রিমিয়াম হানি রোস্টেড নাটস ও ড্রাই ফ্রুটস কম্বো জার',
-
-
-
-    price: 850,
-
-
-
-    originalPrice: 1150,
-
-
-
+    key: 'canon-eos-r50',
+    category: 'cameras-photography',
+    categoryEn: 'Cameras & Photography',
+    categoryBn: 'ক্যামেরা ও ফটোগ্রাফি',
+    nameEn: 'Canon EOS R50 Mirrorless Camera with 18-45mm Lens Kit',
+    nameBn: 'ক্যানন ইওএস আর৫০ মিররলেস ক্যামেরা ১৮-৪৫মিমি লেন্স কিটসহ',
+    price: 68000,
+    originalPrice: 74000,
     storeCount: 3,
-
-
-
-    badgeEn: 'Healthy Pick',
-
-
-
-    badgeBn: 'হেলদি স্ন্যাকস',
-
-
-
-    statusEn: 'Fresh Stock',
-
-
-
-    statusBn: 'ফ্রেশ স্টক',
-
-
-
-    image: '/images/snacks-food.jpg',
-
-
-
+    deliveryBadgeEn: 'Official Warranty',
+    deliveryBadgeBn: 'অফিসিয়াল ওয়ারেন্টি',
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80',
     pastPrices: [
-
-
-
-      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 1150 },
-
-
-
-      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 980 },
-
-
-
-      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 850 }
-
-
-
+      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 72000 },
+      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 69500 },
+      { labelEn: 'Today', labelBn: 'আজকের সেরা রেট', price: 68000 },
     ],
-
-
-
-    offers: [
-
-
-
-      {
-
-
-
-        id: 'sf-1',
-
-
-
-        store: 'F-COMMERCE',
-
-
-
-        subStoreEn: 'NutriBites Gourmet BD',
-
-
-
-        url: 'https://www.facebook.com/search/top/?q=NutriBites+Gourmet',
-
-
-
-        websiteUrl: null,
-
-
-
-        facebookUrl: 'https://www.facebook.com/search/top/?q=NutriBites+Gourmet',
-
-
-
-        subStoreBn: 'নিউট্রিবাইটস গোরমেট বিডি',
-
-
-
-        termsEn: '100% Organic Sealed Jar · Cash on Delivery · ৳60 Inside Dhaka',
-
-
-
-        termsBn: '১০০% খাঁটি সিলড জার · ক্যাশ অন ডেলিভারি · ৳৬০ ঢাকা',
-
-
-
-        price: 850,
-
-
-
-        warrantyEn: 'Freshness Seal Guarantee',
-
-
-
-        warrantyBn: '১০০% ফ্রেশনেস ও খাঁটি থাকার নিশ্চয়তা'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'sf-2',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Organic Delight Bangladesh',
-
-
-
-        url: 'https://khaasfood.com/search?q=nuts',
-
-
-
-        websiteUrl: 'https://khaasfood.com/search?q=nuts',
-
-
-
-        facebookUrl: 'https://www.facebook.com/khaasfood',
-
-
-
-        subStoreBn: 'অর্গানিক ডিলাইট বাংলাদেশ',
-
-
-
-        termsEn: 'Cash on Delivery · Same-Day Delivery Inside Dhaka',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ঢাকা শহরে সেম-ডে ডেলিভারি',
-
-
-
-        price: 920,
-
-
-
-        isSponsored: true,
-
-
-
-        warrantyEn: 'Food Grade Certified',
-
-
-
-        warrantyBn: 'বিএসটিআই ও ফুড গ্রেড সার্টিফাইড'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'sf-3',
-
-
-
-        store: 'MARKETPLACE',
-
-
-
-        subStoreEn: 'Verified Gourmet Pantry',
-
-
-
-        url: 'https://chaldal.com/search/nuts',
-
-
-
-        websiteUrl: 'https://chaldal.com/search/nuts',
-
-
-
-        facebookUrl: 'https://www.facebook.com/chaldalcom',
-
-
-
-        subStoreBn: 'ভেরিফাইড গোরমেট প্যান্ট্রি',
-
-
-
-        termsEn: 'Cash on Delivery · ৳50 Delivery',
-
-
-
-        termsBn: 'ক্যাশ অন ডেলিভারি · ৳৫০ ডেলিভারি',
-
-
-
-        price: 990,
-
-
-
-        warrantyEn: 'Original Jar Guarantee',
-
-
-
-        warrantyBn: 'অরিজিনাল জার নিশ্চয়তা'
-
-
-
-      }
-
-
-
-    ]
-
-
-
   },
 
 
@@ -3032,314 +2184,23 @@ const INITIAL_PRODUCTS = [
 
 
 
-    key: 'pure-oil-index',
-
-
-
-    category: 'grocery-snacks',
-
-
-
-    categoryEn: 'Grocery & Essentials',
-
-
-
-    categoryBn: 'গ্রোসারি ও নিত্যপ্রয়োজনীয়',
-
-
-
-    nameEn: 'National Live Oil Price Index (Edible & Fuel Rates)',
-
-
-
-    nameBn: 'জাতীয় লাইভ ভোজ্য ও জ্বালানি তেল বাজার দর',
-
-
-
-    price: 175,
-
-
-
-    originalPrice: 190,
-
-
-
+    key: 'gree-1-5-ton-ac',
+    category: 'home-appliances',
+    categoryEn: 'Home Appliances & Inverter AC',
+    categoryBn: 'হোম অ্যাপ্লায়েন্স ও এসি',
+    nameEn: 'Gree 1.5 Ton Inverter Air Conditioner Split AC',
+    nameBn: 'গ্রী ১.৫ টন ইনভার্টার স্প্লিট এয়ার কন্ডিশনার',
+    price: 59500,
+    originalPrice: 66000,
     storeCount: 4,
-
-
-
-    badgeEn: 'Govt. Fixed Rate',
-
-
-
-    badgeBn: 'সরকার নির্ধারিত রেট',
-
-
-
-    statusEn: 'Live Rate Tracked',
-
-
-
-    statusBn: 'লাইভ রেট ট্র্যাকড',
-
-
-
-    image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80',
-
-
-
+    deliveryBadgeEn: 'Official Showroom Warranty',
+    deliveryBadgeBn: 'শোরুম অফিসিয়াল ওয়ারেন্টি',
+    image: 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=600&q=80',
     pastPrices: [
-
-
-
-      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 179 },
-
-
-
-      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 176 },
-
-
-
-      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 175 }
-
-
-
+      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 64000 },
+      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 61000 },
+      { labelEn: 'Today', labelBn: 'আজকের সেরা রেট', price: 59500 },
     ],
-
-
-
-    offers: [
-
-
-
-      {
-
-
-
-        id: 'oil-1',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Chaldal Grocery Express',
-
-
-
-        subStoreBn: 'চালডাল গ্রোসারি এক্সপ্রেস',
-
-
-
-        url: 'https://chaldal.com/search/oil',
-
-
-
-        websiteUrl: 'https://chaldal.com/search/oil',
-
-
-
-        facebookUrl: 'https://www.facebook.com/chaldalcom',
-
-
-
-        termsEn: 'Teer / Rupchanda 1L Bottled Soybean Oil · 1 Hour Express Delivery',
-
-
-
-        termsBn: 'তীর / রূপচাঁদা ১ লিটার সয়াবিন তেল · ১ ঘণ্টায় হোম ডেলিভারি',
-
-
-
-        price: 175,
-
-
-
-        warrantyEn: '100% Genuine BSTI Certified Bottle',
-
-
-
-        warrantyBn: 'বিএসটিআই অনুমোদিত সিলযুক্ত বোতল'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'oil-2',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Shwapno Supermarket',
-
-
-
-        subStoreBn: 'স্বপ্ন সুপারশপ',
-
-
-
-        url: 'https://www.shwapno.com/search?q=soybean+oil',
-
-
-
-        websiteUrl: 'https://www.shwapno.com/search?q=soybean+oil',
-
-
-
-        facebookUrl: 'https://www.facebook.com/shwapno.bangladesh',
-
-
-
-        termsEn: 'Fresh / Teer Fortified Soybean Oil 5L Canister ৳850',
-
-
-
-        termsBn: 'ফ্রেশ / তীর ফর্টিফাইড সয়াবিন তেল ৫ লিটার ৳৮৫০',
-
-
-
-        price: 170,
-
-
-
-        warrantyEn: 'Official Supermarket Sealed Bottle',
-
-
-
-        warrantyBn: 'সুপারশপ ভেরিফাইড ব্র্যান্ডেড প্রোডাক্ট'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'oil-3',
-
-
-
-        store: 'WEB STORE',
-
-
-
-        subStoreEn: 'Khaas Food Organic',
-
-
-
-        subStoreBn: 'খাস ফুড খাঁটি পণ্য',
-
-
-
-        url: 'https://khaasfood.com/search?q=mustard+oil',
-
-
-
-        websiteUrl: 'https://khaasfood.com/search?q=mustard+oil',
-
-
-
-        facebookUrl: 'https://www.facebook.com/khaasfood',
-
-
-
-        termsEn: 'Cold-Pressed Pure Desi Mustard Oil 1 Litre (ঘানি ভাঙা সরিষার তেল)',
-
-
-
-        termsBn: 'কাঠের ঘানি ভাঙা খাঁটি সরিষার তেল ১ লিটার',
-
-
-
-        price: 260,
-
-
-
-        warrantyEn: '100% Cold-Pressed Unadulterated Guarantee',
-
-
-
-        warrantyBn: 'শতভাগ কেমিক্যালমুক্ত আসল ঘানি ভাঙা তেল'
-
-
-
-      },
-
-
-
-      {
-
-
-
-        id: 'oil-4',
-
-
-
-        store: 'VERIFIED STORE',
-
-
-
-        subStoreEn: 'BPC Official Fuel Station Index',
-
-
-
-        subStoreBn: 'বাংলাদেশ পেট্রোলিয়াম কর্পোরেশন ডিপো রেট',
-
-
-
-        url: 'https://bpc.gov.bd',
-
-
-
-        websiteUrl: 'https://bpc.gov.bd',
-
-
-
-        facebookUrl: null,
-
-
-
-        termsEn: 'Fuel Rates: Octane ৳125/L · Petrol ৳121/L · Diesel ৳105/L',
-
-
-
-        termsBn: 'জ্বালানি তেল: অকটেন ৳১২৫/লিটার · পেট্রোল ৳১২১ · ডিজেল ৳১০৫',
-
-
-
-        price: 125,
-
-
-
-        warrantyEn: 'Ministry of Power & Energy Daily Gazetted Rate',
-
-
-
-        warrantyBn: 'জ্বালানি ও খনিজ সম্পদ বিভাগ নির্ধারিত দৈনিক রেট'
-
-
-
-      }
-
-
-
-    ]
-
-
-
   },
 
 
@@ -3725,105 +2586,30 @@ const INITIAL_TRENDING_HUBS = [
 
 
   {
-
-
-
-    id: 'hub-mens-panjabi',
-
-
-
-    titleEn: "Men's Fashion & Panjabi",
-
-
-
-    titleBn: 'মেনস ফ্যাশন ও পাঞ্জাবি',
-
-
-
-    subtitleEn: 'Premium Combed Cotton, Semi-Fitted Designer Cuts',
-
-
-
-    subtitleBn: 'প্রিমিয়াম সুতি ও ডিজাইনার সেমি-ফিটেড পাঞ্জাবি',
-
-
-
-    queryTrigger: 'Panjabi',
-
-
-
-    badgeEn: '🔥 Trending Festive',
-
-
-
-    badgeBn: '🔥 ট্রেন্ডিং ফেস্টিভ',
-
-
-
-    iconName: 'Shirt',
-
-
-
-    startingPrice: 3200,
-
-
-
-    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80',
-
-
-
-  },
-
-
-
-  {
-
-
-
-    id: 'hub-womens-ethnic',
-
-
-
-    titleEn: "Women's Dresses & Ethnic Wear",
-
-
-
-    titleBn: 'ওমেনস ড্রেস ও শাড়ি-কুর্তি',
-
-
-
-    subtitleEn: 'Authentic Handloom Dhakai Jamdani & Designer Kurtis',
-
-
-
-    subtitleBn: 'ঐতিহ্যবাহী তাঁতের জামদানি শাড়ি ও কুর্তি কালেকশন',
-
-
-
-    queryTrigger: 'Jamdani Saree',
-
-
-
-    badgeEn: '🔥 Handcrafted Quality',
-
-
-
-    badgeBn: '🔥 তাঁতের আসল নকশা',
-
-
-
+    id: 'hub-beauty-skincare',
+    titleEn: 'Beauty & Korean Skincare',
+    titleBn: 'বিউটি ও কোরিয়ান স্কিনকেয়ার',
+    subtitleEn: 'Dr. Althea, COSRX, Sunscreens & Barrier Creams',
+    subtitleBn: 'ডা. আলথিয়া, কসআরএক্স, সানস্ক্রিন ও খাঁটি কোরিয়ান ক্রিম',
+    queryTrigger: 'Dr. Althea 345',
+    badgeEn: '100% Authentic Certified',
+    badgeBn: '১০০% খাঁটি ও সার্টিফাইড',
     iconName: 'Sparkles',
-
-
-
-    startingPrice: 5800,
-
-
-
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80',
-
-
-
+    startingPrice: 1450,
+    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 'hub-gaming-consoles',
+    titleEn: 'Gaming Consoles & Handhelds',
+    titleBn: 'গেমিং কনসোল ও হ্যান্ডহেল্ড',
+    subtitleEn: 'Sony PS5 Slim, Nintendo Switch OLED & Steam Deck',
+    subtitleBn: 'প্লেস্টেশন ৫ স্লিম, নিনটেন্ডো সুইচ ও স্টিম ডেক',
+    queryTrigger: 'PS5',
+    badgeEn: 'Verified Gaming Hubs',
+    badgeBn: 'ভেরিফায়েড গেমিং হাব',
+    iconName: 'Gamepad2',
+    startingPrice: 48500,
+    image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80',
   },
 
 
@@ -4032,320 +2818,124 @@ const REGISTRY_CATEGORIES = [
 
 
 const getDynamicLoadingStores = (queryText) => {
-  const q_check = (queryText || '').toLowerCase();
-  if (q_check.includes('ps5') || q_check.includes('playstation') || q_check.includes('xbox') || q_check.includes('nintendo') || q_check.includes('switch') || q_check.includes('console') || q_check.includes('dualsense') || q_check.includes('steam deck') || q_check.includes('rog ally') || q_check.includes('গেমিং') || q_check.includes('কনসোল')) {
+  const q = (queryText || '').toLowerCase();
+
+  // 1. Beauty & Skincare (High priority keyword routing)
+  const skincareKeywords = [
+    'cream', 'crem', 'krim', 'lotion', 'sunscreen', 'sunblock', 'spf', 'serum', 'cleanser', 'toner',
+    'moisturizer', 'moisturiser', 'gel', 'facewash', 'face wash', 'ampoule', 'essence', 'scrub',
+    'lip balm', 'lipstick', 'foundation', 'shampoo', 'conditioner', 'althea', 'athlea', 'cosrx',
+    'cerave', 'cetaphil', 'centella', 'joseon', 'anua', 'torriden', 'round lab', 'ordinary',
+    'innisfree', 'laneige', 'shajgoj', 'bioderma', 'beauty', 'skincare', 'cosmetic', 'makeup',
+    'বিউটি', 'স্কিনকেয়ার', 'ক্রিম', 'লোশন', 'সানস্ক্রিন', 'সিরাম', 'টোনার', 'ফেসওয়াশ'
+  ];
+  if (skincareKeywords.some((k) => q.includes(k))) {
+    return {
+      textEn: 'Querying Beauty Booth BD, Shajgoj, Korean Mart BD, BanglaShoppers & authentic skincare outlets...',
+      textBn: 'বিউটি বুথ, সাজগোজ, কোরিয়ান মার্ট, বাংলাশপার্স ও খাঁটি স্কিনকেয়ার শপ স্ক্যান করা হচ্ছে...',
+      stores: ['Beauty Booth BD', 'Shajgoj', 'Korean Mart BD', 'BanglaShoppers', 'Makeup Chari', 'The Mall BD']
+    };
+  }
+
+  // 2. Gaming Consoles & Handhelds
+  const gamingKeywords = [
+    'ps5', 'playstation', 'xbox', 'nintendo', 'switch', 'console', 'dualsense', 'steam deck',
+    'rog ally', 'গেমিং', 'কনসোল'
+  ];
+  if (gamingKeywords.some((k) => q.includes(k))) {
     return {
       textEn: 'Querying Star Tech, Game Over BD, Gamers Republic, Ryans & verified gaming hubs...',
       textBn: 'স্টার টেক, গেম ওভার বিডি, গেমার্স রিপাবলিক, রায়ান্স ও ভেরিফায়েড গেমিং হাব স্ক্যান করা হচ্ছে...',
-      stores: ['⚡ Star Tech', '⚡ Game Over BD', '⚡ Gamers Republic BD', '⚡ Ryans Gaming', '⚡ TechLand BD']
+      stores: ['Star Tech', 'Game Over BD', 'Gamers Republic BD', 'Ryans Gaming', 'TechLand BD']
     };
   }
 
-
-
-  const q = (queryText || '').toLowerCase();
-
-
-
-  if (q.includes('bike') || q.includes('cycle') || q.includes('scooter') || q.includes('ev')) {
-
-
-
+  // 3. Watches & Horology (Smartwatches & Traditional)
+  const watchKeywords = [
+    'watch', 'smartwatch', 'smart watch', 'apple watch', 'galaxy watch', 'amazfit', 'haylou',
+    'casio', 'edifice', 'g-shock', 'gshock', 'tissot', 'seiko', 'rolex', 'omega', 'citizen',
+    'fossil', 'kieslect', 'mibro', 'ঘড়ি', 'স্মার্টওয়াচ'
+  ];
+  if (watchKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: 'Querying Duranta, Velce, Lifan BD, Lion Cycle & authentic EV showrooms...',
-
-
-
-      textBn: 'দুরন্ত, ভেলস, লিফান ও ভেরিফাইড সাইকেল ও ই-বাইক স্টোর স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Duranta Sports', '⚡ Veloce Bicycles', '⚡ Lion Cycle', '⚡ Reevo EV', '⚡ Runner EV']
-
-
-
+      textEn: 'Querying Time Zone BD, Watch Zone BD, Mohammad & Sons, Apple Gadgets & authorized horology outlets...',
+      textBn: 'টাইম জোন, ওয়াচ জোন, মোহাম্মদ অ্যান্ড সন্স ও ভেরিফাইড ঘড়ির শপ স্ক্যান করা হচ্ছে...',
+      stores: ['Time Zone BD', 'Watch Zone BD', 'Apple Gadgets BD', 'Mohammad & Sons', 'Dazzle BD']
     };
-
-
-
   }
 
-
-
-  if (q.includes('fridge') || q.includes('refrigerator') || q.includes('ac') || q.includes('washing') || q.includes('tv') || q.includes('oven') || q.includes('appliance') || q.includes('হোম') || q.includes('অ্যাপ্লায়েন্স')) {
-
-
-
+  // 4. Laptops & PC Hardware
+  const laptopKeywords = [
+    'laptop', 'notebook', 'macbook', 'vivobook', 'zenbook', 'thinkpad', 'ideapad', 'legion',
+    'spectre', 'infinix inbook', 'inspiron', 'pavilion', 'desktop', 'monitor', 'processor',
+    'ryzen', 'intel core', 'graphics card', 'rtx', 'ram', 'ssd', 'ল্যাপটপ', 'কম্পিউটার'
+  ];
+  if (laptopKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: 'Querying Walton, Singer BD, Transcom Digital, Butterfly & authentic appliance showrooms...',
-
-
-
-      textBn: 'ওয়ালটন, সিঙ্গার, ট্রান্সকম ডিজিটাল ও বাটারফ্লাই শোরুম থেকে রেট নেওয়া হচ্ছে...',
-
-
-
-      stores: ['⚡ Transcom Digital', '⚡ Singer BD', '⚡ Walton Plaza', '⚡ Butterfly BD', '⚡ Rangs eMart']
-
-
-
+      textEn: 'Querying Star Tech, Ryans Computers, TechLand, Computer Mania & authentic PC outlets...',
+      textBn: 'স্টার টেক, রায়ান্স, টেকল্যান্ড, কম্পিউটার ম্যানিয়া ও অনুমোদিত পিসি আউটলেট স্ক্যান করা হচ্ছে...',
+      stores: ['Star Tech BD', 'Ryans Computers', 'TechLand BD', 'Computer Mania BD', 'Custom Mac BD']
     };
-
-
-
   }
 
-
-
-  if (q.includes('saree') || q.includes('jamdani') || q.includes('silk') || q.includes('kurti') || q.includes('boutique') || q.includes('শাড়ি') || q.includes('বুটিক')) {
-
-
-
+  // 5. Cameras & Photography
+  const cameraKeywords = [
+    'camera', 'dslr', 'mirrorless', 'lens', 'photography', 'canon eos', 'sony alpha',
+    'nikon z', 'fujifilm', 'gopro', 'dji pocket', 'dji osmo', 'dji mini', 'drone', 'ক্যামেরা'
+  ];
+  if (cameraKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: "Querying Aarong, Sailor, Anjan's, Boutique Purnima & authentic boutique pages...",
-
-
-
-      textBn: 'আড়ং, সেইলর, অঞ্জনস, বুটিক পূর্ণিমা ও ঐতিহ্যবাহী বুটিক পেজ স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Aarong', '⚡ Sailor BD', "⚡ Anjan's", '⚡ Boutique Purnima', '⚡ Tangail Saree Kutir']
-
-
-
+      textEn: 'Querying Cameraluz BD, Digital Camera BD, Star Tech Cameras & verified photography stores...',
+      textBn: 'ক্যামেরালুজ, ডিজিটাল ক্যামেরা শপ, স্টার টেক ও ভেরিফাইড ফটোগ্রাফি গিয়ার শপ স্ক্যান করা হচ্ছে...',
+      stores: ['Cameraluz BD', 'Star Tech Cameras', 'Ryans Cameras', 'Digital Camera BD', 'Sony Centre']
     };
-
-
-
   }
 
-
-
-  if (q.includes('panjabi') || q.includes('shirt') || q.includes('pant') || q.includes('polo') || q.includes('fashion') || q.includes('apparel') || q.includes('clothing') || q.includes('পোশাক') || q.includes('ফ্যাশন')) {
-
-
-
+  // 6. Home Appliances & White Goods
+  const applianceKeywords = [
+    'fridge', 'refrigerator', 'ac', 'air conditioner', 'inverter', 'washing machine', 'tv', 'television',
+    'microwave', 'oven', 'blender', 'purifier', 'appliance', 'হোম', 'অ্যাপ্লায়েন্স'
+  ];
+  if (applianceKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: 'Querying Fabrilife, Aarong, Sailor, Le Reve, Illiyeen & top fashion outlets...',
-
-
-
-      textBn: 'ফ্যাব্রিলাইফ, আড়ং, সেইলর, লে রিভ, ইলিয়ীন ও শীর্ষ ফ্যাশন ব্র্যান্ড স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Fabrilife', '⚡ Aarong', '⚡ Sailor BD', '⚡ Le Reve', '⚡ Illiyeen']
-
-
-
+      textEn: 'Querying Transcom Digital, Singer BD, Walton Plaza, Butterfly BD & authentic appliance showrooms...',
+      textBn: 'ট্রান্সকম ডিজিটাল, সিঙ্গার, ওয়ালটন প্লাজা ও বাটারফ্লাই শোরুম থেকে রেট নেওয়া হচ্ছে...',
+      stores: ['Transcom Digital', 'Singer BD', 'Walton Plaza', 'Butterfly BD', 'Rangs eMart']
     };
-
-
-
   }
 
-
-
-  if (q.includes('imitation') || q.includes('budget') || q.includes('oxidized') || q.includes('choker') || q.includes('jhumka') || q.includes('tiara') || q.includes('fashion jewel') || q.includes('fcommerce') || (q.includes('jewel') && !q.includes('gold') && !q.includes('diamond'))) {
-
-
-
+  // 7. Bicycles & EVs
+  const cycleKeywords = [
+    'bike', 'cycle', 'bicycle', 'mtb', 'mountain bike', 'veloce', 'duranta', 'firefox',
+    'scooter', 'electric bike', 'ev', 'সাইকেল', 'বাইক'
+  ];
+  if (cycleKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: 'Querying FANTORA, Cresol, Sparkle & Shine, Johrot BD & verified F-Commerce jewelry pages...',
-
-
-
-      textBn: 'ফ্যান্টোরা, ক্রেসল, স্পার্কল অ্যান্ড শাইন ও শীর্ষ এফ-কমার্স জুয়েলারি পেজ স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ FANTORA (@fantora.net)', '⚡ Cresol BD', '⚡ Sparkle & Shine', '⚡ Johrot BD', '⚡ Ayosh BD']
-
-
-
+      textEn: 'Querying Duranta Sports, Veloce Bicycles, Lion Cycle & authentic cycle showrooms...',
+      textBn: 'দুরন্ত, ভেলস, লায়ন সাইকেল ও ভেরিফাইড সাইকেল শোরুম স্ক্যান করা হচ্ছে...',
+      stores: ['Duranta Sports', 'Veloce Bicycles', 'Lion Cycle', 'Dream Cycle Store', 'Walton Plaza']
     };
-
-
-
   }
 
-
-
-  if (q.includes('gold') || q.includes('diamond') || q.includes('22k') || q.includes('21k') || q.includes('hallmark')) {
-
-
-
+  // 8. Fine Jewelry (Gold & Diamond)
+  const jewelryKeywords = [
+    'gold', 'diamond', '22k', '21k', 'hallmark', 'সোনার', 'হীরা'
+  ];
+  if (jewelryKeywords.some((k) => q.includes(k))) {
     return {
-
-
-
-      textEn: 'Querying Diamond World, Apan Jewellers, Al-Amin & hallmarked jewelry stores...',
-
-
-
+      textEn: 'Querying Diamond World, Apan Jewellers, Al-Amin Jewellers & hallmarked jewelry stores...',
       textBn: 'ডায়মন্ড ওয়ার্ল্ড, আপন জুয়েলার্স ও হলমার্ক করা খাঁটি সোনার দোকান স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Diamond World', '⚡ Apan Jewellers', '⚡ Al-Amin Jewellers', '⚡ Venus Jewellers', '⚡ Gaurav Jewellers']
-
-
-
+      stores: ['Diamond World', 'Apan Jewellers', 'Al-Amin Jewellers', 'Venus Jewellers', 'Gaurav Jewellers']
     };
-
-
-
   }
 
-
-
-  if (q.includes('shoe') || q.includes('sneaker') || q.includes('sandal') || q.includes('footwear') || q.includes('জুতা') || q.includes('স্নিকার্স')) {
-
-
-
-    return {
-
-
-
-      textEn: 'Querying Apex, Bata, Lotto, Bay Emporium & authentic footwear outlets...',
-
-
-
-      textBn: 'এপেক্স, বাটা, লোটো, বে এম্পোরিয়াম ও শীর্ষ জুতার ব্র্যান্ড স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Apex Footwear', '⚡ Bata BD', '⚡ Lotto Bangladesh', '⚡ Bay Emporium', '⚡ Step Footwear']
-
-
-
-    };
-
-
-
-  }
-
-
-
-  if (q.includes('gym') || q.includes('sport') || q.includes('jersey') || q.includes('activewear') || q.includes('স্পোর্টস') || q.includes('জিম')) {
-
-
-
-    return {
-
-
-
-      textEn: 'Querying Fabrilife Active, Aarong Sports, Decathlon & athletic gym outlets...',
-
-
-
-      textBn: 'স্পোর্টস গিয়ার, অ্যাথলেটিক আউটলেট ও জিম ব্র্যান্ড স্ক্যান করা হচ্ছে...',
-
-
-
-      stores: ['⚡ Fabrilife Active', '⚡ Aarong Sports', '⚡ Decathlon BD', '⚡ GymArmour BD', '⚡ F-Commerce']
-
-
-
-    };
-
-
-
-  }
-
-
-
-  if (q.includes('beauty') || q.includes('skincare') || q.includes('cosmetic') || q.includes('makeup') || q.includes('বিউটি') || q.includes('স্কিনকেয়ার')) {
-
-    return {
-
-      textEn: 'Querying Shajgoj, The Mall BD, Beauty Booth & authentic skincare outlets...',
-
-      textBn: 'সাজগোজ, দ্য মল বিডি, বিউটি বুথ ও খাঁটি স্কিনকেয়ার শপ স্ক্যান করা হচ্ছে...',
-
-      stores: ['⚡ Shajgoj', '⚡ The Mall BD', '⚡ Beauty Booth BD', '⚡ Korean Skincare BD', '⚡ Almas Super Shop']
-
-    };
-
-  }
-
-
-
-  if (q.includes('grocery') || q.includes('snack') || q.includes('food') || q.includes('ghee') || q.includes('honey') || q.includes('oil') || q.includes('গ্রোসারি') || q.includes('স্ন্যাকস')) {
-
-    return {
-
-      textEn: 'Querying Chaldal, Shwapno, Khaas Food, Meena Bazar & verified organic markets...',
-
-      textBn: 'চালডাল, স্বপ্ন, খাস ফুড, মীনা বাজার ও খাঁটি অর্গানিক স্টোর স্ক্যান করা হচ্ছে...',
-
-      stores: ['⚡ Chaldal', '⚡ Shwapno', '⚡ Khaas Food', '⚡ Meena Bazar', '⚡ Agora']
-
-    };
-
-  }
-
-
-
-  if (q.includes('camera') || q.includes('dslr') || q.includes('lens') || q.includes('photography') || q.includes('ক্যামেরা')) {
-
-    return {
-
-      textEn: 'Querying Cameraluz, Digital Camera Shop, Star Tech & photography equipment stores...',
-
-      textBn: 'ক্যামেরা শপ, স্টার টেক ও ভেরিফাইড ফটোগ্রাফি গিয়ার শপ স্ক্যান করা হচ্ছে...',
-
-      stores: ['⚡ Cameraluz BD', '⚡ Star Tech Cameras', '⚡ Ryans Cameras', '⚡ Digital Camera BD', '⚡ Sony Centre']
-
-    };
-
-  }
-
-
-
+  // 9. Default: Mobile Phones, Tablets & Smart Gadgets
   return {
-
-
-
-    textEn: 'Querying Star Tech, Ryans Computers, Pickaboo, Dazzle BD & authentic gadget outlets...',
-
-
-
-    textBn: 'স্টার টেক, রায়ান্স, পিকাবু, ড্যাজল ও অন্যান্য ভেরিফাইড শপ থেকে লাইভ রেট নেওয়া হচ্ছে...',
-
-
-
-    stores: ['⚡ Star Tech BD', '⚡ Ryans Computers', '⚡ Dazzle BD', '⚡ Pickaboo', '⚡ Apple Gadgets BD']
-
-
-
+    textEn: 'Querying Apple Gadgets BD, Dazzle BD, Sumash Tech, Star Tech & authentic gadget outlets...',
+    textBn: 'অ্যাপল গ্যাজেটস, ড্যাজল, সুমাশ টেক, স্টার টেক ও অন্যান্য ভেরিফাইড শপ থেকে লাইভ রেট নেওয়া হচ্ছে...',
+    stores: ['Apple Gadgets BD', 'Dazzle BD', 'Sumash Tech', 'Star Tech BD', 'Pickaboo']
   };
-
-
-
 };
-
-
-
-
-
-
 
 const CATEGORY_FALLBACK_IMAGES = {
 
@@ -4359,19 +2949,7 @@ const CATEGORY_FALLBACK_IMAGES = {
 
 
 
-  'fashion-apparel': '/images/cotton-panjabi.svg',
-
-
-
-  'saree-boutiques': '/images/jamdani-saree.svg',
-
-
-
   'fine-jewelry': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80',
-
-
-
-  'fashion-jewelry': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80',
 
 
 
@@ -4404,10 +2982,6 @@ const CATEGORY_FALLBACK_IMAGES = {
 
 
   'sportswear-gym': 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80',
-
-
-
-  'grocery-snacks': 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80',
 
 
 
@@ -4491,39 +3065,15 @@ const getProductFallbackImage = (product) => {
 
 
 
-  if (combined.includes('saree') || combined.includes('jamdani') || combined.includes('silk')) {
+  
 
 
 
-    return CATEGORY_FALLBACK_IMAGES['saree-boutiques'];
+  
 
 
 
-  }
-
-
-
-  if (combined.includes('panjabi') || combined.includes('shirt') || combined.includes('kurti') || combined.includes('apparel') || combined.includes('fashion')) {
-
-
-
-    return CATEGORY_FALLBACK_IMAGES['fashion-apparel'];
-
-
-
-  }
-
-
-
-  if (combined.includes('imitation') || combined.includes('oxidized') || combined.includes('choker') || combined.includes('jhumka') || combined.includes('fashion jewel') || combined.includes('budget jewel') || (combined.includes('jewel') && !combined.includes('gold') && !combined.includes('diamond'))) {
-
-
-
-    return CATEGORY_FALLBACK_IMAGES['fashion-jewelry'];
-
-
-
-  }
+  
 
 
 
@@ -4587,15 +3137,7 @@ const getProductFallbackImage = (product) => {
 
 
 
-  if (combined.includes('grocery') || combined.includes('snack') || combined.includes('food')) {
-
-
-
-    return CATEGORY_FALLBACK_IMAGES['grocery-snacks'];
-
-
-
-  }
+  
 
 
 
@@ -5406,7 +3948,7 @@ export default function App() {
 
 
 
-                productKey: b.target_url?.replace(/^\/+/, '') || 'jamdani-saree',
+                productKey: b.target_url?.replace(/^\/+/, '') || 'dr-althea-cream',
 
 
 
@@ -7474,15 +6016,7 @@ export default function App() {
 
 
 
-              <input
-
-
-
-                type="text"
-
-
-
-                value={searchQuery}
+              <input type="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} value={searchQuery}
 
 
 
@@ -7522,11 +6056,8 @@ export default function App() {
 
 
 
-                    ? 'যা চাই তাই খুঁজুন: জামদানি শাড়ি, সুইস ওয়াচ, লিনেন শার্ট, কিবোর্ড...'
-
-
-
-                    : 'Search phones, shirts, panjabi, gadgets, watches...'
+                    ? 'যা চাই তাই খুঁজুন: আইফোন, ল্যাপটপ, ওয়াচ, স্কিনকেয়ার, অ্যাপ্লায়েন্স...'
+                    : 'Search iPhone, laptops, watches, skincare, appliances...'
 
 
 

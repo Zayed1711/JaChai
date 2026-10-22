@@ -1115,82 +1115,8 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "{title} Smart Digital Inverter"
         ]
     },
-    "fashion-apparel": {
-        "csv": "fashion_and_apparel.csv",
-        "csv_aliases": [
-            "fashion_and_apparel.csv", "fashion_and_apparel", "fashion-and-apparel", "fashion-apparel",
-            "fashion", "apparel"
-        ],
-        "csv_category": "Mainstream Fashion & Apparel Brands",
-        "display_en": "Fashion & Apparel",
-        "display_bn": "ফ্যাশন ও পোশাক",
-        "vertical": "FASHION_APPAREL",
-        "keywords": [
-            "panjabi", "mens panjabi", "cotton panjabi", "silk panjabi", "eid panjabi", "embroidered panjabi",
-            "t-shirt", "mens polo t shirt", "oversized t-shirt", "drop shoulder t shirt", "cotton tee",
-            "salwar kameez", "three piece", "ladies kurti", "kurti", "kurtis", "ladies kurti", "kurti", "kurtis", "ladies kurti", "kurti", "kurtis", "ladies suit", "party three piece", "cotton three piece",
-            "mens formal shirt", "office shirt", "casual shirt", "oxford shirt", "linen shirt",
-            "denim jeans", "mens jeans pant", "gabardine pants", "cargo pants", "formal trousers", "chinos",
-            "joggers", "cotton socks", "winter socks", "socks", "leather belt", "mens leather belt", "belt", "belts", "wallet", "mens wallet", "underwear", "mens underwear", "boxer", "boxers", "briefs", "mens boxer briefs innerwear", "innerwear", "vest", "blazer", "suit", "jacket", "hoodie", "sweatshirt",
-            "sweater", "lungi", "gamcha", "fotua", "borkha", "burqa", "abaya", "hijab", "polo", "shirt",
-            "punjabi", "panzabi", "panjbi", "tshart", "genji", "thri pis", "3 piece", "3-piece", "payer moja",
-            "kamiz", "jama",
-            "পাঞ্জাবি", "কাটলি পাঞ্জাবি", "কটন পাঞ্জাবি", "সিল্ক পাঞ্জাবি", "বিয়ে পাঞ্জাবি", "সাদা পাঞ্জাবি",
-            "কালো পাঞ্জাবি", "মেনস পাঞ্জাবি", "ঈদ কালেকশন পাঞ্জাবি", "টিশার্ট", "গেঞ্জি", "পোলো শার্ট",
-            "গোল গলার গেঞ্জি", "হাফ হাতা গেঞ্জি", "ফুল হাতা টিশার্ট", "থ্রি পিস", "সালোয়ার কামিজ",
-            "মহিলাদের থ্রি পিস", "সুতি থ্রি পিস", "ঈদ থ্রি পিস", "ফরমাল শার্ট", "অফিস শার্ট",
-            "ক্যাজুয়াল শার্ট", "চেক শার্ট", "জিন্স প্যান্ট", "গ্যাবারডিন প্যান্ট", "কারগো প্যান্ট",
-            "ফরমাল ট্রাউজার", "ছেলেদের প্যান্ট", "মোজা", "ব্লেজার", "হুডি", "লুঙ্গি",
-            "Yellow", "Sailor", "Richman", "Lubnan", "Cats Eye", "Ecstasy", "Gentle Park", "Artisan",
-            "Dorjibari", "Infinity Mega Mall", "Freeland", "Fabrilife", "Klotho", "Illiyeen", "Blucheez",
-            "Raw Nation"
-        ],
-        "default_query": "Panjabi",
-        "base_price": 2400,
-        "price_min": 850,
-        "price_max": 18000,
-        "model_templates": [
-            "{title} (100% Pure Organic Cotton)",
-            "{title} Premium Tailored Fit",
-            "{title} Classic Heritage Fit"
-        ]
-    },
-    "saree-boutiques": {
-        "csv": "saree_boutiques_fcommerce.csv",
-        "csv_aliases": [
-            "saree_boutiques_fcommerce.csv", "saree_boutiques_fcommerce", "saree-boutiques-fcommerce",
-            "saree-boutiques", "saree", "boutiques"
-        ],
-        "csv_category": "Small & Medium Saree & Boutique Pages",
-        "display_en": "Saree & Boutiques",
-        "display_bn": "শাড়ি ও বুটিকস",
-        "vertical": "SAREE_BOUTIQUE",
-        "keywords": [
-            "jamdani saree", "dhakai jamdani", "half silk jamdani", "muslin jamdani", "bridal jamdani",
-            "katan saree", "benaroshi saree", "rajshahi silk katan", "tissue katan", "bridals benaroshi",
-            "silk saree", "raw silk saree", "party wear saree", "georgette saree", "chiffon saree",
-            "daily wear saree", "cotton saree", "handloom saree", "taant saree", "monipuri saree",
-            "tangail saree", "khadi saree", "organza saree", "sequin saree", "lawn three piece",
-            "pakistani lawn suit", "chiffon suit", "velvet three piece", "festive suit", "saree", "sari", "শাড়ি",
-            "jamdhani shari", "katan shari", "benarosi", "shari", "sharee", "tater shari", "pakistani thri pis",
-            "জামদানি শাড়ি", "ঢাকাই জামদানি", "হাফ সিল্ক জামদানি", "মসলিন জামদানি", "বিয়ে জামদানি",
-            "লাল জামদানি", "আসল জামদানি", "হাতে বোনা জামদানি", "কাতান শাড়ি", "বেনারসি শাড়ি",
-            "রাজশাহী সিল্ক কাতান", "টিস্যু কাতান", "বিয়ে বেনারসি", "ব্রাইডাল কাতান", "সিল্ক শাড়ি",
-            "পার্টি শাড়ি", "জর্জেট শাড়ি", "শিফন শাড়ি", "ডিজাইনার শাড়ি", "সুতি শাড়ি", "তাঁতের শাড়ি",
-            "মণিপুরী শাড়ি", "টাঙ্গাইল শাড়ি", "লন থ্রি পিস", "পাকিস্তানি থ্রি পিস", "ভেলভেট থ্রি পিস",
-            "Aarong Saree", "Tangail Sharee Kutir", "Pirang", "Nodi", "Kumudini", "Taant", "Doshobhuja",
-            "Maya", "Sutra", "Anjan's", "Kay Kraft", "Rong Bangladesh", "Sadakalo", "Bibiana", "Deshi Dosh"
-        ],
-        "default_query": "Jamdani Saree",
-        "base_price": 5500,
-        "price_min": 2500,
-        "price_max": 45000,
-        "model_templates": [
-            "{title} (Authentic Handloom Weave)",
-            "{title} Pure Silk Festive Edition",
-            "{title} Traditional Tangail Handloom"
-        ]
-    },
+    
+    
     "fine-jewelry": {
         "csv": "fine_jewelry_and_gold.csv",
         "csv_aliases": [
@@ -1226,46 +1152,7 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "{title} Certified Artisan Crafted"
         ]
     },
-    "fashion-jewelry": {
-        "csv": "budget_jewelry_fcommerce.csv",
-        "csv_aliases": [
-            "budget_jewellery_fcommerce.csv", "budget_jewelry_fcommerce.csv",
-            "budget_jewellery_fcommerce", "budget_jewelry_fcommerce",
-            "budget-jewellery-fcommerce", "budget-jewelry-fcommerce",
-            "budget-jewelry", "budget-jewellery", "budget_jewelry", "budget_jewellery",
-            "fashion-jewellery", "fashion-jewelry"
-        ],
-        "csv_category": "Budget, Casual & Imitation Jewelry Targets",
-        "display_en": "Fashion & Budget Jewellery",
-        "display_bn": "ফ্যাশন ও বাজেট জুয়েলারি",
-        "vertical": "FASHION_JEWELRY",
-        "keywords": [
-            "oxidized earrings", "jhumka", "imitation earrings", "party jhumka", "long earrings",
-            "imitation necklace set", "party choker", "choker", "choker necklace", "long necklace", "rani haar",
-            "artificial jewelry set", "artificial necklace set", "silver plated ring", "bridal imitation set", "kundan earrings", "budget jewelry", "fashion jewelry", "costume jewelry", "minimal jewelry", "minimal jewelries", "minimalist jewelry", "minimalist ring", "minimal ring", "minimal necklace", "minimal earrings", "aesthetic jewelry", "aesthetic ring", "oxidized jewelry",
-            "silver plated jewelry", "gold plated jewelry", "clay jewelry", "terracotta jewelry",
-            "fabric jewelry", "thread jewelry", "beaded jewelry", "bangles", "churi", "reshmi churi",
-            "clay churi", "bala", "bracelet", "anklet", "payel", "paiel", "nupur", "nose pin", "nath",
-            "nolok", "finger ring", "angti", "tikli", "matha patti", "maang tikka", "waist chain", "bichha",
-            "saree pin", "hair accessories",
-            "kaner dul", "jhumko", "chudi", "dul", "har",
-            "ঝুমকা", "ঝুমকো", "কানের দুল", "অক্সিডাইজড দুল", "ফ্যাশন দুল", "পার্টি ঝুমকা", "লম্বা দুল",
-            "পাথরের দুল", "নেকলেস সেট", "চোকার", "রানি হার", "লং নেকলেস", "কৃত্রিম গহনা", "গলার হার",
-            "স্টাইলিশ চোকার", "নূপুর", "পায়েল", "চুড়ি", "টিকলি", "নোলক", "আংটি", "বালা", "ইমিটেশন গহনা",
-            "কসমেটিকস নেকলেস",
-            "Shukti", "Clay Station", "Bohurupi", "Oikko", "Kantik", "Shingari", "Nokshi", "Rangon",
-            "Ornamentry", "Gohona Kutir", "Shajbati", "Bohubrihi", "Dokaan Jewelry"
-        ],
-        "default_query": "Fashion Jewellery",
-        "base_price": 950,
-        "price_min": 250,
-        "price_max": 4500,
-        "model_templates": [
-            "{title} (Handcrafted Oxidized Collection)",
-            "{title} Artisan Bohemian Set",
-            "{title} Ethnic Kundan Floral Set"
-        ]
-    },
+    
     "sneakers-footwear": {
         "csv": "sneakers_and_footwear.csv",
         "csv_aliases": [
@@ -1406,43 +1293,7 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "{title} Pro Athletic Training Edition"
         ]
     },
-    "grocery-snacks": {
-        "csv": "grocery_and_snacks.csv",
-        "csv_aliases": [
-            "grocery_and_snacks.csv", "grocery_and_snacks", "grocery-and-snacks",
-            "grocery-snacks", "grocery", "snacks"
-        ],
-        "csv_category": "Snacks, Dry Foods & Grocery Marketplaces",
-        "display_en": "Grocery & Snacks",
-        "display_bn": "গ্রোসারি ও স্ন্যাকস",
-        "vertical": "GROCERY_SNACKS",
-        "keywords": [
-            "mustard oil", "pure mustard oil", "pure cow ghee", "gawya ghee", "sundarban honey",
-            "natural honey", "organic honey", "date palm jaggery", "chinigura rice", "aromatic rice",
-            "masoor dal", "mung dal", "organic oats", "soybean oil", "sunflower oil", "olive oil",
-            "pumpkin seeds", "sunflower seeds", "chia seeds", "mixed nuts", "almonds cashews", "dates",
-            "dry fruits", "raisins", "turmeric powder", "spices", "tea", "coffee", "biscuits", "noodles",
-            "chanachur", "pickles", "grocery", "snack", "ghee", "honey",
-            "shorishar tel", "sorisar tel", "khati ghi", "modhu", "khati modhu", "chal", "daal", "tel",
-            "holud", "jira", "khejur", "cha", "kopi", "achar",
-            "সরিষার তেল", "ঘি", "খাঁটি ঘি", "গাওয়া ঘি", "ঘানি ভাঙা তেল", "মধু", "সুন্দরবনের মধু",
-            "প্রাকৃতিক মধু", "খাঁটি মধু", "খেজুরের গুড়", "পোলাও চাল", "চিনিগুড়া চাল", "মসুর ডাল",
-            "মুগ ডাল", "ওটস", "কুমড়ার বীজ", "সূর্যমুখীর বীজ", "চিয়া সিডস", "বাদাম", "কাজুবাদাম ও পেস্তা",
-            "ড্রাই ফ্রুটস", "চাল", "ডাল", "তেল", "মসলা", "হলুদ", "মরিচ", "চা", "কফি", "নুডলস", "চানাচুর",
-            "আচার",
-            "Chaldal", "Shwapno", "Meena Bazar", "Agora", "Khaas Food", "Bongo Bajar Organic", "Prakritik",
-            "Teer", "Rupchanda", "Radhuni", "Pran", "Fresh", "Aarong Dairy", "Milk Vita",
-            "Kazi & Kazi Tea", "Ispahani"
-        ],
-        "default_query": "Organic Food",
-        "base_price": 750,
-        "price_min": 200,
-        "price_max": 5000,
-        "model_templates": [
-            "{title} (100% Pure Organic & Natural)",
-            "{title} Premium Export Quality"
-        ]
-    },
+    
     "laptops-pc": {
         "csv": "laptops_and_computers.csv",
         "csv_aliases": [
@@ -1538,17 +1389,9 @@ CATEGORY_REGISTRY_MAP["gaming"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
 CATEGORY_REGISTRY_MAP["consoles"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
 CATEGORY_REGISTRY_MAP["gaming_consoles"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
 CATEGORY_REGISTRY_MAP["gaming-consoles-and-accessories"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
-CATEGORY_REGISTRY_MAP["budget-jewelry"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
-CATEGORY_REGISTRY_MAP["budget-jewellery"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
-CATEGORY_REGISTRY_MAP["budget_jewellery_fcommerce"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
-CATEGORY_REGISTRY_MAP["budget_jewelry_fcommerce"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
-CATEGORY_REGISTRY_MAP["budget-jewelry-fcommerce"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
-CATEGORY_REGISTRY_MAP["budget-jewellery-fcommerce"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
 CATEGORY_REGISTRY_MAP["appliances-electronics"] = CATEGORY_REGISTRY_MAP["home-appliances"]
 CATEGORY_REGISTRY_MAP["appliances-and-electronics"] = CATEGORY_REGISTRY_MAP["home-appliances"]
 CATEGORY_REGISTRY_MAP["appliances"] = CATEGORY_REGISTRY_MAP["home-appliances"]
-CATEGORY_REGISTRY_MAP["fashion"] = CATEGORY_REGISTRY_MAP["fashion-apparel"]
-CATEGORY_REGISTRY_MAP["fashion-and-apparel"] = CATEGORY_REGISTRY_MAP["fashion-apparel"]
 CATEGORY_REGISTRY_MAP["watches"] = CATEGORY_REGISTRY_MAP["watches-horology"]
 CATEGORY_REGISTRY_MAP["watches-and-horology"] = CATEGORY_REGISTRY_MAP["watches-horology"]
 CATEGORY_REGISTRY_MAP["mobiles-gadgets"] = CATEGORY_REGISTRY_MAP["mobile-gadgets"]
@@ -1709,7 +1552,7 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
         if ev_norm in q_spaced or ev_phrase in q_raw or ev_phrase.replace("-", "") in q_collapsed:
             return "cycles-evs", CATEGORY_REGISTRY_MAP["cycles-evs"]
 
-    # Priority 0.5: Gold & Diamond Priority -> fine-jewelry (overrides general 'bangles' / 'bracelet' in fashion-jewelry)
+    # Priority 0.5: Gold & Diamond Priority -> fine-jewelry (overrides general 'bangles' / 'bracelet' in fine-jewelry)
     if any(k in q_spaced for k in ("gold", "diamond", "22k", "21k", "24k", "bhori", "স্বর্ণ", "সোনা", "হীরা")):
         if not any(k in q_spaced for k in ("imitation", "artificial", "budget", "plated", "gold plated")):
             return "fine-jewelry", CATEGORY_REGISTRY_MAP["fine-jewelry"]
@@ -1841,10 +1684,7 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
     if any(k in q_text_low for k in ("laptop", "notebook", "macbook", "vivobook", "zenbook", "thinkpad", "ideapad", "desktop", "gpu", "rtx", "gtx", "processor", "motherboard", "ram", "ssd")):
         return "laptops-pc", CATEGORY_REGISTRY_MAP["laptops-pc"]
 
-    # 5. Saree & Ethnic apparel keywords
-    if any(k in q_text_low for k in ("saree", "sharee", "shari", "jamdani", "katan", "silk", "boutique", "kurti", "lehenga", "panjabi", "kamiz")):
-        return "saree-boutiques", CATEGORY_REGISTRY_MAP["saree-boutiques"]
-
+    
     # 6. Home Appliances keywords
     if any(k in q_text_low for k in ("fridge", "refrigerator", "freezer", "air conditioner", "inverter", "microwave", "oven", "washing machine", "blender", "kettle")):
         return "home-appliances", CATEGORY_REGISTRY_MAP["home-appliances"]
@@ -1984,7 +1824,7 @@ def store_matches_department_capability(store_name: str, category_id: str, query
 
     # Never allow Mobile/Gadget stores in Laptops/Routers or Home Appliances
     mob_shops = ("motion view", "gadget studio", "apple gadgets", "sumash tech", "dazzle", "kry international", "goriber gadget", "mobile buzz", "rio international")
-    if category_id in ("laptops-pc", "home-appliances", "bicycles-mtb", "cycles-evs", "fashion-apparel", "saree-boutiques", "fine-jewelry", "fashion-jewelry", "grocery-snacks"):
+    if category_id in ("laptops-pc", "home-appliances", "bicycles-mtb", "cycles-evs", "fine-jewelry", ):
         if any(ms in s_low for ms in mob_shops):
             if not (category_id == "laptops-pc" and any(l in q_low for l in ("laptop", "notebook", "macbook", "ipad", "vivobook", "zenbook", "asus", "dell", "hp", "lenovo")) and any(m in s_low for m in ("apple gadgets", "custom mac", "istock", "dazzle"))):
                 return False

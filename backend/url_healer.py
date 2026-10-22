@@ -146,27 +146,18 @@ STORE_CATEGORY_PAGES: Dict[str, Dict[str, str]] = {
         "cycles-evs": "https://dreamcycle.store/product-category/bicycles",
     },
     "aarong.com": {
-        "fashion-apparel": "https://www.aarong.com/men/panjabi",
-        "saree-boutiques": "https://www.aarong.com/women/saree",
         "fine-jewelry": "https://www.aarong.com/jewellery",
     },
     "yellowclothing.net": {
-        "fashion-apparel": "https://www.yellowclothing.net/collections/men",
-        "saree-boutiques": "https://www.yellowclothing.net/collections/women",
     },
     "sailor.clothing": {
-        "fashion-apparel": "https://sailor.clothing/men",
-        "saree-boutiques": "https://sailor.clothing/women",
     },
     "fabrilife.com": {
-        "fashion-apparel": "https://fabrilife.com/shop",
         "sportswear-gym": "https://fabrilife.com/shop?category=sports",
     },
     "twelvebd.com": {
-        "fashion-apparel": "https://twelvebd.com/collections/mens",
     },
     "dorjibari.com.bd": {
-        "fashion-apparel": "https://dorjibari.com.bd/collections/panjabi",
     },
     "batabd.com": {
         "sneakers-footwear": "https://www.batabd.com/collections/men",
@@ -187,10 +178,8 @@ STORE_CATEGORY_PAGES: Dict[str, Dict[str, str]] = {
         "beauty-skincare": "https://www.banglashoppers.com/skin-care.html",
     },
     "khaasfood.com": {
-        "grocery-snacks": "https://www.khaasfood.com/shop",
     },
     "shwapno.com": {
-        "grocery-snacks": "https://www.shwapno.com",
     },
     "swap.com.bd": {
         "mobile-gadgets": "https://swap.com.bd/buy/phone",
@@ -212,15 +201,11 @@ CATEGORY_NAV_KEYWORDS: Dict[str, List[str]] = {
     "cameras-photography": ["dslr", "mirrorless", "camera", "photography", "action-camera", "lens"],
     "cycles-evs": ["e-bike", "ebike", "electric-bike", "bicycle", "bicycles", "cycle", "scooter", "ev"],
     "home-appliances": ["refrigerator", "fridge", "air-conditioner", "ac", "television", "tv", "washing-machine", "appliance", "home-appliance"],
-    "fashion-apparel": ["panjabi", "shirt", "t-shirt", "men", "mens", "apparel", "clothing", "fashion"],
-    "saree-boutiques": ["saree", "jamdani", "katan", "women", "womens", "ethnic"],
     "fine-jewelry": ["gold", "diamond", "ring", "necklace", "jewellery", "jewelry"],
-    "fashion-jewelry": ["earring", "jhumka", "necklace", "bangles", "jewellery", "jewelry"],
     "sneakers-footwear": ["sneaker", "sneakers", "shoe", "shoes", "footwear", "men"],
     "watches-horology": ["smart-watch", "smartwatch", "watches", "watch", "men-watches"],
     "beauty-skincare": ["skin-care", "skincare", "skin", "face", "cosmetics", "beauty"],
     "sportswear-gym": ["jersey", "sports", "activewear", "gym", "fitness"],
-    "grocery-snacks": ["grocery", "organic", "honey", "ghee", "oil", "food", "shop"],
 }
 
 # In-memory cache of auto-discovered category URLs per (domain, category_id)

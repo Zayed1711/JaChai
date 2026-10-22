@@ -114,40 +114,10 @@ CATEGORY_PREDETERMINED_CATALOG: Dict[str, Dict[str, Any]] = {
     },
 
     # 4. Fashion & Apparel
-    "fashion-apparel": {
-        "subcategories": ["All", "Ethnic & Traditional", "Tops & Shirts", "Pants & Trousers", "Winter & Formal"],
-        "products": [
-            {"slug": "panjabi", "title_en": "Panjabi", "title_bn": "পাঞ্জাবি", "subcategory": "Ethnic & Traditional", "search_kw": "cotton panjabi", "starts_from": 1250, "max_price": 12500, "img": "/images/cotton-panjabi.svg"},
-            {"slug": "kurta", "title_en": "Kurta", "title_bn": "কুর্তা", "subcategory": "Ethnic & Traditional", "search_kw": "mens kurta", "starts_from": 950, "max_price": 6500, "img": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "formal-shirt", "title_en": "Formal Shirt", "title_bn": "ফরমাল শার্ট", "subcategory": "Tops & Shirts", "search_kw": "formal shirt", "starts_from": 850, "max_price": 4500, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "casual-t-shirt", "title_en": "Casual T-Shirt", "title_bn": "টি-শার্ট", "subcategory": "Tops & Shirts", "search_kw": "casual t-shirt", "starts_from": 350, "max_price": 2200, "img": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "polo-shirt", "title_en": "Polo Shirt", "title_bn": "পোলো শার্ট", "subcategory": "Tops & Shirts", "search_kw": "polo shirt", "starts_from": 550, "max_price": 3200, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "denim-jeans", "title_en": "Denim Jeans", "title_bn": "ডেনিম জিন্স", "subcategory": "Pants & Trousers", "search_kw": "denim jeans", "starts_from": 850, "max_price": 5500, "img": "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "formal-trousers", "title_en": "Formal Trousers", "title_bn": "ফরমাল প্যান্ট", "subcategory": "Pants & Trousers", "search_kw": "formal trousers", "starts_from": 950, "max_price": 4500, "img": "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "fleece-hoodie", "title_en": "Fleece Hoodie", "title_bn": "হুডি", "subcategory": "Winter & Formal", "search_kw": "fleece hoodie", "starts_from": 850, "max_price": 4500, "img": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "winter-jacket", "title_en": "Winter Jacket", "title_bn": "উইন্টার জ্যাকেট", "subcategory": "Winter & Formal", "search_kw": "winter jacket", "starts_from": 1850, "max_price": 12500, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "three-piece-suit", "title_en": "Three-Piece Suit", "title_bn": "থ্রি-পিস স্যুট", "subcategory": "Winter & Formal", "search_kw": "three piece suit", "starts_from": 4500, "max_price": 28000, "img": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "blazer", "title_en": "Blazer", "title_bn": "ব্লেজার", "subcategory": "Winter & Formal", "search_kw": "mens blazer", "starts_from": 3200, "max_price": 16500, "img": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80"},
-        ],
-    },
+
 
     # 5. Grocery & Snacks
-    "grocery-snacks": {
-        "subcategories": ["All", "Oils & Ghee", "Rice & Grains", "Natural & Dry Fruits"],
-        "products": [
-            {"slug": "bottled-soybean-oil", "title_en": "Bottled Soybean Oil", "title_bn": "সয়াবিন তেল", "subcategory": "Oils & Ghee", "search_kw": "soybean oil", "starts_from": 190, "max_price": 950, "img": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "mustard-oil", "title_en": "Mustard Oil", "title_bn": "সরিষার তেল", "subcategory": "Oils & Ghee", "search_kw": "mustard oil", "starts_from": 320, "max_price": 1450, "img": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "ghee", "title_en": "Ghee", "title_bn": "ঘি", "subcategory": "Oils & Ghee", "search_kw": "pure cow ghee", "starts_from": 1150, "max_price": 3500, "img": "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "honey", "title_en": "Honey", "title_bn": "মধু", "subcategory": "Natural & Dry Fruits", "search_kw": "natural honey", "starts_from": 650, "max_price": 2800, "img": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "chinigura-rice", "title_en": "Chinigura Rice", "title_bn": "চিনিগুঁড়া চাল", "subcategory": "Rice & Grains", "search_kw": "chinigura rice", "starts_from": 145, "max_price": 750, "img": "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "basmati-rice", "title_en": "Basmati Rice", "title_bn": "বাসমতী চাল", "subcategory": "Rice & Grains", "search_kw": "basmati rice", "starts_from": 280, "max_price": 1450, "img": "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "lentils-dal", "title_en": "Lentils (Dal)", "title_bn": "ডাল", "subcategory": "Rice & Grains", "search_kw": "lentils dal", "starts_from": 135, "max_price": 550, "img": "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "dates", "title_en": "Dates", "title_bn": "খেজুর", "subcategory": "Natural & Dry Fruits", "search_kw": "fresh dates khejur", "starts_from": 450, "max_price": 2800, "img": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "black-cumin-seed-oil", "title_en": "Black Cumin Seed Oil", "title_bn": "কালোজিরা তেল", "subcategory": "Oils & Ghee", "search_kw": "black seed oil kalojira", "starts_from": 380, "max_price": 1850, "img": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "organic-tea", "title_en": "Organic Tea", "title_bn": "অর্গানিক চা", "subcategory": "Natural & Dry Fruits", "search_kw": "organic green tea", "starts_from": 260, "max_price": 1450, "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "dry-fruits", "title_en": "Dry Fruits", "title_bn": "ড্রাই ফ্রুটস ও বাদাম", "subcategory": "Natural & Dry Fruits", "search_kw": "mixed dry fruits nuts", "starts_from": 750, "max_price": 3800, "img": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80"},
-        ],
-    },
+
 
     # 6. Fine Jewelry & Gold
     "fine-jewelry": {
@@ -165,19 +135,7 @@ CATEGORY_PREDETERMINED_CATALOG: Dict[str, Dict[str, Any]] = {
     },
 
     # 7. Saree & Boutiques
-    "saree-boutiques": {
-        "subcategories": ["All", "Traditional Sarees", "Silk & Katan", "Designer & Suits"],
-        "products": [
-            {"slug": "jamdani-saree", "title_en": "Jamdani Saree", "title_bn": "জামদানি শাড়ি", "subcategory": "Traditional Sarees", "search_kw": "dhakai jamdani saree", "starts_from": 2850, "max_price": 35000, "img": "/images/jamdani-saree.svg"},
-            {"slug": "katan-silk-saree", "title_en": "Katan Silk Saree", "title_bn": "কাতান সিল্ক শাড়ি", "subcategory": "Silk & Katan", "search_kw": "katan silk saree", "starts_from": 4500, "max_price": 45000, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "tant-cotton-saree", "title_en": "Tant Cotton Saree", "title_bn": "তাঁত সুতি শাড়ি", "subcategory": "Traditional Sarees", "search_kw": "tangail tant cotton saree", "starts_from": 1150, "max_price": 5500, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "georgette-saree", "title_en": "Georgette Saree", "title_bn": "জর্জেট শাড়ি", "subcategory": "Traditional Sarees", "search_kw": "georgette party saree", "starts_from": 1850, "max_price": 12500, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "designer-kurti", "title_en": "Designer Kurti", "title_bn": "ডিজাইনার কুর্তি", "subcategory": "Designer & Suits", "search_kw": "designer kurti", "starts_from": 1250, "max_price": 6500, "img": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "partywear-salwar-kameez", "title_en": "Partywear Salwar Kameez", "title_bn": "পার্টিওয়্যার সালোয়ার কামিজ", "subcategory": "Designer & Suits", "search_kw": "salwar kameez three piece", "starts_from": 2650, "max_price": 18500, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "embroidered-unstitched-suit", "title_en": "Embroidered Unstitched Suit", "title_bn": "আনস্টিচড ড্রেস পিস", "subcategory": "Designer & Suits", "search_kw": "embroidered unstitched suit", "starts_from": 1850, "max_price": 14500, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "linen-saree", "title_en": "Linen Saree", "title_bn": "লিনেন শাড়ি", "subcategory": "Traditional Sarees", "search_kw": "pure linen saree", "starts_from": 1450, "max_price": 7500, "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"},
-        ],
-    },
+
 
     # 8. Sneakers & Shoes
     "sneakers-footwear": {
@@ -308,19 +266,7 @@ CATEGORY_PREDETERMINED_CATALOG: Dict[str, Dict[str, Any]] = {
         ],
     },
     # 15. Fashion & Budget Jewellery
-    "fashion-jewelry": {
-        "subcategories": ["All", "Earrings & Jhumkas", "Necklaces & Chokers", "Rings & Bracelets"],
-        "products": [
-            {"slug": "oxidised-jhumka-earrings", "title_en": "Oxidised Jhumka Earrings", "title_bn": "অক্সিডাইজড ঝুমকা", "subcategory": "Earrings & Jhumkas", "search_kw": "oxidised jhumka earrings", "starts_from": 250, "max_price": 1450, "img": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "choker-necklace-set", "title_en": "Choker Necklace Set", "title_bn": "চোকার নেকলেস সেট", "subcategory": "Necklaces & Chokers", "search_kw": "choker necklace set", "starts_from": 450, "max_price": 2800, "img": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "anti-tarnish-bracelet", "title_en": "Anti-Tarnish Bracelet", "title_bn": "অ্যান্টি-টার্নিশ ব্রেসলেট", "subcategory": "Rings & Bracelets", "search_kw": "anti tarnish stainless steel bracelet", "starts_from": 380, "max_price": 1950, "img": "https://images.unsplash.com/photo-1611591475817-48f868ac9d4e?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "cubic-zirconia-ring", "title_en": "Cubic Zirconia Ring", "title_bn": "কিউবিক জিরকোনিয়া আংটি", "subcategory": "Rings & Bracelets", "search_kw": "cz cubic zirconia crystal ring", "starts_from": 280, "max_price": 1650, "img": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "kundan-bridal-set", "title_en": "Kundan Bridal Set", "title_bn": "কুন্দন ব্রাইডাল সেট", "subcategory": "Necklaces & Chokers", "search_kw": "kundan bridal jewelry set", "starts_from": 1450, "max_price": 8500, "img": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "pearl-layered-chain", "title_en": "Pearl Layered Chain", "title_bn": "পার্ল লেয়ার্ড চেইন", "subcategory": "Necklaces & Chokers", "search_kw": "pearl layered necklace chain", "starts_from": 320, "max_price": 1850, "img": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "german-silver-pendant", "title_en": "German Silver Pendant", "title_bn": "জার্মান সিলভার লকেট", "subcategory": "Necklaces & Chokers", "search_kw": "german silver pendant necklace", "starts_from": 350, "max_price": 2200, "img": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "hoop-earrings", "title_en": "Hoop Earrings", "title_bn": "হুপ কানের দুল", "subcategory": "Earrings & Jhumkas", "search_kw": "golden hoop earrings", "starts_from": 180, "max_price": 1250, "img": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80"},
-        ],
-    },
+
 }
 
 

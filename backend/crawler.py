@@ -219,16 +219,12 @@ CATEGORY_COMPATIBILITY_MAP: Dict[str, List[str]] = {
     "cycles-evs": ["electric bikes & evs (cycles & evs)", "cycles & evs", "cycles & electric vehicles (evs)", "cycles_and_evs", "cycles-evs"],
     "mobile-gadgets": ["mobiles & gadgets", "mobile phones & consumer gadgets", "mobiles-computers", "gadgets", "mobile-gadgets", "mobiles"],
     "laptops-pc": ["laptops & pc", "laptops, desktops & computer components", "mobiles-computers", "laptops-pc", "laptops", "pc"],
-    "fashion-apparel": ["fashion & apparel", "fashion", "fashion-apparel", "apparel", "mainstream fashion & apparel brands"],
-    "saree-boutiques": ["saree & boutiques", "saree_boutiques_fcommerce", "saree-boutiques", "small & medium saree & boutique pages", "fashion"],
     "fine-jewelry": ["fine jewelry & gold", "fine_jewelry_and_gold", "fine-jewelry", "jewelleries", "fine jewelry & premium fashion jewelry stores"],
-    "fashion-jewelry": ["fashion & budget jewellery", "budget_jewelry_fcommerce", "fashion-jewelry", "budget-jewelry", "jewelleries", "budget, casual & imitation jewelry targets"],
     "sneakers-footwear": ["sneakers & shoes", "sneakers_and_footwear", "sneakers-footwear", "sneakers & footwear stores", "sneakers-watches", "shoes"],
     "watches-horology": ["watches & horology", "watches_and_horology", "watches-horology", "watches & horology retailers", "sneakers-watches"],
     "home-appliances": ["home appliances", "appliances_and_electronics", "appliances-electronics", "home-appliances", "home appliances & white goods"],
     "beauty-skincare": ["beauty & skincare", "beauty_and_skincare", "beauty-skincare", "beauty, skincare & lifestyle stores"],
     "sportswear-gym": ["sportswear & gym", "sportswear_and_gym", "sportswear-gym", "sportswear, activewear & gym gear"],
-    "grocery-snacks": ["grocery & snacks", "grocery_and_snacks", "grocery-snacks", "snacks-food", "snacks, dry foods & grocery marketplaces"],
     "gaming-consoles": ["gaming consoles & accessories", "gaming_consoles_and_accessories", "gaming-consoles", "gaming consoles", "consoles", "playstation", "xbox", "nintendo"],
 }
 
@@ -261,10 +257,6 @@ def is_product_category_compatible(prod_cat: str, cat_id: str, display_en: str, 
         if cat_id == "sneakers-footwear" and not any(w in t_low for w in ["shoe", "sneaker", "boot", "suede", "sole", "footwear"]):
             return False
 
-    if p_low == "fashion":
-        if cat_id == "saree-boutiques" and not any(w in t_low for w in ["saree", "shari", "jamdani", "tangail"]):
-            return False
-        if cat_id == "fashion-apparel" and any(w in t_low for w in ["saree", "shari", "jamdani"]):
             return False
 
     return True
@@ -612,15 +604,11 @@ DEFAULT_CATEGORY_IMAGES = {
     "bicycles-mtb": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80",
     "cycles-evs": "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=600&q=80",
     "home-appliances": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
-    "fashion-apparel": "/images/cotton-panjabi.svg",
-    "saree-boutiques": "/images/jamdani-saree.svg",
     "fine-jewelry": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80",
-    "fashion-jewelry": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80",
     "sneakers-footwear": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
     "watches-horology": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80",
     "beauty-skincare": "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80",
     "sportswear-gym": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
-    "grocery-snacks": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
     "laptops-pc": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
     "mobile-gadgets": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80",
 }
@@ -646,7 +634,7 @@ def validate_and_sanitize_image(
     image_url: Optional[str], title: str, query: str, category: Optional[str] = None
 ) -> str:
     text = f"{title.lower()} {query.lower()} {category or ''}".lower()
-    is_apparel = any(kw in text for kw in APPAREL_KEYWORDS) or category in ("fashion", "fashion-apparel", "saree-boutiques")
+    is_apparel = any(kw in text for kw in APPAREL_KEYWORDS) or category in ("fashion", )
 
     if image_url:
         img_lower = image_url.lower()
@@ -1571,10 +1559,6 @@ def compute_min_hardware_floor(cat_id: str, search_kw: str, is_acc: bool, max_bu
             floor = 3500
         else:
             floor = 500
-    elif cat_id == "saree-boutiques":
-        floor = 550
-    elif cat_id == "fashion-apparel":
-        floor = 350
     elif cat_id == "fine-jewelry":
         floor = 10000
     elif cat_id == "sneakers-footwear":
@@ -1949,7 +1933,7 @@ async def live_meta_search_and_persist(
     # ZERO SYNTHETIC PLACEHOLDERS OR FAKE FALLBACKS FOR DEVICES!
     # Only broad generic categories (like generic 'jamdani saree' or 'jersey') use starting price indicators
     is_jersey_query = cat_id == "sportswear-gym" and any(j in search_kw.lower() for j in ("jersey", "jarsi", "kit"))
-    is_broad_fcommerce = cat_id in ("saree-boutiques", "fashion-apparel") and len(scraped_listings) < 1
+    is_broad_fcommerce = False and len(scraped_listings) < 1
     if (is_broad_fcommerce or is_jersey_query) and not is_device_query:
         fallback_listings = generate_resilient_fallback(q_norm, category, intent)
         scraped_listings.extend(fallback_listings)

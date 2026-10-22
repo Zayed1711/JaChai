@@ -61,21 +61,9 @@ DIAGNOSTIC_QUERIES_BY_CATEGORY: Dict[str, List[str]] = {
         "walton refrigerator", "singer refrigerator", "gree 1.5 ton ac", "smart tv 43 inch",
         "washing machine", "microwave oven", "rice cooker", "electric kettle", "ceiling fan", "water purifier",
     ],
-    "fashion-apparel": [
-        "cotton panjabi", "mens formal shirt", "polo t-shirt", "denim jeans", "mens hoodie",
-        "salwar kameez", "three piece", "ladies kurti", "abaya borka", "\u09aa\u09be\u099e\u09cd\u099c\u09be\u09ac\u09bf",
-    ],
-    "saree-boutiques": [
-        "dhakai jamdani saree", "katan saree", "benaroshi saree", "tangail cotton saree",
-        "silk saree", "muslin jamdani", "georgette saree", "handloom saree", "bridal saree", "\u099c\u09be\u09ae\u09a6\u09be\u09a8\u09bf \u09b6\u09be\u09a1\u09bc\u09bf",
-    ],
     "fine-jewelry": [
         "22k gold ring", "gold necklace", "diamond ring", "gold earrings", "bridal gold set",
         "gold chain", "gold bracelet", "diamond nose pin", "gold bangles", "\u09b8\u09cb\u09a8\u09be\u09b0 \u0986\u0982\u099f\u09bf",
-    ],
-    "fashion-jewelry": [
-        "oxidized jhumka", "choker necklace", "imitation earrings", "artificial necklace set",
-        "silver plated ring", "reshmi churi", "payel anklet", "bridal imitation set", "kundan earrings", "\u099d\u09c1\u09ae\u0995\u09be",
     ],
     "sneakers-footwear": [
         "white sneakers", "running shoes", "mens leather formal shoes", "bata shoes",
@@ -92,10 +80,6 @@ DIAGNOSTIC_QUERIES_BY_CATEGORY: Dict[str, List[str]] = {
     "sportswear-gym": [
         "argentina jersey", "brazil jersey", "bangladesh cricket jersey", "gym tracksuit",
         "yoga mat", "dumbbell set", "gym gloves", "skipping rope", "football", "badminton racket",
-    ],
-    "grocery-snacks": [
-        "mustard oil", "pure cow ghee", "sundarban honey", "chinigura rice", "masoor dal",
-        "mixed nuts", "chia seeds", "olive oil", "green tea", "\u09b8\u09b0\u09bf\u09b7\u09be\u09b0 \u09a4\u09c7\u09b2",
     ],
 }
 
