@@ -843,6 +843,23 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str]:
     clean = re.sub(r"\(.*?\)|\[.*?\]", " ", clean)
     clean = re.sub(r"\s+", " ", clean).strip()
 
+    # Preserve essential model variant modifiers (e.g. Pro, Pro XL, Fold, Ultra, Plus, Mini, 5G, 4G, SE)
+    sub_models = ["pro xl", "pro fold", "pro max", "pro", "plus", "ultra", "fold", "flip", "mini", "lite", "classic", "se"]
+    found_sub = None
+    for sm in sub_models:
+        if re.search(r"\b" + re.escape(sm) + r"\b", title.lower()):
+            found_sub = sm.title()
+            break
+    if found_sub and found_sub.lower() not in clean.lower():
+        clean = f"{clean} {found_sub}"
+    
+    # Check 'a' series (e.g. Pixel 8a, Pixel 9a)
+    a_match = re.search(r"\b(\d+a)\b", title.lower())
+    if a_match:
+        a_tag = a_match.group(1).upper()
+        if a_tag.lower() not in clean.lower():
+            clean = f"{clean} {a_tag}"
+
     is_accessory = any(acc in clean.lower() for acc in ("controller", "gamepad", "headset", "wheel", "pedal", "dock", "skin", "case", "cover", "disc", "cartridge", "gift card", "cable", "charger", "strap", "band"))
 
     # Watch accessory detector - distinguishing "Aluminum Case" / "Titanium Case" from protective covers/straps
@@ -1850,7 +1867,8 @@ async def live_meta_search_and_persist(
     user_explicit_wants_used = is_used_or_reconditioned_title(q_norm)
     has_cached_used = any(is_used_or_reconditioned_title(p.title_en) for p in sanitized_cached)
     distinct_stores = {off.store_name for p in sanitized_cached for off in p.offers if off.store_name}
-    has_enough_cached = len(sanitized_cached) >= 1 and len(distinct_stores) >= 2
+    # Only short-circuit cache if we have rich coverage (at least 3 distinct products with multi-store offers)
+    has_enough_cached = len(sanitized_cached) >= 3 and len(distinct_stores) >= 3
     if has_enough_cached and (not user_explicit_wants_used or has_cached_used):
         return sanitized_cached
 
@@ -2100,6 +2118,13 @@ async def live_meta_search_and_persist(
                 price=float(curr_p),
                 all_prices=[float(p) for p in all_group_prices],
             )
+            # If store is unverified (not preseeded or recognized in verified registry), label as caution
+            if not is_pre:
+                trust_res["risk_level"] = "high"
+                trust_res["trust_badge"] = "⚠️ Unverified Merchant"
+                trust_res["trust_score"] = min(trust_res.get("trust_score", 55), 58)
+                cod_en = "Unverified Store · Verify on Delivery (COD Only)"
+                cod_bn = "অযাচাইকৃত বিক্রেতা · ক্যাশ অন ডেলিভারিতে চেক করে নিন"
 
             s_name_low = s_name.lower().strip()
             is_spon = bool(off.get("is_sponsored")) or any(

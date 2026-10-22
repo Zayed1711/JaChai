@@ -518,6 +518,27 @@ def get_categories():
             'query': 'Electric Bike',
             'icon': 'Bike',
         },
+        'Fine Jewelry & Premium Fashion Jewelry Stores': {
+            'id': 'fine-jewelry',
+            'name_en': 'Fine Jewelry & Gold',
+            'name_bn': 'স্বর্ণ ও ফাইন জুয়েলারি',
+            'query': 'Gold Chain',
+            'icon': 'Gem',
+        },
+        'Sportswear, Activewear & Gym Gear': {
+            'id': 'sportswear-gym',
+            'name_en': 'Sportswear & Activewear',
+            'name_bn': 'স্পোর্টসওয়্যার ও জিম গিয়ার',
+            'query': 'Jersey',
+            'icon': 'Activity',
+        },
+        'Sneakers & Footwear Stores': {
+            'id': 'sneakers-footwear',
+            'name_en': 'Sneakers & Shoes',
+            'name_bn': 'স্নিকার্স ও জুতো',
+            'query': 'Sneakers',
+            'icon': 'Footprints',
+        },
     }
 
     cat_counts = {}
@@ -596,7 +617,12 @@ def get_merchant_leaderboard(
             return cached_payload
 
     if category and category != "all":
-        stores_raw = get_stores_for_category(category)
+        from bd_stores_registry import resolve_category_or_none, get_stores_for_category
+        resolved_cat_id, meta = resolve_category_or_none("", category)
+        if resolved_cat_id:
+            stores_raw = get_stores_for_category(resolved_cat_id)
+        else:
+            stores_raw = get_stores_for_category(category)
     else:
         stores_raw = get_all_stores_registry()
 

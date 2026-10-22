@@ -1398,6 +1398,13 @@ CATEGORY_REGISTRY_MAP["mobiles-gadgets"] = CATEGORY_REGISTRY_MAP["mobile-gadgets
 CATEGORY_REGISTRY_MAP["mobile-phones-and-gadgets"] = CATEGORY_REGISTRY_MAP["mobile-gadgets"]
 CATEGORY_REGISTRY_MAP["mobiles"] = CATEGORY_REGISTRY_MAP["mobile-gadgets"]
 CATEGORY_REGISTRY_MAP["gadgets"] = CATEGORY_REGISTRY_MAP["mobile-gadgets"]
+CATEGORY_REGISTRY_MAP["fine-jewelry-premium-fashion-jewelry-stores"] = CATEGORY_REGISTRY_MAP["fine-jewelry"]
+CATEGORY_REGISTRY_MAP["fine-jewelry-and-gold"] = CATEGORY_REGISTRY_MAP["fine-jewelry"]
+CATEGORY_REGISTRY_MAP["sportswear-activewear-gym-gear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
+CATEGORY_REGISTRY_MAP["sportswear-activewear-and-gym-gear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
+CATEGORY_REGISTRY_MAP["sneakers-footwear-stores"] = CATEGORY_REGISTRY_MAP["sneakers-footwear"]
+CATEGORY_REGISTRY_MAP["sneakers-and-shoes"] = CATEGORY_REGISTRY_MAP["sneakers-footwear"]
+
 
 
 # One canonical Unicode form for Bengali text. NFC *decomposes* ড় ঢ় য় (they are composition
