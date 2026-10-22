@@ -51,7 +51,9 @@ import {
   apiFetchMacroTicker,
   apiRunMacroScraper,
   triggerPrewarmCrawler,
-  fetchPrewarmStatus
+  fetchPrewarmStatus,
+  apiRecalculateLeaderboard,
+  fetchAdminLeaderboardStatus
 } from '../api';
 
 export default function AdminCommandCenter({
@@ -282,6 +284,15 @@ export default function AdminCommandCenter({
     errors: []
   });
   const [isTriggeringPrewarm, setIsTriggeringPrewarm] = useState(false);
+
+  // Leaderboard Admin & Rearrange State
+  const [leaderboardAdminState, setLeaderboardAdminState] = useState({
+    last_recalculated_at: 'Just now',
+    total_stores_ranked: 326,
+    top_reigning_store: 'Custom Mac BD',
+    recalculations_count: 1
+  });
+  const [isRecalculatingLeaderboard, setIsRecalculatingLeaderboard] = useState(false);
 
   const loadRegistryInfo = React.useCallback(async () => {
     try {
@@ -662,6 +673,33 @@ export default function AdminCommandCenter({
       alert(`Prewarm failed: ${err.message}`);
     } finally {
       setIsTriggeringPrewarm(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeTab === 'crawler') {
+      fetchAdminLeaderboardStatus()
+        .then((res) => {
+          if (res?.data) {
+            setLeaderboardAdminState(res.data);
+          }
+        })
+        .catch((err) => console.warn('Leaderboard status fetch error:', err));
+    }
+  }, [activeTab]);
+
+  const handleRecalculateLeaderboard = async () => {
+    setIsRecalculatingLeaderboard(true);
+    try {
+      const res = await apiRecalculateLeaderboard();
+      if (res?.data) {
+        setLeaderboardAdminState(res.data);
+      }
+      showNotification(res?.message || 'Leaderboard recalculated and re-arranged');
+    } catch (err) {
+      alert(`Leaderboard recalculation failed: ${err.message}`);
+    } finally {
+      setIsRecalculatingLeaderboard(false);
     }
   };
 
@@ -1610,6 +1648,70 @@ export default function AdminCommandCenter({
                 </div>
               )}
             </div>
+            {/* MERCHANT LEADERBOARD & RANK RE-ARRANGE CONTROL */}
+            <div className="bg-[#12141C] border border-[#FFC857]/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFC857]/5 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-5 relative z-10">
+                <div>
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-amber-950/80 text-amber-400 border border-amber-500/40">
+                      MERCHANT TRUST & VALUE LEAGUE
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-cyan-950/80 text-cyan-400 border border-cyan-500/40">
+                      DYNAMIC RANK AUDITOR
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5 flex items-center gap-2">
+                    <span>Store Leaderboard & Ranking Re-arrange Engine</span>
+                  </h3>
+                  <p className="text-xs text-white/50 mt-1 max-w-2xl">
+                    Force an immediate recalculation of merchant price competitiveness, TrustShield safety scores, and crowning benchmark deals across all 16 retail categories to re-arrange public leaderboard standings.
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleRecalculateLeaderboard}
+                  disabled={isRecalculatingLeaderboard}
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#FFC857] to-[#F59E0B] hover:from-[#F5BA3D] hover:to-[#D97706] text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer shadow-xl disabled:opacity-50 shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isRecalculatingLeaderboard ? 'animate-spin' : ''}`} />
+                  <span>
+                    {isRecalculatingLeaderboard
+                      ? 'Re-scoring All Stores...'
+                      : '⚡ Recalculate & Re-arrange Leaderboard'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Telemetry Stats */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 relative z-10">
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Ranked Stores Evaluated</span>
+                  <span className="text-2xl font-black text-[#FFC857]">{leaderboardAdminState.total_stores_ranked} Stores</span>
+                  <span className="text-[11px] text-white/40 block mt-1">Across 16 Retail Verticals</span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Current #1 Overall Leader</span>
+                  <span className="text-base font-black text-emerald-400 block truncate">{leaderboardAdminState.top_reigning_store}</span>
+                  <span className="text-[11px] text-white/40 block mt-1">Leading Price Competitiveness</span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Audit Passes Completed</span>
+                  <span className="text-2xl font-black text-[#38BDF8]">{leaderboardAdminState.recalculations_count} Cycles</span>
+                  <span className="text-[11px] text-white/40 block mt-1">Mathematical Scoring Runs</span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Last Re-arranged At</span>
+                  <span className="text-xs font-mono font-bold text-white block truncate">{leaderboardAdminState.last_recalculated_at}</span>
+                  <span className="text-[11px] text-emerald-400 font-mono block mt-1">● Public Standings Live</span>
+                </div>
+              </div>
+            </div>
+
             {/* DYNAMIC CSV STORE REGISTRIES & COLUMN MONITOR */}
             <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-5">

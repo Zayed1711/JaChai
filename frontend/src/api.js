@@ -942,6 +942,24 @@ export async function fetchLeaderboard(category = 'all', pillar = 'price', limit
   return await res.json();
 }
 
+export async function apiRecalculateLeaderboard() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/leaderboard/recalculate`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+export async function fetchAdminLeaderboardStatus() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/leaderboard/status`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+
 
 
 
