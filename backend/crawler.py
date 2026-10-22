@@ -805,7 +805,7 @@ async def scrape_store_search(
 # ==============================================================================
 # 8. CANONICAL SKU GROUPING & MODE B SHOP RANGE COMPARISON BUILDER
 # ==============================================================================
-STORAGE_RE = re.compile(r"\b(16|32|64|128|256|512)\s*(?:gb|g)\b|\b(1|2)\s*(?:tb|t)\b", re.I)
+STORAGE_RE = re.compile(r"\b(16|32|64|128|256|512|825)\s*(?:gb|g)\b|\b(1|2)\s*(?:tb|t)\b", re.I)
 COLOR_RE = re.compile(
     r"\b(black|white|blue|green|pink|yellow|purple|gold|silver|gray|grey|titanium|natural|desert|midnight|starlight|graphite|sierra\s*blue|deep\s*purple|alpine\s*green|cosmic|phantom|cream|violet|lavender|mint|red|rose\s*gold|neon\s*blue\s*/\s*red|neon)\b",
     re.I
@@ -1778,8 +1778,10 @@ async def live_meta_search_and_persist(
         if p.image_url and len(p.offers) >= 1 and not is_placeholder_image(p.image_url):
             sanitized_cached.append(p)
 
+    user_explicit_wants_used = is_used_or_reconditioned_title(q_norm)
     has_cached_used = any(is_used_or_reconditioned_title(p.title_en) for p in sanitized_cached)
-    if len(sanitized_cached) >= 2 and (cat_id not in DURABLE_CONDITION_CATEGORIES or has_cached_used):
+    has_enough_cached = len(sanitized_cached) >= 2 or (len(sanitized_cached) >= 1 and len(sanitized_cached[0].offers) >= 2)
+    if has_enough_cached and (not user_explicit_wants_used or has_cached_used):
         return sanitized_cached
 
     # Step 3: Always initialize scraped_listings list first

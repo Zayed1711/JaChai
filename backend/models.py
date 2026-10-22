@@ -70,7 +70,7 @@ class Product(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     slug = Column(String(100), unique=True, index=True, nullable=False)
-    title_en = Column(String(255), nullable=False)
+    title_en = Column(String(255), index=True, nullable=False)
     title_bn = Column(String(255), nullable=False)
     category = Column(String(100), index=True, nullable=False)
     image_url = Column(String(500), nullable=False)
@@ -100,7 +100,7 @@ class StoreOffer(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False, index=True)
-    store_name = Column(String(255), nullable=False)
+    store_name = Column(String(255), index=True, nullable=False)
     source_type = Column(String(50), default="crawler", nullable=False)
     target_url = Column(String(500), default="https://", nullable=False)
     website_url = Column(String(500), nullable=True)
@@ -183,7 +183,7 @@ class HomepageBlock(Base):
 
 
 def ensure_schema_migrations():
-    """Auto-adds is_sponsored to store_offers on existing SQLite DBs without losing data."""
+    """Auto-adds missing columns and performance indexes to existing SQLite DBs without losing data."""
     try:
         insp = inspect(engine)
         if "store_offers" in insp.get_table_names():
@@ -191,6 +191,9 @@ def ensure_schema_migrations():
             if "is_sponsored" not in cols:
                 with engine.begin() as conn:
                     conn.execute(text("ALTER TABLE store_offers ADD COLUMN is_sponsored BOOLEAN NOT NULL DEFAULT 0"))
+        with engine.begin() as conn:
+            conn.execute(text("CREATE INDEX IF NOT EXISTS idx_products_title_en ON products(title_en)"))
+            conn.execute(text("CREATE INDEX IF NOT EXISTS idx_store_offers_store_name ON store_offers(store_name)"))
     except Exception:
         pass
 

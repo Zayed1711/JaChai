@@ -605,6 +605,9 @@ def get_categories():
     return {"categories": categories}
 
 
+LEADERBOARD_CACHE = {}
+
+
 @app.get("/api/v1/leaderboard")
 def get_merchant_leaderboard(
     category: Optional[str] = Query("all"),
@@ -624,6 +627,13 @@ def get_merchant_leaderboard(
         CATEGORY_REGISTRY_MAP,
     )
     from predetermined_catalog import CATEGORY_PREDETERMINED_CATALOG
+
+    cache_key = f"{category}:{pillar}:{limit}"
+    now_ts = time.time()
+    if cache_key in LEADERBOARD_CACHE:
+        cached_ts, cached_payload = LEADERBOARD_CACHE[cache_key]
+        if now_ts - cached_ts < 300:
+            return cached_payload
 
     if category and category != "all":
         stores_raw = get_stores_for_category(category)
@@ -672,11 +682,25 @@ def get_merchant_leaderboard(
         raw_fb = s.get("facebook_page") or s.get("facebook") or meta.get("facebook_url") or ""
 
         w_url = f"https://{raw_w}" if raw_w and not raw_w.startswith("http") else raw_w
-        fb_url = f"https://{raw_fb}" if raw_fb and not raw_fb.startswith("http") else raw_fb
+        if raw_fb:
+            raw_fb_clean = raw_fb.strip()
+            if raw_fb_clean.startswith("@"):
+                fb_url = f"https://www.facebook.com/{raw_fb_clean.lstrip('@')}"
+            elif not raw_fb_clean.startswith("http"):
+                if "facebook.com" in raw_fb_clean:
+                    fb_url = f"https://{raw_fb_clean}"
+                else:
+                    fb_url = f"https://www.facebook.com/{raw_fb_clean}"
+            else:
+                fb_url = raw_fb_clean
+        else:
+            fb_url = ""
 
         matched_deals = []
         for k, deals in store_stats.items():
             if k in s_low or s_low in k:
+                if category and category != "all":
+                    deals = [d for d in deals if d["product"].category == category]
                 matched_deals.extend(deals)
 
         lowest_wins = sum(1 for d in matched_deals if d["is_lowest"])
@@ -696,7 +720,8 @@ def get_merchant_leaderboard(
                 "is_lowest_in_market": best_d["is_lowest"],
             }
         else:
-            cat_key = category if category != "all" else "gaming-consoles"
+            store_cat = s.get("category") or s.get("vertical")
+            cat_key = category if (category and category != "all") else (store_cat if store_cat in CATEGORY_PREDETERMINED_CATALOG else "mobile-gadgets")
             cat_prods = CATEGORY_PREDETERMINED_CATALOG.get(cat_key, {}).get("products", [])
             if cat_prods:
                 bp = cat_prods[0]
@@ -743,13 +768,15 @@ def get_merchant_leaderboard(
     for i, item in enumerate(ranked_list[:limit]):
         item["rank"] = i + 1
 
-    return {
+    resp_payload = {
         "status": "success",
         "category": category,
         "pillar": pillar,
         "total_stores_ranked": len(unique_stores),
         "stores": ranked_list[:limit],
     }
+    LEADERBOARD_CACHE[cache_key] = (now_ts, resp_payload)
+    return resp_payload
 
 
 @app.get("/api/v1/storefront/trending-hubs", response_model=TrendingHubsResponse)
@@ -2241,7 +2268,8 @@ def admin_recalculate_leaderboard(
     db: Session = Depends(get_db),
     admin_auth: dict = Depends(verify_admin_access),
 ):
-    global LEADERBOARD_ADMIN_STATE
+    global LEADERBOARD_ADMIN_STATE, LEADERBOARD_CACHE
+    LEADERBOARD_CACHE.clear()
     now_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
     res = get_merchant_leaderboard(category="all", pillar="price", limit=1, db=db)
