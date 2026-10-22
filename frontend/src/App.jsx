@@ -4007,6 +4007,7 @@ const REGISTRY_CATEGORIES = [
   { id: 'cycles-evs', categoryName: 'Electric Bikes & EVs', en: 'Electric Bikes & EVs', bn: 'ই-বাইক ও স্কুটার', defaultQuery: 'Electric Bikes & EVs' },
   { id: 'sportswear-gym', categoryName: 'Sportswear & Gym', en: 'Sportswear & Gym', bn: 'স্পোর্টস ও জিম গিয়ার', defaultQuery: 'Sportswear & Gym' },
   { id: 'fashion-jewelry', categoryName: 'Fashion & Budget Jewellery', en: 'Fashion & Budget Jewellery', bn: 'ফ্যাশন ও বাজেট জুয়েলারি', defaultQuery: 'Fashion & Budget Jewellery' },
+  { id: 'gaming-consoles', categoryName: 'Gaming Consoles & Accessories', en: 'Gaming Consoles & Accessories', bn: 'গেমিং কনসোল ও এক্সেসরিজ', defaultQuery: 'PlayStation 5' },
 ];
 
 
@@ -4032,6 +4033,14 @@ const REGISTRY_CATEGORIES = [
 
 
 const getDynamicLoadingStores = (queryText) => {
+  const q_check = (queryText || '').toLowerCase();
+  if (q_check.includes('ps5') || q_check.includes('playstation') || q_check.includes('xbox') || q_check.includes('nintendo') || q_check.includes('switch') || q_check.includes('console') || q_check.includes('dualsense') || q_check.includes('steam deck') || q_check.includes('rog ally') || q_check.includes('গেমিং') || q_check.includes('কনসোল')) {
+    return {
+      textEn: 'Querying Star Tech, Game Over BD, Gamers Republic, Ryans & verified gaming hubs...',
+      textBn: 'স্টার টেক, গেম ওভার বিডি, গেমার্স রিপাবলিক, রায়ান্স ও ভেরিফায়েড গেমিং হাব স্ক্যান করা হচ্ছে...',
+      stores: ['⚡ Star Tech', '⚡ Game Over BD', '⚡ Gamers Republic BD', '⚡ Ryans Gaming', '⚡ TechLand BD']
+    };
+  }
 
 
 
@@ -9216,7 +9225,12 @@ export default function App() {
 
                     </div>
 
-
+                    <div className="mt-5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] sm:text-xs text-[#475569] leading-relaxed max-w-lg mx-auto text-left sm:text-center">
+                      <span className="font-semibold text-amber-700">💡 {lang === 'bn' ? 'জেনে রাখুন:' : 'Note:'}</span>{' '}
+                      {lang === 'bn'
+                        ? 'আপনার কাঙ্ক্ষিত পণ্যটি না পেলে তা হয়তো স্টকে নেই, অথবা ১ বছরের বেশি পুরনো হওয়ায় অপ্রাসঙ্গিক ও বিভ্রান্তিকর দাম পরিহার করতে ফিল্টার করা হয়েছে।'
+                        : "If a product doesn't appear, it is either currently out of stock or filtered out because the listings were over 1 year old and no longer reflect authentic market rates."}
+                    </div>
 
                   </div>
 
@@ -9256,7 +9270,12 @@ export default function App() {
 
                 </p>
 
-
+                <div className="mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] sm:text-xs text-[#64748B] leading-relaxed text-left sm:text-center">
+                  <span className="font-semibold text-slate-700">💡 {lang === 'bn' ? 'জেনে রাখুন:' : 'Note:'}</span>{' '}
+                  {lang === 'bn'
+                    ? 'আপনার কাঙ্ক্ষিত পণ্যটি না পেলে তা হয়তো স্টকে নেই, অথবা ১ বছরের বেশি পুরনো হওয়ায় অপ্রাসঙ্গিক ও বিভ্রান্তিকর দাম পরিহার করতে ফিল্টার করা হয়েছে।'
+                    : "If you don't get your desired search result, the product might be currently out of stock or listings over 1 year old were excluded to ensure accurate, up-to-date pricing."}
+                </div>
 
                 <button
 

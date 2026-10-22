@@ -49,7 +49,9 @@ import {
   fetchAdminRegistryStatus,
   apiReloadAdminRegistry,
   apiFetchMacroTicker,
-  apiRunMacroScraper
+  apiRunMacroScraper,
+  triggerPrewarmCrawler,
+  fetchPrewarmStatus
 } from '../api';
 
 export default function AdminCommandCenter({
@@ -266,6 +268,20 @@ export default function AdminCommandCenter({
   // --- REGISTRY DYNAMIC CSV STATE ---
   const [registryStatus, setRegistryStatus] = useState(null);
   const [isReloadingRegistry, setIsReloadingRegistry] = useState(false);
+
+  // Daily Pre-Warm Harvester State
+  const [prewarmState, setPrewarmState] = useState({
+    is_running: false,
+    current_query: null,
+    completed_queries: 0,
+    total_queries: 28,
+    items_harvested: 0,
+    start_time: null,
+    completed_at: null,
+    last_run: null,
+    errors: []
+  });
+  const [isTriggeringPrewarm, setIsTriggeringPrewarm] = useState(false);
 
   const loadRegistryInfo = React.useCallback(async () => {
     try {
@@ -613,6 +629,41 @@ export default function AdminCommandCenter({
       }
     }
   }, [activeTab, setSpiders, loadRegistryInfo]);
+
+  React.useEffect(() => {
+    let timer;
+    if (activeTab === 'crawler') {
+      const checkStatus = () => {
+        fetchPrewarmStatus()
+          .then((res) => {
+            if (res?.data) {
+              setPrewarmState(res.data);
+            }
+          })
+          .catch((err) => console.warn('Prewarm status fetch error:', err));
+      };
+      checkStatus();
+      timer = setInterval(checkStatus, 3000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [activeTab]);
+
+  const handleRunPrewarmHarvester = async () => {
+    setIsTriggeringPrewarm(true);
+    try {
+      const res = await triggerPrewarmCrawler();
+      if (res?.data) {
+        setPrewarmState(res.data);
+      }
+      showNotification(res?.message || 'Daily pre-warm harvester job started');
+    } catch (err) {
+      alert(`Prewarm failed: ${err.message}`);
+    } finally {
+      setIsTriggeringPrewarm(false);
+    }
+  };
 
   // --- TAB 1 ACTIONS ---
   const toggleBillboardStatus = async (id) => {
@@ -1462,6 +1513,103 @@ export default function AdminCommandCenter({
         =================================================================== */}
         {activeTab === 'crawler' && (
           <div className="space-y-8">
+            {/* DAILY CATALOG HARVESTER & PRE-WARM PRICE ACCELERATOR */}
+            <div className="bg-[#12141C] border border-[#10B981]/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-[#10B981]/5 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-5 relative z-10">
+                <div>
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
+                      DAILY MORNING PRE-WARM HARVESTER
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-cyan-950/80 text-cyan-400 border border-cyan-500/40">
+                      16 CATEGORIES · &lt;20MS LATENCY
+                    </span>
+                    {prewarmState.is_running && (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-amber-950/80 text-amber-400 border border-amber-500/40 animate-pulse">
+                        ● LIVE HARVESTING IN PROGRESS
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5 flex items-center gap-2">
+                    <span>Daily Catalog Harvester & Latency Reducer</span>
+                  </h3>
+                  <p className="text-xs text-white/50 mt-1 max-w-2xl">
+                    Run by an administrator each morning to pre-harvest and verify live retail prices across top high-velocity queries in all 16 categories. Ensures all visitor searches throughout the day return fresh, authentic market rates in &lt;20ms.
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleRunPrewarmHarvester}
+                  disabled={isTriggeringPrewarm || prewarmState.is_running}
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer shadow-xl disabled:opacity-50 shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <RefreshCw className={`w-4 h-4 ${prewarmState.is_running || isTriggeringPrewarm ? 'animate-spin' : ''}`} />
+                  <span>
+                    {prewarmState.is_running
+                      ? `Harvesting (${prewarmState.completed_queries}/${prewarmState.total_queries})...`
+                      : '⚡ Run Morning Pre-Warm Harvester'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Progress & Telemetry Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 relative z-10">
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Harvester Status</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2.5 h-2.5 rounded-full ${prewarmState.is_running ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'}`} />
+                    <span className="text-lg font-black text-white">
+                      {prewarmState.is_running ? 'Active Scraping' : 'Ready / Idle'}
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-white/40 block mt-1">
+                    {prewarmState.current_query ? `Current: "${prewarmState.current_query}"` : 'Standing by for schedule'}
+                  </span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Target Coverage</span>
+                  <span className="text-2xl font-black text-[#38BDF8]">
+                    {prewarmState.completed_queries} / {prewarmState.total_queries}
+                  </span>
+                  <span className="text-[11px] text-white/40 block mt-1">Top Benchmark Queries</span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Items Harvested</span>
+                  <span className="text-2xl font-black text-[#10B981]">
+                    {prewarmState.items_harvested || 0}
+                  </span>
+                  <span className="text-[11px] text-white/40 block mt-1">Verified Real Store Listings</span>
+                </div>
+
+                <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4">
+                  <span className="text-[10px] font-bold text-white/50 uppercase block mb-1">Last Run Synchronization</span>
+                  <span className="text-xs font-mono font-bold text-emerald-300 block truncate">
+                    {prewarmState.last_run || 'Not run yet today'}
+                  </span>
+                  <span className="text-[11px] text-white/40 block mt-1">Zero Fake Offsets · 100% Truth</span>
+                </div>
+              </div>
+
+              {/* Progress bar if running */}
+              {prewarmState.is_running && (
+                <div className="mt-4 bg-[#0A0B0E] border border-emerald-500/20 rounded-xl p-3">
+                  <div className="flex justify-between text-xs text-white/70 mb-1.5 font-mono">
+                    <span>Scraping query: {prewarmState.current_query}</span>
+                    <span>{Math.round((prewarmState.completed_queries / (prewarmState.total_queries || 1)) * 100)}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300"
+                      style={{ width: `${Math.round((prewarmState.completed_queries / (prewarmState.total_queries || 1)) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
             {/* DYNAMIC CSV STORE REGISTRIES & COLUMN MONITOR */}
             <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-5">

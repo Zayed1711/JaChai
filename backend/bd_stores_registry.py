@@ -937,6 +937,42 @@ def compute_trust_score(
 # 5. STRICT 13-CATEGORY REGISTRY MAP & SMART QUERY ROUTER
 # ==============================================================================
 CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
+    "gaming-consoles": {
+        "csv": "gaming_consoles_and_accessories.csv",
+        "csv_aliases": [
+            "gaming_consoles_and_accessories.csv", "gaming_consoles_and_accessories",
+            "gaming-consoles-and-accessories", "gaming-consoles", "gaming_consoles",
+            "gaming consoles & accessories", "consoles", "console", "gaming"
+        ],
+        "csv_category": "Gaming Consoles & Accessories",
+        "display_en": "Gaming Consoles & Accessories",
+        "display_bn": "গেমিং কনসোল ও এক্সেসরিজ",
+        "vertical": "GAMING_CONSOLES",
+        "keywords": [
+            "ps5", "playstation", "playstation 5", "playstation 4", "ps4", "ps5 slim",
+            "ps5 pro", "xbox", "xbox series x", "xbox series s", "xbox one", "nintendo switch",
+            "switch oled", "switch lite", "steam deck", "steam deck oled", "rog ally",
+            "rog ally x", "legion go", "r36s", "miyoo mini", "anbernic", "gamepad",
+            "wireless controller", "dualsense", "dualsense edge", "xbox controller",
+            "racing wheel", "logitech g29", "logitech g923", "thrustmaster", "pxn v10",
+            "flight stick", "hotas", "fight stick", "arcade stick", "gaming headset",
+            "hyperx cloud", "logitech g733", "steelseries arctis", "streaming mic",
+            "fifine", "hyperx quadcast", "shure sm7b", "vr headset", "meta quest",
+            "quest 2", "quest 3", "quest 3s", "ps vr2", "playstation vr2", "vision pro",
+            "controller dock", "ps5 ssd", "ps5 disc", "ps5 game", "ps4 game", "nintendo game",
+            "psn gift card", "xbox game pass", "gaming console", "console",
+            "প্লেস্টেশন", "প্লেস্টেশন ৫", "গেমিং কনসোল", "এক্সবক্স", "নিনটেন্ডো সুইচ",
+            "স্টিম ডেক", "কন্ট্রোলার", "গেমিং হেডসেট", "ভিআর হেডসেট"
+        ],
+        "default_query": "PlayStation 5",
+        "base_price": 65000,
+        "price_min": 1200,
+        "price_max": 145000,
+        "model_templates": [
+            "{title} (Official Brand New Intact)",
+            "{title} Certified Pre-Owned / Used Grade-A"
+        ]
+    },
     "cameras-photography": {
         "csv": "cameras_and_photography.csv",
         "csv_aliases": [
@@ -1493,6 +1529,10 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
 }
 
 # Aliases
+CATEGORY_REGISTRY_MAP["gaming"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
+CATEGORY_REGISTRY_MAP["consoles"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
+CATEGORY_REGISTRY_MAP["gaming_consoles"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
+CATEGORY_REGISTRY_MAP["gaming-consoles-and-accessories"] = CATEGORY_REGISTRY_MAP["gaming-consoles"]
 CATEGORY_REGISTRY_MAP["budget-jewelry"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
 CATEGORY_REGISTRY_MAP["budget-jewellery"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
 CATEGORY_REGISTRY_MAP["budget_jewellery_fcommerce"] = CATEGORY_REGISTRY_MAP["fashion-jewelry"]
@@ -1669,6 +1709,7 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
     if q_collapsed:
         matches = []
         primary_categories = [
+            ("gaming-consoles", CATEGORY_REGISTRY_MAP["gaming-consoles"]),
             ("cameras-photography", CATEGORY_REGISTRY_MAP["cameras-photography"]),
             ("bicycles-mtb", CATEGORY_REGISTRY_MAP["bicycles-mtb"]),
             ("cycles-evs", CATEGORY_REGISTRY_MAP["cycles-evs"]),

@@ -712,6 +712,13 @@ VERIFIED_BD_DOMAIN_TO_STORE = {
     "othoba.com": "Othoba",
     "daraz.com.bd": "Daraz Bangladesh",
     "rokomari.com": "Rokomari",
+    "gameover.com.bd": "Game Over BD",
+    "gamersrepublic.com.bd": "Gamers Republic BD",
+    "playstationbd.com": "PlayStation Bangladesh",
+    "xboxbd.com": "Xbox Bangladesh",
+    "nintendobd.com": "Nintendo Bangladesh",
+    "gamerszonebd.com": "Gamers Zone BD",
+    "sonybd.com": "Sony World BD",
 }
 
 
@@ -897,6 +904,18 @@ async def scrape_bangladesh_web_live(
                 continue
 
         full_text = _EMI_OR_SAVE_RE.sub(" ", f"{title_raw} {body}")
+
+        # 1-Year Freshness Guard & Stock Integrity:
+        # Discard listings older than 1 year (> 365 days / 2024 or older in 2026) and out-of-stock items
+        lower_blob = f"{title_raw} {body}".lower()
+        if any(oos in lower_blob for oos in ("out of stock", "stock out", "discontinued", "currently unavailable", "স্টকে নেই", "সোল্ড আউট")):
+            continue
+
+        if re.search(r"\b(201[5-9]|202[0-4])\b", lower_blob) or re.search(r"/(?:201[5-9]|202[0-4])/", href):
+            continue
+
+        if re.search(r"\b(?:[2-9]|\d{2})\s+years?\s+ago\b", lower_blob):
+            continue
         # Require explicit currency marker (৳, Tk, BDT, Taka) in web search snippets so '100% cotton' or '150 models' never become ৳100/৳150!
         cur_matches = _CUR.findall(full_text.translate(_BN))
         prices = []

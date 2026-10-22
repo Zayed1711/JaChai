@@ -107,3 +107,4 @@ python scratch/sqa_comprehensive_suite.py
 
 ## 📄 License
 Proprietary & Confidential — Developed for JaChai Bangladesh.
+

@@ -906,4 +906,26 @@ export async function apiReloadAdminRegistry() {
   return await res.json();
 }
 
+// ==============================================================================
+// PRE-WARM HARVESTER ADMIN API
+// ==============================================================================
+
+export async function triggerPrewarmCrawler() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/prewarm`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+export async function fetchPrewarmStatus() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/prewarm-status`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+
 

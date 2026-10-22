@@ -11,7 +11,7 @@ import uuid
 import mimetypes
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import Body, Depends, FastAPI, File, Header, HTTPException, Query, Request, Response, UploadFile, status
+from fastapi import BackgroundTasks, Body, Depends, FastAPI, File, Header, HTTPException, Query, Request, Response, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -556,6 +556,13 @@ def get_categories():
             'name_bn': 'ফ্যাশন ও বাজেট জুয়েলারি',
             'query': 'Fashion Jewellery',
             'icon': 'Sparkles',
+        },
+        'Gaming Consoles & Accessories': {
+            'id': 'gaming-consoles',
+            'name_en': 'Gaming Consoles & Accessories',
+            'name_bn': 'গেমিং কনসোল ও এক্সেসরিজ',
+            'query': 'PlayStation 5',
+            'icon': 'Gamepad2',
         },
     }
 
@@ -1950,4 +1957,122 @@ async def trigger_scrape_macro_prices(
         "scraped_at": now_str,
         "source": scraped_source,
         "data": MACRO_TICKER_CACHE,
+    }
+
+# ==============================================================================
+# DAILY PRE-WARM HARVESTER & PRICE CACHE ACCELERATOR
+# ==============================================================================
+PREWARM_TOP_QUERIES = [
+    # 1. Gaming Consoles & Accessories
+    {"query": "PlayStation 5 Slim", "category": "gaming-consoles"},
+    {"query": "Nintendo Switch OLED", "category": "gaming-consoles"},
+    {"query": "Xbox Series X", "category": "gaming-consoles"},
+    {"query": "Steam Deck", "category": "gaming-consoles"},
+    {"query": "DualSense Wireless Controller", "category": "gaming-consoles"},
+    # 2. Mobiles & Consumer Gadgets
+    {"query": "iPhone 15", "category": "mobile-gadgets"},
+    {"query": "iPhone 16", "category": "mobile-gadgets"},
+    {"query": "Samsung Galaxy S24", "category": "mobile-gadgets"},
+    {"query": "Google Pixel 8", "category": "mobile-gadgets"},
+    {"query": "AirPods Pro 2", "category": "mobile-gadgets"},
+    # 3. Laptops & PC Components
+    {"query": "MacBook Air M2", "category": "laptops-pc"},
+    {"query": "RTX 4060 Graphics Card", "category": "laptops-pc"},
+    {"query": "Gaming Laptop", "category": "laptops-pc"},
+    # 4. Cameras & Photography
+    {"query": "Sony A7 IV", "category": "cameras-photography"},
+    {"query": "Canon EOS R6", "category": "cameras-photography"},
+    # 5. Cycles & Electric Vehicles
+    {"query": "Duranta Mountain Bike", "category": "bicycles-mtb"},
+    {"query": "Electric Scooter", "category": "cycles-evs"},
+    # 6. Saree & Boutiques
+    {"query": "Jamdani Saree", "category": "saree-boutiques"},
+    {"query": "Tangail Saree", "category": "saree-boutiques"},
+    # 7. Fashion & Apparel
+    {"query": "Panjabi", "category": "fashion-apparel"},
+    {"query": "Polo T-Shirt", "category": "fashion-apparel"},
+    # 8. Jewelry & Horology
+    {"query": "22K Gold Chain", "category": "fine-jewelry"},
+    {"query": "Seiko 5 Automatic", "category": "watches-horology"},
+    # 9. Home Appliances
+    {"query": "Inverter AC 1.5 Ton", "category": "home-appliances"},
+    {"query": "Walton Refrigerator", "category": "home-appliances"},
+    # 10. Beauty, Sportswear, Grocery
+    {"query": "Sunscreen SPF 50", "category": "beauty-skincare"},
+    {"query": "Gym Dumbbell Set", "category": "sportswear-gym"},
+    {"query": "Pure Mustard Oil", "category": "grocery-snacks"},
+]
+
+prewarm_state = {
+    "is_running": False,
+    "current_query": None,
+    "completed_queries": 0,
+    "total_queries": len(PREWARM_TOP_QUERIES),
+    "items_harvested": 0,
+    "start_time": None,
+    "completed_at": None,
+    "last_run": None,
+    "errors": [],
+}
+
+
+async def _run_prewarm_harvester_job():
+    global prewarm_state
+    from crawler import live_meta_search_and_persist
+    from database import SessionLocal
+
+    prewarm_state["is_running"] = True
+    prewarm_state["start_time"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    prewarm_state["completed_queries"] = 0
+    prewarm_state["items_harvested"] = 0
+    prewarm_state["errors"] = []
+    prewarm_state["total_queries"] = len(PREWARM_TOP_QUERIES)
+
+    for item in PREWARM_TOP_QUERIES:
+        q = item["query"]
+        cat = item["category"]
+        prewarm_state["current_query"] = q
+        db_job = SessionLocal()
+        try:
+            results = await live_meta_search_and_persist(q, cat, db_job)
+            if results:
+                prewarm_state["items_harvested"] += len(results)
+        except Exception as err:
+            print(f"[Prewarm Harvester] Error scraping '{q}': {err}")
+            prewarm_state["errors"].append(f"{q}: {str(err)[:60]}")
+        finally:
+            db_job.close()
+            prewarm_state["completed_queries"] += 1
+        await asyncio.sleep(1.0)
+
+    now_done = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    prewarm_state["is_running"] = False
+    prewarm_state["current_query"] = None
+    prewarm_state["completed_at"] = now_done
+    prewarm_state["last_run"] = now_done
+
+
+@app.post("/api/v1/admin/crawler/prewarm")
+async def trigger_prewarm_crawler(background_tasks: BackgroundTasks, admin_auth: dict = Depends(verify_admin_access)):
+    global prewarm_state
+    if prewarm_state["is_running"]:
+        return {
+            "status": "already_running",
+            "message": f"Pre-warm harvester is already running query: {prewarm_state['current_query']}",
+            "data": prewarm_state,
+        }
+
+    background_tasks.add_task(_run_prewarm_harvester_job)
+    return {
+        "status": "started",
+        "message": f"Started pre-warm harvester job for {len(PREWARM_TOP_QUERIES)} benchmark queries across 16 categories.",
+        "data": prewarm_state,
+    }
+
+
+@app.get("/api/v1/admin/crawler/prewarm-status")
+def get_prewarm_status(admin_auth: dict = Depends(verify_admin_access)):
+    return {
+        "status": "success",
+        "data": prewarm_state,
     }
