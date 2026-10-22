@@ -452,13 +452,6 @@ def get_categories():
     stores = get_all_stores_registry()
 
     display_info = {
-        'Cameras, DSLR & Photography Gear': {
-            'id': 'cameras-photography',
-            'name_en': 'Cameras & DSLR',
-            'name_bn': 'ক্যামেরা ও ডিএসএলআর',
-            'query': 'DSLR Camera',
-            'icon': 'Camera',
-        },
         'Mobile Phones & Consumer Gadgets': {
             'id': 'mobile-gadgets',
             'name_en': 'Mobiles & Gadgets',
@@ -473,41 +466,6 @@ def get_categories():
             'query': 'Laptop',
             'icon': 'Laptop',
         },
-        'Mainstream Fashion & Apparel Brands': {
-            'id': 'fashion-apparel',
-            'name_en': 'Fashion & Apparel',
-            'name_bn': 'ফ্যাশন ও পোশাক',
-            'query': 'Panjabi',
-            'icon': 'Shirt',
-        },
-        'Snacks, Dry Foods & Grocery Marketplaces': {
-            'id': 'grocery-snacks',
-            'name_en': 'Grocery & Snacks',
-            'name_bn': 'গ্রোসারি ও স্ন্যাকস',
-            'query': 'Organic Food',
-            'icon': 'ShoppingBag',
-        },
-        'Fine Jewelry & Premium Fashion Jewelry Stores': {
-            'id': 'fine-jewelry',
-            'name_en': 'Fine Jewelry & Gold',
-            'name_bn': 'স্বর্ণ ও ডায়মন্ড গহনা',
-            'query': 'Gold Jewellery',
-            'icon': 'Sparkles',
-        },
-        'Small & Medium Saree & Boutique Pages': {
-            'id': 'saree-boutiques',
-            'name_en': 'Saree & Boutiques',
-            'name_bn': 'শাড়ি ও বুটিকস',
-            'query': 'Jamdani Saree',
-            'icon': 'Sparkles',
-        },
-        'Sneakers & Footwear Stores': {
-            'id': 'sneakers-footwear',
-            'name_en': 'Sneakers & Shoes',
-            'name_bn': 'স্নিকার্স ও জুতা',
-            'query': 'Sneakers',
-            'icon': 'Footprints',
-        },
         'Watches & Horology Retailers': {
             'id': 'watches-horology',
             'name_en': 'Watches & Horology',
@@ -515,19 +473,33 @@ def get_categories():
             'query': 'Watch',
             'icon': 'Watch',
         },
-        'Home Appliances & White Goods': {
-            'id': 'home-appliances',
-            'name_en': 'Home Appliances',
-            'name_bn': 'হোম অ্যাপ্লায়েন্স',
-            'query': 'Refrigerator',
-            'icon': 'Tv',
-        },
         'Beauty, Skincare & Lifestyle Stores': {
             'id': 'beauty-skincare',
             'name_en': 'Beauty & Skincare',
             'name_bn': 'বিউটি ও স্কিনকেয়ার',
             'query': 'Skincare',
             'icon': 'Sparkles',
+        },
+        'Cameras, DSLR & Photography Gear': {
+            'id': 'cameras-photography',
+            'name_en': 'Cameras & DSLR',
+            'name_bn': 'ক্যামেরা ও ডিএসএলআর',
+            'query': 'DSLR Camera',
+            'icon': 'Camera',
+        },
+        'Gaming Consoles & Accessories': {
+            'id': 'gaming-consoles',
+            'name_en': 'Gaming Consoles & Accessories',
+            'name_bn': 'গেমিং কনসোল ও এক্সেসরিজ',
+            'query': 'PlayStation 5',
+            'icon': 'Gamepad2',
+        },
+        'Home Appliances & White Goods': {
+            'id': 'home-appliances',
+            'name_en': 'Home Appliances',
+            'name_bn': 'হোম অ্যাপ্লায়েন্স',
+            'query': 'Refrigerator',
+            'icon': 'Tv',
         },
         'Cycles, Bicycles, MTB & Aero Bikes': {
             'id': 'bicycles-mtb',
@@ -539,30 +511,9 @@ def get_categories():
         'Cycles & Electric Vehicles (EVs)': {
             'id': 'cycles-evs',
             'name_en': 'Electric Bikes & EVs',
-            'name_bn': 'ই-বইক ও স্কুটার',
+            'name_bn': 'ই-বাইক ও স্কুটার',
             'query': 'Electric Bike',
             'icon': 'Bike',
-        },
-        'Sportswear, Activewear & Gym Gear': {
-            'id': 'sportswear-gym',
-            'name_en': 'Sportswear & Gym',
-            'name_bn': 'স্পোর্টস ও জিম গিয়ার',
-            'query': 'Sportswear',
-            'icon': 'Activity',
-        },
-        'Budget, Casual & Imitation Jewelry Targets': {
-            'id': 'fashion-jewelry',
-            'name_en': 'Fashion & Budget Jewellery',
-            'name_bn': 'ফ্যাশন ও বাজেট জুয়েলারি',
-            'query': 'Fashion Jewellery',
-            'icon': 'Sparkles',
-        },
-        'Gaming Consoles & Accessories': {
-            'id': 'gaming-consoles',
-            'name_en': 'Gaming Consoles & Accessories',
-            'name_bn': 'গেমিং কনসোল ও এক্সেসরিজ',
-            'query': 'PlayStation 5',
-            'icon': 'Gamepad2',
         },
     }
 
@@ -589,8 +540,14 @@ def get_categories():
             'predetermined_products': cat_spec.get('products', []),
         })
 
+    pruned_cat_names = {
+        "Mainstream Fashion & Apparel Brands",
+        "Small & Medium Saree & Boutique Pages",
+        "Snacks, Dry Foods & Grocery Marketplaces",
+        "Budget, Casual & Imitation Jewelry Targets",
+    }
     for c, count in cat_counts.items():
-        if c not in display_info:
+        if c not in display_info and c not in pruned_cat_names:
             slug = re.sub(r'[^a-zA-Z0-9]+', '-', c).strip('-').lower()
             categories.append({
                 'id': slug,
@@ -639,6 +596,10 @@ def get_merchant_leaderboard(
         stores_raw = get_stores_for_category(category)
     else:
         stores_raw = get_all_stores_registry()
+
+    # Filter out stores belonging to pruned non-fungible categories (fashion, saree, imitation jewelry, grocery)
+    pruned_cat_names = {"Mainstream Fashion & Apparel Brands", "Small & Medium Saree & Boutique Pages", "Snacks, Dry Foods & Grocery Marketplaces", "Budget, Casual & Imitation Jewelry Targets"}
+    stores_raw = [s for s in stores_raw if s.get("category") not in pruned_cat_names]
 
     seen_names = set()
     unique_stores = []
