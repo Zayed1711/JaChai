@@ -14,7 +14,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm import Session, joinedload
 
 try:
-    from .models import PriceHistory, Product, SpotlightCard, StoreOffer
+    from .models import PriceHistory, Product, SpotlightCard, StoreOffer, DiscoveredDomain, SearchTelemetry
     from .adapters import search_stores_concurrently
     from .bd_stores_registry import (
         RETAIL_VERTICALS,
@@ -43,7 +43,7 @@ try:
         ACCESSORY_KEYWORDS,
     )
 except ImportError:
-    from models import PriceHistory, Product, SpotlightCard, StoreOffer
+    from models import PriceHistory, Product, SpotlightCard, StoreOffer, DiscoveredDomain, SearchTelemetry
     from adapters import search_stores_concurrently
     from bd_stores_registry import (
         RETAIL_VERTICALS,
@@ -1571,7 +1571,38 @@ def compute_min_hardware_floor(cat_id: str, search_kw: str, is_acc: bool, max_bu
     return floor
 
 
-async def scrape_wide_net_multistore(query: str, min_floor: int = 150) -> List[dict]:
+def record_discovered_merchant_domain(db: Session, product_url: str, store_name: str, primary_category: Optional[str] = None):
+    """Dynamically registers discovered Bangladeshi merchant domains for continuous crawler expansion."""
+    try:
+        if not product_url or not product_url.startswith("http"):
+            return
+        parsed = urlparse(product_url)
+        domain = (parsed.netloc or "").lower().strip()
+        if not domain or domain in ("localhost", "127.0.0.1") or len(domain) < 4:
+            return
+        domain = re.sub(r"^(?:www\.|m\.)", "", domain)
+        existing = db.query(DiscoveredDomain).filter(DiscoveredDomain.domain == domain).first()
+        if existing:
+            existing.crawl_success_count += 1
+            existing.last_crawled_at = datetime.utcnow()
+            if primary_category and not existing.primary_category:
+                existing.primary_category = primary_category
+        else:
+            new_dom = DiscoveredDomain(
+                domain=domain,
+                store_name=store_name or domain,
+                primary_category=primary_category,
+                is_verified=True if any(t1 in (store_name or "").lower() for t1 in ("star tech", "ryans", "custom mac", "pickaboo", "apple gadgets")) else False,
+                crawl_success_count=1,
+                last_crawled_at=datetime.utcnow(),
+                created_at=datetime.utcnow(),
+            )
+            db.add(new_dom)
+    except Exception:
+        pass
+
+
+async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_tokens: Optional[List[str]] = None) -> List[dict]:
     """
     Tier 2: Wide-Net Web Discovery Scraper
     Hits multi-category merchants simultaneously without rigid category-bucket filtering upfront.
@@ -1591,6 +1622,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150) -> List[d
                     for p in r.json().get("resources", {}).get("results", {}).get("products", []):
                         p_price = float(p.get("price", 0))
                         full_u = f"https://custommacbd.com{p.get('url')}"
+                        p_title = p.get("title", "")
+                        if anchor_tokens and not matches_anchor_tokens(p_title, anchor_tokens, clean_q):
+                            continue
                         if p_price >= min_floor and full_u not in seen_urls:
                             seen_urls.add(full_u)
                             results.append({
@@ -1621,6 +1655,8 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150) -> List[d
                         img_el = it.select_one(".p-item-img img")
                         if name_el and price_el:
                             title = name_el.get_text(strip=True)
+                            if anchor_tokens and not matches_anchor_tokens(title, anchor_tokens, clean_q):
+                                continue
                             p_raw = price_el.get_text(" ", strip=True)
                             nums = re.findall(r"[\d,]+", p_raw)
                             if nums:
@@ -1650,6 +1686,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150) -> List[d
             for wr in web_rows:
                 u = wr.get("product_url")
                 p_val = wr.get("price") or 0
+                w_title = wr.get("title", "")
+                if anchor_tokens and not matches_anchor_tokens(w_title, anchor_tokens, clean_q):
+                    continue
                 if p_val >= min_floor and u and u not in seen_urls:
                     seen_urls.add(u)
                     results.append(wr)
@@ -1681,12 +1720,11 @@ async def live_meta_search_and_persist(
     if not category or category == "all":
         cat_id, cat_meta = resolve_category_or_none(q_norm, None)
         if not cat_id or not cat_meta:
-            # Try SLM / Translator before giving up on Out-of-Syllabus product queries
             en_try = translate_bengali_and_banglish_for_store(q_norm)
             cat_id, cat_meta = resolve_category_or_none(en_try, None)
             if not cat_id or not cat_meta:
-                # Out-of-Syllabus valid product query! Route to open discovery instead of returning []
-                cat_id, cat_meta = resolve_category_from_query(en_try, "mobile-gadgets")
+                cat_id = None
+                cat_meta = {"display_en": "Open Market", "vertical": "MULTI_MARKETPLACE", "base_price": 500}
     else:
         cat_id, cat_meta = resolve_category_from_query(q_norm, category)
 
@@ -1713,10 +1751,10 @@ async def live_meta_search_and_persist(
     # Step 2: Check existing database cache
     term = f"%{search_kw}%"
     raw_term = f"%{cleaned_display_q}%"
-    compat_list = CATEGORY_COMPATIBILITY_MAP.get(cat_id, [cat_meta["display_en"]])
-    cat_clauses = [Product.category.ilike(f"%{c}%") for c in compat_list]
+    compat_list = CATEGORY_COMPATIBILITY_MAP.get(cat_id, [cat_meta.get("display_en", "Open Market")]) if cat_id else []
+    cat_clauses = [Product.category.ilike(f"%{c}%") for c in compat_list] if compat_list else []
 
-    cached_products = (
+    db_cache_q = (
         db.query(Product)
         .options(joinedload(Product.offers), joinedload(Product.price_history))
         .filter(
@@ -1728,16 +1766,17 @@ async def live_meta_search_and_persist(
                 Product.title_bn.ilike(raw_term),
             )
         )
-        .filter(or_(*cat_clauses))
-        .all()
     )
+    if cat_clauses:
+        db_cache_q = db_cache_q.filter(or_(*cat_clauses))
+    cached_products = db_cache_q.all()
 
     anchor_tokens = extract_mandatory_anchor_tokens(q_norm)
     requested_acc = user_requested_accessory(q_norm)
 
     sanitized_cached = []
     valid_cat_stores = set()
-    reg_stores_for_cat = get_stores_for_category(cat_id, query=q_norm)
+    reg_stores_for_cat = get_stores_for_category(cat_id, query=q_norm) if cat_id else []
     for s in reg_stores_for_cat:
         rn = s.get("name", "").lower().strip()
         if rn:
@@ -1749,7 +1788,7 @@ async def live_meta_search_and_persist(
         # Zero synthetic placeholders in cache
         if "(official bangladesh edition)" in (p.title_en or "").lower():
             continue
-        if not passes_category_negative_firewall(p.title_en, cat_meta["display_en"], q_norm):
+        if cat_id and not passes_category_negative_firewall(p.title_en, cat_meta.get("display_en", ""), q_norm):
             continue
         if anchor_tokens and not matches_anchor_tokens(p.title_en, anchor_tokens, q_norm):
             continue
@@ -1759,7 +1798,7 @@ async def live_meta_search_and_persist(
         else:
             if not any(re.search(r"(?i)\b" + re.escape(tok) + r"\b", p.title_en.lower()) for tok in requested_acc):
                 continue
-        if not is_product_category_compatible(p.category, cat_id, cat_meta["display_en"], p.title_en):
+        if cat_id and not is_product_category_compatible(p.category, cat_id, cat_meta.get("display_en", ""), p.title_en):
             continue
 
         clean_img = validate_and_sanitize_image(p.image_url, p.title_en, q_norm, cat_id)
@@ -1798,6 +1837,15 @@ async def live_meta_search_and_persist(
         p.offers = unique_offers
         if p.image_url and len(p.offers) >= 1 and not is_placeholder_image(p.image_url):
             sanitized_cached.append(p)
+
+    seen_cached_titles = set()
+    deduped_cached = []
+    for cp in sanitized_cached:
+        clean_title_key = re.sub(r"[^a-z0-9]+", "", (cp.title_en or "").lower())
+        if clean_title_key not in seen_cached_titles:
+            seen_cached_titles.add(clean_title_key)
+            deduped_cached.append(cp)
+    sanitized_cached = deduped_cached
 
     user_explicit_wants_used = is_used_or_reconditioned_title(q_norm)
     has_cached_used = any(is_used_or_reconditioned_title(p.title_en) for p in sanitized_cached)
@@ -1868,11 +1916,20 @@ async def live_meta_search_and_persist(
     is_device_query = any(k in q_norm.lower() for k in ("iphone", "apple", "samsung", "galaxy", "pixel", "laptop", "macbook", "watch", "camera"))
     if is_device_query or len(scraped_listings) < 2:
         try:
-            wide_hits = await scrape_wide_net_multistore(distilled_kw, min_floor=min_hw_floor)
+            wide_hits = await scrape_wide_net_multistore(distilled_kw, min_floor=min_hw_floor, anchor_tokens=anchor_tokens)
             if wide_hits:
                 scraped_listings.extend(wide_hits)
         except Exception as e:
             print(f"[WideNet Scraper] Notice: {e}")
+
+    # Step 4C: STRICT ANCHOR TOKEN INTERSECTION GUARDIAN
+    # Enforces that every single scraped candidate contains the user's mandatory query tokens.
+    # Zero leakage: Apple TV or Galaxy Watch can NEVER pass a 'Walton Smart TV' query!
+    if anchor_tokens:
+        scraped_listings = [
+            c for c in scraped_listings
+            if matches_anchor_tokens(c.get("title", ""), anchor_tokens, q_norm)
+        ]
 
     # Step 4C: DEVICE VS. ACCESSORY PRICE-FLOOR GUARDIAN
     # Purges accessory traps when user requested a primary device
@@ -2020,6 +2077,8 @@ async def live_meta_search_and_persist(
             stores_seen.add(s_name)
             seen_urls.add(offer_url)
 
+            if offer_url:
+                record_discovered_merchant_domain(db, offer_url, s_name, prod_category)
             s_meta = get_store_registry_meta(s_name, title_en)
             w_url = s_meta["website_url"] or (offer_url if "facebook" not in offer_url else "")
             fb_url = s_meta["facebook_url"] or (offer_url if "facebook" in offer_url else "")

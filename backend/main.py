@@ -9,6 +9,7 @@ from typing import List, Optional
 from urllib.parse import quote, quote_plus, urlparse, urljoin
 import uuid
 import mimetypes
+import hashlib
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import BackgroundTasks, Body, Depends, FastAPI, File, Header, HTTPException, Query, Request, Response, UploadFile, status
@@ -31,6 +32,8 @@ from models import (
     SpotlightCard,
     StoreOffer,
     TickerAd,
+    SearchTelemetry,
+    DiscoveredDomain,
 )
 from schemas import (
     AdLeadCreate,
@@ -768,6 +771,7 @@ async def search_suggestions(q: Optional[str] = Query(None, description="Prefix 
 
 @app.get("/api/v1/search/live", response_model=List[ProductResponse])
 async def search_products_live(
+    request: Request,
     q: Optional[str] = Query(None, description="Product query to search and scrape dynamically"),
     category: Optional[str] = Query(None, description="Optional category filter"),
     subcategory: Optional[str] = Query(None, description="Optional subcategory filter"),
@@ -815,6 +819,25 @@ async def search_products_live(
         return build_predetermined_browse_products("mobile-gadgets")
 
     products = await live_meta_search_and_persist(query_str, category, db)
+
+    # Telemetry logging for continuous SLM distillation & emerging query tracking
+    try:
+        ip_raw = request.client.host if request and request.client else "127.0.0.1"
+        ip_hash = hashlib.sha256(ip_raw.encode("utf-8")).hexdigest()[:16]
+        cat_hint = category or (products[0].category if products else None)
+        telemetry_row = SearchTelemetry(
+            raw_query=query_str,
+            normalized_query=query_str.lower().strip(),
+            category_hint=cat_hint,
+            results_count=len(products),
+            ip_hash=ip_hash,
+            created_at=datetime.utcnow(),
+        )
+        db.add(telemetry_row)
+        db.commit()
+    except Exception:
+        db.rollback()
+
     return products
 
 
@@ -2258,4 +2281,101 @@ def admin_get_leaderboard_status(
     return {
         "status": "success",
         "data": LEADERBOARD_ADMIN_STATE,
+    }
+
+
+class SearchClickLogRequest(BaseModel):
+    query: str
+    store_name: str
+    product_url: str
+    product_id: Optional[int] = None
+
+
+@app.post("/api/v1/telemetry/click")
+async def log_search_click(
+    payload: SearchClickLogRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Logs clicked offers for continuous SLM distillation and merchant CTR analytics."""
+    try:
+        ip_raw = request.client.host if request and request.client else "127.0.0.1"
+        ip_hash = hashlib.sha256(ip_raw.encode("utf-8")).hexdigest()[:16]
+
+        click_entry = ClickLog(
+            target_type="store_offer",
+            target_id=payload.product_id or 0,
+            brand_or_store_name=payload.store_name,
+            device_type="desktop",
+            destination_url=payload.product_url,
+            clicked_at=datetime.utcnow(),
+        )
+        db.add(click_entry)
+
+        q_norm = payload.query.lower().strip()
+        latest_tel = (
+            db.query(SearchTelemetry)
+            .filter(SearchTelemetry.normalized_query == q_norm)
+            .order_by(desc(SearchTelemetry.created_at))
+            .first()
+        )
+        if latest_tel:
+            latest_tel.clicked_store_name = payload.store_name
+            latest_tel.clicked_product_url = payload.product_url
+
+        db.commit()
+        return {"status": "ok", "logged": True}
+    except Exception as e:
+        db.rollback()
+        return {"status": "error", "message": str(e)}
+
+
+@app.get("/api/v1/telemetry/slm-dataset")
+async def export_slm_dataset(
+    limit: int = Query(500, description="Max training examples"),
+    db: Session = Depends(get_db),
+):
+    """Exports structured query-entity-store pairs for continuous SLM fine-tuning and domain expansion."""
+    from sqlalchemy import func
+
+    query_stats = (
+        db.query(
+            SearchTelemetry.normalized_query,
+            SearchTelemetry.category_hint,
+            func.count(SearchTelemetry.id).label("search_count"),
+            func.max(SearchTelemetry.results_count).label("max_results"),
+        )
+        .group_by(SearchTelemetry.normalized_query, SearchTelemetry.category_hint)
+        .order_by(desc("search_count"))
+        .limit(limit)
+        .all()
+    )
+
+    dataset = []
+    for q_norm, cat_hint, count, max_res in query_stats:
+        clicked_stores = [
+            row[0]
+            for row in (
+                db.query(SearchTelemetry.clicked_store_name)
+                .filter(SearchTelemetry.normalized_query == q_norm, SearchTelemetry.clicked_store_name.isnot(None))
+                .distinct()
+                .limit(5)
+                .all()
+            )
+            if row[0]
+        ]
+        dataset.append({
+            "query": q_norm,
+            "category": cat_hint or "General",
+            "search_count": count,
+            "has_results": (max_res or 0) > 0,
+            "results_count": max_res or 0,
+            "clicked_stores": clicked_stores,
+            "is_zero_hit_query": (max_res or 0) == 0,
+        })
+
+    return {
+        "dataset_size": len(dataset),
+        "exported_at": datetime.utcnow().isoformat(),
+        "examples": dataset,
     }

@@ -2817,125 +2817,6 @@ const REGISTRY_CATEGORIES = [
 
 
 
-const getDynamicLoadingStores = (queryText) => {
-  const q = (queryText || '').toLowerCase();
-
-  // 1. Beauty & Skincare (High priority keyword routing)
-  const skincareKeywords = [
-    'cream', 'crem', 'krim', 'lotion', 'sunscreen', 'sunblock', 'spf', 'serum', 'cleanser', 'toner',
-    'moisturizer', 'moisturiser', 'gel', 'facewash', 'face wash', 'ampoule', 'essence', 'scrub',
-    'lip balm', 'lipstick', 'foundation', 'shampoo', 'conditioner', 'althea', 'athlea', 'cosrx',
-    'cerave', 'cetaphil', 'centella', 'joseon', 'anua', 'torriden', 'round lab', 'ordinary',
-    'innisfree', 'laneige', 'shajgoj', 'bioderma', 'beauty', 'skincare', 'cosmetic', 'makeup',
-    'বিউটি', 'স্কিনকেয়ার', 'ক্রিম', 'লোশন', 'সানস্ক্রিন', 'সিরাম', 'টোনার', 'ফেসওয়াশ'
-  ];
-  if (skincareKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Beauty Booth BD, Shajgoj, Korean Mart BD, BanglaShoppers & authentic skincare outlets...',
-      textBn: 'বিউটি বুথ, সাজগোজ, কোরিয়ান মার্ট, বাংলাশপার্স ও খাঁটি স্কিনকেয়ার শপ স্ক্যান করা হচ্ছে...',
-      stores: ['Beauty Booth BD', 'Shajgoj', 'Korean Mart BD', 'BanglaShoppers', 'Makeup Chari', 'The Mall BD']
-    };
-  }
-
-  // 2. Gaming Consoles & Handhelds
-  const gamingKeywords = [
-    'ps5', 'playstation', 'xbox', 'nintendo', 'switch', 'console', 'dualsense', 'steam deck',
-    'rog ally', 'গেমিং', 'কনসোল'
-  ];
-  if (gamingKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Star Tech, Game Over BD, Gamers Republic, Ryans & verified gaming hubs...',
-      textBn: 'স্টার টেক, গেম ওভার বিডি, গেমার্স রিপাবলিক, রায়ান্স ও ভেরিফায়েড গেমিং হাব স্ক্যান করা হচ্ছে...',
-      stores: ['Star Tech', 'Game Over BD', 'Gamers Republic BD', 'Ryans Gaming', 'TechLand BD']
-    };
-  }
-
-  // 3. Watches & Horology (Smartwatches & Traditional)
-  const watchKeywords = [
-    'watch', 'smartwatch', 'smart watch', 'apple watch', 'galaxy watch', 'amazfit', 'haylou',
-    'casio', 'edifice', 'g-shock', 'gshock', 'tissot', 'seiko', 'rolex', 'omega', 'citizen',
-    'fossil', 'kieslect', 'mibro', 'ঘড়ি', 'স্মার্টওয়াচ'
-  ];
-  if (watchKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Time Zone BD, Watch Zone BD, Mohammad & Sons, Apple Gadgets & authorized horology outlets...',
-      textBn: 'টাইম জোন, ওয়াচ জোন, মোহাম্মদ অ্যান্ড সন্স ও ভেরিফাইড ঘড়ির শপ স্ক্যান করা হচ্ছে...',
-      stores: ['Time Zone BD', 'Watch Zone BD', 'Apple Gadgets BD', 'Mohammad & Sons', 'Dazzle BD']
-    };
-  }
-
-  // 4. Laptops & PC Hardware
-  const laptopKeywords = [
-    'laptop', 'notebook', 'macbook', 'vivobook', 'zenbook', 'thinkpad', 'ideapad', 'legion',
-    'spectre', 'infinix inbook', 'inspiron', 'pavilion', 'desktop', 'monitor', 'processor',
-    'ryzen', 'intel core', 'graphics card', 'rtx', 'ram', 'ssd', 'ল্যাপটপ', 'কম্পিউটার'
-  ];
-  if (laptopKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Star Tech, Ryans Computers, TechLand, Computer Mania & authentic PC outlets...',
-      textBn: 'স্টার টেক, রায়ান্স, টেকল্যান্ড, কম্পিউটার ম্যানিয়া ও অনুমোদিত পিসি আউটলেট স্ক্যান করা হচ্ছে...',
-      stores: ['Star Tech BD', 'Ryans Computers', 'TechLand BD', 'Computer Mania BD', 'Custom Mac BD']
-    };
-  }
-
-  // 5. Cameras & Photography
-  const cameraKeywords = [
-    'camera', 'dslr', 'mirrorless', 'lens', 'photography', 'canon eos', 'sony alpha',
-    'nikon z', 'fujifilm', 'gopro', 'dji pocket', 'dji osmo', 'dji mini', 'drone', 'ক্যামেরা'
-  ];
-  if (cameraKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Cameraluz BD, Digital Camera BD, Star Tech Cameras & verified photography stores...',
-      textBn: 'ক্যামেরালুজ, ডিজিটাল ক্যামেরা শপ, স্টার টেক ও ভেরিফাইড ফটোগ্রাফি গিয়ার শপ স্ক্যান করা হচ্ছে...',
-      stores: ['Cameraluz BD', 'Star Tech Cameras', 'Ryans Cameras', 'Digital Camera BD', 'Sony Centre']
-    };
-  }
-
-  // 6. Home Appliances & White Goods
-  const applianceKeywords = [
-    'fridge', 'refrigerator', 'ac', 'air conditioner', 'inverter', 'washing machine', 'tv', 'television',
-    'microwave', 'oven', 'blender', 'purifier', 'appliance', 'হোম', 'অ্যাপ্লায়েন্স'
-  ];
-  if (applianceKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Transcom Digital, Singer BD, Walton Plaza, Butterfly BD & authentic appliance showrooms...',
-      textBn: 'ট্রান্সকম ডিজিটাল, সিঙ্গার, ওয়ালটন প্লাজা ও বাটারফ্লাই শোরুম থেকে রেট নেওয়া হচ্ছে...',
-      stores: ['Transcom Digital', 'Singer BD', 'Walton Plaza', 'Butterfly BD', 'Rangs eMart']
-    };
-  }
-
-  // 7. Bicycles & EVs
-  const cycleKeywords = [
-    'bike', 'cycle', 'bicycle', 'mtb', 'mountain bike', 'veloce', 'duranta', 'firefox',
-    'scooter', 'electric bike', 'ev', 'সাইকেল', 'বাইক'
-  ];
-  if (cycleKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Duranta Sports, Veloce Bicycles, Lion Cycle & authentic cycle showrooms...',
-      textBn: 'দুরন্ত, ভেলস, লায়ন সাইকেল ও ভেরিফাইড সাইকেল শোরুম স্ক্যান করা হচ্ছে...',
-      stores: ['Duranta Sports', 'Veloce Bicycles', 'Lion Cycle', 'Dream Cycle Store', 'Walton Plaza']
-    };
-  }
-
-  // 8. Fine Jewelry (Gold & Diamond)
-  const jewelryKeywords = [
-    'gold', 'diamond', '22k', '21k', 'hallmark', 'সোনার', 'হীরা'
-  ];
-  if (jewelryKeywords.some((k) => q.includes(k))) {
-    return {
-      textEn: 'Querying Diamond World, Apan Jewellers, Al-Amin Jewellers & hallmarked jewelry stores...',
-      textBn: 'ডায়মন্ড ওয়ার্ল্ড, আপন জুয়েলার্স ও হলমার্ক করা খাঁটি সোনার দোকান স্ক্যান করা হচ্ছে...',
-      stores: ['Diamond World', 'Apan Jewellers', 'Al-Amin Jewellers', 'Venus Jewellers', 'Gaurav Jewellers']
-    };
-  }
-
-  // 9. Default: Mobile Phones, Tablets & Smart Gadgets
-  return {
-    textEn: 'Querying Apple Gadgets BD, Dazzle BD, Sumash Tech, Star Tech & authentic gadget outlets...',
-    textBn: 'অ্যাপল গ্যাজেটস, ড্যাজল, সুমাশ টেক, স্টার টেক ও অন্যান্য ভেরিফাইড শপ থেকে লাইভ রেট নেওয়া হচ্ছে...',
-    stores: ['Apple Gadgets BD', 'Dazzle BD', 'Sumash Tech', 'Star Tech BD', 'Pickaboo']
-  };
-};
 
 const CATEGORY_FALLBACK_IMAGES = {
 
@@ -4902,7 +4783,7 @@ export default function App() {
 
 
 
-      const rawData = await searchLiveProducts(q, categoryFilter, isBrowse || categoryFilter !== 'all');
+      const rawData = await searchLiveProducts(q, categoryFilter, Boolean(isBrowse));
 
 
 
@@ -6147,10 +6028,10 @@ export default function App() {
             {showSuggestions && suggestionsData.suggestions?.length > 0 && (
               <div
                 ref={suggestionsRef}
-                className="absolute left-0 right-0 top-full mt-2 bg-[#0B0F19] border border-white/20 rounded-2xl shadow-2xl overflow-hidden z-[9999] text-left py-2 text-white"
-                style={{ backgroundColor: '#0B0F19', opacity: 1 }}
+                className="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200/90 rounded-2xl shadow-2xl overflow-hidden z-[9999] text-left py-1 text-slate-900 ring-1 ring-black/5"
+                style={{ backgroundColor: '#ffffff', opacity: 1 }}
               >
-                <div className="py-1 divide-y divide-white/5">
+                <div className="py-1 divide-y divide-slate-100">
                   {suggestionsData.suggestions.map((item, idx) => {
                     const isHighlighted = highlightedIndex === idx;
                     return (
@@ -6164,14 +6045,14 @@ export default function App() {
                           executeLiveSearch(item.title, 'all');
                         }}
                         className={`w-full px-5 py-3 flex items-center justify-between transition cursor-pointer text-left ${
-                          isHighlighted ? 'bg-[#FFC857]/20 text-[#FFC857]' : 'text-slate-100 hover:bg-white/10'
+                          isHighlighted ? 'bg-teal-50 text-teal-900 font-semibold border-l-4 border-teal-600 pl-4' : 'text-slate-800 hover:bg-slate-50 font-medium'
                         }`}
                       >
                         <div className="flex items-center gap-3 min-w-0 pr-3">
-                          <Search className={`w-4 h-4 shrink-0 ${isHighlighted ? 'text-[#FFC857]' : 'text-slate-400'}`} />
+                          <Search className={`w-4 h-4 shrink-0 transition-colors ${isHighlighted ? 'text-teal-600' : 'text-slate-400'}`} />
                           <span className="text-sm font-semibold truncate tracking-tight">{item.title}</span>
                         </div>
-                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 opacity-60 shrink-0" />
+                        <ArrowUpRight className={`w-3.5 h-3.5 shrink-0 transition-colors ${isHighlighted ? 'text-teal-600' : 'text-slate-400'}`} />
                       </button>
                     );
                   })}
@@ -7767,124 +7648,27 @@ export default function App() {
 
 
 
-            {isSearching ? (() => {
-
-
-
-              const dynInfo = getDynamicLoadingStores(activeSearchQuery);
-
-
-
-              return (
-
-
-
-                <div className="bg-[#FFFFFF] border border-[#DDE3EA] rounded-3xl p-10 sm:p-14 text-center max-w-2xl mx-auto my-8 shadow-xl relative overflow-hidden">
-
-
-
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#14B8A6]/5 to-transparent animate-pulse pointer-events-none" />
-
-
-
-                  <div className="relative z-10 flex flex-col items-center">
-
-
-
-                    <div className="w-16 h-16 rounded-full bg-[#14B8A6]/15 border-2 border-[#14B8A6] flex items-center justify-center mb-4 relative">
-
-
-
-                      <Loader2 className="w-8 h-8 text-[#14B8A6] animate-spin" />
-
-
-
-                      <span className="absolute inset-0 rounded-full border border-[#14B8A6]/40 animate-ping" />
-
-
-
-                    </div>
-
-
-
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#101B2D] mb-2">
-
-
-
-                      {lang === 'bn'
-
-
-
-                        ? `দোকানগুলো স্ক্যান করে '${activeSearchQuery}'-এর সেরা দাম খোঁজা হচ্ছে...`
-
-
-
-                        : `Scanning Bangladeshi stores & extracting live prices for '${activeSearchQuery}'...`}
-
-
-
-                    </h3>
-
-
-
-                    <p className="text-xs sm:text-sm text-[#334155] max-w-md mx-auto mb-5">
-
-
-
-                      {lang === 'bn' ? dynInfo.textBn : dynInfo.textEn}
-
-
-
-                    </p>
-
-
-
-                    <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] uppercase font-bold text-[#334155]">
-
-
-
-                      {dynInfo.stores.map((storeChip, sIdx) => (
-
-
-
-                        <span key={sIdx} className="px-2.5 py-1 rounded-full bg-[#F5F7FA] border border-[#DDE3EA]">
-
-
-
-                          {storeChip}
-
-
-
-                        </span>
-
-
-
-                      ))}
-
-
-
-                    </div>
-
-                    <div className="mt-5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] sm:text-xs text-[#475569] leading-relaxed max-w-lg mx-auto text-left sm:text-center">
-                      <span className="font-semibold text-amber-700">💡 {lang === 'bn' ? 'জেনে রাখুন:' : 'Note:'}</span>{' '}
-                      {lang === 'bn'
-                        ? 'আপনার কাঙ্ক্ষিত পণ্যটি না পেলে তা হয়তো স্টকে নেই, অথবা ১ বছরের বেশি পুরনো হওয়ায় অপ্রাসঙ্গিক ও বিভ্রান্তিকর দাম পরিহার করতে ফিল্টার করা হয়েছে।'
-                        : "If a product doesn't appear, it is either currently out of stock or filtered out because the listings were over 1 year old and no longer reflect authentic market rates."}
-                    </div>
-
+            {isSearching ? (
+              <div className="bg-[#FFFFFF] border border-[#DDE3EA] rounded-3xl p-10 sm:p-14 text-center max-w-2xl mx-auto my-8 shadow-xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#14B8A6]/5 to-transparent animate-pulse pointer-events-none" />
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="w-16 h-16 rounded-full bg-[#14B8A6]/15 border-2 border-[#14B8A6] flex items-center justify-center mb-4 relative">
+                    <Loader2 className="w-8 h-8 text-[#14B8A6] animate-spin" />
+                    <span className="absolute inset-0 rounded-full border border-[#14B8A6]/40 animate-ping" />
                   </div>
-
-
-
+                  <h3 className="font-display text-lg sm:text-xl font-bold text-[#101B2D] mb-2">
+                    {lang === 'bn'
+                      ? `'${activeSearchQuery}'-এর লাইভ রেট স্ক্যান করা হচ্ছে...`
+                      : `Scanning Bangladeshi stores & extracting live prices for '${activeSearchQuery}'...`}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#475569] max-w-md mx-auto">
+                    {lang === 'bn'
+                      ? 'ভেরিফাইড বাংলাদেশি বিক্রেতাদের লাইভ প্রাইস, ওয়ারেন্টি ও স্টক স্ট্যাটাস যাচাই করা হচ্ছে...'
+                      : 'Comparing authentic retailers across Bangladesh and verifying real-time stock & pricing in seconds.'}
+                  </p>
                 </div>
-
-
-
-              );
-
-
-
-            })() : searchResults.length === 0 ? (
+              </div>
+            ) : searchResults.length === 0 ? (
 
 
 

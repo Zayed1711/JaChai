@@ -1811,6 +1811,8 @@ def store_matches_department_capability(store_name: str, category_id: str, query
       3. Inside mobile-gadgets: Earphone/Speaker/Charger queries go to Gadget stores; Handset queries go to Phone retailers.
       4. Inside cycles: EVs go strictly to EV stores; Bicycles go strictly to Bicycle stores.
     """
+    if not category_id or category_id == "all":
+        return True
     s_low = (store_name or "").lower()
     q_low = (query or "").lower()
 

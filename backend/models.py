@@ -182,9 +182,40 @@ class HomepageBlock(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
+class SearchTelemetry(Base):
+    """Logs raw user search traffic, zero-hit queries, and clicked offers for continuous SLM distillation."""
+    __tablename__ = "search_telemetry"
+
+    id = Column(Integer, primary_key=True, index=True)
+    raw_query = Column(String(255), nullable=False, index=True)
+    normalized_query = Column(String(255), nullable=False, index=True)
+    category_hint = Column(String(100), nullable=True)
+    results_count = Column(Integer, default=0, nullable=False)
+    clicked_store_name = Column(String(150), nullable=True)
+    clicked_product_url = Column(String(500), nullable=True)
+    ip_hash = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class DiscoveredDomain(Base):
+    """Dynamic Bangladeshi merchant domain registry for self-expanding crawler coverage without static hardcoding."""
+    __tablename__ = "discovered_domains"
+
+    id = Column(Integer, primary_key=True, index=True)
+    domain = Column(String(150), unique=True, index=True, nullable=False)
+    store_name = Column(String(150), nullable=False)
+    primary_category = Column(String(100), nullable=True)
+    is_verified = Column(Boolean, default=False, nullable=False)
+    crawl_success_count = Column(Integer, default=0, nullable=False)
+    crawl_fail_count = Column(Integer, default=0, nullable=False)
+    last_crawled_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 def ensure_schema_migrations():
     """Auto-adds missing columns and performance indexes to existing SQLite DBs without losing data."""
     try:
+        Base.metadata.create_all(bind=engine)
         insp = inspect(engine)
         if "store_offers" in insp.get_table_names():
             cols = {c["name"] for c in insp.get_columns("store_offers")}

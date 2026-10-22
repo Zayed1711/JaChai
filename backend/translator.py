@@ -55,7 +55,7 @@ def _normalize_category_hint(raw_hint: str, clean_q: str, attrs: Dict[str, Any])
     # Semantic head-noun & context disambiguation (Polysemy & Domain Principles)
     if re.search(r"\b(facial|skincare|face\s*wash|body\s*wash|hair\s*oil|onion\s*oil|makeup|serum|sunscreen|cleanser)\b", combined):
         return "beauty-skincare"
-        if re.search(r"\b(dslr|mirrorless|eos|a6400|a7|camera\s*body|kit\s*lens|camera)\b", combined):
+    if re.search(r"\b(dslr|mirrorless|eos|a6400|a7|camera\s*body|kit\s*lens|camera)\b", combined):
         return "cameras-photography"
     if re.search(r"\b(barca|barcelona|real\s*madrid|argentina|brazil|football\s*jersey|home\s*kit|away\s*kit|resistance\s*band|dumbbell|gym)\b", combined):
         return "sportswear-gym"
@@ -69,7 +69,7 @@ def _normalize_category_hint(raw_hint: str, clean_q: str, attrs: Dict[str, Any])
         return "watches-horology"
     if re.search(r"\b(22k|21k|24k|gold\s*band|gold\s*ring|gold\s*chain|diamond|hallmark)\b", combined):
         return "fine-jewelry"
-                if re.search(r"\b(football\s*boots|mercurial|sneakers|running\s*shoes|loafers|footwear)\b", combined):
+    if re.search(r"\b(football\s*boots|mercurial|sneakers|running\s*shoes|loafers|footwear)\b", combined):
         return "sneakers-footwear"
     if re.search(r"\b(takyon|electric\s*bike|e-bike|e-scooter|ev\s*cycle)\b", combined):
         return "cycles-evs"
