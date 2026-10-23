@@ -1,4 +1,4 @@
-from contextlib import asynccontextmanager
+﻿from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import ipaddress
 import os
@@ -175,17 +175,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Enable secure CORS for local, LAN and web development
+# Enable secure CORS for local, LAN and web development (including Vercel production/preview)
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+)(:\d+)?$",
+    allow_origin_regex=r"^https?://([a-zA-Z0-9\-]+\.)?(vercel\.app|localhost|127\.0\.0\.1)(:\d+)?$",
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
+        "https://ja-chai-five.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
