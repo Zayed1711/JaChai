@@ -1,4 +1,6 @@
+import re
 from datetime import datetime
+from typing import Optional
 from sqlalchemy import (
     Boolean,
     Column,
@@ -93,6 +95,15 @@ class Product(Base):
         cascade="all, delete-orphan",
         order_by="PriceHistory.recorded_at.asc()"
     )
+
+    @property
+    def variant(self) -> Optional[str]:
+        if not self.title_en:
+            return None
+        matches = re.findall(r"\(([^)]+)\)", self.title_en)
+        if matches:
+            return " · ".join(m.strip() for m in matches)
+        return None
 
 
 class StoreOffer(Base):

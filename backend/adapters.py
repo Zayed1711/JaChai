@@ -597,7 +597,10 @@ async def scrape_bicycles_live(q: str, limit: int = 8) -> List[Dict[str, Any]]:
     for sq in ddg_queries:
         if len(out) >= 4:
             break
-        results = await asyncio.to_thread(_search_ddg, sq)
+        try:
+            results = await asyncio.wait_for(asyncio.to_thread(_search_ddg, sq), timeout=5.0)
+        except Exception:
+            results = []
         for r in results:
             title = (r.get("title") or "").strip()
             href = (r.get("href") or "").strip()
@@ -849,7 +852,10 @@ async def scrape_bangladesh_web_live(
             f"{clean_q} bangladesh online shop price BDT",
         ]
         for sq in search_queries:
-            hits = await asyncio.to_thread(_run_ddg, sq)
+            try:
+                hits = await asyncio.wait_for(asyncio.to_thread(_run_ddg, sq), timeout=5.0)
+            except Exception:
+                hits = []
             if hits:
                 raw_hits.extend(hits)
             if len(raw_hits) >= 10:

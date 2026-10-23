@@ -989,7 +989,7 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
             "canon m50", "sony alpha", "sony a6400", "sony a6700", "sony a7iii", "sony a7iv", "sony zv-e10",
             "zve10", "nikon camera", "nikon d5600", "nikon d7500", "nikon z50", "nikon z6", "fujifilm camera",
             "instax mini", "polaroid camera", "gopro", "gopro hero", "insta360", "dji osmo", "osmo pocket",
-            "dji action", "camera lens", "prime lens", "50mm lens", "85mm lens", "zoom lens", "sigma lens",
+            "dji action", "lens", "lenses", "camera lens", "prime lens", "zoom lens", "50mm", "85mm", "35mm", "24-70mm", "70-200mm", "sigma lens",
             "tamron lens", "camera gimbal", "camera tripod", "used dslr", "reconditioned camera", "camera",
             "kemera", "camara", "dslr kemera", "kenera",
             "\u0995\u09cd\u09af\u09be\u09ae\u09c7\u09b0\u09be", "\u09a1\u09bf\u098f\u09b8\u098f\u09b2\u0986\u09b0",
@@ -1826,7 +1826,7 @@ def store_matches_department_capability(store_name: str, category_id: str, query
     # Never allow PC component shops in non-PC categories unless it's cameras or mobile/gadget items they officially retail
     pc_shops = ("star tech", "ryans", "techland", "skyland", "pc house", "ucc", "binary logic", "potaka it", "computer mania", "ultra technology")
     if category_id != "laptops-pc" and any(ps in s_low for ps in pc_shops):
-        is_camera = category_id == "cameras-photography" and any(c in q_low for c in ("camera", "dslr", "gopro", "sony", "canon", "nikon"))
+        is_camera = category_id == "cameras-photography" and any(c in q_low for c in ("camera", "dslr", "gopro", "sony", "canon", "nikon", "lens", "50mm", "tripod", "gimbal", "flash"))
         is_mobile_gadget = category_id == "mobile-gadgets" and any(g in q_low for g in ("iphone", "apple", "phone", "mobile", "samsung", "galaxy", "pixel", "watch", "smartwatch", "tablet", "ipad", "airpods", "earbuds", "headphone", "gadget", "powerbank"))
         if not (is_camera or is_mobile_gadget):
             return False

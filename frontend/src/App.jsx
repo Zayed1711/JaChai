@@ -3089,6 +3089,7 @@ export default function App() {
   const [activeDisambiguationPills, setActiveDisambiguationPills] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const suggestionsRef = useRef(null);
+  const skipNextSuggestionsRef = useRef(false);
 
 
 
@@ -3346,6 +3347,12 @@ export default function App() {
       return;
     }
 
+    if (skipNextSuggestionsRef.current) {
+      skipNextSuggestionsRef.current = false;
+      setShowSuggestions(false);
+      return;
+    }
+
     const timer = setTimeout(async () => {
       try {
         const data = await fetchSearchSuggestions(searchQuery.trim());
@@ -3374,6 +3381,14 @@ export default function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSelectSuggestion = (title, catId = 'all') => {
+    skipNextSuggestionsRef.current = true;
+    setShowSuggestions(false);
+    setSuggestionsData({ suggestions: [], did_you_mean: [] });
+    setSearchQuery(title);
+    executeLiveSearch(title, catId);
+  };
 
 
 
@@ -5920,9 +5935,7 @@ export default function App() {
                     if (highlightedIndex >= 0 && suggestionsData.suggestions && suggestionsData.suggestions[highlightedIndex]) {
                       e.preventDefault();
                       const item = suggestionsData.suggestions[highlightedIndex];
-                      setSearchQuery(item.title);
-                      setShowSuggestions(false);
-                      executeLiveSearch(item.title, item.category_id || 'all');
+                      handleSelectSuggestion(item.title, item.category_id || 'all');
                     }
                   }
                 }}
@@ -6039,10 +6052,13 @@ export default function App() {
                         key={idx}
                         type="button"
                         onMouseEnter={() => setHighlightedIndex(idx)}
-                        onClick={() => {
-                          setSearchQuery(item.title);
-                          setShowSuggestions(false);
-                          executeLiveSearch(item.title, 'all');
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          handleSelectSuggestion(item.title, item.category_id || 'all');
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSelectSuggestion(item.title, item.category_id || 'all');
                         }}
                         className={`w-full px-5 py-3 flex items-center justify-between transition cursor-pointer text-left ${
                           isHighlighted ? 'bg-teal-50 text-teal-900 font-semibold border-l-4 border-teal-600 pl-4' : 'text-slate-800 hover:bg-slate-50 font-medium'
@@ -7787,6 +7803,12 @@ export default function App() {
 
                         </span>
 
+                          {product.variant && (
+                            <span className="px-2 py-0.5 rounded-md bg-[#F0FDFA] border border-[#0D9488]/30 text-[#0F766E] text-[10px] font-black tracking-wide uppercase">
+                              {product.variant}
+                            </span>
+                          )}
+
 
 
                         <span className="text-[11px] font-semibold text-[#334155]">
@@ -7894,6 +7916,15 @@ export default function App() {
 
 
                       </h3>
+
+                      {product.variant && (
+                        <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#E6FFFA] text-[#0F766E] border border-[#0D9488]/30 shadow-xs">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] shrink-0"></span>
+                            <span>{lang === 'bn' ? 'ভ্যারিয়েন্ট / কোয়ালিটি:' : 'Variant / Quality:'} <strong className="font-extrabold text-[#0D9488]">{product.variant}</strong></span>
+                          </span>
+                        </div>
+                      )}
 
 
 
@@ -8554,6 +8585,15 @@ export default function App() {
 
 
                   </h3>
+
+                  {inspectProduct.variant && (
+                    <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase bg-[#14B8A6]/20 text-[#2DD4BF] border border-[#14B8A6]/40 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] shrink-0"></span>
+                        <span>{lang === 'bn' ? 'ভ্যারিয়েন্ট / কোয়ালিটি: ' : 'Variant / Quality: '}<strong>{inspectProduct.variant}</strong></span>
+                      </span>
+                    </div>
+                  )}
 
 
 

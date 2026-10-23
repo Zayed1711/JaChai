@@ -273,6 +273,7 @@ def extract_mandatory_anchor_tokens(raw_query: str) -> List[str]:
 
     cleaned = re.sub(r"[^\w\s\u0980-\u09FF-]", " ", cleaned.lower())
     tokens = [t.strip() for t in cleaned.split() if len(t.strip()) >= 2 and t.strip() not in STOP_WORDS]
+    tokens = [t for t in tokens if not re.match(r"^f\d+$", t)]
     return tokens or [raw_query.strip().lower()]
 
 

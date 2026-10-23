@@ -862,6 +862,14 @@ export function mapProductItem(p) {
   const badgeEn = isBrowse ? 'Starts From' : (p.discount_percent > 0 ? `Flat ${p.discount_percent}% Off` : 'Best Deal');
   const badgeBn = isBrowse ? 'শুরু এখান থেকে' : (p.discount_percent > 0 ? `${p.discount_percent}% ছাড়` : 'সেরা ডিল');
 
+  let variant = p.variant;
+  if (!variant && p.title_en) {
+    const matches = Array.from(p.title_en.matchAll(/\(([^)]+)\)/g)).map(m => m[1].trim());
+    if (matches.length > 0) {
+      variant = matches.join(' · ');
+    }
+  }
+
   return {
     id: p.id,
     key: p.slug,
@@ -870,6 +878,7 @@ export function mapProductItem(p) {
     categoryBn: p.category || 'সেরা ডিল',
     nameEn: p.title_en,
     nameBn: p.title_bn,
+    variant: variant || null,
     price: lowest,
     originalPrice: original,
     storeCount: offers.length,

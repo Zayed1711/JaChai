@@ -243,6 +243,7 @@ class ProductBase(BaseModel):
     specs_summary: Optional[str] = None
     price_30d_ago: Optional[int] = 0
     price_15d_ago: Optional[int] = 0
+    variant: Optional[str] = None
     is_pinned_homepage: Optional[bool] = True
     homepage_slot_order: Optional[int] = 0
 
@@ -260,6 +261,7 @@ class ProductUpdate(BaseModel):
     specs_summary: Optional[str] = None
     price_30d_ago: Optional[int] = None
     price_15d_ago: Optional[int] = None
+    variant: Optional[str] = None
     is_pinned_homepage: Optional[bool] = None
     homepage_slot_order: Optional[int] = None
 
