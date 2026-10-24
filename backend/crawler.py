@@ -1914,8 +1914,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
                         p_title = p.get("title", "")
                         if anchor_tokens and not matches_anchor_tokens(p_title, anchor_tokens, clean_q):
                             continue
-                        if p_price >= min_floor and full_u not in seen_urls:
+                        if p_price > 0 and full_u not in seen_urls:
                             seen_urls.add(full_u)
+                            is_anom = bool(min_floor and p_price < min_floor)
                             results.append({
                                 "title": p.get("title"),
                                 "price": int(p_price),
@@ -1926,6 +1927,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
                                 "source_type": "crawler",
                                 "is_real_scraped": True,
                                 "in_stock": True,
+                                "is_risky": is_anom,
+                                "risk_level": "high" if is_anom else "low",
+                                "trust_badge": "⚠️ Price Anomaly / High Risk" if is_anom else "Verified Store",
                             })
         except Exception:
             pass
@@ -1951,8 +1955,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
                             if nums:
                                 val = int(nums[0].replace(",", ""))
                                 full_u = name_el.get("href")
-                                if val >= min_floor and full_u and full_u not in seen_urls:
+                                if val > 0 and full_u and full_u not in seen_urls:
                                     seen_urls.add(full_u)
+                                    is_anom = bool(min_floor and val < min_floor)
                                     results.append({
                                         "title": title,
                                         "price": val,
@@ -1963,6 +1968,9 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
                                         "source_type": "crawler",
                                         "is_real_scraped": True,
                                         "in_stock": True,
+                                        "is_risky": is_anom,
+                                        "risk_level": "high" if is_anom else "low",
+                                        "trust_badge": "⚠️ Price Anomaly / High Risk" if is_anom else "Verified Store",
                                     })
         except Exception:
             pass
@@ -1981,8 +1989,13 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
                 w_title = wr.get("title", "")
                 if anchor_tokens and not matches_anchor_tokens(w_title, anchor_tokens, clean_q):
                     continue
-                if p_val >= min_floor and u and u not in seen_urls:
+                if p_val > 0 and u and u not in seen_urls:
                     seen_urls.add(u)
+                    is_anom = bool(min_floor and p_val < min_floor)
+                    if is_anom:
+                        wr["is_risky"] = True
+                        wr["risk_level"] = "high"
+                        wr["trust_badge"] = "⚠️ Price Anomaly / High Risk"
                     results.append(wr)
         except Exception:
             pass
@@ -2039,6 +2052,19 @@ async def live_meta_search_and_persist(
                 active_sponsor_brands.add(sp.brand_title_en.lower().strip())
     except Exception:
         pass
+
+    # Step 1.5: Check Appliances Model Catalog for instant, high-precision matching
+    try:
+        from appliances_catalog import match_appliances_catalog, build_appliance_product_card
+        app_match = match_appliances_catalog(q_norm)
+        if app_match:
+            existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == app_match["slug"]).first()
+            if existing and len(existing.offers) >= 1:
+                return [existing]
+            card = build_appliance_product_card(app_match)
+            return [card]
+    except Exception as e:
+        print(f"[Appliances Catalog Notice]: {e}")
 
     # Step 2: Check existing database cache
     term = f"%{search_kw}%"
@@ -2108,7 +2134,9 @@ async def live_meta_search_and_persist(
             off_price = getattr(off, "current_price", None) or getattr(off, "price_bdt", 0)
             min_hw_floor_cached = compute_min_hardware_floor(cat_id, search_kw, is_acc, max_budget_bdt)
             if off_price and off_price < min_hw_floor_cached:
-                continue
+                off.risk_level = "high"
+                off.trust_badge = "⚠️ Price Anomaly / High Risk"
+                off.trust_score = min(getattr(off, "trust_score", 45) or 45, 45)
             if max_budget_bdt and off_price and off_price > max_budget_bdt:
                 continue
 
@@ -2209,10 +2237,12 @@ async def live_meta_search_and_persist(
         ]
 
     min_hw_floor = compute_min_hardware_floor(cat_id, search_kw, is_acc, max_budget_bdt)
-    scraped_listings = [
-        c for c in scraped_listings
-        if (c.get("price") or 0) >= min_hw_floor
-    ]
+    for c in scraped_listings:
+        c_p = c.get("price") or 0
+        if c_p > 0 and c_p < min_hw_floor:
+            c["is_risky"] = True
+            c["risk_level"] = "high"
+            c["trust_badge"] = "⚠️ Unusually Low Price · High Risk"
 
     # Step 4B: WIDE-NET WEB DISCOVERY SCRAPER (Hits multi-category merchants simultaneously)
     is_device_query = any(k in q_norm.lower() for k in ("iphone", "apple", "samsung", "galaxy", "pixel", "laptop", "macbook", "watch", "camera"))
@@ -2257,9 +2287,14 @@ async def live_meta_search_and_persist(
         )
         scraped_listings = [
             c for c in scraped_listings
-            if (c.get("price") or 0) >= min_hw_floor
-            and not accessory_trap_re.search(c.get("title", ""))
+            if not accessory_trap_re.search(c.get("title", ""))
         ]
+        for c in scraped_listings:
+            c_p = c.get("price") or 0
+            if c_p > 0 and c_p < min_hw_floor:
+                c["is_risky"] = True
+                c["risk_level"] = "high"
+                c["trust_badge"] = "⚠️ Unusually Low Price · High Risk"
         # Generation token requirement: e.g. 'iphone 17' requires whole word '17' in title
         gen_m = re.search(r"iphone\s*(\d+)", q_norm.lower())
         if gen_m:
@@ -2443,7 +2478,13 @@ async def live_meta_search_and_persist(
                 price=float(curr_p),
                 all_prices=[float(p) for p in all_group_prices],
             )
-            if not is_pre:
+            if off.get("is_risky") or (min_hw_floor and curr_p > 0 and curr_p < min_hw_floor):
+                trust_res["risk_level"] = "high"
+                trust_res["trust_badge"] = "⚠️ Price Anomaly / High Risk"
+                trust_res["trust_score"] = min(trust_res.get("trust_score", 45), 45)
+                cod_en = "⚠️ Price Anomaly · Verify Authenticity on Delivery"
+                cod_bn = "⚠️ অস্বাভাবিক কম দাম · ডেলিভারিতে ভালো করে চেক করুন"
+            elif not is_pre:
                 trust_res["risk_level"] = "high"
                 trust_res["trust_badge"] = "⚠️ Unverified Merchant"
                 trust_res["trust_score"] = min(trust_res.get("trust_score", 55), 58)
@@ -2808,21 +2849,18 @@ async def run_all_spiders(
 
 def enforce_device_price_floor(query: str, items: list) -> list:
     """
-    Ensures high-ticket devices (iPhones, flagship phones, laptops) 
-    never get polluted by cheap accessories (cases, protectors, chargers) priced under a realistic floor.
+    Checks high-ticket devices against price guard rails.
+    Never drops products/shops: retains them in the comparison list and highlights them as risky.
     """
     q_low = query.lower()
     is_device_search = any(k in q_low for k in ("iphone", "galaxy s", "pixel", "macbook", "laptop", "watch"))
     is_accessory_explicit = any(k in q_low for k in ("case", "cover", "protector", "glass", "adapter", "cable", "strap"))
     
     if is_device_search and not is_accessory_explicit:
-        filtered = []
         for item in items:
             p = item.get("lowest_price") or item.get("current_price") or 0
-            # If an iPhone or flagship is listed under 15,000 BDT, it's an accessory/error—drop it.
-            if p > 15000 or any(kw in str(item.get("name","")).lower() for kw in ("pro", "max", "ultra", "tb", "gb")) and p > 8000:
-                filtered.append(item)
-            elif p > 30000: # Safe absolute floor for primary phones/laptops
-                filtered.append(item)
-        return filtered if filtered else items
+            if 0 < p < 15000:
+                item["is_risky"] = True
+                item["risk_level"] = "high"
+                item["trust_badge"] = "⚠️ Price Anomaly / High Risk"
     return items

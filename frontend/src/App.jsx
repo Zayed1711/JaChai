@@ -522,272 +522,87 @@ const INITIAL_TICKERS = [
 
 
 const INITIAL_BILLBOARDS = [
-
-
-
   {
-
-
-
-    id: 'bb-saree',
-
-
-
-    productKey: 'dr-althea-cream',
-    tagEn: 'FEATURED · KOREAN DERMA SKINCARE',
-    tagBn: 'ফিচার্ড · কোরিয়ান ডার্মা স্কিনকেয়ার',
-    brandEn: 'DR. ALTHEA DERMA RESEARCH',
-    brandBn: 'ডা. আলথিয়া ডার্মা রিসার্চ',
-    headlineLightEn: 'INTENSIVE 345',
-    headlineBoldEn: 'RELIEF CREAM',
-    headlineBn: 'ডা. আলথিয়া ৩৪৫ ইনটেনসিভ রিলিফ ক্রিম ৫০মি.লি.',
-    subtextEn: 'Fast-absorbing soothing barrier cream with resveratrol & centella. 100% verified authentic.',
-    subtextBn: 'রেসভেরাট্রল ও সেন্টেলা সমৃদ্ধ ইনটেনসিভ ব্যারিয়ার ক্রিম। ১০০% খাঁটি ও পরীক্ষিত।',
-    startingPrice: 2200,
-    originalPrice: 2600,
-    badgeEn: 'Verified Korean Authentic',
-    badgeBn: 'ভেরিফায়েড অথেনটিক',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80',
+    id: 'bb-slot-01',
+    productKey: 'advertise-slot-1',
+    tagEn: 'PREMIER HERO PLACEMENT · SLOT #01',
+    tagBn: 'প্রিমিয়ার হিরো প্লেসমেন্ট · স্লট #০১',
+    brandEn: 'BILLBOARD SLOT #01',
+    brandBn: 'বিলবোর্ড স্লট #০১',
+    headlineLightEn: 'YOUR AD',
+    headlineBoldEn: 'GOES HERE',
+    headlineBn: 'আপনার বিজ্ঞাপন এখানে দিন',
+    subtextEn: 'Reach 100,000+ verified active shoppers daily across Bangladesh. Click to reserve Slot #01.',
+    subtextBn: 'প্রতিদিন লক্ষাধিক সক্রিয় ক্রেতার কাছে পৌঁছান। স্লট #০১ বুক করতে ক্লিক করুন।',
+    startingPrice: 0,
+    originalPrice: 0,
+    badgeEn: 'Slot Available',
+    badgeBn: 'স্লট বুকিং উন্মুক্ত',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+    targetUrl: '/advertise',
     isActive: true
   },
-
-
-
   {
-
-
-
-    id: 'bb-watch',
-
-
-
-    productKey: 'luxury-watch',
-
-
-
-    tagEn: 'SPONSORED · LUXURY TIMEPIECE',
-
-
-
-    tagBn: 'স্পন্সরড · লাক্সারি টাইমপিস',
-
-
-
-    brandEn: 'CHRONOS SWISS HOROLOGY',
-
-
-
-    brandBn: 'ক্রোনোস সুইস হরোলোজি',
-
-
-
-    headlineLightEn: 'EMERALD',
-
-
-
-    headlineBoldEn: 'SWISS CHRONO',
-
-
-
-    headlineBn: 'সুইস অটোমেটিক এমারেল্ড মেকানিক্যাল ওয়াচ',
-
-
-
-    subtextEn: 'Self-winding automatic movement with anti-reflective sapphire glass & 2-year warranty.',
-
-
-
-    subtextBn: 'সেলফ-উইন্ডিং মেকানিক্যাল মুভমেন্ট, স্যাফায়ার গ্লাস ও ২ বছরের অফিসিয়াল ওয়ারেন্টি।',
-
-
-
-    startingPrice: 51900,
-
-
-
-    originalPrice: 58000,
-
-
-
-    badgeEn: '2-Year Warranty',
-
-
-
-    badgeBn: '২ বছর ওয়ারেন্টি',
-
-
-
-    image: '/images/luxury-watch.jpg',
-
-
-
+    id: 'bb-slot-02',
+    productKey: 'advertise-slot-2',
+    tagEn: 'PREMIER HERO PLACEMENT · SLOT #02',
+    tagBn: 'প্রিমিয়ার হিরো প্লেসমেন্ট · স্লট #০২',
+    brandEn: 'BILLBOARD SLOT #02',
+    brandBn: 'বিলবোর্ড স্লট #০২',
+    headlineLightEn: 'YOUR AD',
+    headlineBoldEn: 'GOES HERE',
+    headlineBn: 'আপনার বিজ্ঞাপন এখানে দিন',
+    subtextEn: 'High-visibility billboard placement on Bangladesh\'s sovereign price comparison portal.',
+    subtextBn: 'বাংলাদেশের শীর্ষ প্রাইস ইন্টেলিজেন্স প্ল্যাটফর্মে আপনার ব্র্যান্ড তুলে ধরুন।',
+    startingPrice: 0,
+    originalPrice: 0,
+    badgeEn: 'Slot Available',
+    badgeBn: 'স্লট বুকিং উন্মুক্ত',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80',
+    targetUrl: '/advertise',
     isActive: true
-
-
-
   },
-
-
-
   {
-
-
-
-    id: 'bb-keyboard',
-
-
-
-    productKey: 'retro-keyboard',
-
-
-
-    tagEn: 'SPONSORED · FANCY DESK GADGETS',
-
-
-
-    tagBn: 'স্পন্সরড · ফ্যান্সি ডেস্ক গ্যাজেটস',
-
-
-
-    brandEn: 'KEYCRAFT LABS BANGLADESH',
-
-
-
-    brandBn: 'কিক্রাফট ল্যাবস বাংলাদেশ',
-
-
-
-    headlineLightEn: 'RETRO 75%',
-
-
-
-    headlineBoldEn: 'WIRELESS DECK',
-
-
-
-    headlineBn: 'রেট্রো ৭৫% ওয়্যারলেস হট-সোয়াপ কিবোর্ড',
-
-
-
-    subtextEn: 'Tri-mode wireless connectivity, gasket mount, and pre-lubed switches. Compare 4 stores.',
-
-
-
-    subtextBn: 'ট্রাই-মোড ওয়্যারলেস, গ্যাসকেট মাউন্ট এবং প্রিমিয়াম সুইচ। ৪টি শপের আসল দাম তুলনা।',
-
-
-
-    startingPrice: 4890,
-
-
-
-    originalPrice: 5600,
-
-
-
-    badgeEn: 'Tri-Mode Wireless',
-
-
-
-    badgeBn: 'ট্রাই-মোড ওয়্যারলেস',
-
-
-
-    image: '/images/retro-keyboard.jpg',
-
-
-
+    id: 'bb-slot-03',
+    productKey: 'advertise-slot-3',
+    tagEn: 'PREMIER HERO PLACEMENT · SLOT #03',
+    tagBn: 'প্রিমিয়ার হিরো প্লেসমেন্ট · স্লট #০৩',
+    brandEn: 'BILLBOARD SLOT #03',
+    brandBn: 'বিলবোর্ড স্লট #০৩',
+    headlineLightEn: 'YOUR AD',
+    headlineBoldEn: 'GOES HERE',
+    headlineBn: 'আপনার বিজ্ঞাপন এখানে দিন',
+    subtextEn: 'Direct brand conversion and verified store traffic. Reserve this placement now.',
+    subtextBn: 'সরাসরি ব্রোশার ও স্টোর ট্রাফিকের জন্য এখনই এই স্লটটি বুক করুন।',
+    startingPrice: 0,
+    originalPrice: 0,
+    badgeEn: 'Slot Available',
+    badgeBn: 'স্লট বুকিং উন্মুক্ত',
+    image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80',
+    targetUrl: '/advertise',
     isActive: true
-
-
-
   },
-
-
-
   {
-
-
-
-    id: 'bb-shirt',
-
-
-
-    productKey: 'old-money-shirt',
-
-
-
-    tagEn: 'SPONSORED · SUMMER LIFESTYLE',
-
-
-
-    tagBn: 'স্পন্সরড · সামার লাইফস্টাইল',
-
-
-
-    brandEn: 'ATELIER DHAKA DRIP',
-
-
-
-    brandBn: 'অ্যাটেলিয়ার ঢাকা ড্রিপ',
-
-
-
-    headlineLightEn: 'OLD MONEY',
-
-
-
-    headlineBoldEn: 'CUBAN LINEN',
-
-
-
-    headlineBn: 'ওল্ড মানি টেক্সচার্ড কিউবান কলার শার্ট',
-
-
-
-    subtextEn: 'Breathable heavyweight cotton linen blend with relaxed fit & natural shell buttons.',
-
-
-
-    subtextBn: 'আরামদায়ক প্রিমিয়াম কটন লিনেন ব্লেন্ড ও রিল্যাক্সড ফিট। ৭ দিনের ফ্রি সাইজ এক্সচেঞ্জ।',
-
-
-
-    startingPrice: 890,
-
-
-
-    originalPrice: 1250,
-
-
-
-    badgeEn: 'Flat 29% Off',
-
-
-
-    badgeBn: '২৯% ছাড়',
-
-
-
-    image: '/images/old-money-shirt.jpg',
-
-
-
+    id: 'bb-slot-04',
+    productKey: 'advertise-slot-4',
+    tagEn: 'PREMIER HERO PLACEMENT · SLOT #04',
+    tagBn: 'প্রিমিয়ার হিরো প্লেসমেন্ট · স্লট #০৪',
+    brandEn: 'BILLBOARD SLOT #04',
+    brandBn: 'বিলবোর্ড স্লট #০৪',
+    headlineLightEn: 'YOUR AD',
+    headlineBoldEn: 'GOES HERE',
+    headlineBn: 'আপনার বিজ্ঞাপন এখানে দিন',
+    subtextEn: 'Targeted placement by category and shopping intent. Contact JaChai sales team.',
+    subtextBn: 'নির্দিষ্ট ক্যাটাগরিতে টার্গেটেড প্রচারণার জন্য যোগাযোগ করুন।',
+    startingPrice: 0,
+    originalPrice: 0,
+    badgeEn: 'Slot Available',
+    badgeBn: 'স্লট বুকিং উন্মুক্ত',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+    targetUrl: '/advertise',
     isActive: true
-
-
-
   }
-
-
-
 ];
-
-
-
-
-
-
 
 // --- INITIAL SIDE PANELS ---
 
@@ -7002,7 +6817,7 @@ export default function App() {
 
 
 
-                  onClick={() => openComparisonModal(currentBillboard.productKey)}
+                  onClick={() => (currentBillboard.startingPrice === 0 || (currentBillboard.headlineBoldEn || '').includes('GOES HERE')) ? (setSelectedAdTier('billboard'), setShowAdModal(true)) : openComparisonModal(currentBillboard.productKey)}
 
 
 
@@ -7030,7 +6845,7 @@ export default function App() {
 
 
 
-                  onClick={() => openComparisonModal(currentBillboard.productKey)}
+                  onClick={() => (currentBillboard.startingPrice === 0 || (currentBillboard.headlineBoldEn || '').includes('GOES HERE')) ? (setSelectedAdTier('billboard'), setShowAdModal(true)) : openComparisonModal(currentBillboard.productKey)}
 
 
 
@@ -7099,97 +6914,49 @@ export default function App() {
 
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
-
-
-
-                <button
-
-
-
-                  onClick={() => {
-
-
-
-                    openComparisonModal(currentBillboard.productKey);
-
-
-
-                    if (currentBillboard?.id) trackOutboundClick('billboard', currentBillboard.id);
-
-
-
-                  }}
-
-
-
-                  className="px-5 py-2.5 rounded-xl bg-[#FFC857] hover:bg-[#F5BA3D] text-[#101B2D] font-extrabold text-xs uppercase tracking-wider shadow-lg transition cursor-pointer flex items-center gap-2"
-
-
-
-                >
-
-
-
-                  <span>{lang === 'bn' ? 'সব শপের দাম দেখুন' : 'Compare Offers'}</span>
-
-
-
-                  <ArrowUpRight className="w-4 h-4" />
-
-
-
-                </button>
-
-
-
-
-
-
-
-                <div className="px-3.5 py-2 rounded-xl bg-black/70 border border-white/15 backdrop-blur-md flex items-baseline gap-2 shadow-lg">
-
-
-
-                  <span className="text-xs text-white/70 font-medium">
-
-
-
-                    {lang === 'bn' ? 'শুরু:' : 'From'}
-
-
-
-                  </span>
-
-
-
-                  <span className="text-base sm:text-lg font-black text-[#10E599] drop-shadow-[0_0_8px_rgba(16,229,153,0.6)]">
-
-
-
-                    {formatBDT(currentBillboard.startingPrice, lang)}
-
-
-
-                  </span>
-
-
-
-                  <span className="text-xs text-white/50 line-through">
-
-
-
-                    {formatBDT(currentBillboard.originalPrice, lang)}
-
-
-
-                  </span>
-
-
-
-                </div>
-
-
-
+                {currentBillboard.startingPrice === 0 || (currentBillboard.headlineBoldEn || '').includes('GOES HERE') ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        setSelectedAdTier('billboard');
+                        setShowAdModal(true);
+                      }}
+                      className="px-5 py-2.5 rounded-xl bg-[#FFC857] hover:bg-[#F5BA3D] text-[#101B2D] font-extrabold text-xs uppercase tracking-wider shadow-lg transition cursor-pointer flex items-center gap-2"
+                    >
+                      <span>{lang === 'bn' ? 'বিজ্ঞাপন দিন' : 'Advertise with Us'}</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                    <div className="px-3.5 py-2 rounded-xl bg-black/70 border border-white/15 backdrop-blur-md flex items-baseline gap-2 shadow-lg">
+                      <span className="text-xs text-[#10E599] font-bold">
+                        {lang === 'bn' ? 'স্লট বুকিং উন্মুক্ত' : 'Slot Available · Reserve Now'}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        openComparisonModal(currentBillboard.productKey);
+                        if (currentBillboard?.id) trackOutboundClick('billboard', currentBillboard.id);
+                      }}
+                      className="px-5 py-2.5 rounded-xl bg-[#FFC857] hover:bg-[#F5BA3D] text-[#101B2D] font-extrabold text-xs uppercase tracking-wider shadow-lg transition cursor-pointer flex items-center gap-2"
+                    >
+                      <span>{lang === 'bn' ? 'সব শপের দাম দেখুন' : 'Compare Offers'}</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                    <div className="px-3.5 py-2 rounded-xl bg-black/70 border border-white/15 backdrop-blur-md flex items-baseline gap-2 shadow-lg">
+                      <span className="text-xs text-white/70 font-medium">
+                        {lang === 'bn' ? 'শুরু:' : 'From'}
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-[#10E599] drop-shadow-[0_0_8px_rgba(16,229,153,0.6)]">
+                        {formatBDT(currentBillboard.startingPrice, lang)}
+                      </span>
+                      <span className="text-xs text-white/50 line-through">
+                        {formatBDT(currentBillboard.originalPrice, lang)}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
 
 
@@ -8834,17 +8601,12 @@ export default function App() {
 
 
                   <div
-
-
-
                     key={offer.id || idx}
-
-
-
-                    className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-[#F5F7FA] transition"
-
-
-
+                    className={`p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition ${
+                      offer.riskLevel === 'high'
+                        ? 'bg-rose-50/80 border-l-4 border-l-rose-500 shadow-sm'
+                        : 'hover:bg-[#F5F7FA]'
+                    }`}
                   >
 
 
@@ -8986,21 +8748,16 @@ export default function App() {
 
 
                         {isLowest && (
-
-
-
-                          <span className="px-2 py-0.5 rounded bg-[#DCFCE7] border border-[#166534]/20 text-[#166534] text-[10px] font-black uppercase tracking-wider">
-
-
-
-                            {lang === 'bn' ? 'সর্বনিম্ন দাম' : 'LOWEST PRICE'}
-
-
-
-                          </span>
-
-
-
+                          offer.riskLevel === 'high' ? (
+                            <span className="px-2 py-0.5 rounded bg-rose-100 border border-rose-300 text-rose-700 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                              <span>⚠️</span>
+                              <span>{lang === 'bn' ? 'অস্বাভাবিক সর্বনিম্ন দাম (সতর্কতা)' : 'SUSPICIOUS LOW PRICE (RISKY)'}</span>
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded bg-[#DCFCE7] border border-[#166534]/20 text-[#166534] text-[10px] font-black uppercase tracking-wider">
+                              {lang === 'bn' ? 'সর্বনিম্ন দাম' : 'LOWEST PRICE'}
+                            </span>
+                          )
                         )}
 
 

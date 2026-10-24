@@ -140,7 +140,11 @@ python scratch/sqa_comprehensive_suite.py
 ```
 
 ### Verification Matrix Summary:
-* ✅ **Suggestions & Categories API:** 100% responsive.
+* ✅ **Appliances & Exact SKU Engine:** 100+ verified model catalogue match across Walton, Samsung, Gree, Singer, Haier, LG, Sharp, Panasonic, Vision, Minister, Miyako.
+* ✅ **Purged Price-Floor Drops:** Price anomaly guard rails preserve listings and prominently highlight them as high risk (`⚠️ Price Anomaly / High Risk`).
+* ✅ **Billboard Ad Inventory:** Clean hero placeholder slots (`BILLBOARD SLOT #01` to `#04` with "YOUR AD GOES HERE") equipped with instant lead booking.
+* ✅ **Admin Command Center:** Production ready for Render + Vercel deployment with multi-auth, real-time crawler health, and store registry controls.
+* ✅ **Suggestions & Categories API:** 100% responsive with immediate dropdown dismissal on selection.
 * ✅ **Mobile Color Consolidation:** 4 distinct color variants consolidate to 1 card.
 * ✅ **Storage Separation:** 128GB vs 256GB partitioned into distinct cards.
 * ✅ **Console Edition Separation:** Disc Edition vs Digital Edition separated with details.

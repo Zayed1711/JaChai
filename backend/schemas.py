@@ -140,9 +140,9 @@ class StoreOfferBase(BaseModel):
     spider_status: str = "healthy"
     last_synced_at: str = "Just now"
     is_preseeded: bool = True
-    trust_score: int = 95
-    trust_badge: str = "Verified Safe"
-    risk_level: str = "low"  # 'low', 'moderate', 'high'
+    trust_score: Optional[int] = 95
+    trust_badge: Optional[str] = "Verified Safe"
+    risk_level: Optional[str] = "low"  # 'low', 'moderate', 'high'
     discount_tag: Optional[str] = None
     discount_pct: Optional[int] = None
     is_sponsored: bool = False
@@ -205,8 +205,10 @@ class StoreOfferResponse(StoreOfferBase):
                 from bd_stores_registry import compute_trust_score
                 trust_info = compute_trust_score(self.store_name, is_preseeded=bool(self.is_preseeded), cod_terms=self.cod_terms_en)
                 self.trust_score = trust_info["trust_score"]
-                self.trust_badge = trust_info["trust_badge"]
-                self.risk_level = trust_info["risk_level"]
+                if not self.trust_badge:
+                    self.trust_badge = trust_info["trust_badge"]
+                if not self.risk_level:
+                    self.risk_level = trust_info["risk_level"]
         except Exception:
             pass
         return self

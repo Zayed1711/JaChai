@@ -566,11 +566,11 @@ export function mapStorefrontData(data) {
     tagBn: 'স্পন্সরড · ক্যাম্পেইন',
     brandEn: b.sponsor_en,
     brandBn: b.sponsor_bn,
-    headlineLightEn: b.headline_en.split('·')[0]?.trim() || b.headline_en,
-    headlineBoldEn: b.headline_en.split('·')[1]?.trim() || '',
+    headlineLightEn: b.headline_en.includes('·') ? b.headline_en.split('·')[0].trim() : (b.headline_en.startsWith('YOUR AD') ? 'YOUR AD' : b.headline_en.split(' ')[0]),
+    headlineBoldEn: b.headline_en.includes('·') ? b.headline_en.split('·')[1].trim() : (b.headline_en.startsWith('YOUR AD') ? 'GOES HERE' : b.headline_en.split(' ').slice(1).join(' ')),
     headlineBn: b.headline_bn,
-    subtextEn: `${b.headline_en} — Starting from ৳${b.starting_price.toLocaleString()}`,
-    subtextBn: `${b.headline_bn} — শুরু মাত্র ৳${b.starting_price.toLocaleString()} থেকে`,
+    subtextEn: b.starting_price > 0 ? `${b.headline_en} — Starting from ৳${b.starting_price.toLocaleString()}` : "Feature your brand to thousands of verified Bangladeshi shoppers daily. Click to book this slot.",
+    subtextBn: b.starting_price > 0 ? `${b.headline_bn} — শুরু মাত্র ৳${b.starting_price.toLocaleString()} থেকে` : "প্রতিদিন হাজারো সক্রিয় ক্রেতার কাছে আপনার ব্র্যান্ড তুলে ধরুন। স্লট বুক করতে ক্লিক করুন।",
     startingPrice: b.starting_price,
     originalPrice: Math.round(b.starting_price * 1.2),
     badgeEn: b.category_badge || 'Featured',
@@ -674,10 +674,18 @@ export function mapStorefrontData(data) {
       warrantyEn: o.warranty_text || 'Official Warranty',
       warrantyBn: o.warranty_text || 'অফিসিয়াল ওয়ারেন্টি',
       url: o.target_url,
-      isSponsored: false,
+      isSponsored: Boolean(o.is_sponsored),
       inStock: o.in_stock,
       spiderStatus: o.spider_status,
-      lastSynced: o.last_synced_at
+      lastSynced: o.last_synced_at,
+      trustScore: o.trust_score,
+      trustBadge: o.trust_badge || (o.risk_level === 'high' ? '⚠️ Price Anomaly / High Risk' : null),
+      riskLevel: o.risk_level || 'low',
+      isPreseeded: o.is_preseeded !== false,
+      websiteUrl: o.website_url,
+      facebookUrl: o.facebook_url,
+      discountTag: o.discount_tag,
+      discountPct: o.discount_pct
     })).sort((a, b) => a.price - b.price);
 
     const pastPrices = [

@@ -1564,6 +1564,15 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
         if not any(k in q_spaced for k in ("imitation", "artificial", "budget", "plated", "gold plated")):
             return "fine-jewelry", CATEGORY_REGISTRY_MAP["fine-jewelry"]
 
+    # Priority 0.6: Appliances & White-Goods Model Catalog Hard-Lock (Eliminates mobile phone collision)
+    try:
+        from appliances_catalog import match_appliances_catalog
+        app_match = match_appliances_catalog(query or query_disambig)
+        if app_match:
+            return "home-appliances", CATEGORY_REGISTRY_MAP["home-appliances"]
+    except Exception:
+        pass
+
     # Priority 1: Unambiguous domain keywords in query ALWAYS override stale/contradictory category hints
     if q_collapsed:
         matches = []

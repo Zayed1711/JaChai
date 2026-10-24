@@ -141,6 +141,17 @@ def get_search_suggestions(raw_prefix: str, limit: int = 6) -> Dict[str, Any]:
     matched_titles: List[str] = []
     seen = set()
 
+    # 0. Appliances model catalog instant autocomplete
+    try:
+        from appliances_catalog import get_appliance_suggestions
+        app_suggs = get_appliance_suggestions(q, limit=2)
+        for title in app_suggs:
+            if title.lower() not in seen:
+                seen.add(title.lower())
+                matched_titles.append(title)
+    except Exception:
+        pass
+
     # 1. First: pull real scraped products already persisted in the local database
     db_items = get_database_product_suggestions(q, limit=3)
     for title in db_items:
