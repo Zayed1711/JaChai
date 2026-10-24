@@ -10,7 +10,7 @@ from urllib.parse import quote_plus, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 import httpx
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from sqlalchemy.orm import Session, joinedload
 
 try:
@@ -2020,6 +2020,7 @@ async def live_meta_search_and_persist(
     q_norm = (query or "").strip()
     if not q_norm or is_gibberish_search(q_norm):
         return []
+    print(f"[CRAWLER_TRACE] Starting for: '{q_norm}', category: '{category}'", flush=True)
 
     # Step 1: Resolve Category (Support both In-Syllabus and Out-of-Syllabus real product queries)
     if not category or category == "all":
@@ -2107,6 +2108,7 @@ async def live_meta_search_and_persist(
         for tp in token_matched:
             if all(tp.id != cp.id for cp in cached_products):
                 cached_products.append(tp)
+    print(f"[CRAWLER_TRACE] Step 2 DB Cache: cat_id={cat_id}, found {len(cached_products)} products", flush=True)
 
     anchor_tokens = extract_mandatory_anchor_tokens(q_norm)
     requested_acc = user_requested_accessory(q_norm)
@@ -2200,8 +2202,12 @@ async def live_meta_search_and_persist(
     distinct_stores = {off.store_name for p in sanitized_cached for off in p.offers if off.store_name}
     # Short-circuit immediately if verified cached products with active store offers match this query
     has_valid_cached = len(sanitized_cached) >= 1 and any(len(p.offers) >= 1 for p in sanitized_cached)
+    print(f"[CRAWLER_TRACE] Cache check: sanitized={len(sanitized_cached)}, has_valid={has_valid_cached}", flush=True)
     if has_valid_cached and (not user_explicit_wants_used or has_cached_used):
+        print(f"[CRAWLER_TRACE] Returning {len(sanitized_cached)} products from CACHE!", flush=True)
         return sanitized_cached
+
+    print(f"[CRAWLER_TRACE] Step 3: Falling through to live external scraping for '{search_kw}'", flush=True)
 
     # Step 3: Always initialize scraped_listings list first
     scraped_listings: List[dict] = []
