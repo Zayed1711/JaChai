@@ -2055,14 +2055,18 @@ async def live_meta_search_and_persist(
 
     # Step 1.5: Check Universal Master Product Catalog for instant, high-precision matching
     try:
-        from master_catalog import match_master_catalog, build_master_product_card
-        master_match = match_master_catalog(q_norm)
-        if master_match:
-            existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == master_match["slug"]).first()
-            if existing and len(existing.offers) >= 1:
-                return [existing]
-            card = build_master_product_card(master_match)
-            return [card]
+        from master_catalog import search_master_catalog, build_master_product_card
+        master_matches = search_master_catalog(q_norm, limit=6)
+        if master_matches:
+            cards = []
+            for mm in master_matches:
+                existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == mm["slug"]).first()
+                if existing and len(existing.offers) >= 1:
+                    cards.append(existing)
+                else:
+                    cards.append(build_master_product_card(mm))
+            if cards:
+                return cards
     except Exception as e:
         print(f"[Master Catalog Notice]: {e}")
 
@@ -2194,9 +2198,9 @@ async def live_meta_search_and_persist(
     user_explicit_wants_used = is_used_or_reconditioned_title(q_norm)
     has_cached_used = any(is_used_or_reconditioned_title(p.title_en) for p in sanitized_cached)
     distinct_stores = {off.store_name for p in sanitized_cached for off in p.offers if off.store_name}
-    # Only short-circuit cache if we have rich coverage (at least 3 distinct products with multi-store offers)
-    has_enough_cached = len(sanitized_cached) >= 3 and len(distinct_stores) >= 3
-    if has_enough_cached and (not user_explicit_wants_used or has_cached_used):
+    # Short-circuit immediately if verified cached products with active store offers match this query
+    has_valid_cached = len(sanitized_cached) >= 1 and any(len(p.offers) >= 1 for p in sanitized_cached)
+    if has_valid_cached and (not user_explicit_wants_used or has_cached_used):
         return sanitized_cached
 
     # Step 3: Always initialize scraped_listings list first

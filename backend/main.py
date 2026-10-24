@@ -119,6 +119,20 @@ async def scheduled_crawler_job():
     try:
         print("[Scheduler] Running automatic 6-hour webcrawler synchronization and campaign expiry guard...")
         expire_ended_campaigns(db)
+        # 1. Harvest retailer feeds & distill to database
+        try:
+            from feed_harvester import run_full_feed_harvest
+            from catalog_distiller import distill_feed_items, persist_distilled_catalog_to_db
+            print("[Scheduler] Ingesting retailer feeds (Shopify & JSON-LD)...")
+            raw_feed = await run_full_feed_harvest(max_shopify_pages=2, max_sitemap_items=25)
+            if raw_feed:
+                distilled = distill_feed_items(raw_feed)
+                saved_count = persist_distilled_catalog_to_db(distilled, db)
+                print(f"[Scheduler] Successfully persisted {saved_count} fresh retailer offers.")
+        except Exception as feed_err:
+            print(f"[Scheduler] Feed harvest notice: {feed_err}")
+
+        # 2. Spider sync
         await run_all_spiders(db, simulate_live_market=False)
         print("[Scheduler] Scheduled cycle completed.")
     except Exception as exc:
@@ -2210,6 +2224,21 @@ async def _run_prewarm_harvester_job():
     prewarm_state["errors"] = []
     prewarm_state["total_queries"] = len(PREWARM_TOP_QUERIES)
 
+    # 1. First ingest live retailer feeds (Shopify & JSON-LD) into database
+    feed_db = SessionLocal()
+    try:
+        from feed_harvester import run_full_feed_harvest
+        from catalog_distiller import distill_feed_items, persist_distilled_catalog_to_db
+        raw_feed = await run_full_feed_harvest(max_shopify_pages=2, max_sitemap_items=25)
+        if raw_feed:
+            distilled = distill_feed_items(raw_feed)
+            saved_count = persist_distilled_catalog_to_db(distilled, feed_db)
+            prewarm_state["items_harvested"] += saved_count
+    except Exception as feed_err:
+        print(f"[Prewarm Harvester] Feed harvest notice: {feed_err}")
+    finally:
+        feed_db.close()
+
     for item in PREWARM_TOP_QUERIES:
         q = item["query"]
         cat = item["category"]
@@ -2258,6 +2287,28 @@ def get_prewarm_status(admin_auth: dict = Depends(verify_admin_access)):
         "status": "success",
         "data": prewarm_state,
     }
+
+@app.post("/api/v1/admin/crawler/sync-feeds")
+async def trigger_sync_feeds(
+    admin_auth: dict = Depends(verify_admin_access),
+    db: Session = Depends(get_db)
+):
+    """Admin endpoint to instantly trigger live merchant feed ingestion (Shopify & JSON-LD)."""
+    try:
+        from feed_harvester import run_full_feed_harvest
+        from catalog_distiller import distill_feed_items, persist_distilled_catalog_to_db
+        raw_feed = await run_full_feed_harvest(max_shopify_pages=2, max_sitemap_items=30)
+        distilled = distill_feed_items(raw_feed)
+        persisted = persist_distilled_catalog_to_db(distilled, db)
+        return {
+            "status": "success",
+            "message": f"Successfully ingested {len(raw_feed)} raw offers and persisted {persisted} canonical SKUs.",
+            "total_harvested": len(raw_feed),
+            "distilled_skus": len(distilled),
+            "persisted_products": persisted,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Feed harvest failed: {e}")
 
 
 # ==============================================================================

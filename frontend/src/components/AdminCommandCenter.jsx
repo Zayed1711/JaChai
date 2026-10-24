@@ -53,7 +53,8 @@ import {
   triggerPrewarmCrawler,
   fetchPrewarmStatus,
   apiRecalculateLeaderboard,
-  fetchAdminLeaderboardStatus
+  fetchAdminLeaderboardStatus,
+  apiSyncMerchantFeeds
 } from '../api';
 
 export default function AdminCommandCenter({
@@ -660,6 +661,23 @@ export default function AdminCommandCenter({
       if (timer) clearInterval(timer);
     };
   }, [activeTab]);
+
+  const [isSyncingFeeds, setIsSyncingFeeds] = useState(false);
+
+  const handleSyncMerchantFeeds = async () => {
+    setIsSyncingFeeds(true);
+    try {
+      const res = await apiSyncMerchantFeeds();
+      showNotification(res?.message || 'Merchant feeds ingested successfully');
+      if (res?.persisted_products) {
+        showNotification(`Ingested ${res.persisted_products} verified SKUs into database!`);
+      }
+    } catch (err) {
+      alert(`Feed sync failed: ${err.message}`);
+    } finally {
+      setIsSyncingFeeds(false);
+    }
+  };
 
   const handleRunPrewarmHarvester = async () => {
     setIsTriggeringPrewarm(true);
@@ -1578,6 +1596,17 @@ export default function AdminCommandCenter({
                   </p>
                 </div>
 
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    onClick={handleSyncMerchantFeeds}
+                    disabled={isSyncingFeeds}
+                    className="px-5 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-blue-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer shadow-xl disabled:opacity-50 shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isSyncingFeeds ? 'animate-spin' : ''}`} />
+                    <span>
+                      {isSyncingFeeds ? 'Ingesting Feeds...' : '📥 Ingest Merchant Feeds (Shopify & XML)'}
+                    </span>
+                  </button>
                 <button
                   onClick={handleRunPrewarmHarvester}
                   disabled={isTriggeringPrewarm || prewarmState.is_running}
@@ -1590,6 +1619,7 @@ export default function AdminCommandCenter({
                       : '⚡ Run Morning Pre-Warm Harvester'}
                   </span>
                 </button>
+                </div>
               </div>
 
               {/* Progress & Telemetry Cards */}

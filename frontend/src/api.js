@@ -944,6 +944,15 @@ export async function fetchPrewarmStatus() {
   return await res.json();
 }
 
+export async function apiSyncMerchantFeeds() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/sync-feeds`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
 // ==============================================================================
 // STORE LEADERBOARD & MERCHANT TRUST INDEX API
 // ==============================================================================

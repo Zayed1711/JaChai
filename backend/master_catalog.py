@@ -23,9 +23,11 @@ from urllib.parse import quote_plus
 try:
     from .models import Product, StoreOffer
     from .appliances_catalog import match_appliances_catalog, build_appliance_product_card, get_appliance_suggestions
+    from .expanded_catalog_items import EXPANDED_CATALOG_ITEMS
 except ImportError:
     from models import Product, StoreOffer
     from appliances_catalog import match_appliances_catalog, build_appliance_product_card, get_appliance_suggestions
+    from expanded_catalog_items import EXPANDED_CATALOG_ITEMS
 
 # ==============================================================================
 # AUTHORITATIVE MASTER CATALOG ITEMS (300+ TOP SKUs ACROSS ALL VERTICALS)
@@ -929,6 +931,9 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
     },
 ]
 
+# Merge expanded SKUs across all consumer electronics verticals
+MASTER_CATALOG_ITEMS.extend(EXPANDED_CATALOG_ITEMS)
+
 # Quick lookup index by model code and aliases
 _MASTER_ALIASES_INDEX: Dict[str, Dict[str, Any]] = {}
 for item in MASTER_CATALOG_ITEMS:
@@ -1028,6 +1033,69 @@ def match_master_catalog(query: str) -> Optional[Dict[str, Any]]:
         return _MASTER_ALIASES_INDEX.get("ps5 slim disc edition")
 
     return None
+
+
+def search_master_catalog(query: str, limit: int = 6) -> List[Dict[str, Any]]:
+    """
+    Multi-card authoritative catalog search:
+      - For exact variants (e.g. 'google pixel 9 256 gb', 'ps5 slim disc edition'), returns [exact_item].
+      - For broader queries (e.g. 'pixel 9', 'iphone 16', 'macbook air m3', 'vivo v40'), returns all
+        matching canonical variant comparison cards up to `limit`.
+    """
+    if not query:
+        return []
+
+    q_norm = normalize_catalog_query(query)
+
+    # 1. First delegate to Appliances Catalog if white goods
+    app_match = match_appliances_catalog(query)
+    if app_match:
+        return [app_match]
+
+    q_words = set(re.findall(r"\w+", q_norm))
+    has_variant_spec = any(tok in q_words for tok in (
+        "128", "128gb", "256", "256gb", "512", "512gb", "1tb", "2tb",
+        "digital", "disc", "cellular", "wifi", "rtx", "gtx", "oled"
+    ))
+
+    # If the user specified an explicit hardware variant, look for exact match first
+    if has_variant_spec:
+        exact = match_master_catalog(query)
+        if exact:
+            return [exact]
+
+    # Broad model search: collect all canonical variants matching core query terms
+    matches: List[Dict[str, Any]] = []
+    seen_slugs = set()
+
+    primary = match_master_catalog(query)
+    if primary:
+        matches.append(primary)
+        seen_slugs.add(primary["slug"])
+
+    # Search through all catalog items
+    sig_words = [w for w in q_words if len(w) >= 2 and w not in ("the", "and", "for", "with", "best", "price", "bd", "in", "online", "buy")]
+    for item in MASTER_CATALOG_ITEMS:
+        slug = item["slug"]
+        if slug in seen_slugs:
+            continue
+
+        t_en = item["title_en"].lower()
+        m_code = item["model_code"].lower()
+        aliases = [al.lower() for al in item.get("aliases", [])]
+
+        if q_norm in t_en or q_norm in m_code or any(q_norm in al for al in aliases):
+            matches.append(item)
+            seen_slugs.add(slug)
+            if len(matches) >= limit:
+                break
+        elif sig_words and all(w in t_en or w in m_code or any(w in al for al in aliases) for w in sig_words):
+            matches.append(item)
+            seen_slugs.add(slug)
+            if len(matches) >= limit:
+                break
+
+    return matches[:limit]
 
 
 def build_master_product_card(catalog_item: Dict[str, Any]) -> Product:

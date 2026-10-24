@@ -1752,6 +1752,15 @@ def get_stores_for_category(category_id: str, query: str = "") -> List[Dict[str,
         if s_cat == csv_cat:
             results.append(store)
 
+    # Interservice capability: Custom Mac BD, Apple Gadgets, and Dazzle BD officially retail MacBooks, Mac minis, and Laptops
+    if category_id == "laptops-pc":
+        existing_names = {s.get("name", "").lower() for s in results}
+        for cross_store in ALL_STORES_REGISTRY:
+            cs_name = cross_store.get("name", "").lower()
+            if any(target in cs_name for target in ("custom mac", "apple gadgets", "dazzle")) and cs_name not in existing_names:
+                results.append(cross_store)
+                existing_names.add(cs_name)
+
     if query:
         filtered = [s for s in results if store_matches_department_capability(s.get("name", ""), category_id, query)]
         if category_id == "mobile-gadgets":
@@ -1855,7 +1864,7 @@ def store_matches_department_capability(store_name: str, category_id: str, query
     mob_shops = ("motion view", "gadget studio", "apple gadgets", "sumash tech", "dazzle", "kry international", "goriber gadget", "mobile buzz", "rio international")
     if category_id in ("laptops-pc", "home-appliances", "bicycles-mtb", "cycles-evs", "fine-jewelry", ):
         if any(ms in s_low for ms in mob_shops):
-            if not (category_id == "laptops-pc" and any(l in q_low for l in ("laptop", "notebook", "macbook", "ipad", "vivobook", "zenbook", "asus", "dell", "hp", "lenovo")) and any(m in s_low for m in ("apple gadgets", "custom mac", "istock", "dazzle"))):
+            if not (category_id == "laptops-pc" and any(l in q_low for l in ("laptop", "notebook", "macbook", "ipad", "vivobook", "zenbook", "asus", "dell", "hp", "lenovo", "mac mini", "imac", "mac", "pc", "thinkpad", "desktop")) and any(m in s_low for m in ("apple gadgets", "custom mac", "istock", "dazzle"))):
                 return False
 
     # Sub-department isolation inside mobile-gadgets (Earphones/Gadgets vs Mobile Handsets)
