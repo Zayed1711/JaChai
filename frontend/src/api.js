@@ -981,7 +981,7 @@ export async function fetchSearchSuggestions(prefix = '') {
     const res = await fetch(`${API_BASE_URL}/api/v1/search/suggestions?${params.toString()}`);
     if (!res.ok) return { query: prefix, suggestions: [], did_you_mean: [] };
     return await res.json();
-  } catch (err) {
+  } catch {
     return { query: prefix, suggestions: [], did_you_mean: [] };
   }
 }

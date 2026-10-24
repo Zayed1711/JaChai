@@ -3364,7 +3364,7 @@ export default function App() {
           setSuggestionsData({ suggestions: [], did_you_mean: [] });
           setShowSuggestions(false);
         }
-      } catch (err) {
+      } catch {
         setSuggestionsData({ suggestions: [], did_you_mean: [] });
       }
     }, 130);
@@ -6076,6 +6076,30 @@ export default function App() {
               </div>
             )}
           </form>
+
+          {/* Disambiguation Suggestion Pills */}
+          {activeDisambiguationPills && activeDisambiguationPills.length > 0 && (
+            <div className="flex items-center justify-center gap-2 mt-3 flex-wrap">
+              <span className="text-xs font-semibold text-slate-500">
+                {lang === 'bn' ? 'সম্ভাব্য ফলাফল:' : 'Did you mean:'}
+              </span>
+              {activeDisambiguationPills.map((pill, pIdx) => {
+                const text = typeof pill === 'string' ? pill : (pill.text || pill.title || '');
+                const cat = (typeof pill === 'object' && pill.category_id) ? pill.category_id : 'all';
+                return (
+                  <button
+                    key={pIdx}
+                    type="button"
+                    onClick={() => handleSelectSuggestion(text, cat)}
+                    className="px-3 py-1 rounded-full text-xs font-bold bg-white text-teal-800 border border-teal-200 shadow-xs hover:bg-teal-50 transition cursor-pointer flex items-center gap-1"
+                  >
+                    <span>{text}</span>
+                    <ArrowUpRight className="w-3 h-3 text-teal-600" />
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Category Navigation Bar: Valorant Kinetic Fluid Motion */}
 

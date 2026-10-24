@@ -806,6 +806,7 @@ async def scrape_store_search(
 STORAGE_RE = re.compile(r"\b(16|32|64|128|256|512|825)\s*(?:gb|g)\b|\b(1|2|4)\s*(?:tb|t)\b", re.I)
 RAM_RE = re.compile(r"\b(\d+)\s*gb\s*(?:ram|memory)\b", re.I)
 RAM_SLASH_STORAGE_RE = re.compile(r"\b(\d+)\s*gb?\s*[\/|\\]\s*(\d+)\s*(gb|tb)\b", re.I)
+RAM_STORAGE_PAIR_RE = re.compile(r"\b(4|6|8|12|16|24|32|64)\s*gb?\s*[\/|\\|\s]\s*(16|32|64|128|256|512|825|1024|1|2)\s*(gb|tb)?\b", re.I)
 WATCH_SIZE_RE = re.compile(r"\b(38|40|41|42|44|45|46|47|49)\s*mm\b", re.I)
 WATCH_CONN_RE = re.compile(r"\b(cellular|lte|gps)\b", re.I)
 
@@ -821,7 +822,7 @@ GPU_CHIP_RE = re.compile(r"\b(rtx\s*\d{4}(?:\s*(?:ti\s*super|ti|super))?|gtx\s*\
 VRAM_RE = re.compile(r"\b(\d+)\s*gb\s*(?:gddr[56]x?|vram)\b", re.I)
 CAMERA_KIT_RE = re.compile(r"\b(body\s*only|with\s+\d+-\d+mm\s*lens|\d+-\d+mm\s*kit)\b", re.I)
 LENS_SPEC_RE = re.compile(r"\b(\d+mm\s*f\/?\d(?:\.\d+)?)\b", re.I)
-QUALITY_WARRANTY_RE = re.compile(r"\b(unofficial(?:\s*global)?|official(?:\s*btrc|\s*warranty)?|global\s*version|player\s*edition|fan\s*edition|thai\s*a1)\b", re.I)
+QUALITY_WARRANTY_RE = re.compile(r"\b(unofficial(?:\s*global)?|official(?:\s*btrc|\s*warranty)?|global(?:\s*version|\s*variant)?|player\s*edition|fan\s*edition|thai\s*a1)\b", re.I)
 JEWELRY_KARAT_RE = re.compile(r"\b(18k|21k|22k|24k)\b", re.I)
 
 COLOR_WORDS = [
@@ -878,11 +879,12 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str, s
     ram = ""
     storage = ""
     
-    slash_m = RAM_SLASH_STORAGE_RE.search(raw)
-    if slash_m:
-        ram = f"{slash_m.group(1)}GB RAM"
-        st_unit = (slash_m.group(3) or "GB").upper() if len(slash_m.groups()) >= 3 and slash_m.group(3) else "GB"
-        storage = f"{slash_m.group(2)}{st_unit}"
+    pair_m = RAM_STORAGE_PAIR_RE.search(raw)
+    if pair_m and not is_ram_part and not is_gpu_part:
+        ram = f"{pair_m.group(1)}GB RAM"
+        val = pair_m.group(2)
+        unit = (pair_m.group(3) or ("TB" if val in ("1", "2") else "GB")).upper()
+        storage = f"{val}{unit}"
     else:
         ram_m = RAM_RE.search(raw)
         if ram_m:
@@ -1016,6 +1018,23 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str, s
     clean = NOISE_RE.sub(" ", clean)
     clean = COLOR_RE.sub(" ", clean)
     clean = re.sub(r"\(.*?\)|\[.*?\]", " ", clean)
+
+    # Strip hardware/variant/marketing specs from clean model title
+    clean = RAM_STORAGE_PAIR_RE.sub(" ", clean)
+    clean = RAM_RE.sub(" ", clean)
+    clean = STORAGE_RE.sub(" ", clean)
+    clean = DDR_RE.sub(" ", clean)
+    clean = FREQ_RE.sub(" ", clean)
+    clean = SSD_TYPE_RE.sub(" ", clean)
+    clean = CONSOLE_ED_RE.sub(" ", clean)
+    clean = QUALITY_WARRANTY_RE.sub(" ", clean)
+    clean = JEWELRY_KARAT_RE.sub(" ", clean)
+    clean = re.sub(r"(?i)\b\d+gb\s*/\s*\d+(?:gb|tb)\b", " ", clean)
+    clean = re.sub(r"(?i)\b\d+\s*(?:gb|tb|mb)(?:\s*ram)?\b", " ", clean)
+    clean = re.sub(r"(?i)\b(?:5g|4g|lte)\b", " ", clean)
+    if "playstation" in clean.lower():
+        clean = re.sub(r"(?i)\bps[45]\b", " ", clean)
+
     clean = re.sub(r"\s+", " ", clean).strip()
 
     # 3. Check for Sub-model modifiers
@@ -1028,15 +1047,15 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str, s
 
     # 4. Blacklist words that belong to extracted variants/qualities so they don't corrupt base model title
     blacklisted_tokens = {
-        "official", "unofficial", "global", "warranty", "btrc",
+        "official", "unofficial", "global", "warranty", "btrc", "approved", "variant",
         "disc", "digital", "edition", "oled", "model",
         "used", "pre-owned", "refurbished", "reconditioned", "second", "hand",
         "nvme", "m.2", "sata", "gen3", "gen4", "gen5", "pcie", "4.0", "3.0", "5.0", "ssd", "hdd",
         "ddr3", "ddr4", "ddr5", "lpddr4", "lpddr5", "ram", "memory",
         "gddr5", "gddr6", "gddr6x", "vram",
         "core", "i3", "i5", "i7", "i9", "ryzen",
-        "player", "fan", "thai", "a1", "master", "copy",
-        "18k", "21k", "22k", "24k"
+        "player", "fan", "thai", "a1", "master", "copy", "version",
+        "18k", "21k", "22k", "24k", "5g", "4g", "lte"
     }
     if is_laptop:
         if gpu_spec:
@@ -1093,6 +1112,14 @@ def extract_canonical_sku_info(title: str, query: str = "") -> Tuple[str, str, s
     base_name = re.sub(r"(?i)\brtx\b", "RTX", base_name)
     base_name = re.sub(r"(?i)\bgtx\b", "GTX", base_name)
     base_name = re.sub(r"(?i)\bgeforce\b", "GeForce", base_name)
+
+    # Deduplicate repeated words in base_name (e.g. "PlayStation 5 PlayStation 5")
+    words = base_name.split()
+    deduped = []
+    for w in words:
+        if not deduped or w.lower() != deduped[-1].lower():
+            deduped.append(w)
+    base_name = " ".join(deduped).strip()
 
     if not base_name:
         clean_name = raw[:40].strip()
