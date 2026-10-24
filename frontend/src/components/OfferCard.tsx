@@ -17,12 +17,15 @@ export default function OfferCard({ offer, isLowestPrice = false }: OfferCardPro
       ? "Free Delivery"
       : `৳${offer.delivery_charge} Delivery`;
 
-  const outboundUrl = `http://localhost:8000/go/${offer.listing_id}`;
+  const outboundUrl = offer.source_url || offer.redirect_url || `/go/${offer.listing_id}`;
+  const isHighRisk = offer.risk_level === "high" || Boolean(offer.trust_badge && offer.trust_badge.includes("Risk"));
 
   return (
     <div
       className={`rounded-xl p-6 border transition-all ${
-        isLowestPrice
+        isHighRisk
+          ? "bg-rose-50/70 border-2 border-rose-500 shadow-md ring-1 ring-rose-500/20"
+          : isLowestPrice
           ? "bg-[#FFFFFF] border-2 border-[#14B8A6] shadow-md ring-1 ring-[#14B8A6]/20"
           : "bg-[#FFFFFF] border-[#DDE3EA] hover:border-[#14B8A6]/60 shadow-xs hover:shadow-sm"
       }`}
@@ -35,8 +38,23 @@ export default function OfferCard({ offer, isLowestPrice = false }: OfferCardPro
               {offer.store_name}
             </span>
             {isLowestPrice && (
-              <span className="bg-[#DCFCE7] text-[#166534] border border-[#166534]/20 text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-0.5 rounded">
-                LOWEST PRICE
+              isHighRisk ? (
+                <span className="bg-rose-100 text-rose-700 border border-rose-300 text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-0.5 rounded flex items-center gap-1">
+                  ⚠️ SUSPICIOUS LOW PRICE (RISKY)
+                </span>
+              ) : (
+                <span className="bg-[#DCFCE7] text-[#166534] border border-[#166534]/20 text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-0.5 rounded">
+                  LOWEST PRICE
+                </span>
+              )
+            )}
+            {offer.trust_badge && (
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
+                isHighRisk
+                  ? "bg-rose-100 text-rose-700 border-rose-300"
+                  : "bg-sky-50 text-sky-700 border-sky-200"
+              }`}>
+                {offer.trust_badge}
               </span>
             )}
             <span className="text-xs text-[#334155]">

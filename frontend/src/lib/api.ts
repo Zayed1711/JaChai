@@ -42,6 +42,8 @@ export interface StoreOfferItem {
   cod_available: boolean | null;
   last_checked_at: string | null;
   is_stale: boolean;
+  risk_level?: string;
+  trust_badge?: string;
   price_history: PriceHistoryPoint[];
 }
 
