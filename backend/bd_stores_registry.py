@@ -1564,12 +1564,23 @@ def _resolve_category(query: str, category_hint: Optional[str] = None, allow_def
         if not any(k in q_spaced for k in ("imitation", "artificial", "budget", "plated", "gold plated")):
             return "fine-jewelry", CATEGORY_REGISTRY_MAP["fine-jewelry"]
 
-    # Priority 0.6: Appliances & White-Goods Model Catalog Hard-Lock (Eliminates mobile phone collision)
+    # Priority 0.6: Universal Master Product Catalog Hard-Lock (Eliminates category collision)
     try:
-        from appliances_catalog import match_appliances_catalog
-        app_match = match_appliances_catalog(query or query_disambig)
-        if app_match:
-            return "home-appliances", CATEGORY_REGISTRY_MAP["home-appliances"]
+        from master_catalog import match_master_catalog
+        m_match = match_master_catalog(query or query_disambig)
+        if m_match:
+            cat_display = m_match.get("category", "")
+            cat_id_lookup = {
+                "Home Appliances": "home-appliances",
+                "Mobiles & Gadgets": "mobile-gadgets",
+                "Laptops & PC": "laptops-pc",
+                "Gaming Consoles": "gaming-consoles",
+                "Cameras & Photography": "cameras-photography",
+                "Watches & Horology": "watches-horology",
+            }
+            if cat_display in cat_id_lookup:
+                target_cat_id = cat_id_lookup[cat_display]
+                return target_cat_id, CATEGORY_REGISTRY_MAP[target_cat_id]
     except Exception:
         pass
 

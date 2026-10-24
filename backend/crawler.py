@@ -2053,18 +2053,18 @@ async def live_meta_search_and_persist(
     except Exception:
         pass
 
-    # Step 1.5: Check Appliances Model Catalog for instant, high-precision matching
+    # Step 1.5: Check Universal Master Product Catalog for instant, high-precision matching
     try:
-        from appliances_catalog import match_appliances_catalog, build_appliance_product_card
-        app_match = match_appliances_catalog(q_norm)
-        if app_match:
-            existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == app_match["slug"]).first()
+        from master_catalog import match_master_catalog, build_master_product_card
+        master_match = match_master_catalog(q_norm)
+        if master_match:
+            existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == master_match["slug"]).first()
             if existing and len(existing.offers) >= 1:
                 return [existing]
-            card = build_appliance_product_card(app_match)
+            card = build_master_product_card(master_match)
             return [card]
     except Exception as e:
-        print(f"[Appliances Catalog Notice]: {e}")
+        print(f"[Master Catalog Notice]: {e}")
 
     # Step 2: Check existing database cache
     term = f"%{search_kw}%"
@@ -2087,7 +2087,22 @@ async def live_meta_search_and_persist(
     )
     if cat_clauses:
         db_cache_q = db_cache_q.filter(or_(*cat_clauses))
-    cached_products = db_cache_q.all()
+    cached_products = list(db_cache_q.all())
+
+    # Tokenized conjunction fallback for DB cache
+    raw_tokens = [t for t in re.findall(r"[a-zA-Z0-9]+", cleaned_display_q.lower()) if len(t) >= 2]
+    sig_tokens = [t for t in raw_tokens if t not in ("the", "and", "for", "with", "best", "price", "bd", "in", "online", "buy")]
+    if len(sig_tokens) >= 2:
+        token_filters = [or_(Product.title_en.ilike(f"%{tok}%"), Product.slug.ilike(f"%{tok}%")) for tok in sig_tokens]
+        token_matched = (
+            db.query(Product)
+            .options(joinedload(Product.offers), joinedload(Product.price_history))
+            .filter(and_(*token_filters))
+            .all()
+        )
+        for tp in token_matched:
+            if all(tp.id != cp.id for cp in cached_products):
+                cached_products.append(tp)
 
     anchor_tokens = extract_mandatory_anchor_tokens(q_norm)
     requested_acc = user_requested_accessory(q_norm)
@@ -2667,15 +2682,25 @@ async def live_meta_search_and_persist(
     # check predetermined catalog for matching curated base product cards with verified stores.
     if not final_products and cat_id:
         try:
-            from predetermined_catalog import build_predetermined_browse_products
-            fallback_cards = build_predetermined_browse_products(cat_id)
-            if fallback_cards:
-                q_words = set(re.findall(r"\w+", q_norm.lower()))
-                matched = [
-                    c for c in fallback_cards
-                    if any(w in c.title_en.lower() for w in q_words if len(w) > 2)
-                ]
-                return matched if matched else fallback_cards[:4]
+            is_specific_model_search = any(
+                w in q_norm.lower() for w in (
+                    "pixel", "iphone", "galaxy", "s24", "s25", "s23", "macbook", "laptop",
+                    "tuf", "rog", "victus", "legion", "ps5", "playstation", "switch", "xbox",
+                    "rtx", "gtx", "ryzen", "core i", "ssd", "gopro", "osmo", "casio", "g-shock",
+                    "tissot", "walton", "gree", "singer", "haier", "oneplus", "redmi", "xiaomi"
+                )
+            ) or bool(re.search(r"\b\d+[a-z]*\b", q_norm.lower()))
+
+            if not is_specific_model_search:
+                from predetermined_catalog import build_predetermined_browse_products
+                fallback_cards = build_predetermined_browse_products(cat_id)
+                if fallback_cards:
+                    q_words = set(re.findall(r"\w+", q_norm.lower()))
+                    matched = [
+                        c for c in fallback_cards
+                        if any(w in c.title_en.lower() for w in q_words if len(w) > 2)
+                    ]
+                    return matched if matched else fallback_cards[:4]
         except Exception:
             pass
 
