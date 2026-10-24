@@ -683,3 +683,4 @@ EXPANDED_CATALOG_ITEMS: List[Dict[str, Any]] = [
         ]
     },
 ]
+

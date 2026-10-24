@@ -44,6 +44,7 @@ export interface StoreOfferItem {
   is_stale: boolean;
   risk_level?: string;
   trust_badge?: string;
+  is_preseeded?: boolean;
   price_history: PriceHistoryPoint[];
 }
 

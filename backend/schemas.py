@@ -139,10 +139,10 @@ class StoreOfferBase(BaseModel):
     in_stock: bool = True
     spider_status: str = "healthy"
     last_synced_at: str = "Just now"
-    is_preseeded: bool = True
-    trust_score: Optional[int] = 95
-    trust_badge: Optional[str] = "Verified Safe"
-    risk_level: Optional[str] = "low"  # 'low', 'moderate', 'high'
+    is_preseeded: Optional[bool] = None
+    trust_score: Optional[int] = None
+    trust_badge: Optional[str] = None
+    risk_level: Optional[str] = None  # 'low', 'moderate', 'high'
     discount_tag: Optional[str] = None
     discount_pct: Optional[int] = None
     is_sponsored: bool = False
@@ -186,29 +186,49 @@ class StoreOfferResponse(StoreOfferBase):
     @model_validator(mode="after")
     def populate_links_and_trust(self) -> "StoreOfferResponse":
         try:
-            if not self.website_url or not self.facebook_url:
-                from bd_stores_registry import get_store_registry_meta
-                meta = get_store_registry_meta(self.store_name)
-                if not self.website_url and meta.get("website_url"):
-                    self.website_url = meta["website_url"]
-                if not self.facebook_url and meta.get("facebook_url"):
-                    self.facebook_url = meta["facebook_url"]
-                if meta.get("is_preseeded") is not None and self.is_preseeded is None:
-                    self.is_preseeded = meta["is_preseeded"]
+            from bd_stores_registry import get_store_registry_meta, compute_trust_score
+            meta = get_store_registry_meta(self.store_name)
+            if not self.website_url and meta.get("website_url"):
+                self.website_url = meta["website_url"]
+            if not self.facebook_url and meta.get("facebook_url"):
+                self.facebook_url = meta["facebook_url"]
+
+            # Strictly determine whether this merchant is preseeded in the curated registry
+            if meta.get("is_preseeded") is True:
+                self.is_preseeded = True
+            elif self.is_preseeded is not True:
+                self.is_preseeded = False
 
             if not self.discount_pct and self.original_price and self.current_price and self.original_price > self.current_price:
                 self.discount_pct = int(round((self.original_price - self.current_price) / self.original_price * 100))
                 if self.discount_pct >= 5 and not self.discount_tag:
                     self.discount_tag = f"{self.discount_pct}% OFF"
 
+            trust_info = compute_trust_score(
+                self.store_name,
+                is_preseeded=bool(self.is_preseeded),
+                cod_terms=self.cod_terms_en or "",
+                price=float(self.current_price) if self.current_price else None,
+            )
             if not self.trust_score:
-                from bd_stores_registry import compute_trust_score
-                trust_info = compute_trust_score(self.store_name, is_preseeded=bool(self.is_preseeded), cod_terms=self.cod_terms_en)
                 self.trust_score = trust_info["trust_score"]
+
+            if self.is_preseeded:
                 if not self.trust_badge:
                     self.trust_badge = trust_info["trust_badge"]
                 if not self.risk_level:
                     self.risk_level = trust_info["risk_level"]
+            else:
+                # Unverified merchant: clearly mark as unverified
+                if not self.risk_level or self.risk_level == "low":
+                    self.risk_level = "moderate"
+                self.trust_badge = "⚠️ Unverified Merchant · COD Only"
+                self.trust_score = min(self.trust_score or 65, 65)
+
+            # High risk or price anomaly overrides
+            if self.risk_level == "high" or (self.trust_badge and "Risk" in self.trust_badge):
+                self.risk_level = "high"
+                self.trust_badge = "⚠️ Price Anomaly / High Risk"
         except Exception:
             pass
         return self

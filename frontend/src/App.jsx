@@ -4859,7 +4859,7 @@ export default function App() {
 
 
 
-      destUrl = offer.websiteUrl || (offer.url && !offer.url.includes('facebook.com') ? offer.url : '');
+      destUrl = (offer.url && !offer.url.includes('facebook.com') ? offer.url : (offer.websiteUrl || ''));
 
 
 
@@ -8655,109 +8655,14 @@ export default function App() {
 
 
 
-                        {offer.isPreseeded !== false ? (
-
-
-
-                          <span className="px-2 py-0.5 rounded-full bg-[#DCFCE7] border border-[#166534]/20 text-[#166534] text-[10px] font-bold">
-
-
-
-                            ✓ {lang === 'bn' ? 'ভেরিফাইড' : 'Verified'}
-
-
-
+                        {offer.isPreseeded ? (
+                          <span className="px-2.5 py-0.5 rounded-full bg-[#DCFCE7] border border-[#166534]/25 text-[#166534] text-[10px] font-extrabold flex items-center gap-1">
+                            ✓ {lang === 'bn' ? 'ভেরিফাইড শপ' : 'Verified Store'}
                           </span>
-
-
-
                         ) : (
-
-
-
-                          <span className="px-2 py-0.5 rounded-full bg-[#F1F5F9] border border-[#CBD5E1] text-[#475569] text-[10px] font-medium">
-
-
-
-                            {lang === 'bn' ? 'ওপেন মার্কেট' : 'Market Discovery'}
-
-
-
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-black flex items-center gap-1 shadow-xs">
+                            ⚠️ {lang === 'bn' ? 'আনভেরিফাইড শপ · শুধুমাত্র সিওডি' : 'Unverified Merchant · COD Only'}
                           </span>
-
-
-
-                        )}
-
-
-
-
-
-
-
-                        {/* TrustShield Security Score Badge - displayed for open market or when risk caution is needed */}
-
-
-
-                        {offer.trustBadge && (!offer.isPreseeded || offer.riskLevel === 'high' || offer.riskLevel === 'moderate') && (
-
-
-
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-
-
-
-                            offer.riskLevel === 'high'
-
-
-
-                              ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-
-
-
-                              : offer.riskLevel === 'moderate'
-
-
-
-                              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-
-
-
-                              : 'bg-[#38BDF8]/15 text-[#38BDF8] border-[#38BDF8]/30'
-
-
-
-                          }`}>
-
-
-
-                            {offer.trustBadge}
-
-
-
-                          </span>
-
-
-
-                        )}
-
-
-
-
-
-
-
-                        {isLowest && (
-                          offer.riskLevel === 'high' ? (
-                            <span className="px-2 py-0.5 rounded bg-rose-100 border border-rose-300 text-rose-700 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
-                              <span>⚠️</span>
-                              <span>{lang === 'bn' ? 'অস্বাভাবিক সর্বনিম্ন দাম (সতর্কতা)' : 'SUSPICIOUS LOW PRICE (RISKY)'}</span>
-                            </span>
-                          ) : (
-                            <span className="px-2 py-0.5 rounded bg-[#DCFCE7] border border-[#166534]/20 text-[#166534] text-[10px] font-black uppercase tracking-wider">
-                              {lang === 'bn' ? 'সর্বনিম্ন দাম' : 'LOWEST PRICE'}
-                            </span>
-                          )
                         )}
 
 

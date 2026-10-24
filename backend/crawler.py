@@ -2055,17 +2055,25 @@ async def live_meta_search_and_persist(
         pass
 
     # Step 1.5: Check Universal Master Product Catalog for instant, high-precision matching
+    matched_catalog_item = None
     try:
         from master_catalog import search_master_catalog, build_master_product_card
         master_matches = search_master_catalog(q_norm, limit=6)
         if master_matches:
+            matched_catalog_item = master_matches[0]
             cards = []
             for mm in master_matches:
                 existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == mm["slug"]).first()
                 if existing and len(existing.offers) >= 1:
-                    cards.append(existing)
-                else:
-                    cards.append(build_master_product_card(mm))
+                    # Keep clean offers with direct URLs
+                    clean_offers = [
+                        o for o in existing.offers
+                        if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                    ]
+                    if clean_offers:
+                        existing.offers = clean_offers
+                        cards.append(existing)
+            # If DB already has active offers for this canonical catalog item, return immediately!
             if cards:
                 return cards
     except Exception as e:
@@ -2475,7 +2483,7 @@ async def live_meta_search_and_persist(
                 offer_url = raw_url
 
             if offer_url in seen_urls:
-                offer_url = build_store_target_url(s_name, f"{title_en} {s_name}", vertical)
+                continue
 
             stores_seen.add(s_low_key)
             seen_urls.add(offer_url)
@@ -2510,9 +2518,9 @@ async def live_meta_search_and_persist(
                 cod_en = "⚠️ Price Anomaly · Verify Authenticity on Delivery"
                 cod_bn = "⚠️ অস্বাভাবিক কম দাম · ডেলিভারিতে ভালো করে চেক করুন"
             elif not is_pre:
-                trust_res["risk_level"] = "high"
-                trust_res["trust_badge"] = "⚠️ Unverified Merchant"
-                trust_res["trust_score"] = min(trust_res.get("trust_score", 55), 58)
+                trust_res["risk_level"] = "moderate"
+                trust_res["trust_badge"] = "⚠️ Unverified Merchant · COD Only"
+                trust_res["trust_score"] = min(trust_res.get("trust_score", 60), 65)
                 cod_en = "Unverified Store · Verify on Delivery (COD Only)"
                 cod_bn = "অযাচাইকৃত বিক্রেতা · ক্যাশ অন ডেলিভারিতে চেক করে নিন"
 
@@ -2710,12 +2718,15 @@ async def live_meta_search_and_persist(
                         c for c in fallback_cards
                         if any(w in c.title_en.lower() for w in q_words if len(w) > 2)
                     ]
-                    return matched if matched else fallback_cards[:4]
+                    return matched
         except Exception:
             pass
 
-    return final_products
+    if not final_products and matched_catalog_item:
+        from master_catalog import build_master_product_card
+        return [build_master_product_card(matched_catalog_item, db=db)]
 
+    return final_products
 
 # ==============================================================================
 # 10. SINGLE-OFFER & ALL-SPIDERS SYNC (FOR ADMIN COMMAND CENTER)

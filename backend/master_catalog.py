@@ -1098,10 +1098,13 @@ def search_master_catalog(query: str, limit: int = 6) -> List[Dict[str, Any]]:
     return matches[:limit]
 
 
-def build_master_product_card(catalog_item: Dict[str, Any]) -> Product:
+def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = None) -> Product:
     """
     Constructs a fully-populated, authentic Product comparison card
     enriched with verified Bangladeshi dealer offers and full specs.
+    Option B Architecture:
+      - Master Catalog provides the Canonical Whitelist (Title, Specs, Images, Model Code, Variant).
+      - Store offers come dynamically from jachai.db if existing, or verified dealer direct landing links (NEVER broken search pages).
     Delegates to appliances_catalog if category is Home Appliances.
     """
     if catalog_item.get("category") == "Home Appliances":
@@ -1130,11 +1133,56 @@ def build_master_product_card(catalog_item: Dict[str, Any]) -> Product:
         created_at=datetime.utcnow(),
     )
 
+    # Option B: Check DB for real live scraped StoreOffers for this SKU
+    if db is not None:
+        try:
+            existing = db.query(Product).filter(Product.slug == slug).first()
+            if existing and existing.offers:
+                clean_db_offers = [
+                    o for o in existing.offers
+                    if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                ]
+                if clean_db_offers:
+                    prod.offers = clean_db_offers
+                    return prod
+        except Exception:
+            pass
+
     offers: List[StoreOffer] = []
+    try:
+        from bd_stores_registry import get_store_registry_meta, compute_trust_score
+    except ImportError:
+        from .bd_stores_registry import get_store_registry_meta, compute_trust_score
+
+    CLEAN_MERCHANT_DOMAINS = {
+        "apple gadgets bd": "https://www.applegadgetsbd.com",
+        "custom mac bd": "https://custommacbd.com",
+        "star tech": "https://www.startech.com.bd",
+        "ryans computers": "https://www.ryanscomputers.com",
+        "dazzle bd": "https://dazzle.com.bd",
+        "techland bd": "https://www.techlandbd.com",
+        "pickaboo": "https://www.pickaboo.com",
+        "gadget & gear": "https://gadgetandgear.com",
+        "daraz bangladesh": "https://www.daraz.com.bd",
+    }
+
     for idx, s in enumerate(catalog_item.get("stores", [])):
         s_name = s.get("name", "Verified BD Dealer")
+        s_low = s_name.lower().strip()
         s_price = s.get("price", starting_p)
-        s_url = s.get("url", f"https://www.google.com/search?q={quote_plus(s_name + ' ' + catalog_item['model_code'])}")
+        raw_u = s.get("url") or ""
+
+        # Guard: NEVER allow broken search URLs or non-shop sites
+        if any(bad in raw_u.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=", "mobiledokan")):
+            s_url = CLEAN_MERCHANT_DOMAINS.get(s_low, "https://www.startech.com.bd")
+        elif raw_u.startswith("http"):
+            s_url = raw_u
+        else:
+            s_url = CLEAN_MERCHANT_DOMAINS.get(s_low, "https://www.startech.com.bd")
+
+        meta = get_store_registry_meta(s_name)
+        is_pre = bool(meta.get("is_preseeded", True))
+        trust = compute_trust_score(store_name=s_name, is_preseeded=is_pre, price=float(s_price))
 
         offer = StoreOffer(
             id=850000 + abs(hash(slug)) % 10000 * 10 + idx,
@@ -1143,20 +1191,20 @@ def build_master_product_card(catalog_item: Dict[str, Any]) -> Product:
             source_type="crawler",
             target_url=s_url,
             website_url=s_url,
-            facebook_url=f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}",
+            facebook_url=meta.get("facebook_url") or f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}",
             current_price=s_price,
             original_price=int(s_price * 1.07),
-            cod_terms_en=f"৳{s_price:,} · Authentic Warranty · Cash on Delivery Available",
-            cod_terms_bn=f"৳{s_price:,} · খাঁটি ওয়্যারেন্টি · ক্যাশ অন ডেলিভারি প্রযোজ্য",
-            warranty_text="Official / Store Verified Warranty",
+            cod_terms_en=f"৳{s_price:,} · Authentic Warranty · Cash on Delivery Available" if is_pre else "⚠️ Unverified Merchant · COD Only",
+            cod_terms_bn=f"৳{s_price:,} · খাঁটি ওয়্যারেন্টি · ক্যাশ অন ডেলিভারি প্রযোজ্য" if is_pre else "⚠️ অযাচাইকৃত বিক্রেতা · ক্যাশ অন ডেলিভারিতে চেক করে নিন",
+            warranty_text="Official BD Warranty" if is_pre else "Store Warranty",
             in_stock=True,
             spider_status="healthy",
             last_synced_at="Verified Merchant Index",
-            is_preseeded=True,
+            is_preseeded=is_pre,
             is_sponsored=False,
-            trust_score=96,
-            trust_badge="✓ 98% Verified Safe",
-            risk_level="low",
+            trust_score=trust["trust_score"],
+            trust_badge=trust["trust_badge"],
+            risk_level=trust["risk_level"],
             discount_tag="7% OFF",
             discount_pct=7,
         )

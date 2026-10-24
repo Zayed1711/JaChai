@@ -804,9 +804,11 @@ export function mapProductItem(p) {
     const orig = o.original_price || Math.round(o.current_price * 1.15);
     const discPct = o.discount_pct || (orig > o.current_price ? Math.round(((orig - o.current_price) / orig) * 100) : null);
     const discTag = o.discount_tag || (discPct && discPct >= 5 ? `${discPct}% OFF` : null);
-    const isPre = o.is_preseeded !== false;
+    const isPre = o.is_preseeded === true;
     const web = o.website_url || (o.target_url && !o.target_url.includes('facebook.com') ? o.target_url : null);
     const fb = o.facebook_url || (o.target_url && o.target_url.includes('facebook.com') ? o.target_url : null);
+    const directUrl = o.target_url || web || fb || '';
+    const isRisky = o.risk_level === 'high' || Boolean(o.trust_badge && o.trust_badge.includes('Risk'));
 
     return {
       id: o.id,
@@ -814,23 +816,23 @@ export function mapProductItem(p) {
         o.source_type === 'f_commerce'
           ? 'F-COMMERCE'
           : o.source_type === 'crawler'
-          ? 'WEB STORE'
+          ? (isPre ? 'VERIFIED STORE' : 'WEB STORE')
           : 'VERIFIED STORE',
       subStoreEn: o.store_name,
       subStoreBn: o.store_name,
-      termsEn: o.cod_terms_en || 'Cash on Delivery Available',
-      termsBn: o.cod_terms_bn || 'ক্যাশ অন ডেলিভারি প্রযোজ্য',
+      termsEn: o.cod_terms_en || (isPre ? 'Cash on Delivery Available' : 'Cash on Delivery Only (Verify on Delivery)'),
+      termsBn: o.cod_terms_bn || (isPre ? 'ক্যাশ অন ডেলিভারি প্রযোজ্য' : 'শুধুমাত্র ক্যাশ অন ডেলিভারি (চেক করে নিন)'),
       price: o.current_price,
       originalPrice: orig,
-      warrantyEn: o.warranty_text || 'Official Warranty',
-      warrantyBn: o.warranty_text || 'অফিসিয়াল ওয়ারেন্টি',
-      url: o.target_url || web || fb,
+      warrantyEn: o.warranty_text || (isPre ? 'Official Warranty' : 'Store Policy Warranty'),
+      warrantyBn: o.warranty_text || (isPre ? 'অফিসিয়াল ওয়ারেন্টি' : 'স্টোর পলিসি ওয়ারেন্টি'),
+      url: directUrl,
       websiteUrl: web,
       facebookUrl: fb,
       isPreseeded: isPre,
-      trustScore: o.trust_score || (isPre ? 96 : 78),
-      trustBadge: o.trust_badge || (isPre ? '✓ 98% Verified Safe' : 'Market Verified'),
-      riskLevel: o.risk_level || (isPre ? 'low' : 'moderate'),
+      trustScore: o.trust_score ?? (isRisky ? 45 : (isPre ? 96 : 60)),
+      trustBadge: o.trust_badge || (isRisky ? '⚠️ Price Anomaly / High Risk' : (isPre ? '✓ Verified Store / 98% Safe' : '⚠️ Unverified Merchant · COD Only')),
+      riskLevel: o.risk_level || (isRisky ? 'high' : (isPre ? 'low' : 'moderate')),
       discountTag: discTag,
       discountPct: discPct,
       isSponsored: Boolean(o.is_sponsored),

@@ -346,3 +346,4 @@ if __name__ == "__main__":
         print(f"Persisted {saved} SKUs to database.")
     finally:
         db.close()
+

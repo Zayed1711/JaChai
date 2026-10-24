@@ -48,6 +48,15 @@ export default function OfferCard({ offer, isLowestPrice = false }: OfferCardPro
                 </span>
               )
             )}
+            {offer.is_preseeded === false ? (
+              <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black uppercase px-2.5 py-0.5 rounded flex items-center gap-1 shadow-xs">
+                ⚠️ UNVERIFIED MERCHANT · COD ONLY
+              </span>
+            ) : (
+              <span className="bg-[#DCFCE7] text-[#166534] border border-[#166534]/20 text-[10px] font-bold uppercase px-2 py-0.5 rounded flex items-center gap-1">
+                ✓ VERIFIED STORE
+              </span>
+            )}
             {offer.trust_badge && (
               <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
                 isHighRisk

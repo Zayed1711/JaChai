@@ -915,9 +915,12 @@ def compute_trust_score(
     # Clamp score to [10, 99]
     score = max(10, min(99, score))
 
-    if score >= 88:
+    if not is_preseeded:
+        risk_level = "moderate" if score >= 60 else "high"
+        trust_badge = "⚠️ Unverified Merchant · COD Only" if risk_level == "moderate" else "⚠️ High Risk / Unverified Merchant"
+    elif score >= 88:
         risk_level = "low"
-        trust_badge = "✓ 98% Verified Safe" if is_preseeded else "✓ Market Verified"
+        trust_badge = "✓ 98% Verified Safe"
     elif score >= 60:
         risk_level = "moderate"
         trust_badge = "Standard Merchant · COD Recommended"

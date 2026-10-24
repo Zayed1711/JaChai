@@ -309,3 +309,4 @@ if __name__ == "__main__":
     print(f"Successfully harvested {len(results)} items.")
     for r in results[:5]:
         print(f" - [{r['store_name']}] {r['title']} -> ৳{r['price']:,} ({r['url']})")
+
