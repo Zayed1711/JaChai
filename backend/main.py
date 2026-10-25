@@ -846,7 +846,8 @@ async def search_products_live(
                 target_cat_id.lower(),
                 "browse", "all", "",
             }
-            if browse or not query_str or q_clean_lower in default_triggers:
+            is_specific_query = bool(query_str and q_clean_lower not in default_triggers)
+            if not is_specific_query and (browse or not query_str or q_clean_lower in default_triggers):
                 cards = build_predetermined_browse_products(target_cat_id, subcategory=subcategory)
                 if cards:
                     return cards

@@ -758,8 +758,11 @@ def build_store_target_url(store_name: str, query: str, vertical: Optional[str] 
                     return STORE_CATEGORY_PAGES[dom][cat_id]
         except Exception:
             pass
-        if dom in MERCHANT_SEARCH_TEMPLATES:
-            return MERCHANT_SEARCH_TEMPLATES[dom].format(q=clean_q)
+        if store.get("website_url"):
+            w = store["website_url"]
+            return w if w.startswith("http") else f"https://{w}"
+        if dom:
+            return f"https://{dom}"
         try:
             from url_healer import STORE_CATEGORY_PAGES
             cat_id, _ = resolve_category_from_query(query, vertical)

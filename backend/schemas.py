@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator, model_validator
@@ -190,6 +191,16 @@ class StoreOfferResponse(StoreOfferBase):
             meta = get_store_registry_meta(self.store_name)
             if not self.website_url and meta.get("website_url"):
                 self.website_url = meta["website_url"]
+
+            # Universal Deep Link Guard: NEVER allow broken /search?q= or /catalog/?q= URLs to escape to clients
+            if self.target_url and ('{q}' in self.target_url or any(bad in self.target_url.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=", "?s="))):
+                parsed_t = urlparse(self.target_url)
+                if parsed_t.netloc:
+                    self.target_url = f"{parsed_t.scheme or 'https'}://{parsed_t.netloc}"
+            if self.website_url and ('{q}' in self.website_url or any(bad in self.website_url.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=", "?s="))):
+                parsed_w = urlparse(self.website_url)
+                if parsed_w.netloc:
+                    self.website_url = f"{parsed_w.scheme or 'https'}://{parsed_w.netloc}" 
             if not self.facebook_url and meta.get("facebook_url"):
                 self.facebook_url = meta["facebook_url"]
 

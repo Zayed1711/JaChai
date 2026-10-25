@@ -122,6 +122,56 @@ def scrape_live_web_suggestions(query_prefix: str, limit: int = 6) -> List[str]:
 
     return results
 
+
+SERIES_GENERATIONS = {
+    "redmi note": ["Redmi Note 13 Pro", "Redmi Note 14 Pro", "Redmi Note 13 5G"],
+    "pixel": ["Google Pixel 9", "Google Pixel 9 Pro", "Google Pixel 8a"],
+    "iphone": ["iPhone 16", "iPhone 16 Pro", "iPhone 15"],
+    "galaxy s": ["Samsung Galaxy S24", "Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 FE"],
+    "oneplus": ["OnePlus 12", "OnePlus 12R", "OnePlus Nord 4"],
+}
+
+COMMON_TYPOS = {
+    "sumsung": "Samsung",
+    "samsng": "Samsung",
+    "ipone": "iPhone",
+    "iphne": "iPhone",
+    "pixle": "Google Pixel",
+    "macbok": "MacBook",
+    "sharge": "SHARGE",
+}
+
+def generate_did_you_mean(query: str) -> List[str]:
+    q_low = (query or "").strip().lower()
+    if not q_low:
+        return []
+    suggestions = []
+
+    for typo, correction in COMMON_TYPOS.items():
+        if typo in q_low:
+            fixed = re.sub(rf"\b{typo}\b", correction, q_low, flags=re.IGNORECASE)
+            suggestions.append(fixed.title())
+
+    for series, valid_models in SERIES_GENERATIONS.items():
+        m = re.search(rf"\b{series}\s*(\d+[a-z]?)\b", q_low)
+        if m:
+            gen_num = m.group(1)
+            matching_valid = [vm for vm in valid_models if gen_num in vm.lower()]
+            if not matching_valid:
+                is_pro = "pro" in q_low
+                is_ultra = "ultra" in q_low
+                for vm in valid_models:
+                    if is_pro and "pro" not in vm.lower():
+                        continue
+                    if is_ultra and "ultra" not in vm.lower():
+                        continue
+                    if vm not in suggestions:
+                        suggestions.append(vm)
+                if not suggestions:
+                    suggestions.extend(valid_models[:2])
+
+    return suggestions[:4]
+
 def get_search_suggestions(raw_prefix: str, limit: int = 6) -> Dict[str, Any]:
     """
     Returns live, continuously web-scraped and dynamically indexed product suggestions.
@@ -136,7 +186,7 @@ def get_search_suggestions(raw_prefix: str, limit: int = 6) -> Dict[str, Any]:
     if q in _SUGGESTION_CACHE:
         entry = _SUGGESTION_CACHE[q]
         if now - entry["timestamp"] < _CACHE_EXPIRY_SEC:
-            return {"query": raw_prefix, "suggestions": entry["data"]}
+            return {"query": raw_prefix, "suggestions": entry["data"], "did_you_mean": entry.get("did_you_mean", [])}
 
     matched_titles: List[str] = []
     seen = set()
@@ -179,13 +229,17 @@ def get_search_suggestions(raw_prefix: str, limit: int = 6) -> Dict[str, Any]:
 
     formatted_suggestions = [{"title": t} for t in matched_titles[:limit]]
 
+    did_you_mean = generate_did_you_mean(raw_prefix)
+
     # Update cache
     _SUGGESTION_CACHE[q] = {
         "timestamp": now,
         "data": formatted_suggestions,
+        "did_you_mean": did_you_mean,
     }
 
     return {
         "query": raw_prefix,
         "suggestions": formatted_suggestions,
+        "did_you_mean": did_you_mean,
     }

@@ -2003,6 +2003,81 @@ async def scrape_wide_net_multistore(query: str, min_floor: int = 150, anchor_to
     await asyncio.gather(_worker_custommac(), _worker_startech(), _worker_web_live(), return_exceptions=True)
     return results
 
+def rank_and_filter_serp_products(products: List[Product], query_str: str) -> List[Product]:
+    """
+    Multi-stage SERP ranker inspired by Google Search Engine Architecture:
+    Combines exact phrase matching, hardware generation alignment, storage/variant precision,
+    verified merchant depth, and heavily penalizes or discards conflicting generations.
+    """
+    if not products:
+        return []
+    q_low = (query_str or "").lower().strip()
+    scored: List[Tuple[float, Product]] = []
+
+    device_series_patterns = [
+        (r"\bpixel\s*(\d+[a-z]?)\b", r"\bpixel\s*(\d+[a-z]?)\b"),
+        (r"\biphone\s*(\d+[a-z]?)\b", r"\biphone\s*(\d+[a-z]?)\b"),
+        (r"\b(?:galaxy\s*)?s(\d+[a-z]?)\b", r"\b(?:galaxy\s*)?s(\d+[a-z]?)\b"),
+        (r"\b(?:redmi\s*)?note\s*(\d+[a-z]?)\b", r"\b(?:redmi\s*)?note\s*(\d+[a-z]?)\b"),
+        (r"\b(?:oneplus|nord)\s*(\d+[a-z]?)\b", r"\b(?:oneplus|nord)\s*(\d+[a-z]?)\b"),
+        (r"\b(?:gopro\s*(?:hero)?|hero)\s*(\d+)\b", r"\b(?:gopro\s*(?:hero)?|hero)\s*(\d+)\b"),
+        (r"\bwatch\s*(?:series\s*)?(\d+)\b", r"\bwatch\s*(?:series\s*)?(\d+)\b"),
+    ]
+    q_caps = re.findall(r"\b(64|128|256|512|1tb)\s*(?:gb)?\b", q_low)
+
+    for prod in products:
+        t_low = (prod.title_en or "").lower()
+        score = 0.0
+
+        has_conflict = False
+        for q_pat, t_pat in device_series_patterns:
+            q_m = re.search(q_pat, q_low)
+            if q_m:
+                q_gen = q_m.group(1).lower()
+                t_m = re.search(t_pat, t_low)
+                if t_m:
+                    t_gen = t_m.group(1).lower()
+                    if q_gen == t_gen:
+                        score += 10000.0
+                    else:
+                        has_conflict = True
+                        break
+        if has_conflict:
+            continue
+
+        if any(unrel in t_low for unrel in ("pixel 10", "iphone 17")) and not any(unrel in q_low for unrel in ("pixel 10", "iphone 17")):
+            continue
+
+        if t_low in ("smartphone", "feature phone", "tablet", "smartwatch", "fitness tracker") and len(q_low.split()) >= 2:
+            continue
+
+        if q_caps:
+            for cap in q_caps:
+                if cap in t_low:
+                    score += 5000.0
+                else:
+                    score -= 1500.0
+
+        clean_q = re.sub(r"[^\w\s]", " ", q_low)
+        clean_tokens = [tok for tok in clean_q.split() if len(tok) >= 2 or tok.isdigit()]
+        for tok in clean_tokens:
+            if re.search(rf"\b{re.escape(tok)}\b", t_low):
+                score += 1000.0
+            elif tok in t_low:
+                score += 400.0
+
+        offers_count = len(prod.offers) if prod.offers else 0
+        score += min(offers_count * 200.0, 1600.0)
+
+        clean_t = re.sub(r"\(.*?\)", "", t_low).strip()
+        if clean_t and (clean_t in q_low or q_low in clean_t):
+            score += 8000.0
+
+        scored.append((score, prod))
+
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [p for s, p in scored if s > 0]
+
 async def live_meta_search_and_persist(
     query: str, category: Optional[str], db: Session
 ) -> List[Product]:
@@ -2063,7 +2138,13 @@ async def live_meta_search_and_persist(
             matched_catalog_item = master_matches[0]
             cards = []
             for mm in master_matches:
-                existing = db.query(Product).options(joinedload(Product.offers)).filter(Product.slug == mm["slug"]).first()
+                existing = db.query(Product).options(joinedload(Product.offers)).filter(
+                    or_(
+                        Product.slug == mm["slug"],
+                        Product.slug == f"{mm['slug']}-new",
+                        Product.title_en.ilike(f"%{mm['title_en'].split('(')[0].strip()}%")
+                    )
+                ).first()
                 if existing and len(existing.offers) >= 1:
                     # Keep clean offers with direct URLs
                     clean_offers = [
@@ -2103,7 +2184,7 @@ async def live_meta_search_and_persist(
     cached_products = list(db_cache_q.all())
 
     # Tokenized conjunction fallback for DB cache
-    raw_tokens = [t for t in re.findall(r"[a-zA-Z0-9]+", cleaned_display_q.lower()) if len(t) >= 2]
+    raw_tokens = [t for t in re.findall(r"[a-zA-Z0-9]+", cleaned_display_q.lower()) if len(t) >= 2 or t.isdigit()]
     sig_tokens = [t for t in raw_tokens if t not in ("the", "and", "for", "with", "best", "price", "bd", "in", "online", "buy")]
     if len(sig_tokens) >= 2:
         token_filters = [or_(Product.title_en.ilike(f"%{tok}%"), Product.slug.ilike(f"%{tok}%")) for tok in sig_tokens]
@@ -2212,8 +2293,10 @@ async def live_meta_search_and_persist(
     has_valid_cached = len(sanitized_cached) >= 1 and any(len(p.offers) >= 1 for p in sanitized_cached)
     print(f"[CRAWLER_TRACE] Cache check: sanitized={len(sanitized_cached)}, has_valid={has_valid_cached}", flush=True)
     if has_valid_cached and (not user_explicit_wants_used or has_cached_used):
-        print(f"[CRAWLER_TRACE] Returning {len(sanitized_cached)} products from CACHE!", flush=True)
-        return sanitized_cached
+        ranked_cached = rank_and_filter_serp_products(sanitized_cached, q_norm)
+        if ranked_cached:
+            print(f"[CRAWLER_TRACE] Returning {len(ranked_cached)} products from CACHE!", flush=True)
+            return ranked_cached
 
     print(f"[CRAWLER_TRACE] Step 3: Falling through to live external scraping for '{search_kw}'", flush=True)
 
@@ -2726,7 +2809,8 @@ async def live_meta_search_and_persist(
         from master_catalog import build_master_product_card
         return [build_master_product_card(matched_catalog_item, db=db)]
 
-    return final_products
+    ranked_final = rank_and_filter_serp_products(final_products, q_norm)
+    return ranked_final
 
 # ==============================================================================
 # 10. SINGLE-OFFER & ALL-SPIDERS SYNC (FOR ADMIN COMMAND CENTER)

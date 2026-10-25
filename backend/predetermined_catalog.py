@@ -335,14 +335,17 @@ def build_predetermined_browse_products(
             raw_w = s_dict.get("website_url") or s_dict.get("Website") or s_dict.get("website") or ""
             raw_fb = s_dict.get("facebook_page_url") or ""
             
-            clean_q = quote_plus(search_kw)
-            if s_dom in MERCHANT_SEARCH_TEMPLATES:
-                target_url = MERCHANT_SEARCH_TEMPLATES[s_dom].format(q=clean_q)
-                w_url = target_url
+            # Universal Deep Link: Use direct clean merchant website or facebook page (NEVER broken search queries)
+            if '{q}' in raw_w or '/search' in raw_w:
+                raw_w = raw_w.replace('{q}', '').split('/product/search')[0].split('/search')[0].split('?')[0].rstrip('/')
+
+            if raw_w:
+                w_url = raw_w if raw_w.startswith("http") else f"https://{raw_w}"
+                target_url = w_url
                 fb_url = raw_fb or f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}"
                 s_type = "crawler"
-            elif raw_w:
-                w_url = raw_w if raw_w.startswith("http") else f"https://{raw_w}"
+            elif s_dom:
+                w_url = f"https://{s_dom}"
                 target_url = w_url
                 fb_url = raw_fb or f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}"
                 s_type = "crawler"
@@ -360,6 +363,11 @@ def build_predetermined_browse_products(
             step = offsets[s_idx % len(offsets)] if starts_from >= 1000 else (s_idx * 20)
             store_start_price = starts_from + step
 
+            # Dynamic verification & TrustShield scoring
+            is_pre = bool(s_dict.get("is_preseeded", True))
+            from bd_stores_registry import compute_trust_score
+            trust_info = compute_trust_score(store_name=s_name, is_preseeded=is_pre, price=float(store_start_price))
+
             offer = StoreOffer(
                 id=800000 + idx * 20 + s_idx,
                 product_id=prod.id,
@@ -370,17 +378,17 @@ def build_predetermined_browse_products(
                 facebook_url=fb_url,
                 current_price=store_start_price,
                 original_price=store_start_price,
-                cod_terms_en=f"Starts from ৳{store_start_price:,} · Direct Store Catalog · Cash on Delivery",
-                cod_terms_bn=f"শুরু ৳{store_start_price:,} থেকে · সরাসরি স্টোর ক্যাটালগ · ক্যাশ অন ডেলিভারি",
-                warranty_text="Verified Store Catalog",
+                cod_terms_en=f"Starts from ৳{store_start_price:,} · Direct Store Catalog · Cash on Delivery" if is_pre else "⚠️ Unverified Merchant · COD Only",
+                cod_terms_bn=f"শুরু ৳{store_start_price:,} থেকে · সরাসরি স্টোর ক্যাটালগ · ক্যাশ অন ডেলিভারি" if is_pre else "⚠️ অযাচাইকৃত বিক্রেতা · ক্যাশ অন ডেলিভারিতে চেক করে নিন",
+                warranty_text="Verified Store Catalog" if is_pre else "Store Warranty",
                 in_stock=True,
                 spider_status="healthy",
                 last_synced_at="Verified Directory",
-                is_preseeded=True,
+                is_preseeded=is_pre,
                 is_sponsored=False,
-                trust_score=96,
-                trust_badge="✓ 98% Verified Safe",
-                risk_level="low",
+                trust_score=trust_info["trust_score"],
+                trust_badge=trust_info["trust_badge"],
+                risk_level=trust_info["risk_level"],
                 discount_tag="STARTS FROM",
                 discount_pct=None,
             )

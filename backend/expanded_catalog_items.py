@@ -360,7 +360,7 @@ EXPANDED_CATALOG_ITEMS: List[Dict[str, Any]] = [
             {"name": "Custom Mac BD", "price": 82990, "url": "https://custommacbd.com/products/mac-mini-m4"},
             {"name": "Apple Gadgets BD", "price": 83500, "url": "https://www.applegadgetsbd.com/product/mac-mini-m4"},
             {"name": "Star Tech", "price": 85000, "url": "https://www.startech.com.bd/apple-mac-mini-m4"},
-            {"name": "Ryans Computers", "price": 86000, "url": "https://www.ryanscomputers.com/search?q=mac+mini+m4"},
+            {"name": "Ryans Computers", "price": 86000, "url": "https://www.ryanscomputers.com"},
         ]
     },
     {

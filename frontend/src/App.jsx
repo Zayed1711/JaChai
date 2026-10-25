@@ -4630,37 +4630,7 @@ export default function App() {
 
 
       } else {
-
-
-
-        const filtered = products.filter(
-
-
-
-          (p) =>
-
-
-
-            p.nameEn.toLowerCase().includes(q.toLowerCase()) ||
-
-
-
-            p.nameBn.includes(q) ||
-
-
-
-            p.categoryEn.toLowerCase().includes(q.toLowerCase())
-
-
-
-        );
-
-
-
-        setSearchResults(filtered);
-
-
-
+        setSearchResults([]);
       }
 
 
@@ -7507,6 +7477,31 @@ export default function App() {
                     ? 'আপনার কাঙ্ক্ষিত পণ্যটি না পেলে তা হয়তো স্টকে নেই, অথবা ১ বছরের বেশি পুরনো হওয়ায় অপ্রাসঙ্গিক ও বিভ্রান্তিকর দাম পরিহার করতে ফিল্টার করা হয়েছে।'
                     : "If you don't get your desired search result, the product might be currently out of stock or listings over 1 year old were excluded to ensure accurate, up-to-date pricing."}
                 </div>
+
+                {activeDisambiguationPills && activeDisambiguationPills.length > 0 && (
+                  <div className="mb-5 p-4 rounded-xl bg-teal-50 border border-teal-200">
+                    <p className="text-xs font-semibold text-teal-900 mb-2.5">
+                      {lang === 'bn' ? 'সম্ভাব্য সঠিক মডেল বা ব্র্যান্ড:' : 'Did you mean one of these available models?'}
+                    </p>
+                    <div className="flex items-center justify-center gap-2 flex-wrap">
+                      {activeDisambiguationPills.map((pill, pIdx) => {
+                        const text = typeof pill === 'string' ? pill : (pill.text || pill.title || '');
+                        const cat = (typeof pill === 'object' && pill.category_id) ? pill.category_id : 'all';
+                        return (
+                          <button
+                            key={pIdx}
+                            type="button"
+                            onClick={() => handleSelectSuggestion(text, cat)}
+                            className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-teal-800 border border-teal-300 shadow-sm hover:bg-teal-100 transition cursor-pointer flex items-center gap-1.5"
+                          >
+                            <span>{text}</span>
+                            <ArrowUpRight className="w-3.5 h-3.5 text-teal-600" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <button
 

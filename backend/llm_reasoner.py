@@ -272,7 +272,7 @@ def extract_mandatory_anchor_tokens(raw_query: str) -> List[str]:
     cleaned = translate_bengali_and_banglish_for_store(cleaned)
 
     cleaned = re.sub(r"[^\w\s\u0980-\u09FF-]", " ", cleaned.lower())
-    tokens = [t.strip() for t in cleaned.split() if len(t.strip()) >= 2 and t.strip() not in STOP_WORDS]
+    tokens = [t.strip() for t in cleaned.split() if (len(t.strip()) >= 2 or t.strip().isdigit()) and t.strip() not in STOP_WORDS]
     tokens = [t for t in tokens if not re.match(r"^f\d+$", t)]
     return tokens or [raw_query.strip().lower()]
 
@@ -325,10 +325,32 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
             return False
     # Reverse guard: if user searched a specific numbered model like 'iPhone 15 Pro' (without 'max'), do not mix 'Pro Max'
     has_num = any(any(ch.isdigit() for ch in tok) for tok in q_tokens_set)
-    if has_num and ("iphone" in q_tokens_set or "samsung" in q_tokens_set or "galaxy" in q_tokens_set or "redmi" in q_tokens_set):
+    if has_num and ("iphone" in q_tokens_set or "samsung" in q_tokens_set or "galaxy" in q_tokens_set or "redmi" in q_tokens_set or "pixel" in q_tokens_set):
         for rev_mod in ("max", "ultra", "plus"):
             if rev_mod not in q_tokens_set and re.search(r"\b" + re.escape(rev_mod) + r"\b", t_low):
                 return False
+
+    # 2.5 Hardware Generation Invariant Gate (Google Search Architecture entity alignment)
+    # When user asks for a specific generation (e.g. Pixel 9, iPhone 16, Note 13, Galaxy S24),
+    # conflicting generations (e.g. Pixel 10, Pixel 8, Note 30, iPhone 15) MUST be immediately rejected.
+    GEN_SERIES_PATTERNS = [
+        (r"\bpixel\s*(\d+[a-z]?)\b", r"\bpixel\s*(\d+[a-z]?)\b"),
+        (r"\biphone\s*(\d+[a-z]?)\b", r"\biphone\s*(\d+[a-z]?)\b"),
+        (r"\b(?:galaxy\s*)?s(\d+[a-z]?)\b", r"\b(?:galaxy\s*)?s(\d+[a-z]?)\b"),
+        (r"\b(?:redmi\s*)?note\s*(\d+[a-z]?)\b", r"\b(?:redmi\s*)?note\s*(\d+[a-z]?)\b"),
+        (r"\b(?:oneplus|nord)\s*(\d+[a-z]?)\b", r"\b(?:oneplus|nord)\s*(\d+[a-z]?)\b"),
+        (r"\b(?:gopro\s*(?:hero)?|hero)\s*(\d+)\b", r"\b(?:gopro\s*(?:hero)?|hero)\s*(\d+)\b"),
+        (r"\bwatch\s*(?:series\s*)?(\d+)\b", r"\bwatch\s*(?:series\s*)?(\d+)\b"),
+    ]
+    for q_pattern, t_pattern in GEN_SERIES_PATTERNS:
+        q_gen_m = re.search(q_pattern, q_low)
+        if q_gen_m:
+            q_gen = q_gen_m.group(1).lower()
+            t_gen_m = re.search(t_pattern, t_low)
+            if t_gen_m:
+                t_gen = t_gen_m.group(1).lower()
+                if q_gen != t_gen:
+                    return False
 
     # 3. Partition Anchor Tokens into Core Hardware Anchors and Accessory Anchors
     acc_set = set(ACCESSORY_KEYWORDS) | {

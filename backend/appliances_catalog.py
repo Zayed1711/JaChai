@@ -45,11 +45,11 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 37500,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Walton ePlaza", "price": 34990, "url": "https://eplaza.waltonbd.com/catalogsearch/result/?q=WFC-3F5"},
-            {"name": "Transcom Digital", "price": 35500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Walton+WFC-3F5"},
-            {"name": "Singer Bangladesh", "price": 36200, "url": "https://singerbd.com/catalogsearch/result/?q=Walton+Refrigerator"},
-            {"name": "Daraz Bangladesh", "price": 35200, "url": "https://www.daraz.com.bd/catalog/?q=Walton+WFC-3F5"},
-            {"name": "Best Electronics", "price": 35800, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Walton+Refrigerator"},
+            {"name": "Walton ePlaza", "price": 34990, "url": "https://eplaza.waltonbd.com"},
+            {"name": "Transcom Digital", "price": 35500, "url": "https://transcomdigital.com"},
+            {"name": "Singer Bangladesh", "price": 36200, "url": "https://singerbd.com"},
+            {"name": "Daraz Bangladesh", "price": 35200, "url": "https://www.daraz.com.bd"},
+            {"name": "Best Electronics", "price": 35800, "url": "https://bestelectronics.com.bd"},
         ]
     },
     {
@@ -69,10 +69,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 62500,
         "image_url": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Walton ePlaza", "price": 58900, "url": "https://eplaza.waltonbd.com/catalogsearch/result/?q=WFD-4E0"},
-            {"name": "Transcom Digital", "price": 59900, "url": "https://transcomdigital.com/catalogsearch/result/?q=Walton+WFD-4E0"},
-            {"name": "Daraz Bangladesh", "price": 59500, "url": "https://www.daraz.com.bd/catalog/?q=Walton+WFD-4E0"},
-            {"name": "Best Electronics", "price": 60500, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Walton+Non+Frost"},
+            {"name": "Walton ePlaza", "price": 58900, "url": "https://eplaza.waltonbd.com"},
+            {"name": "Transcom Digital", "price": 59900, "url": "https://transcomdigital.com"},
+            {"name": "Daraz Bangladesh", "price": 59500, "url": "https://www.daraz.com.bd"},
+            {"name": "Best Electronics", "price": 60500, "url": "https://bestelectronics.com.bd"},
         ]
     },
     {
@@ -92,11 +92,11 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 53500,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 48900, "url": "https://transcomdigital.com/catalogsearch/result/?q=Samsung+RT28"},
-            {"name": "Butterfly Marketing", "price": 49500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Samsung+RT28"},
-            {"name": "Best Electronics", "price": 49200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Samsung+RT28"},
-            {"name": "Rangs Electronics", "price": 50500, "url": "https://sonyrangs.com/catalogsearch/result/?q=Samsung+RT28"},
-            {"name": "Daraz Bangladesh", "price": 49000, "url": "https://www.daraz.com.bd/catalog/?q=Samsung+RT28"},
+            {"name": "Transcom Digital", "price": 48900, "url": "https://transcomdigital.com"},
+            {"name": "Butterfly Marketing", "price": 49500, "url": "https://butterflygroupbd.com"},
+            {"name": "Best Electronics", "price": 49200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Rangs Electronics", "price": 50500, "url": "https://sonyrangs.com"},
+            {"name": "Daraz Bangladesh", "price": 49000, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -116,10 +116,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 67900,
         "image_url": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 62500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Samsung+RT34"},
-            {"name": "Butterfly Marketing", "price": 63200, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Samsung+RT34"},
-            {"name": "Best Electronics", "price": 62900, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Samsung+RT34"},
-            {"name": "Daraz Bangladesh", "price": 63000, "url": "https://www.daraz.com.bd/catalog/?q=Samsung+RT34"},
+            {"name": "Transcom Digital", "price": 62500, "url": "https://transcomdigital.com"},
+            {"name": "Butterfly Marketing", "price": 63200, "url": "https://butterflygroupbd.com"},
+            {"name": "Best Electronics", "price": 62900, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 63000, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -139,10 +139,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 34500,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Singer Bangladesh", "price": 31990, "url": "https://singerbd.com/catalogsearch/result/?q=Refrigerator"},
-            {"name": "Transcom Digital", "price": 32500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Singer+Refrigerator"},
-            {"name": "Best Electronics", "price": 32200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Singer+Refrigerator"},
-            {"name": "Daraz Bangladesh", "price": 32000, "url": "https://www.daraz.com.bd/catalog/?q=Singer+Refrigerator"},
+            {"name": "Singer Bangladesh", "price": 31990, "url": "https://singerbd.com"},
+            {"name": "Transcom Digital", "price": 32500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 32200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 32000, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -162,10 +162,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 35500,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 32900, "url": "https://transcomdigital.com/catalogsearch/result/?q=Haier+HRF-226"},
-            {"name": "Butterfly Marketing", "price": 33500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Haier+HRF-226"},
-            {"name": "Best Electronics", "price": 33200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Haier+Refrigerator"},
-            {"name": "Daraz Bangladesh", "price": 33000, "url": "https://www.daraz.com.bd/catalog/?q=Haier+HRF-226"},
+            {"name": "Transcom Digital", "price": 32900, "url": "https://transcomdigital.com"},
+            {"name": "Butterfly Marketing", "price": 33500, "url": "https://butterflygroupbd.com"},
+            {"name": "Best Electronics", "price": 33200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 33000, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -185,10 +185,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 43000,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Butterfly Marketing", "price": 39500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=LG+GL-B201"},
-            {"name": "Transcom Digital", "price": 40200, "url": "https://transcomdigital.com/catalogsearch/result/?q=LG+GL-B201"},
-            {"name": "Rangs Electronics", "price": 40500, "url": "https://sonyrangs.com/catalogsearch/result/?q=LG+Refrigerator"},
-            {"name": "Daraz Bangladesh", "price": 39800, "url": "https://www.daraz.com.bd/catalog/?q=LG+GL-B201"},
+            {"name": "Butterfly Marketing", "price": 39500, "url": "https://butterflygroupbd.com"},
+            {"name": "Transcom Digital", "price": 40200, "url": "https://transcomdigital.com"},
+            {"name": "Rangs Electronics", "price": 40500, "url": "https://sonyrangs.com"},
+            {"name": "Daraz Bangladesh", "price": 39800, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -208,9 +208,9 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 31500,
         "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Minister Hi-Tech Park", "price": 28500, "url": "https://ministerbd.com/catalogsearch/result/?q=M-200"},
-            {"name": "Daraz Bangladesh", "price": 28900, "url": "https://www.daraz.com.bd/catalog/?q=Minister+M-200"},
-            {"name": "Best Electronics", "price": 29500, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Minister+Refrigerator"},
+            {"name": "Minister Hi-Tech Park", "price": 28500, "url": "https://ministerbd.com"},
+            {"name": "Daraz Bangladesh", "price": 28900, "url": "https://www.daraz.com.bd"},
+            {"name": "Best Electronics", "price": 29500, "url": "https://bestelectronics.com.bd"},
         ]
     },
 
@@ -234,11 +234,11 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 63500,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 58500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Gree+1.5+Ton+Inverter"},
-            {"name": "Best Electronics", "price": 58900, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Gree+1.5+Ton"},
+            {"name": "Transcom Digital", "price": 58500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 58900, "url": "https://bestelectronics.com.bd"},
             {"name": "Star Tech", "price": 59200, "url": "https://startech.com.bd/gree-1-5-ton-inverter-ac"},
-            {"name": "Butterfly Marketing", "price": 59500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Gree+1.5+Ton"},
-            {"name": "Daraz Bangladesh", "price": 58800, "url": "https://www.daraz.com.bd/catalog/?q=Gree+1.5+Ton+Inverter+AC"},
+            {"name": "Butterfly Marketing", "price": 59500, "url": "https://butterflygroupbd.com"},
+            {"name": "Daraz Bangladesh", "price": 58800, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -258,10 +258,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 51000,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 46500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Gree+1+Ton+Inverter"},
-            {"name": "Best Electronics", "price": 46900, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Gree+1+Ton"},
+            {"name": "Transcom Digital", "price": 46500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 46900, "url": "https://bestelectronics.com.bd"},
             {"name": "Star Tech", "price": 47200, "url": "https://startech.com.bd/gree-1-ton-inverter-ac"},
-            {"name": "Daraz Bangladesh", "price": 46800, "url": "https://www.daraz.com.bd/catalog/?q=Gree+1+Ton+Inverter+AC"},
+            {"name": "Daraz Bangladesh", "price": 46800, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -281,10 +281,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 82000,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 76500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Gree+2+Ton"},
-            {"name": "Best Electronics", "price": 77000, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Gree+2+Ton"},
-            {"name": "Butterfly Marketing", "price": 77500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Gree+2+Ton"},
-            {"name": "Daraz Bangladesh", "price": 76800, "url": "https://www.daraz.com.bd/catalog/?q=Gree+2+Ton+Inverter+AC"},
+            {"name": "Transcom Digital", "price": 76500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 77000, "url": "https://bestelectronics.com.bd"},
+            {"name": "Butterfly Marketing", "price": 77500, "url": "https://butterflygroupbd.com"},
+            {"name": "Daraz Bangladesh", "price": 76800, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -304,10 +304,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 58900,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Walton ePlaza", "price": 54900, "url": "https://eplaza.waltonbd.com/catalogsearch/result/?q=Inverna-18H"},
-            {"name": "Transcom Digital", "price": 55500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Walton+1.5+Ton+Inverter"},
-            {"name": "Daraz Bangladesh", "price": 55200, "url": "https://www.daraz.com.bd/catalog/?q=Walton+1.5+Ton+AC"},
-            {"name": "Best Electronics", "price": 55900, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Walton+AC"},
+            {"name": "Walton ePlaza", "price": 54900, "url": "https://eplaza.waltonbd.com"},
+            {"name": "Transcom Digital", "price": 55500, "url": "https://transcomdigital.com"},
+            {"name": "Daraz Bangladesh", "price": 55200, "url": "https://www.daraz.com.bd"},
+            {"name": "Best Electronics", "price": 55900, "url": "https://bestelectronics.com.bd"},
         ]
     },
     {
@@ -327,9 +327,9 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 89000,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 82000, "url": "https://transcomdigital.com/catalogsearch/result/?q=General+1.5+Ton"},
-            {"name": "Best Electronics", "price": 82500, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=General+1.5+Ton"},
-            {"name": "Butterfly Marketing", "price": 83000, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=General+1.5+Ton"},
+            {"name": "Transcom Digital", "price": 82000, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 82500, "url": "https://bestelectronics.com.bd"},
+            {"name": "Butterfly Marketing", "price": 83000, "url": "https://butterflygroupbd.com"},
             {"name": "Star Tech", "price": 83500, "url": "https://startech.com.bd/general-1-5-ton-split-ac"},
         ]
     },
@@ -350,10 +350,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 60500,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 56500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Haier+1.5+Ton"},
-            {"name": "Butterfly Marketing", "price": 56900, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Haier+1.5+Ton"},
-            {"name": "Best Electronics", "price": 57200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Haier+1.5+Ton"},
-            {"name": "Daraz Bangladesh", "price": 56800, "url": "https://www.daraz.com.bd/catalog/?q=Haier+1.5+Ton+Inverter+AC"},
+            {"name": "Transcom Digital", "price": 56500, "url": "https://transcomdigital.com"},
+            {"name": "Butterfly Marketing", "price": 56900, "url": "https://butterflygroupbd.com"},
+            {"name": "Best Electronics", "price": 57200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 56800, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -373,10 +373,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 57500,
         "image_url": "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Singer Bangladesh", "price": 53990, "url": "https://singerbd.com/catalogsearch/result/?q=1.5+Ton+Inverter+AC"},
-            {"name": "Transcom Digital", "price": 54500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Singer+1.5+Ton+AC"},
-            {"name": "Best Electronics", "price": 54200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Singer+1.5+Ton+AC"},
-            {"name": "Daraz Bangladesh", "price": 54000, "url": "https://www.daraz.com.bd/catalog/?q=Singer+1.5+Ton+AC"},
+            {"name": "Singer Bangladesh", "price": 53990, "url": "https://singerbd.com"},
+            {"name": "Transcom Digital", "price": 54500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 54200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 54000, "url": "https://www.daraz.com.bd"},
         ]
     },
 
@@ -400,10 +400,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 59900,
         "image_url": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 54900, "url": "https://transcomdigital.com/catalogsearch/result/?q=Samsung+WW70T"},
-            {"name": "Butterfly Marketing", "price": 55500, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Samsung+WW70T"},
-            {"name": "Best Electronics", "price": 55200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Samsung+Washing+Machine"},
-            {"name": "Daraz Bangladesh", "price": 55000, "url": "https://www.daraz.com.bd/catalog/?q=Samsung+WW70T"},
+            {"name": "Transcom Digital", "price": 54900, "url": "https://transcomdigital.com"},
+            {"name": "Butterfly Marketing", "price": 55500, "url": "https://butterflygroupbd.com"},
+            {"name": "Best Electronics", "price": 55200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 55000, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -423,10 +423,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 62500,
         "image_url": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Butterfly Marketing", "price": 57900, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=LG+FHT1207"},
-            {"name": "Transcom Digital", "price": 58500, "url": "https://transcomdigital.com/catalogsearch/result/?q=LG+7kg+Washing+Machine"},
-            {"name": "Rangs Electronics", "price": 58900, "url": "https://sonyrangs.com/catalogsearch/result/?q=LG+Washing+Machine"},
-            {"name": "Daraz Bangladesh", "price": 58200, "url": "https://www.daraz.com.bd/catalog/?q=LG+7kg+Front+Load"},
+            {"name": "Butterfly Marketing", "price": 57900, "url": "https://butterflygroupbd.com"},
+            {"name": "Transcom Digital", "price": 58500, "url": "https://transcomdigital.com"},
+            {"name": "Rangs Electronics", "price": 58900, "url": "https://sonyrangs.com"},
+            {"name": "Daraz Bangladesh", "price": 58200, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -446,10 +446,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 29900,
         "image_url": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Walton ePlaza", "price": 27500, "url": "https://eplaza.waltonbd.com/catalogsearch/result/?q=WWM-80"},
-            {"name": "Transcom Digital", "price": 28000, "url": "https://transcomdigital.com/catalogsearch/result/?q=Walton+WWM-80"},
-            {"name": "Daraz Bangladesh", "price": 27800, "url": "https://www.daraz.com.bd/catalog/?q=Walton+WWM-80"},
-            {"name": "Best Electronics", "price": 28200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Walton+Washing+Machine"},
+            {"name": "Walton ePlaza", "price": 27500, "url": "https://eplaza.waltonbd.com"},
+            {"name": "Transcom Digital", "price": 28000, "url": "https://transcomdigital.com"},
+            {"name": "Daraz Bangladesh", "price": 27800, "url": "https://www.daraz.com.bd"},
+            {"name": "Best Electronics", "price": 28200, "url": "https://bestelectronics.com.bd"},
         ]
     },
     {
@@ -469,10 +469,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 27500,
         "image_url": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Singer Bangladesh", "price": 24990, "url": "https://singerbd.com/catalogsearch/result/?q=Washing+Machine"},
-            {"name": "Transcom Digital", "price": 25500, "url": "https://transcomdigital.com/catalogsearch/result/?q=Singer+Washing+Machine"},
-            {"name": "Best Electronics", "price": 25200, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Singer+Washing+Machine"},
-            {"name": "Daraz Bangladesh", "price": 25000, "url": "https://www.daraz.com.bd/catalog/?q=Singer+7kg+Washing+Machine"},
+            {"name": "Singer Bangladesh", "price": 24990, "url": "https://singerbd.com"},
+            {"name": "Transcom Digital", "price": 25500, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 25200, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 25000, "url": "https://www.daraz.com.bd"},
         ]
     },
 
@@ -496,11 +496,11 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 9500,
         "image_url": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 8450, "url": "https://transcomdigital.com/catalogsearch/result/?q=Sharp+R-20A0"},
-            {"name": "Best Electronics", "price": 8500, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Sharp+Microwave"},
-            {"name": "Butterfly Marketing", "price": 8600, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Sharp+Microwave"},
-            {"name": "Daraz Bangladesh", "price": 8490, "url": "https://www.daraz.com.bd/catalog/?q=Sharp+R-20A0"},
-            {"name": "Pickaboo", "price": 8700, "url": "https://pickaboo.com/catalogsearch/result/?q=Sharp+Microwave"},
+            {"name": "Transcom Digital", "price": 8450, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 8500, "url": "https://bestelectronics.com.bd"},
+            {"name": "Butterfly Marketing", "price": 8600, "url": "https://butterflygroupbd.com"},
+            {"name": "Daraz Bangladesh", "price": 8490, "url": "https://www.daraz.com.bd"},
+            {"name": "Pickaboo", "price": 8700, "url": "https://pickaboo.com"},
         ]
     },
     {
@@ -520,10 +520,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 15500,
         "image_url": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Butterfly Marketing", "price": 13900, "url": "https://butterflygroupbd.com/catalogsearch/result/?q=Panasonic+NN-ST25JW"},
-            {"name": "Transcom Digital", "price": 14200, "url": "https://transcomdigital.com/catalogsearch/result/?q=Panasonic+Microwave"},
-            {"name": "Best Electronics", "price": 14100, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Panasonic+Microwave"},
-            {"name": "Daraz Bangladesh", "price": 13950, "url": "https://www.daraz.com.bd/catalog/?q=Panasonic+NN-ST25JW"},
+            {"name": "Butterfly Marketing", "price": 13900, "url": "https://butterflygroupbd.com"},
+            {"name": "Transcom Digital", "price": 14200, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 14100, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 13950, "url": "https://www.daraz.com.bd"},
         ]
     },
     {
@@ -543,9 +543,9 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 9800,
         "image_url": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Walton ePlaza", "price": 8900, "url": "https://eplaza.waltonbd.com/catalogsearch/result/?q=WMO-20G30"},
-            {"name": "Transcom Digital", "price": 9100, "url": "https://transcomdigital.com/catalogsearch/result/?q=Walton+WMO-20G30"},
-            {"name": "Daraz Bangladesh", "price": 8950, "url": "https://www.daraz.com.bd/catalog/?q=Walton+Microwave+Oven"},
+            {"name": "Walton ePlaza", "price": 8900, "url": "https://eplaza.waltonbd.com"},
+            {"name": "Transcom Digital", "price": 9100, "url": "https://transcomdigital.com"},
+            {"name": "Daraz Bangladesh", "price": 8950, "url": "https://www.daraz.com.bd"},
         ]
     },
 
@@ -569,10 +569,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 3950,
         "image_url": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Daraz Bangladesh", "price": 3450, "url": "https://www.daraz.com.bd/catalog/?q=Miyako+YT-999"},
-            {"name": "Pickaboo", "price": 3600, "url": "https://pickaboo.com/catalogsearch/result/?q=Miyako+Blender"},
-            {"name": "Transcom Digital", "price": 3650, "url": "https://transcomdigital.com/catalogsearch/result/?q=Miyako+Blender"},
-            {"name": "Best Electronics", "price": 3550, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Miyako+Blender"},
+            {"name": "Daraz Bangladesh", "price": 3450, "url": "https://www.daraz.com.bd"},
+            {"name": "Pickaboo", "price": 3600, "url": "https://pickaboo.com"},
+            {"name": "Transcom Digital", "price": 3650, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 3550, "url": "https://bestelectronics.com.bd"},
         ]
     },
     {
@@ -592,9 +592,9 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 5200,
         "image_url": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Daraz Bangladesh", "price": 4650, "url": "https://www.daraz.com.bd/catalog/?q=Jaipan+Commando"},
-            {"name": "Pickaboo", "price": 4800, "url": "https://pickaboo.com/catalogsearch/result/?q=Jaipan+Blender"},
-            {"name": "Transcom Digital", "price": 4900, "url": "https://transcomdigital.com/catalogsearch/result/?q=Jaipan+Mixer"},
+            {"name": "Daraz Bangladesh", "price": 4650, "url": "https://www.daraz.com.bd"},
+            {"name": "Pickaboo", "price": 4800, "url": "https://pickaboo.com"},
+            {"name": "Transcom Digital", "price": 4900, "url": "https://transcomdigital.com"},
         ]
     },
     {
@@ -614,10 +614,10 @@ APPLIANCE_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "max_price": 6500,
         "image_url": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
         "stores": [
-            {"name": "Transcom Digital", "price": 5850, "url": "https://transcomdigital.com/catalogsearch/result/?q=Philips+HR2118"},
-            {"name": "Best Electronics", "price": 5950, "url": "https://bestelectronics.com.bd/catalogsearch/result/?q=Philips+Blender"},
-            {"name": "Daraz Bangladesh", "price": 5900, "url": "https://www.daraz.com.bd/catalog/?q=Philips+HR2118"},
-            {"name": "Pickaboo", "price": 6100, "url": "https://pickaboo.com/catalogsearch/result/?q=Philips+Blender"},
+            {"name": "Transcom Digital", "price": 5850, "url": "https://transcomdigital.com"},
+            {"name": "Best Electronics", "price": 5950, "url": "https://bestelectronics.com.bd"},
+            {"name": "Daraz Bangladesh", "price": 5900, "url": "https://www.daraz.com.bd"},
+            {"name": "Pickaboo", "price": 6100, "url": "https://pickaboo.com"},
         ]
     },
 ]
@@ -686,17 +686,12 @@ def match_appliances_catalog(query: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def build_appliance_product_card(catalog_item: Dict[str, Any]) -> Product:
-    """
-    Constructs a fully-populated, authentic Product comparison card
-    enriched with verified Bangladeshi dealer offers and full specs.
-    """
+def build_appliance_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = None) -> Product:
     title_en = catalog_item["title_en"]
     title_bn = catalog_item["title_bn"]
     slug = catalog_item["slug"]
     img_url = catalog_item["image_url"]
     starting_p = catalog_item["starting_price"]
-    max_p = catalog_item["max_price"]
     specs = f"{catalog_item['type']} · {catalog_item['capacity']} · {catalog_item['warranty']} · {catalog_item['key_specs']}"
 
     prod = Product(
@@ -713,11 +708,54 @@ def build_appliance_product_card(catalog_item: Dict[str, Any]) -> Product:
         created_at=datetime.utcnow(),
     )
 
+    # Option B: check DB for live scraped offers for this appliance
+    if db is not None:
+        try:
+            existing = db.query(Product).filter(Product.slug == slug).first()
+            if existing and existing.offers:
+                clean_db_offers = [
+                    o for o in existing.offers
+                    if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                ]
+                if clean_db_offers:
+                    prod.offers = clean_db_offers
+                    return prod
+        except Exception:
+            pass
+
     offers: List[StoreOffer] = []
+    try:
+        from bd_stores_registry import get_store_registry_meta, compute_trust_score
+    except ImportError:
+        from .bd_stores_registry import get_store_registry_meta, compute_trust_score
+
+    CLEAN_APPLIANCE_DOMAINS = {
+        "walton eplaza": "https://eplaza.waltonbd.com",
+        "transcom digital": "https://transcomdigital.com",
+        "singer bangladesh": "https://singerbd.com",
+        "butterfly marketing": "https://butterflygroupbd.com",
+        "best electronics": "https://bestelectronics.com.bd",
+        "rangs electronics": "https://sonyrangs.com",
+        "daraz bangladesh": "https://www.daraz.com.bd",
+        "pickaboo": "https://www.pickaboo.com",
+    }
+
     for idx, s in enumerate(catalog_item.get("stores", [])):
         s_name = s.get("name", "Verified BD Dealer")
+        s_low = s_name.lower().strip()
         s_price = s.get("price", starting_p)
-        s_url = s.get("url", f"https://transcomdigital.com/catalogsearch/result/?q={quote_plus(catalog_item['model_code'])}")
+        raw_u = s.get("url") or ""
+
+        if any(bad in raw_u.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=")):
+            s_url = CLEAN_APPLIANCE_DOMAINS.get(s_low, "https://transcomdigital.com")
+        elif raw_u.startswith("http"):
+            s_url = raw_u
+        else:
+            s_url = CLEAN_APPLIANCE_DOMAINS.get(s_low, "https://transcomdigital.com")
+
+        meta = get_store_registry_meta(s_name)
+        is_pre = bool(meta.get("is_preseeded", True))
+        trust = compute_trust_score(store_name=s_name, is_preseeded=is_pre, price=float(s_price))
 
         offer = StoreOffer(
             id=750000 + abs(hash(slug)) % 10000 * 10 + idx,
@@ -726,20 +764,20 @@ def build_appliance_product_card(catalog_item: Dict[str, Any]) -> Product:
             source_type="crawler",
             target_url=s_url,
             website_url=s_url,
-            facebook_url=f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}",
+            facebook_url=meta.get("facebook_url") or f"https://www.facebook.com/search/top/?q={quote_plus(s_name)}",
             current_price=s_price,
             original_price=int(s_price * 1.06),
-            cod_terms_en=f"৳{s_price:,} · Official BD Warranty · Cash on Delivery Available",
-            cod_terms_bn=f"৳{s_price:,} · অফিসিয়াল বাংলাদেশ ওয়ারেন্টি · ক্যাশ অন ডেলিভারি",
-            warranty_text=catalog_item["warranty"],
+            cod_terms_en=f"৳{s_price:,} · Official BD Warranty · Cash on Delivery Available" if is_pre else "⚠️ Unverified Merchant · COD Only",
+            cod_terms_bn=f"৳{s_price:,} · অফিসিয়াল বাংলাদেশ ওয়ারেন্টি · ক্যাশ অন ডেলিভারি" if is_pre else "⚠️ অযাচাইকৃত বিক্রেতা · ক্যাশ অন ডেলিভারিতে চেক করে নিন",
+            warranty_text=catalog_item.get("warranty", "Official 1-Year BD Warranty"),
             in_stock=True,
             spider_status="healthy",
             last_synced_at="Verified Dealer Index",
-            is_preseeded=True,
+            is_preseeded=is_pre,
             is_sponsored=False,
-            trust_score=96,
-            trust_badge="✓ 98% Verified Safe",
-            risk_level="low",
+            trust_score=trust["trust_score"],
+            trust_badge=trust["trust_badge"],
+            risk_level=trust["risk_level"],
             discount_tag="6% OFF",
             discount_pct=6,
         )
