@@ -137,7 +137,7 @@ class StoreOfferBase(BaseModel):
     cod_terms_en: str = "Cash on Delivery"
     cod_terms_bn: str = "ক্যাশ অন ডেলিভারি"
     warranty_text: str = "Official Warranty"
-    in_stock: bool = True
+    in_stock: Optional[bool] = True
     spider_status: str = "healthy"
     last_synced_at: str = "Just now"
     is_preseeded: Optional[bool] = None
@@ -146,7 +146,7 @@ class StoreOfferBase(BaseModel):
     risk_level: Optional[str] = None  # 'low', 'moderate', 'high'
     discount_tag: Optional[str] = None
     discount_pct: Optional[int] = None
-    is_sponsored: bool = False
+    is_sponsored: Optional[bool] = False
     
 
 class StoreOfferCreate(StoreOfferBase):
@@ -181,11 +181,17 @@ class StoreOfferUpdate(BaseModel):
 class StoreOfferResponse(StoreOfferBase):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: Optional[int] = 0
     clicks: Optional[int] = 0
 
     @model_validator(mode="after")
     def populate_links_and_trust(self) -> "StoreOfferResponse":
+        if not self.id:
+            self.id = abs(hash(f"{self.product_id}_{self.store_name}_{self.current_price}")) % 9000000 + 100000
+        if self.is_sponsored is None:
+            self.is_sponsored = False
+        if self.in_stock is None:
+            self.in_stock = True
         try:
             from bd_stores_registry import get_store_registry_meta, compute_trust_score
             meta = get_store_registry_meta(self.store_name)

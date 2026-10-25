@@ -123,12 +123,27 @@ def scrape_live_web_suggestions(query_prefix: str, limit: int = 6) -> List[str]:
     return results
 
 
-SERIES_GENERATIONS = {
-    "redmi note": ["Redmi Note 13 Pro", "Redmi Note 14 Pro", "Redmi Note 13 5G"],
-    "pixel": ["Google Pixel 9", "Google Pixel 9 Pro", "Google Pixel 8a"],
-    "iphone": ["iPhone 16", "iPhone 16 Pro", "iPhone 15"],
-    "galaxy s": ["Samsung Galaxy S24", "Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 FE"],
-    "oneplus": ["OnePlus 12", "OnePlus 12R", "OnePlus Nord 4"],
+KNOWN_RELEASED_GENERATIONS = {
+    "iphone": {
+        "valid_generations": {"11", "12", "13", "14", "15", "16", "se", "x", "xr", "xs"},
+        "latest_flagships": ["iPhone 16", "iPhone 16 Pro", "iPhone 15"],
+    },
+    "pixel": {
+        "valid_generations": {"6", "6a", "7", "7a", "8", "8a", "9", "9a", "9 pro"},
+        "latest_flagships": ["Google Pixel 9", "Google Pixel 9 Pro", "Google Pixel 8a"],
+    },
+    "galaxy s": {
+        "valid_generations": {"20", "21", "22", "23", "24"},
+        "latest_flagships": ["Samsung Galaxy S24", "Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 FE"],
+    },
+    "redmi note": {
+        "valid_generations": {"9", "10", "11", "12", "13", "14"},
+        "latest_flagships": ["Redmi Note 13 Pro", "Redmi Note 14 Pro", "Redmi Note 13 5G"],
+    },
+    "oneplus": {
+        "valid_generations": {"8", "9", "10", "11", "12"},
+        "latest_flagships": ["OnePlus 12", "OnePlus 12R", "OnePlus Nord 4"],
+    },
 }
 
 COMMON_TYPOS = {
@@ -147,28 +162,30 @@ def generate_did_you_mean(query: str) -> List[str]:
         return []
     suggestions = []
 
+    # 1. Real spelling typo check
     for typo, correction in COMMON_TYPOS.items():
-        if typo in q_low:
+        if re.search(rf"\b{typo}\b", q_low):
             fixed = re.sub(rf"\b{typo}\b", correction, q_low, flags=re.IGNORECASE)
             suggestions.append(fixed.title())
 
-    for series, valid_models in SERIES_GENERATIONS.items():
+    # 2. Non-existent generation check (strictly for fictitious/future model numbers)
+    for series, info in KNOWN_RELEASED_GENERATIONS.items():
         m = re.search(rf"\b{series}\s*(\d+[a-z]?)\b", q_low)
         if m:
-            gen_num = m.group(1)
-            matching_valid = [vm for vm in valid_models if gen_num in vm.lower()]
-            if not matching_valid:
-                is_pro = "pro" in q_low
-                is_ultra = "ultra" in q_low
-                for vm in valid_models:
-                    if is_pro and "pro" not in vm.lower():
-                        continue
-                    if is_ultra and "ultra" not in vm.lower():
-                        continue
-                    if vm not in suggestions:
-                        suggestions.append(vm)
-                if not suggestions:
-                    suggestions.extend(valid_models[:2])
+            gen_num = m.group(1).lower()
+            if gen_num in info["valid_generations"]:
+                continue
+            is_pro = "pro" in q_low
+            is_ultra = "ultra" in q_low
+            for vm in info["latest_flagships"]:
+                if is_pro and "pro" not in vm.lower():
+                    continue
+                if is_ultra and "ultra" not in vm.lower():
+                    continue
+                if vm not in suggestions:
+                    suggestions.append(vm)
+            if not suggestions:
+                suggestions.extend(info["latest_flagships"][:2])
 
     return suggestions[:4]
 

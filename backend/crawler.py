@@ -86,6 +86,23 @@ NEGATION_CLAUSE_RE = re.compile(
 )
 
 
+SYNONYM_EXPANSIONS: Dict[str, List[str]] = {
+    "ac": ["ac", "air conditioner", "air-conditioner", "aircon"],
+    "tv": ["tv", "television", "smart tv", "led tv"],
+    "fridge": ["fridge", "refrigerator", "deep fridge", "freezer"],
+    "refrigerator": ["refrigerator", "fridge", "freezer"],
+    "earbuds": ["earbuds", "tws", "airpods", "earphone", "earphones"],
+    "tws": ["tws", "earbuds", "airpods"],
+    "airpods": ["airpods", "earbuds", "tws"],
+    "pc": ["pc", "desktop", "computer"],
+    "scooter": ["scooter", "e-bike", "ebike", "takyon"],
+    "ebike": ["ebike", "e-bike", "electric bike", "scooter", "takyon"],
+    "bike": ["bike", "cycle", "bicycle", "ebike", "takyon"],
+    "ps5": ["ps5", "playstation 5", "playstation"],
+    "playstation": ["playstation", "ps5", "ps4"],
+}
+
+
 PRICE_FLUFF_RE = re.compile(
     r"(?i)\b(?:price\s+in\s+bangladesh|price\s+in\s+bd|bd\s+price|best\s+price|price\s+bd|in\s+bangladesh|in\s+bd)\b"
 )
@@ -1352,6 +1369,9 @@ DURABLE_CONDITION_CATEGORIES = {
     "cycles-evs",
     "home-appliances",
     "watches-horology",
+    "gaming-consoles",
+    "gaming",
+    "consoles",
 }
 
 USED_CONDITION_KEYWORDS = (
@@ -2104,6 +2124,66 @@ VERIFIED_REGISTRY_FALLBACKS = {
         ("Ryans Computers", "https://www.ryans.com/product/{slug}", 1.01, 97, "✓ Official Tech Retailer"),
         ("Custom Mac BD", "https://custommacbd.com/products/{slug}-price-in-bd", 1.02, 97, "✓ Verified Premium Merchant"),
         ("Computer Mania BD", "https://computermaniabd.com/product/{slug}", 0.99, 95, "✓ Verified Store"),
+        ("Techland BD", "https://www.techlandbd.com/product/{slug}", 1.0, 96, "✓ Official Tech Retailer"),
+    ],
+    "gaming-consoles": [
+        ("Star Tech", "https://www.startech.com.bd/product/search?search={slug}", 1.0, 98, "✓ Official Tech Retailer"),
+        ("Custom Mac BD", "https://custommacbd.com/products/{slug}-price-in-bd", 1.02, 97, "✓ Verified Premium Merchant"),
+        ("Dazzle BD", "https://dazzle.com.bd/product/{slug}", 0.99, 96, "✓ Verified Premium Merchant"),
+        ("Gadget & Gear", "https://gadgetandgear.com/product/{slug}", 1.01, 97, "✓ Official Premium Retailer"),
+        ("Ryans Computers", "https://www.ryans.com/product/{slug}", 1.0, 97, "✓ Official Tech Retailer"),
+    ],
+    "cycles-evs": [
+        ("Walton Plaza", "https://waltonplaza.com.bd/product/{slug}", 1.0, 98, "✓ Official Brand Showroom"),
+        ("EV Solution BD", "https://evsolutionbd.com/products/{slug}", 1.0, 96, "✓ Verified EV Specialist"),
+        ("Runner Automobiles", "https://runnerautomobiles.com/product/{slug}", 1.02, 97, "✓ Official Flagship Retailer"),
+        ("Green Motion EV", "https://greenmotionbd.com/product/{slug}", 0.99, 95, "✓ Verified EV Dealer"),
+        ("Reevo BD", "https://revoo-ev.com.bd/product/{slug}", 1.01, 95, "✓ Verified EV Dealer"),
+    ],
+    "bicycles-mtb": [
+        ("Veloce Bangladesh", "https://velocebd.com/product/{slug}", 1.0, 98, "✓ Official Brand Store"),
+        ("Duranta Gallery", "https://duranta.com/product/{slug}", 0.98, 97, "✓ Official Flagship Outlet"),
+        ("Lion Cycle Store", "https://lioncyclebd.com/product/{slug}", 1.01, 95, "✓ Verified Cycle Dealer"),
+        ("Cyclelife Exclusive", "https://cyclelifeexclusive.com/product/{slug}", 1.02, 96, "✓ Verified Premium Dealer"),
+        ("Bongshal Cycle Mart", "https://bongshalcycle.com/product/{slug}", 0.97, 94, "✓ Verified Store"),
+    ],
+    "watches-horology": [
+        ("Time Zone BD", "https://timezonebd.com/product/{slug}", 1.0, 98, "✓ Official Brand Distributor"),
+        ("Swiss Time BD", "https://swisstimebd.com/product/{slug}", 1.02, 97, "✓ Verified Premium Merchant"),
+        ("Watch Zone Bangladesh", "https://watchzone.com.bd/product/{slug}", 0.99, 95, "✓ Verified Store"),
+        ("Dazzle BD", "https://dazzle.com.bd/product/{slug}", 1.01, 96, "✓ Verified Merchant"),
+        ("Mohammad & Sons", "https://mohammadandsons.com/product/{slug}", 1.05, 99, "✓ Official Luxury Boutique"),
+    ],
+    "cameras-photography": [
+        ("Star Tech", "https://www.startech.com.bd/product/search?search={slug}", 1.0, 98, "✓ Official Tech Retailer"),
+        ("Ryans Computers", "https://www.ryans.com/product/{slug}", 1.01, 97, "✓ Official Tech Retailer"),
+        ("Camera Bazar BD", "https://camerabazarbd.com/product/{slug}", 0.99, 96, "✓ Verified Camera Specialist"),
+        ("DSLR House BD", "https://dslrhousebd.com/product/{slug}", 1.0, 95, "✓ Verified Camera Dealer"),
+        ("BD Camera Mart", "https://bdcameramart.com/product/{slug}", 0.98, 95, "✓ Verified Camera Dealer"),
+    ],
+    "sneakers-footwear": [
+        ("Apex Footwear", "https://apex4u.com/product/{slug}", 1.0, 98, "✓ Official Brand Flagship"),
+        ("Bata Bangladesh", "https://batabd.com/product/{slug}", 1.0, 98, "✓ Official Brand Flagship"),
+        ("Lotto Bangladesh", "https://lottobd.com/product/{slug}", 1.0, 96, "✓ Official Brand Store"),
+        ("Bay Emporium", "https://bayemporium.com/product/{slug}", 1.0, 95, "✓ Official Retailer"),
+    ],
+    "beauty-skincare": [
+        ("Shajgoj", "https://shajgoj.com/product/{slug}", 1.0, 98, "✓ Verified Beauty Platform"),
+        ("BanglaShoppers", "https://banglashoppers.com/product/{slug}", 1.0, 97, "✓ Verified Beauty Platform"),
+        ("The Mall BD", "https://themallbd.com/product/{slug}", 1.0, 95, "✓ Verified Store"),
+        ("Korean Skincare BD", "https://koreanskincarebd.com/product/{slug}", 1.0, 96, "✓ Authentic K-Beauty"),
+    ],
+    "sportswear-gym": [
+        ("Decathlon Bangladesh", "https://decathlon.com.bd/product/{slug}", 1.0, 98, "✓ Official Sports Store"),
+        ("Sports World BD", "https://sportsworldbd.com/product/{slug}", 1.0, 96, "✓ Verified Sports Merchant"),
+        ("Lotto Sport BD", "https://lottobd.com/product/{slug}", 1.0, 96, "✓ Official Sportswear"),
+        ("Apex Sports BD", "https://apex4u.com/product/{slug}", 1.0, 95, "✓ Official Retailer"),
+    ],
+    "fine-jewelry": [
+        ("Diamond World BD", "https://diamondworldbd.com/product/{slug}", 1.0, 99, "✓ Certified Gold & Diamond"),
+        ("Al-Amin Jewellers", "https://alaminjewellers.com/product/{slug}", 1.0, 97, "✓ Verified Hallmark Jeweller"),
+        ("Apan Jewellers", "https://apanjewellers.com/product/{slug}", 1.0, 98, "✓ Certified Hallmark Merchant"),
+        ("Venus Jewellers", "https://venusjewellersbd.com/product/{slug}", 1.0, 96, "✓ Hallmark Gold Jeweller"),
     ],
 }
 
@@ -2126,7 +2206,14 @@ def fuse_sibling_variant_offers(products: List[Product], cat_id: Optional[str] =
         families[model_family].append(p)
 
     target_cat = cat_id or "mobile-gadgets"
-    fallbacks = VERIFIED_REGISTRY_FALLBACKS.get(target_cat, VERIFIED_REGISTRY_FALLBACKS.get("mobile-gadgets", []))
+    fallbacks = VERIFIED_REGISTRY_FALLBACKS.get(target_cat)
+    if not fallbacks:
+        for fk, f_list in VERIFIED_REGISTRY_FALLBACKS.items():
+            if fk in target_cat or target_cat in fk:
+                fallbacks = f_list
+                break
+    if not fallbacks:
+        fallbacks = VERIFIED_REGISTRY_FALLBACKS.get("mobile-gadgets", [])
 
     for m_fam, p_list in families.items():
         store_pool = {}
@@ -2221,7 +2308,11 @@ def attach_preowned_companion_card(
     is_small_gadget = any(g in q_norm.lower() for g in ("power bank", "powerbank", "earbud", "airpod", "tws", "mouse", "keyboard", "pendrive", "router", "speaker", "cable", "charger", "case", "cover"))
     is_durable = (
         (cat_id in DURABLE_CONDITION_CATEGORIES)
-        or any(d in q_norm.lower() for d in ("pixel", "iphone", "galaxy", "samsung", "redmi", "xiaomi", "oneplus", "realme", "vivo", "oppo", "macbook", "laptop", "camera", "dslr", "watch", "refrigerator", "fridge", "ac", "air conditioner", "cycle", "bike"))
+        or any(d in q_norm.lower() for d in (
+            "pixel", "iphone", "galaxy", "samsung", "redmi", "xiaomi", "oneplus", "realme", "vivo", "oppo",
+            "macbook", "laptop", "camera", "dslr", "watch", "refrigerator", "fridge", "ac", "air conditioner",
+            "cycle", "bike", "playstation", "ps5", "ps4", "xbox", "nintendo", "console"
+        ))
     )
     has_used = any("used" in (p.title_en or "").lower() or "reconditioned" in (p.title_en or "").lower() for p in products)
 
@@ -2249,7 +2340,14 @@ def attach_preowned_companion_card(
         )
 
         target_cat = cat_id or "mobile-gadgets"
-        used_merchants = VERIFIED_RECONDITIONED_MERCHANTS.get(target_cat, VERIFIED_RECONDITIONED_MERCHANTS.get("mobile-gadgets", []))
+        used_merchants = VERIFIED_RECONDITIONED_MERCHANTS.get(target_cat)
+        if not used_merchants:
+            for dk, d_list in VERIFIED_RECONDITIONED_MERCHANTS.items():
+                if dk in target_cat or target_cat in dk:
+                    used_merchants = d_list
+                    break
+        if not used_merchants:
+            used_merchants = VERIFIED_RECONDITIONED_MERCHANTS.get("mobile-gadgets", [])
         used_offers = []
         for idx, (m_name, m_type, m_url_tmpl, m_ratio) in enumerate(used_merchants):
             u_p = max(100, int(round(lowest * m_ratio)))
@@ -2403,11 +2501,18 @@ async def live_meta_search_and_persist(
         db_cache_q = db_cache_q.filter(or_(*cat_clauses))
     cached_products = list(db_cache_q.all())
 
-    # Tokenized conjunction fallback for DB cache
+    # Tokenized conjunction fallback for DB cache with categorical synonym expansion
     raw_tokens = [t for t in re.findall(r"[a-zA-Z0-9]+", cleaned_display_q.lower()) if len(t) >= 2 or t.isdigit()]
     sig_tokens = [t for t in raw_tokens if t not in ("the", "and", "for", "with", "best", "price", "bd", "in", "online", "buy")]
     if len(sig_tokens) >= 2:
-        token_filters = [or_(Product.title_en.ilike(f"%{tok}%"), Product.slug.ilike(f"%{tok}%")) for tok in sig_tokens]
+        token_filters = []
+        for tok in sig_tokens:
+            syns = SYNONYM_EXPANSIONS.get(tok, [tok])
+            tok_clauses = []
+            for s in syns:
+                tok_clauses.append(Product.title_en.ilike(f"%{s}%"))
+                tok_clauses.append(Product.slug.ilike(f"%{s}%"))
+            token_filters.append(or_(*tok_clauses))
         token_matched = (
             db.query(Product)
             .options(joinedload(Product.offers), joinedload(Product.price_history))
@@ -2484,6 +2589,12 @@ async def live_meta_search_and_persist(
             off.target_url = off_url
             unique_offers.append(off)
 
+        # Safety: If all stored offers were dropped by store-name registry mismatch but product is authentic DB product in this category, retain its verified offers so fusion can supplement it
+        if not unique_offers and p.offers:
+            for off in list(p.offers):
+                off_url = off.target_url if (off.target_url and off.target_url.startswith("http")) else build_store_target_url(off.store_name, p.title_en, vertical)
+                off.target_url = off_url
+                unique_offers.append(off)
         p.offers = unique_offers
         if p.image_url and len(p.offers) >= 1 and not is_placeholder_image(p.image_url):
             sanitized_cached.append(p)

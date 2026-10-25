@@ -1832,7 +1832,7 @@ PEDAL_BICYCLE_STORES = (
 )
 
 EV_ONLY_STORES = (
-    "revoo", "reevo", "green tiger", "takyon", "walton", "yadea", "tailg", "runner", "sumato", "vmoto", "ridevo", "zeeho"
+    "revoo", "reevo", "green tiger", "takyon", "walton", "yadea", "tailg", "runner", "sumato", "vmoto", "ridevo", "zeeho", "evsolution", "green motion"
 )
 
 
