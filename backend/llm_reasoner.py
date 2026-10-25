@@ -415,7 +415,7 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
         "galaxy": ("galaxy", "samsung"),
     })
 
-    soft_modifiers = {'fc', 'club', 'home', 'away', 'third', 'kit', 'innerwear', 'boxer', 'briefs', 'galaxy', 'eos', 'alpha', 'inspiron', 'pavilion', 'ideapad', 'vivobook', 'vostro', 'modern', 'aspires', 'aspire', 'pure', 'cow', 'sundarban', 'chinigura', 'dhakai', 'tangail', 'mens', 'womens', 'ladies', 'girls', '5g', 'aero', 'hybrid', 'boys', 'racing', 'global', 'men', 'business', 'full', 'non', 'unofficial', 'series', 'portable', 'luxury', 'manual', 'mens', 'bangladesh', 'kids', 'digital', 'auto', 'commuter', 'road', 'student', '4k', 'premium', 'automatic', 'womens', 'pedal', 'official', 'smart', 'hd', 'office', 'waterproof', 'budget', 'intact', 'gear', 'touch', 'wireless', 'gents', 'edition', 'fhd', 'non-gear', 'women', 'original', 'ladies', 'mountain', 'screen', 'authentic'}
+    soft_modifiers = {'fc', 'club', 'home', 'away', 'third', 'kit', 'innerwear', 'boxer', 'briefs', 'galaxy', 'eos', 'alpha', 'inspiron', 'pavilion', 'ideapad', 'vivobook', 'vostro', 'modern', 'aspires', 'aspire', 'pure', 'cow', 'sundarban', 'chinigura', 'dhakai', 'tangail', 'mens', 'womens', 'ladies', 'girls', '5g', 'aero', 'hybrid', 'boys', 'racing', 'global', 'men', 'business', 'full', 'non', 'unofficial', 'series', 'portable', 'luxury', 'manual', 'mens', 'bangladesh', 'kids', 'digital', 'auto', 'commuter', 'road', 'student', '4k', 'premium', 'automatic', 'womens', 'pedal', 'official', 'smart', 'hd', 'office', 'waterproof', 'budget', 'intact', 'gear', 'touch', 'wireless', 'gents', 'edition', 'fhd', 'non-gear', 'women', 'original', 'ladies', 'mountain', 'screen', 'authentic', 'double', 'door', 'doors', 'single', 'triple', 'side', 'french', 'frost', 'non-frost', 'inverter', 'direct', 'cool', 'split', 'window', 'front', 'top', 'load', 'liter', 'ltr', 'ton', 'inch', 'oled', 'qled', 'curved', 'fast', 'speed', 'alloy', 'disc'}
     # When searching for a watch, band, or ghori, 'smart' is a critical non-negotiable technology anchor
     if any(w in (raw_query or "").lower() for w in ("watch", "ghori", "band")):
         soft_modifiers = soft_modifiers - {"smart"}
@@ -451,6 +451,12 @@ def matches_anchor_tokens(title: str, anchor_tokens: List[str], *args: Any, **kw
         {"manual", "bicycle"},
         {"aero", "bike"},
         {"gear", "cycle"},
+        {"double", "door"},
+        {"single", "door"},
+        {"triple", "door"},
+        {"side", "door"},
+        {"direct", "cool"},
+        {"non", "frost"},
         {"smart", "tv"},
         {"microwave", "oven"},
         {"washing", "machine"},

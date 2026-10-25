@@ -2522,6 +2522,39 @@ async def live_meta_search_and_persist(
         for tp in token_matched:
             if all(tp.id != cp.id for cp in cached_products):
                 cached_products.append(tp)
+
+        # Google-grade Query Relaxation: If strict conjunction returned 0 products due to descriptive modifiers
+        # (e.g. 'double door fridge' vs 'Walton Refrigerator', '1.5 ton split ac' vs 'Gree Inverter AC', '4k smart tv' vs 'Sony Bravia TV'),
+        # relax to core entity tokens (brand + product noun)
+        if not token_matched and len(sig_tokens) > 2:
+            SOFT_SPECIFIERS = {
+                "double", "door", "doors", "single", "triple", "side", "french",
+                "frost", "non-frost", "inverter", "direct", "cool", "split", "window", "portable",
+                "automatic", "front", "top", "load", "liter", "ltr", "ton", "inch",
+                "4k", "8k", "fhd", "hd", "smart", "led", "oled", "qled", "curved",
+                "gaming", "fast", "quick", "wireless", "bluetooth", "gear", "alloy",
+                "disc", "speed",
+            }
+            core_sig_tokens = [t for t in sig_tokens if t not in SOFT_SPECIFIERS]
+            if len(core_sig_tokens) >= 2:
+                core_filters = []
+                for tok in core_sig_tokens:
+                    syns = SYNONYM_EXPANSIONS.get(tok, [tok])
+                    tok_clauses = []
+                    for s in syns:
+                        tok_clauses.append(Product.title_en.ilike(f"%{s}%"))
+                        tok_clauses.append(Product.slug.ilike(f"%{s}%"))
+                    core_filters.append(or_(*tok_clauses))
+                relaxed_matched = (
+                    db.query(Product)
+                    .options(joinedload(Product.offers), joinedload(Product.price_history))
+                    .filter(and_(*core_filters))
+                    .all()
+                )
+                for tp in relaxed_matched:
+                    if all(tp.id != cp.id for cp in cached_products):
+                        cached_products.append(tp)
+
     print(f"[CRAWLER_TRACE] Step 2 DB Cache: cat_id={cat_id}, found {len(cached_products)} products", flush=True)
 
     anchor_tokens = extract_mandatory_anchor_tokens(q_norm)
