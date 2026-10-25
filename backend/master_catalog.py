@@ -976,6 +976,200 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
 ]
 
 # Merge expanded SKUs across all consumer electronics verticals
+SPORTSWEAR_MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
+    {
+        "slug": "argentina-3-star-player-edition-home-jersey",
+        "model_code": "Argentina 3-Star Player Edition Home Jersey",
+        "aliases": [
+            "argentina jersey", "argentina 3 star jersey", "argentina home jersey",
+            "argentina player edition jersey", "argentina kit", "argentina football jersey",
+            "argentina jarsi", "argentina"
+        ],
+        "title_en": "Argentina 3-Star Player Edition Home Jersey",
+        "title_bn": "আর্জেন্টিনা ৩-স্টার প্লেয়ার এডিশন হোম জার্সি",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Jerseys & Apparel",
+        "brand": "Adidas",
+        "specs_summary": "Authentic Dri-FIT Slim Fit · 3-Star Gold Crest · Heat-applied Badges · Official Player Spec Kit",
+        "starting_price": 1150,
+        "max_price": 1850,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "Player Edition Slim Fit",
+        "stores": [
+            {"name": "Jersey Freak BD", "price": 1150, "url": "https://jerseyfreakbd.com/products/argentina-3-star-player-edition"},
+            {"name": "Sports Station BD", "price": 1190, "url": "https://sportsstationbd.com/product/argentina-player-edition"},
+            {"name": "Dour", "price": 1250, "url": "https://dourstore.com/product/argentina-3-star-jersey"},
+            {"name": "K Sports", "price": 1200, "url": "https://ksportsbd.com/product/argentina-home-jersey"},
+            {"name": "Fabrilife", "price": 1290, "url": "https://fabrilife.com/products/argentina-jersey"},
+        ]
+    },
+    {
+        "slug": "brazil-national-team-away-jersey-2024-25",
+        "model_code": "Brazil National Team Away Jersey 2024/25",
+        "aliases": [
+            "brazil jersey", "brazil away jersey", "brazil national jersey",
+            "brazil kit", "brazil football jersey", "brazil jarsi", "brazil"
+        ],
+        "title_en": "Brazil National Team Away Jersey 2024/25",
+        "title_bn": "ব্রাজিল জাতীয় দল অ্যাওয়ে জার্সি",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Jerseys & Apparel",
+        "brand": "Nike",
+        "specs_summary": "Dri-FIT ADV Breathable Fabric · Embroidered CBF Crest · Wave Print Pattern · Slim Athletic Cut",
+        "starting_price": 1150,
+        "max_price": 1850,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "Away Stadium Kit",
+        "stores": [
+            {"name": "Jersey Freak BD", "price": 1150, "url": "https://jerseyfreakbd.com/products/brazil-away-jersey"},
+            {"name": "Sports World BD", "price": 1180, "url": "https://sportsworldbd.com/product/brazil-jersey"},
+            {"name": "Sports Station BD", "price": 1200, "url": "https://sportsstationbd.com/product/brazil-away-kit"},
+            {"name": "Dour", "price": 1250, "url": "https://dourstore.com/product/brazil-away-jersey"},
+        ]
+    },
+    {
+        "slug": "real-madrid-2024-25-home-fan-edition-kit",
+        "model_code": "Real Madrid 2024/25 Home Fan Edition Kit",
+        "aliases": [
+            "real madrid jersey", "real madrid home jersey", "real madrid kit",
+            "madrid jersey", "real madrid", "mbappe jersey"
+        ],
+        "title_en": "Real Madrid 2024/25 Home Fan Edition Kit",
+        "title_bn": "রিয়াল মাদ্রিদ হোম ফ্যান এডিশন কিট",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Jerseys & Apparel",
+        "brand": "Adidas",
+        "specs_summary": "AEROREADY Moisture Absorbing · Classic All-White Houndstooth Pattern · Embroidered Real Madrid Crest",
+        "starting_price": 1050,
+        "max_price": 1750,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "Home Fan Edition",
+        "stores": [
+            {"name": "Jersey Freak BD", "price": 1050, "url": "https://jerseyfreakbd.com/products/real-madrid-home-kit"},
+            {"name": "Sports World BD", "price": 1090, "url": "https://sportsworldbd.com/product/real-madrid-jersey"},
+            {"name": "Fabrilife", "price": 1150, "url": "https://fabrilife.com/products/real-madrid-fan-kit"},
+            {"name": "ONEUP", "price": 1190, "url": "https://oneupbd.com/product/real-madrid-home-jersey"},
+        ]
+    },
+    {
+        "slug": "bangladesh-cricket-world-cup-jersey",
+        "model_code": "Bangladesh Cricket Team Official World Cup Jersey",
+        "aliases": [
+            "bangladesh cricket jersey", "bangladesh jersey", "bd cricket jersey",
+            "tigers jersey", "bangladesh kit", "cricket jersey"
+        ],
+        "title_en": "Bangladesh National Cricket Team Official World Cup Jersey",
+        "title_bn": "বাংলাদেশ ক্রিকেট দল অফিশিয়াল বিশ্বকাপ জার্সি",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Cricket Jerseys",
+        "brand": "K Sports",
+        "specs_summary": "Official BCB Authenticated Kit · Moisture-Wicking Sublimation · Tiger Stripe Print · Quick Dry Sports Poly",
+        "starting_price": 1200,
+        "max_price": 1950,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "Official BCB Edition",
+        "stores": [
+            {"name": "K Sports", "price": 1200, "url": "https://ksportsbd.com/product/bangladesh-world-cup-jersey"},
+            {"name": "Fabrilife", "price": 1250, "url": "https://fabrilife.com/products/bangladesh-cricket-jersey"},
+            {"name": "Jersey Freak BD", "price": 1150, "url": "https://jerseyfreakbd.com/products/bd-cricket-jersey"},
+            {"name": "Sports Station BD", "price": 1220, "url": "https://sportsstationbd.com/product/bangladesh-jersey"},
+        ]
+    },
+    {
+        "slug": "fabrilife-compression-gym-tee",
+        "model_code": "Fabrilife High-Performance Compression Gym Tee",
+        "aliases": [
+            "gym t-shirt", "gym tshirt", "compression gym tee", "workout t-shirt",
+            "dri fit t-shirt", "activewear gym tee", "gym wear", "gym shirt"
+        ],
+        "title_en": "Fabrilife High-Performance Compression Gym Tee",
+        "title_bn": "ফ্যাব্রিলাইফ কম্প্রেশন জিম টি-শার্ট",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Gym Apparel",
+        "brand": "Fabrilife",
+        "specs_summary": "4-Way Stretch Compression · Rapid Moisture-Wicking Dri-Fit · Anti-Odor Technology · Flatlock Ergonomic Seams",
+        "starting_price": 690,
+        "max_price": 1250,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "Compression Athletic Cut",
+        "stores": [
+            {"name": "Fabrilife", "price": 690, "url": "https://fabrilife.com/products/compression-gym-tee"},
+            {"name": "Dour", "price": 750, "url": "https://dourstore.com/product/active-gym-tee"},
+            {"name": "Sports World BD", "price": 790, "url": "https://sportsworldbd.com/product/gym-tshirt"},
+        ]
+    },
+    {
+        "slug": "hex-dumbbell-set-20kg",
+        "model_code": "Adjustable Rubberized Hex Dumbbell Set (20kg)",
+        "aliases": [
+            "dumbbells", "dumbbell", "dumbbell set", "hex dumbbell set",
+            "fitness dumbbells", "gym dumbbells", "20kg dumbbells"
+        ],
+        "title_en": "Adjustable Rubberized Hex Dumbbell Set (20kg)",
+        "title_bn": "রাবার হেক্স ডাম্বেল সেট (২০ কেজি)",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Gym Equipment",
+        "brand": "Bodyline Sports",
+        "specs_summary": "Solid Cast Iron Core · Heavy-Duty Odor-Free Virgin Rubber Coating · Ergonomic Contoured Chrome Grip · Anti-Roll Hex Design",
+        "starting_price": 3850,
+        "max_price": 6500,
+        "image_url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
+        "variant": "20kg Pair (10kg x 2)",
+        "stores": [
+            {"name": "Sports World BD", "price": 3850, "url": "https://sportsworldbd.com/product/hex-dumbbell-20kg"},
+            {"name": "Bodyline Sports", "price": 3950, "url": "https://bodylinesportsbd.com/product/rubber-hex-dumbbell-set"},
+            {"name": "Decathlon Bangladesh", "price": 4200, "url": "https://decathlon.com.bd/product/hex-dumbbell-pair-20kg"},
+        ]
+    },
+    {
+        "slug": "heavy-duty-resistance-bands-set",
+        "model_code": "Heavy-Duty Resistance Loop Bands Set (5-Pack)",
+        "aliases": [
+            "resistance bands", "resistance band set", "workout resistance loop bands",
+            "gym bands", "exercise bands", "pull up bands"
+        ],
+        "title_en": "Heavy-Duty Resistance Loop Bands Set (5-Pack)",
+        "title_bn": "রেজিস্ট্যান্স লুপ ব্যান্ডস সেট (৫ প্যাক)",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Gym Equipment",
+        "brand": "Bodyline Sports",
+        "specs_summary": "100% Natural Malaysian Latex · 5 Resistance Levels (10lbs to 50lbs) · Door Anchor & Handles Included · Waterproof Carry Pouch",
+        "starting_price": 850,
+        "max_price": 1850,
+        "image_url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
+        "variant": "5-Band Full Body Set",
+        "stores": [
+            {"name": "Sports World BD", "price": 850, "url": "https://sportsworldbd.com/product/resistance-loop-bands-set"},
+            {"name": "Bodyline Sports", "price": 890, "url": "https://bodylinesportsbd.com/product/resistance-bands-5pack"},
+            {"name": "Fabrilife", "price": 950, "url": "https://fabrilife.com/products/workout-resistance-bands"},
+        ]
+    },
+    {
+        "slug": "non-slip-tpe-yoga-mat",
+        "model_code": "Non-Slip TPE High-Density Fitness Yoga Mat (6mm)",
+        "aliases": [
+            "yoga mat", "exercise mat", "fitness mat", "anti slip yoga mat",
+            "pilates mat", "gym mat"
+        ],
+        "title_en": "Non-Slip TPE High-Density Fitness Yoga Mat (6mm)",
+        "title_bn": "নন-স্লিপ টিপিই হাই-ডেনসিটি ইয়োগা ম্যাট (৬ মিমি)",
+        "category": "Sportswear & Activewear",
+        "subcategory": "Fitness Accessories",
+        "brand": "Bodyline Sports",
+        "specs_summary": "Eco-Friendly Dual-Layer TPE · 6mm Joint Cushioning Thickness · Laser-Etched Body Alignment Guides · Carrying Strap Included",
+        "starting_price": 1250,
+        "max_price": 2600,
+        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
+        "variant": "6mm Dual-Color Alignment Mat",
+        "stores": [
+            {"name": "Sports World BD", "price": 1250, "url": "https://sportsworldbd.com/product/tpe-yoga-mat-6mm"},
+            {"name": "Bodyline Sports", "price": 1290, "url": "https://bodylinesportsbd.com/product/non-slip-yoga-mat"},
+            {"name": "Fabrilife", "price": 1350, "url": "https://fabrilife.com/products/premium-fitness-yoga-mat"},
+        ]
+    }
+]
+
+MASTER_CATALOG_ITEMS.extend(SPORTSWEAR_MASTER_CATALOG_ITEMS)
 MASTER_CATALOG_ITEMS.extend(EXPANDED_CATALOG_ITEMS)
 
 # Quick lookup index by model code and aliases
@@ -1199,6 +1393,13 @@ def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = 
         from .bd_stores_registry import get_store_registry_meta, compute_trust_score
 
     CLEAN_MERCHANT_DOMAINS = {
+        "jersey freak bd": "https://jerseyfreakbd.com",
+        "sports world bd": "https://sportsworldbd.com",
+        "fabrilife": "https://fabrilife.com",
+        "dour": "https://dourstore.com",
+        "k sports": "https://ksportsbd.com",
+        "sports station bd": "https://sportsstationbd.com",
+        "bodyline sports": "https://bodylinesportsbd.com",
         "apple gadgets bd": "https://www.applegadgetsbd.com",
         "custom mac bd": "https://custommacbd.com",
         "star tech": "https://www.startech.com.bd",

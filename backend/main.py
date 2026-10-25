@@ -544,7 +544,7 @@ def get_categories():
             'id': 'sportswear-gym',
             'name_en': 'Sportswear & Activewear',
             'name_bn': 'স্পোর্টসওয়্যার ও জিম গিয়ার',
-            'query': 'Jersey',
+            'query': 'Sportswear & Activewear',
             'icon': 'Activity',
         },
         'Sneakers & Footwear Stores': {
@@ -801,7 +801,8 @@ def get_category_predetermined_catalog(
     from bd_stores_registry import resolve_category_from_query
     from predetermined_catalog import build_predetermined_browse_products
     cat_id, _ = resolve_category_from_query("", category_id)
-    return build_predetermined_browse_products(cat_id, subcategory=subcategory)
+    target_id = cat_id or category_id
+    return build_predetermined_browse_products(target_id, subcategory=subcategory)
 
 
 @app.get("/api/v1/search/suggestions")
@@ -848,10 +849,18 @@ async def search_products_live(
                 (cat_meta.get("display_bn") or "").lower(),
                 (cat_meta.get("csv_category") or "").lower(),
                 target_cat_id.lower(),
+                target_cat_id.replace("-", " "),
+                target_cat_id.replace("-", ""),
                 "browse", "all", "",
+                "sportswear & activewear", "sportswear & gym", "sportswear and activewear",
+                "sports & activewear", "sports and activewear", "jersey", "jerseys",
+                "mobiles & gadgets", "laptops & pc", "watches & horology", "cameras & dslr",
+                "gaming consoles & accessories", "home appliances", "beauty & skincare",
+                "bicycles, mtb & aero", "electric bikes & evs", "fine jewelry & gold",
+                "sneakers & shoes",
             }
-            is_specific_query = bool(query_str and q_clean_lower not in default_triggers)
-            if not is_specific_query and (browse or not query_str or q_clean_lower in default_triggers):
+            is_category_label = not query_str or q_clean_lower in default_triggers
+            if browse or is_category_label:
                 cards = build_predetermined_browse_products(target_cat_id, subcategory=subcategory)
                 if cards:
                     return cards

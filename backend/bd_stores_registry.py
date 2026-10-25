@@ -1409,6 +1409,9 @@ CATEGORY_REGISTRY_MAP["fine-jewelry-premium-fashion-jewelry-stores"] = CATEGORY_
 CATEGORY_REGISTRY_MAP["fine-jewelry-and-gold"] = CATEGORY_REGISTRY_MAP["fine-jewelry"]
 CATEGORY_REGISTRY_MAP["sportswear-activewear-gym-gear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
 CATEGORY_REGISTRY_MAP["sportswear-activewear-and-gym-gear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
+CATEGORY_REGISTRY_MAP["sports-activewear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
+CATEGORY_REGISTRY_MAP["sportswear-activewear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
+CATEGORY_REGISTRY_MAP["sports-and-activewear"] = CATEGORY_REGISTRY_MAP["sportswear-gym"]
 CATEGORY_REGISTRY_MAP["sneakers-footwear-stores"] = CATEGORY_REGISTRY_MAP["sneakers-footwear"]
 CATEGORY_REGISTRY_MAP["sneakers-and-shoes"] = CATEGORY_REGISTRY_MAP["sneakers-footwear"]
 

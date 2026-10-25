@@ -232,14 +232,14 @@ CATEGORY_PREDETERMINED_CATALOG: Dict[str, Dict[str, Any]] = {
     "sportswear-gym": {
         "subcategories": ["All", "Jerseys & Apparel", "Gym Gear & Equipment"],
         "products": [
-            {"slug": "football-jersey", "title_en": "Football Jersey", "title_bn": "ফুটবল জার্সি", "subcategory": "Jerseys & Apparel", "search_kw": "football jersey kit", "starts_from": 550, "max_price": 1850, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "running-shorts", "title_en": "Running Shorts", "title_bn": "রানিং শর্টস", "subcategory": "Jerseys & Apparel", "search_kw": "running athletic shorts", "starts_from": 450, "max_price": 1850, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "compression-tights", "title_en": "Compression Tights", "title_bn": "কম্প্রেশন টাইটস", "subcategory": "Jerseys & Apparel", "search_kw": "compression tights leggings", "starts_from": 650, "max_price": 2800, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "gym-training-t-shirt", "title_en": "Gym Training T-Shirt", "title_bn": "জিম ট্রেনিং টি-শার্ট", "subcategory": "Jerseys & Apparel", "search_kw": "gym quick dry dri fit t-shirt", "starts_from": 380, "max_price": 1650, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "fitness-dumbbells", "title_en": "Fitness Dumbbells", "title_bn": "ডাম্বেল", "subcategory": "Gym Gear & Equipment", "search_kw": "gym rubber dumbbells weight", "starts_from": 1250, "max_price": 8500, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "resistance-bands", "title_en": "Resistance Bands", "title_bn": "রেজিস্ট্যান্স ব্যান্ড", "subcategory": "Gym Gear & Equipment", "search_kw": "workout resistance bands set", "starts_from": 450, "max_price": 2400, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "yoga-mat", "title_en": "Yoga Mat", "title_bn": "ইয়োগা ম্যাট", "subcategory": "Gym Gear & Equipment", "search_kw": "anti slip yoga mat", "starts_from": 750, "max_price": 3500, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
-            {"slug": "boxing-hand-wraps", "title_en": "Boxing Hand Wraps", "title_bn": "বক্সিং হ্যান্ড র্যাপ", "subcategory": "Gym Gear & Equipment", "search_kw": "boxing hand wraps gloves", "starts_from": 350, "max_price": 1850, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "argentina-3-star-player-edition-home-jersey", "title_en": "Argentina 3-Star Player Edition Home Jersey", "title_bn": "আর্জেন্টিনা ৩-স্টার প্লেয়ার এডিশন হোম জার্সি", "subcategory": "Jerseys & Apparel", "search_kw": "argentina jersey kit", "starts_from": 1150, "max_price": 1850, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "brazil-away-jersey-2024-25", "title_en": "Brazil National Team Away Jersey 2024/25", "title_bn": "ব্রাজিল জাতীয় দল অ্যাওয়ে জার্সি", "subcategory": "Jerseys & Apparel", "search_kw": "brazil jersey kit", "starts_from": 1150, "max_price": 1850, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "real-madrid-fan-edition-kit", "title_en": "Real Madrid 2024/25 Home Fan Edition Kit", "title_bn": "রিয়াল মাদ্রিদ হোম ফ্যান এডিশন কিট", "subcategory": "Jerseys & Apparel", "search_kw": "real madrid jersey kit", "starts_from": 1050, "max_price": 1750, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "bangladesh-cricket-world-cup-jersey", "title_en": "Bangladesh National Cricket Team Official World Cup Jersey", "title_bn": "বাংলাদেশ ক্রিকেট দল অফিশিয়াল বিশ্বকাপ জার্সি", "subcategory": "Jerseys & Apparel", "search_kw": "bangladesh cricket jersey", "starts_from": 1200, "max_price": 1950, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "fabrilife-compression-gym-tee", "title_en": "Fabrilife High-Performance Compression Gym Tee", "title_bn": "ফ্যাব্রিলাইফ কম্প্রেশন জিম টি-শার্ট", "subcategory": "Jerseys & Apparel", "search_kw": "gym quick dry dri fit t-shirt", "starts_from": 690, "max_price": 1250, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "hex-dumbbell-set-20kg", "title_en": "Adjustable Rubberized Hex Dumbbell Set (20kg)", "title_bn": "রাবার হেক্স ডাম্বেল সেট (২০ কেজি)", "subcategory": "Gym Gear & Equipment", "search_kw": "gym rubber dumbbells weight", "starts_from": 3850, "max_price": 6500, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "heavy-duty-resistance-bands-set", "title_en": "Heavy-Duty Resistance Loop Bands Set (5-Pack)", "title_bn": "রেজিস্ট্যান্স লুপ ব্যান্ডস সেট (৫ প্যাক)", "subcategory": "Gym Gear & Equipment", "search_kw": "workout resistance bands set", "starts_from": 850, "max_price": 1850, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"},
+            {"slug": "non-slip-tpe-yoga-mat", "title_en": "Non-Slip TPE High-Density Fitness Yoga Mat (6mm)", "title_bn": "নন-স্লিপ টিপিই হাই-ডেনসিটি ইয়োগা ম্যাট (৬ মিমি)", "subcategory": "Gym Gear & Equipment", "search_kw": "anti slip yoga mat", "starts_from": 1250, "max_price": 2600, "img": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"},
         ],
     },
 
@@ -400,3 +400,11 @@ def build_predetermined_browse_products(
 
     _PREDETERMINED_BROWSE_CACHE[cache_key] = browse_products
     return browse_products
+
+
+# Category aliases for predetermined catalog
+CATEGORY_PREDETERMINED_CATALOG["sports-activewear"] = CATEGORY_PREDETERMINED_CATALOG["sportswear-gym"]
+CATEGORY_PREDETERMINED_CATALOG["sportswear-activewear"] = CATEGORY_PREDETERMINED_CATALOG["sportswear-gym"]
+CATEGORY_PREDETERMINED_CATALOG["sportswear-activewear-gym-gear"] = CATEGORY_PREDETERMINED_CATALOG["sportswear-gym"]
+CATEGORY_PREDETERMINED_CATALOG["sportswear-and-gym"] = CATEGORY_PREDETERMINED_CATALOG["sportswear-gym"]
+CATEGORY_PREDETERMINED_CATALOG["sports-and-activewear"] = CATEGORY_PREDETERMINED_CATALOG["sportswear-gym"]

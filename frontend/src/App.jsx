@@ -2609,6 +2609,9 @@ const REGISTRY_CATEGORIES = [
   { id: 'beauty-skincare', categoryName: 'Beauty, Skincare & Lifestyle Stores', en: 'Beauty & Skincare', bn: 'বিউটি ও স্কিনকেয়ার', defaultQuery: 'Beauty & Skincare' },
   { id: 'bicycles-mtb', categoryName: 'Bicycles, MTB & Aero', en: 'Bicycles, MTB & Aero', bn: 'সাইকেল, এমটিবি ও এরো', defaultQuery: 'Bicycles, MTB & Aero' },
   { id: 'cycles-evs', categoryName: 'Electric Bikes & EVs', en: 'Electric Bikes & EVs', bn: 'ই-বাইক ও ইলেকট্রিক', defaultQuery: 'Electric Bikes & EVs' },
+  { id: 'sportswear-gym', categoryName: 'Sportswear & Activewear', en: 'Sportswear & Activewear', bn: 'স্পোর্টসওয়্যার ও অ্যাক্টিভওয়্যার', defaultQuery: 'Sportswear & Activewear' },
+  { id: 'fine-jewelry', categoryName: 'Fine Jewelry & Gold', en: 'Fine Jewelry & Gold', bn: 'স্বর্ণ ও ফাইন জুয়েলারি', defaultQuery: 'Fine Jewelry & Gold' },
+  { id: 'sneakers-footwear', categoryName: 'Sneakers & Shoes', en: 'Sneakers & Shoes', bn: 'স্নিকার্স ও জুতো', defaultQuery: 'Sneakers & Shoes' },
 ];
 
 

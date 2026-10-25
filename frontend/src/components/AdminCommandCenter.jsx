@@ -2301,10 +2301,11 @@ export default function AdminCommandCenter({
                 </div>
               </div>
 
-              {/* Spider Table */}
-              <div className="overflow-x-auto max-h-[520px] overflow-y-auto">
+              {/* Contained Spider Matrix Card Viewport with Internal Scrollbar */}
+              <div className="relative border border-white/10 rounded-2xl overflow-hidden bg-[#0A0B0E]/80 shadow-2xl">
+                <div className="overflow-x-auto max-h-[460px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#10b981_#0a0b0e] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#0A0B0E] [&::-webkit-scrollbar-thumb]:bg-emerald-500/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-emerald-500/70">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#0A0B0E] text-white/50 text-[10px] font-bold uppercase tracking-wider border-b border-white/10 sticky top-0 z-10">
+                  <thead className="bg-[#0e121a] text-white/70 text-[10px] font-black uppercase tracking-wider border-b border-white/15 sticky top-0 z-10 backdrop-blur-md shadow-sm">
                     <tr>
                       <th className="p-3.5">Store / Channel</th>
                       <th className="p-3.5">Target Domain</th>
@@ -2386,7 +2387,23 @@ export default function AdminCommandCenter({
                   </tbody>
                 </table>
               </div>
+
+              {/* Pinned Spider Matrix Card Footer */}
+              <div className="px-4 py-3 bg-[#0e121a] border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-white/60">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>
+                    Tracking <strong className="text-white">{spiders.length}</strong> verified webstores & Facebook page boutiques across 16 categories
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-[11px] font-mono">
+                  <span className="text-emerald-400">Contained Card Viewport</span>
+                  <span className="text-white/30">|</span>
+                  <span className="text-white/60">Independent Internal Scrollbar</span>
+                </div>
+              </div>
             </div>
+          </div>
 
             {/* HYBRID STORE URL MAPPER & F-COMMERCE OVERRIDE */}
             <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
@@ -2779,7 +2796,7 @@ export default function AdminCommandCenter({
               ) : (
                 <div className="overflow-x-auto max-h-72 overflow-y-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#0A0B0E] text-white/50 text-[10px] font-bold uppercase tracking-wider border-b border-white/10 sticky top-0 z-10">
+                    <thead className="bg-[#0e121a] text-white/70 text-[10px] font-black uppercase tracking-wider border-b border-white/15 sticky top-0 z-10 backdrop-blur-md shadow-sm">
                       <tr>
                         <th className="p-3">Customer Search Query</th>
                         <th className="p-3">Category Hint</th>
