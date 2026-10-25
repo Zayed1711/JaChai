@@ -1054,6 +1054,18 @@ export async function fetchSearchSuggestions(prefix = '') {
   }
 }
 
+export async function fetchSearchTelemetryDataset(limit = 100) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/telemetry/slm-dataset?limit=${limit}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[JaChai API] fetchSearchTelemetryDataset error:', err.message);
+    return [];
+  }
+}
+
+
 
 
 

@@ -24,7 +24,10 @@ import {
   Compass,
   ArrowUp,
   ArrowDown,
-  Search
+  Search,
+  Edit,
+  ExternalLink,
+  TrendingUp
 } from 'lucide-react';
 import {
   apiCreateBillboard,
@@ -58,7 +61,10 @@ import {
   fetchPrewarmStatus,
   apiRecalculateLeaderboard,
   fetchAdminLeaderboardStatus,
-  apiSyncMerchantFeeds
+  apiSyncMerchantFeeds,
+  apiUpdateOffer,
+  apiDeleteOffer,
+  fetchSearchTelemetryDataset
 } from '../api';
 
 export default function AdminCommandCenter({
@@ -109,6 +115,19 @@ export default function AdminCommandCenter({
   const [spiderSearchQuery, setSpiderSearchQuery] = useState('');
   const [spiderRunProgress, setSpiderRunProgress] = useState(null);
   const [pingingStoreId, setPingingStoreId] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [managingOffersProduct, setManagingOffersProduct] = useState(null);
+  const [newLinkedOffer, setNewLinkedOffer] = useState({
+    storeName: '',
+    sourceType: 'Automated Webcrawler URL',
+    price: 1000,
+    originalPrice: 1200,
+    targetUrl: 'https://',
+    terms: 'Cash on Delivery · Verified Courier',
+    warranty: '1-Year Official Warranty'
+  });
+  const [telemetryData, setTelemetryData] = useState([]);
+  const [isLoadingTelemetry, setIsLoadingTelemetry] = useState(false);
 
   React.useEffect(() => {
     apiFetchMacroTicker()
@@ -600,6 +619,12 @@ export default function AdminCommandCenter({
   // Tab Data Synchronization Effects
   React.useEffect(() => {
     if (activeTab === 'analytics' && setAnalytics) {
+      fetchSearchTelemetryDataset(50)
+        .then((data) => {
+          if (Array.isArray(data)) setTelemetryData(data);
+        })
+        .catch(() => {});
+
       fetchSponsorAnalytics()
         .then((res) => {
           if (res?.billboards || res?.spotlights) {
@@ -867,6 +892,192 @@ export default function AdminCommandCenter({
     } catch (err) {
       console.warn('API create billboard error:', err);
     }
+  };
+
+  const handleSaveBillboardChanges = async (b) => {
+    showNotification(`Saving billboard slide for ${b.brandEn}...`);
+    try {
+      if (typeof b.id === 'number') {
+        await apiUpdateBillboard(b.id, {
+          sponsor_en: b.brandEn,
+          sponsor_bn: b.brandBn || b.brandEn,
+          headline_en: `${b.headlineLightEn || ''} ${b.headlineBoldEn || ''}`.trim(),
+          headline_bn: b.headlineBn || b.brandEn,
+          category_badge: (b.tagEn || '').replace('SPONSORED · ', ''),
+          starting_price: Number(b.startingPrice),
+          image_url: b.image,
+          target_url: b.productKey,
+          is_active: b.isActive !== false
+        });
+      }
+      showNotification(`✓ Billboard changes saved for ${b.brandEn}`);
+    } catch (err) {
+      console.warn('Failed to save billboard:', err);
+      showNotification(`⚠️ Failed to save billboard: ${err.message}`);
+    }
+  };
+
+  const handleSaveSpotlightChanges = async (slot) => {
+    showNotification(`Saving spotlight slot ${slot.slotBadge}...`);
+    try {
+      if (typeof slot.id === 'number') {
+        await apiUpdateSpotlight(slot.id, {
+          brand_title_en: slot.brandEn,
+          brand_title_bn: slot.brandBn || slot.brandEn,
+          tagline_en: slot.titleEn,
+          tagline_bn: slot.titleBn || slot.titleEn,
+          starting_price: Number(slot.price),
+          image_url: slot.image,
+          target_url: slot.targetUrl || '/',
+          is_active: slot.isActive !== false
+        });
+      }
+      showNotification(`✓ Spotlight slot ${slot.slotBadge} saved!`);
+    } catch (err) {
+      console.warn('Failed to save spotlight:', err);
+      showNotification(`⚠️ Failed to save spotlight: ${err.message}`);
+    }
+  };
+
+  const handleSaveEditedProduct = async (e) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+    showNotification(`Updating ${editingProduct.nameEn}...`);
+    try {
+      if (typeof editingProduct.id === 'number') {
+        await apiUpdateProduct(editingProduct.id, {
+          title_en: editingProduct.nameEn,
+          title_bn: editingProduct.nameBn || editingProduct.nameEn,
+          category: editingProduct.category,
+          image_url: editingProduct.image,
+          price_30d_ago: Number(editingProduct.past30d || editingProduct.price * 1.05),
+          price_15d_ago: Number(editingProduct.past15d || editingProduct.price * 1.02),
+          is_pinned_homepage: editingProduct.isPinned
+        });
+      }
+      setProducts((prev) =>
+        prev.map((p) => (p.key === editingProduct.key ? { ...editingProduct } : p))
+      );
+      showNotification(`✓ Product "${editingProduct.nameEn}" updated!`);
+      setEditingProduct(null);
+    } catch (err) {
+      console.warn('Failed to update product:', err);
+      showNotification(`⚠️ Failed to update product: ${err.message}`);
+    }
+  };
+
+  const handleDeleteOfferFromProduct = async (offerId, productId) => {
+    showNotification('Deleting store offer...');
+    try {
+      if (typeof offerId === 'number') {
+        await apiDeleteOffer(offerId);
+      }
+      setProducts((prev) =>
+        prev.map((p) => {
+          if (p.id !== productId && p.key !== productId) return p;
+          const filteredOffers = (p.offers || []).filter((o) => o.id !== offerId);
+          const lowest = filteredOffers.length > 0 ? Math.min(...filteredOffers.map((o) => o.price || o.current_price || 999999)) : p.price;
+          return {
+            ...p,
+            price: lowest,
+            storeCount: filteredOffers.length,
+            offers: filteredOffers
+          };
+        })
+      );
+      if (managingOffersProduct) {
+        setManagingOffersProduct((prev) => {
+          if (!prev) return null;
+          const filteredOffers = (prev.offers || []).filter((o) => o.id !== offerId);
+          return { ...prev, offers: filteredOffers, storeCount: filteredOffers.length };
+        });
+      }
+      showNotification('✓ Store offer removed successfully');
+    } catch (err) {
+      console.warn('Failed to delete offer:', err);
+      showNotification(`⚠️ Failed to delete offer: ${err.message}`);
+    }
+  };
+
+  const handleAddNewOfferDirectly = async (e) => {
+    e.preventDefault();
+    if (!managingOffersProduct || !newLinkedOffer.storeName || !newLinkedOffer.price) {
+      alert('Please fill in Store Name and Price.');
+      return;
+    }
+    const tempOfferId = Date.now();
+    const offerToAdd = {
+      id: tempOfferId,
+      store: newLinkedOffer.sourceType.includes('Facebook') ? 'F-COMMERCE' : 'WEB STORE',
+      subStoreEn: newLinkedOffer.storeName,
+      subStoreBn: newLinkedOffer.storeName,
+      termsEn: newLinkedOffer.terms,
+      termsBn: newLinkedOffer.terms,
+      price: Number(newLinkedOffer.price),
+      warrantyEn: newLinkedOffer.warranty,
+      warrantyBn: newLinkedOffer.warranty,
+      targetUrl: newLinkedOffer.targetUrl
+    };
+
+    setProducts((prev) =>
+      prev.map((p) => {
+        if (p.key !== managingOffersProduct.key && p.id !== managingOffersProduct.id) return p;
+        const updatedOffers = [...(p.offers || []), offerToAdd].sort((a, b) => a.price - b.price);
+        const lowest = updatedOffers[0]?.price || p.price;
+        return {
+          ...p,
+          price: lowest,
+          storeCount: updatedOffers.length,
+          offers: updatedOffers
+        };
+      })
+    );
+
+    setManagingOffersProduct((prev) => {
+      if (!prev) return null;
+      const updatedOffers = [...(prev.offers || []), offerToAdd].sort((a, b) => a.price - b.price);
+      return { ...prev, offers: updatedOffers, storeCount: updatedOffers.length, price: updatedOffers[0]?.price || prev.price };
+    });
+
+    showNotification(`✓ Added ${newLinkedOffer.storeName} offer!`);
+
+    if (managingOffersProduct.id) {
+      try {
+        const res = await apiCreateOffer({
+          product_id: managingOffersProduct.id,
+          store_name: newLinkedOffer.storeName,
+          source_type: newLinkedOffer.sourceType.includes('Facebook') ? 'f_commerce' : 'crawler',
+          target_url: newLinkedOffer.targetUrl || 'https://',
+          current_price: Number(newLinkedOffer.price),
+          original_price: Number(newLinkedOffer.originalPrice || newLinkedOffer.price * 1.15),
+          cod_terms_en: newLinkedOffer.terms,
+          cod_terms_bn: newLinkedOffer.terms,
+          warranty_text: newLinkedOffer.warranty
+        });
+        if (res?.id) {
+          // Update id
+          setManagingOffersProduct((prev) => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              offers: prev.offers.map((o) => (o.id === tempOfferId ? { ...o, id: res.id } : o))
+            };
+          });
+        }
+      } catch (err) {
+        console.warn('Failed to persist offer:', err);
+      }
+    }
+
+    setNewLinkedOffer({
+      storeName: '',
+      sourceType: 'Automated Webcrawler URL',
+      price: 1000,
+      originalPrice: 1200,
+      targetUrl: 'https://',
+      terms: 'Cash on Delivery · Verified Courier',
+      warranty: '1-Year Official Warranty'
+    });
   };
 
   const toggleSidePanelStatus = async (id) => {
@@ -1506,9 +1717,16 @@ export default function AdminCommandCenter({
                       </div>
                     </div>
 
-                    <div className="text-[10px] text-white/40 flex items-center justify-between border-t border-white/10 pt-2">
-                      <span>Slide ID: {b.id}</span>
-                      <span className="text-[#10B981] font-semibold">Live in rotation</span>
+                    <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                      <span className="text-[10px] text-white/40">Slide #{b.id}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveBillboardChanges(b)}
+                        className="px-3 py-1.5 rounded-lg bg-[#10B981] hover:bg-[#059669] text-black text-[10px] font-extrabold uppercase tracking-wider transition cursor-pointer flex items-center gap-1 shadow-sm"
+                      >
+                        <Check className="w-3 h-3 text-black" />
+                        <span>Save Slide</span>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -1636,6 +1854,17 @@ export default function AdminCommandCenter({
                             onChange={(e) => handleBannerFileUpload(e, 'spotlight', slot.id)}
                           />
                         </label>
+                      </div>
+
+                      <div className="pt-2 border-t border-white/10 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => handleSaveSpotlightChanges(slot)}
+                          className="px-3 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-black text-[10px] font-extrabold uppercase tracking-wider transition cursor-pointer flex items-center gap-1 shadow-sm"
+                        >
+                          <Check className="w-3 h-3 text-black" />
+                          <span>Save Slot</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -2352,7 +2581,16 @@ export default function AdminCommandCenter({
                         <td className="p-3.5 font-extrabold text-[#10B981]">
                           {formatBDT(p.price, 'en')}
                         </td>
-                        <td className="p-3.5 text-white/60">{p.offers?.length || p.storeCount} stores</td>
+                        <td className="p-3.5">
+                          <button
+                            type="button"
+                            onClick={() => setManagingOffersProduct(p)}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider transition cursor-pointer inline-flex items-center gap-1.5"
+                          >
+                            <Globe className="w-3 h-3" />
+                            <span>{p.offers?.length || p.storeCount} stores</span>
+                          </button>
+                        </td>
                         <td className="p-3.5 text-center">
                           <button
                             onClick={() => toggleProductPin(p.key)}
@@ -2366,13 +2604,23 @@ export default function AdminCommandCenter({
                           </button>
                         </td>
                         <td className="p-3.5 text-right">
-                          <button
-                            onClick={() => deleteProduct(p.key)}
-                            className="p-1.5 text-white/40 hover:text-red-400 rounded-lg transition cursor-pointer"
-                            title="Delete Product"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setEditingProduct({ ...p })}
+                              className="p-1.5 text-white/50 hover:text-emerald-400 hover:bg-white/10 rounded-lg transition cursor-pointer"
+                              title="Edit Product"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => deleteProduct(p.key)}
+                              className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition cursor-pointer"
+                              title="Delete Product"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -2503,6 +2751,75 @@ export default function AdminCommandCenter({
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* SEARCH INTELLIGENCE & EMERGING QUERIES TELEMETRY */}
+            <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
+              <div className="border-b border-white/10 pb-4 mb-5 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-black tracking-widest uppercase text-[#38BDF8]">
+                    SEARCH ENGINE INTELLIGENCE · CONTINUOUS SLM DISTILLATION
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5">
+                    Live Customer Search Telemetry & Emerging Market Queries
+                  </h3>
+                  <p className="text-xs text-white/50 mt-1">
+                    Real queries entered by Bangladeshi shoppers, automated category inference, and zero-result recovery signals.
+                  </p>
+                </div>
+                <span className="text-xs font-mono font-bold text-[#38BDF8] bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-500/30">
+                  {telemetryData.length} Tracked Queries
+                </span>
+              </div>
+
+              {telemetryData.length === 0 ? (
+                <div className="text-center py-8 text-white/40 text-xs">
+                  Awaiting visitor search queries. Searches performed on storefront are tracked here automatically.
+                </div>
+              ) : (
+                <div className="overflow-x-auto max-h-72 overflow-y-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#0A0B0E] text-white/50 text-[10px] font-bold uppercase tracking-wider border-b border-white/10 sticky top-0 z-10">
+                      <tr>
+                        <th className="p-3">Customer Search Query</th>
+                        <th className="p-3">Category Hint</th>
+                        <th className="p-3 text-center">Frequency</th>
+                        <th className="p-3 text-center">Catalog Status</th>
+                        <th className="p-3">Outbound Converted Store</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {telemetryData.map((tel, tIdx) => (
+                        <tr key={tIdx} className="hover:bg-white/[0.02] transition">
+                          <td className="p-3 font-mono font-bold text-white">
+                            &quot;{tel.query}&quot;
+                          </td>
+                          <td className="p-3 text-white/70">
+                            {tel.category}
+                          </td>
+                          <td className="p-3 font-mono text-center text-[#10B981] font-bold">
+                            {tel.search_count}x
+                          </td>
+                          <td className="p-3 text-center">
+                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${
+                              tel.has_results
+                                ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/30'
+                                : 'bg-red-950/60 text-red-400 border border-red-500/30'
+                            }`}>
+                              {tel.has_results ? '✓ Active Results' : '⚠️ Zero Results'}
+                            </span>
+                          </td>
+                          <td className="p-3 text-white/60 font-mono text-[11px]">
+                            {tel.clicked_stores && tel.clicked_stores.length > 0
+                              ? tel.clicked_stores.join(', ')
+                              : '—'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* ADVERTISER BOOKING INBOX */}
