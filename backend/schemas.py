@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union, Dict, Any
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator, model_validator
 
 
@@ -495,15 +495,53 @@ class AdminOverviewResponse(BaseModel):
 # CRAWLER & SPIDER HEALTH SCHEMAS
 # ==========================================
 class SpiderHealthItem(BaseModel):
-    id: int
-    product_id: int
+    id: Union[int, str]
+    product_id: Optional[int] = 0
     store_name: str
+    category: Optional[str] = "General"
+    channel: Optional[str] = "WEBSITE"
     domain: str
     target_url: str
     css_selector: Optional[str] = None
     spider_status: str  # 'healthy', 'slow', 'broken'
-    current_price: int
+    current_price: Optional[int] = 0
+    latency_ms: Optional[int] = 120
     last_synced_at: str
+
+
+class SpiderHealthMatrixResponse(BaseModel):
+    total_spiders: int
+    healthy_count: int
+    slow_count: int
+    broken_count: int
+    spiders: List[SpiderHealthItem]
+
+
+class SpiderPingRequest(BaseModel):
+    store_name: Optional[str] = None
+    domain: Optional[str] = None
+    target_url: Optional[str] = None
+
+
+class SpiderPingResponse(BaseModel):
+    store_name: str
+    domain: str
+    status: str
+    spider_status: str
+    latency_ms: int
+    last_synced: str
+    selector: str
+
+
+class SpiderRunStatusResponse(BaseModel):
+    is_running: bool
+    progress: int
+    current_store: Optional[str] = None
+    total_checked: int = 0
+    healthy_count: int = 0
+    slow_count: int = 0
+    broken_count: int = 0
+    completed_at: Optional[str] = None
 
 
 class CrawlerSummaryResponse(BaseModel):

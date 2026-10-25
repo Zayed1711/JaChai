@@ -180,6 +180,7 @@ import {
 
 
   triggerRunAllSpiders,
+  triggerRunAllSpidersBackground,
 
 
 
@@ -4042,113 +4043,33 @@ export default function App() {
 
 
   const runAllSpiders = async () => {
-
-
-
     setIsScraping(true);
-
-
-
     try {
-
-
-
-      await triggerRunAllSpiders(false);
-
-
-
+      await triggerRunAllSpidersBackground();
       const health = await fetchSpiderHealth();
-
-
-
-      if (health?.spiders) {
-
-
-
+      const list = Array.isArray(health) ? health : (health?.spiders || []);
+      if (list.length) {
         setSpiders(
-
-
-
-          health.spiders.map((s, i) => ({
-
-
-
-            id: `sp-${s.id || i + 1}`,
-
-
-
+          list.map((s, i) => ({
+            id: s.id || `sp-${i + 1}`,
             name: s.store_name,
-
-
-
             domain: s.domain,
-
-
-
-            selector: s.css_selector || 'Dynamic Multi-Strategy',
-
-
-
+            category: s.category || 'General',
+            channel_type: s.channel_type || 'WEBSITE',
+            selector: s.css_selector || (s.channel_type === 'F_COMMERCE' ? 'Manual F-Commerce (FB)' : '.price, .product-price'),
             status: s.spider_status === 'healthy' ? 'Healthy' : 'Slow',
-
-
-
+            statusCode: s.status_code || 200,
+            latencyMs: s.latency_ms || 145,
+            target_url: s.target_url || `https://${s.domain}`,
             lastSynced: s.last_synced_at || 'Just now'
-
-
-
           }))
-
-
-
         );
-
-
-
       }
-
-
-
-      const raw = await fetchStorefrontInit(false);
-
-
-
-      if (raw) {
-
-
-
-        const mapped = mapStorefrontData(raw);
-
-
-
-        if (mapped?.products) setProducts(mapped.products);
-
-
-
-      }
-
-
-
     } catch (err) {
-
-
-
-      console.warn('Crawler spider run error:', err);
-
-
-
+      console.warn('Run all spiders error:', err);
     } finally {
-
-
-
       setIsScraping(false);
-
-
-
     }
-
-
-
   };
 
 

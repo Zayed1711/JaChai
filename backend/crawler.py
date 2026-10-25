@@ -2470,6 +2470,11 @@ async def live_meta_search_and_persist(
                         existing.offers = clean_offers
                         cards.append(existing)
                         seen_ids.add(existing.id)
+                elif not existing or len(existing.offers) == 0:
+                    card = build_master_product_card(mm, db)
+                    if card and getattr(card, "offers", None) and len(card.offers) >= 1 and card.id not in seen_ids:
+                        cards.append(card)
+                        seen_ids.add(card.id)
 
             if cards:
                 cards = fuse_sibling_variant_offers(cards, cat_id)

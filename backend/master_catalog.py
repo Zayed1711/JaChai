@@ -262,6 +262,50 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         ]
     },
 
+    {
+        "slug": "apple-iphone-14-128gb",
+        "model_code": "iPhone 14 (128GB)",
+        "aliases": ["iphone 14 128gb", "iphone 14 128 gb", "iphone 14", "apple iphone 14"],
+        "title_en": "Apple iPhone 14 (128GB · Grade-A International)",
+        "title_bn": "অ্যাপল আইফোন ১৪ (১২৮জিবি)",
+        "category": "Mobiles & Gadgets",
+        "subcategory": "Smartphones",
+        "brand": "Apple",
+        "specs_summary": "Apple A15 Bionic · 6GB RAM · 128GB · 6.1-inch Super Retina XDR OLED · 12MP Dual Camera · Photonic Engine · Ceramic Shield",
+        "starting_price": 64999,
+        "max_price": 68500,
+        "image_url": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=600&q=80",
+        "variant": "128GB · Dual SIM",
+        "stores": [
+            {"name": "Mobile Buzz", "price": 64999, "url": "https://mobilebuzzbd.com/product/iphone-14/"},
+            {"name": "Apple Gadgets BD", "price": 68499, "url": "https://www.applegadgetsbd.com/product/iphone-14"},
+            {"name": "Custom Mac BD", "price": 68000, "url": "https://custommacbd.com/products/apple-iphone-14-price-in-bangladesh"},
+            {"name": "Star Tech", "price": 68500, "url": "https://www.startech.com.bd/iphone-14"},
+            {"name": "Daraz Bangladesh", "price": 68500, "url": "https://www.daraz.com.bd/catalog/?q=iPhone+14"},
+        ]
+    },
+    {
+        "slug": "apple-iphone-14-pro-128gb",
+        "model_code": "iPhone 14 Pro (128GB)",
+        "aliases": ["iphone 14 pro 128gb", "iphone 14 pro", "apple iphone 14 pro"],
+        "title_en": "Apple iPhone 14 Pro (128GB · Grade-A International)",
+        "title_bn": "অ্যাপল আইফোন ১৪ প্রো (১২৮জিবি)",
+        "category": "Mobiles & Gadgets",
+        "subcategory": "Smartphones",
+        "brand": "Apple",
+        "specs_summary": "Apple A16 Bionic · 6GB RAM · 128GB · 6.1-inch Super Retina XDR 120Hz ProMotion · Dynamic Island · 48MP Main Camera",
+        "starting_price": 94990,
+        "max_price": 99000,
+        "image_url": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=600&q=80",
+        "variant": "128GB · Dual SIM",
+        "stores": [
+            {"name": "Mobile Buzz", "price": 94990, "url": "https://mobilebuzzbd.com/product/iphone-14-pro/"},
+            {"name": "Apple Gadgets BD", "price": 97999, "url": "https://www.applegadgetsbd.com/product/iphone-14-pro"},
+            {"name": "Custom Mac BD", "price": 98000, "url": "https://custommacbd.com/products/apple-iphone-14-pro"},
+            {"name": "Star Tech", "price": 98500, "url": "https://www.startech.com.bd/iphone-14-pro"},
+        ]
+    },
+
     # --------------------------------------------------------------------------
     # 3. SAMSUNG GALAXY FLAGSHIPS
     # --------------------------------------------------------------------------

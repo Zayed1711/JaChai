@@ -666,25 +666,42 @@ def match_appliances_catalog(query: str) -> Optional[Dict[str, Any]]:
             return item
 
     # 3. Compound Brand + Category Check
-    # e.g. "walton refrigerator", "samsung fridge", "gree ac", "singer washing machine"
     APPLIANCE_BRANDS = ["walton", "samsung", "gree", "singer", "haier", "lg", "sharp", "panasonic", "vision", "minister", "miyako", "general", "philips", "jaipan"]
-    APPLIANCE_TYPES = ["refrigerator", "fridge", "ac", "air conditioner", "inverter", "washing machine", "washer", "microwave", "oven", "blender", "grinder"]
+    TYPE_SYNONYM_MAP = {
+        "refrigerator": ["refrigerator", "fridge", "freeze", "freezer", "frost", "non-frost", "double door", "deep fridge"],
+        "air conditioner": ["ac", "air conditioner", "inverter", "split ac"],
+        "washing machine": ["washing machine", "washer"],
+        "microwave oven": ["microwave", "oven"],
+        "blender": ["blender", "grinder", "mixer"],
+        "television": ["tv", "television", "bravia"]
+    }
 
-    has_brand = any(b in q_norm.split() for b in APPLIANCE_BRANDS)
-    has_type = any(t in q_norm for t in APPLIANCE_TYPES)
+    matched_brand = next((b for b in APPLIANCE_BRANDS if re.search(r"\b" + re.escape(b) + r"\b", q_norm)), None)
+    if matched_brand:
+        detected_types = []
+        for canonical_type, syns in TYPE_SYNONYM_MAP.items():
+            if any(re.search(r"\b" + re.escape(s) + r"\b", q_norm) for s in syns):
+                detected_types.append(canonical_type)
 
-    if has_brand and has_type:
-        # Find best matching product for that brand & type
-        matched_brand = next(b for b in APPLIANCE_BRANDS if b in q_norm.split())
-        for item in APPLIANCE_CATALOG_ITEMS:
-            if item["brand"].lower() == matched_brand:
-                # check subcategory or keywords
-                t_en = item["title_en"].lower()
-                if any(t in t_en for t in APPLIANCE_TYPES if t in q_norm):
-                    return item
+        if detected_types:
+            brand_items = [it for it in APPLIANCE_CATALOG_ITEMS if it["brand"].lower() == matched_brand]
+            # Check for specific modifier match (e.g. double door / non-frost / inverter)
+            if any(mod in q_norm for mod in ("non frost", "non-frost", "double door", "inverter", "380")):
+                for it in brand_items:
+                    t_en = it["title_en"].lower()
+                    if "non-frost" in t_en or "inverter" in t_en:
+                        return it
+            for it in brand_items:
+                t_en = it["title_en"].lower()
+                m_slug = it["slug"].lower()
+                for ctype in detected_types:
+                    type_syns = TYPE_SYNONYM_MAP[ctype]
+                    if any(ts in t_en or ts in m_slug for ts in type_syns):
+                        return it
+            if brand_items:
+                return brand_items[0]
 
     return None
-
 
 def build_appliance_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = None) -> Product:
     title_en = catalog_item["title_en"]

@@ -239,15 +239,64 @@ export async function fetchSponsorAnalytics() {
   }
 }
 
-export async function fetchSpiderHealth() {
+export async function fetchSpiderHealth(category = null) {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/health`, {
+    const url = category && category !== 'all'
+      ? `${API_BASE_URL}/api/v1/admin/crawler/health?category=${encodeURIComponent(category)}`
+      : `${API_BASE_URL}/api/v1/admin/crawler/health`;
+    const res = await fetch(url, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      return { spiders: data, total_spiders: data.length };
+    }
+    return data;
+  } catch (err) {
+    console.warn('[JaChai API] fetchSpiderHealth error:', err.message);
+    return null;
+  }
+}
+
+export async function apiPingSpiderStore(payload) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/ping-store`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[JaChai API] apiPingSpiderStore error:', err.message);
+    return null;
+  }
+}
+
+export async function triggerRunAllSpidersBackground() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/run-all-background`, {
+      method: 'POST',
       headers: getAuthHeaders()
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (err) {
-    console.warn('[JaChai API] fetchSpiderHealth error:', err.message);
+    console.warn('[JaChai API] triggerRunAllSpidersBackground error:', err.message);
+    return null;
+  }
+}
+
+export async function fetchSpiderRunStatus() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/run-status`, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[JaChai API] fetchSpiderRunStatus error:', err.message);
     return null;
   }
 }
