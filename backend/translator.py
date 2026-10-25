@@ -142,6 +142,53 @@ async def query_ollama_neural_router(raw_query: str) -> Dict[str, Any]:
 
     return result
 
+
+BENGALI_DIGITS_MAP = {
+    '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4',
+    '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9'
+}
+
+BENGALI_TERM_MAP = {
+    r"গুগল": "Google",
+    r"পিক্সেল": "Pixel",
+    r"আইফোন": "iPhone",
+    r"অ্যাপল": "Apple",
+    r"আপেল": "Apple",
+    r"স্যামসাং": "Samsung",
+    r"সামসাং": "Samsung",
+    r"শাওমি": "Xiaomi",
+    r"শায়োমি": "Xiaomi",
+    r"রেডমি": "Redmi",
+    r"রিয়েলমি": "Realme",
+    r"ওয়ানপ্লাস": "OnePlus",
+    r"স্মার্টফোন": "Smartphone",
+    r"স্মার্টওয়াচ": "Smartwatch",
+    r"স্মার্টওয়াচ": "Smartwatch",
+    r"ঘড়ি": "Watch",
+    r"ঘড়ি": "Watch",
+    r"ল্যাপটপ": "Laptop",
+    r"ম্যাকবুক": "MacBook",
+    r"ক্যামেরা": "Camera",
+    r"সাইকেল": "Bicycle",
+    r"টিভি": "TV",
+    r"ফ্রিজ": "Fridge",
+    r"এসি": "AC",
+    r"প্রো": "Pro",
+    r"ম্যাক্স": "Max",
+    r"প্লাস": "Plus",
+    r"নোট": "Note",
+}
+
+def deterministic_bengali_transliterate(q: str) -> str:
+    if not q:
+        return ""
+    res = q
+    for b_digit, e_digit in BENGALI_DIGITS_MAP.items():
+        res = res.replace(b_digit, e_digit)
+    for b_pat, e_term in BENGALI_TERM_MAP.items():
+        res = re.sub(rf"(?i){b_pat}", e_term, res)
+    return res
+
 def translate_and_align_query(raw_query: str) -> str:
     """
     Synchronous wrapper used by bd_stores_registry.py and main.py.
@@ -150,6 +197,7 @@ def translate_and_align_query(raw_query: str) -> str:
     """
     if not raw_query or not raw_query.strip():
         return ""
+    raw_query = deterministic_bengali_transliterate(raw_query.strip())
 
     q_key = raw_query.strip().lower()
     res: Optional[Dict[str, Any]] = _ROUTER_CACHE.get(q_key)
