@@ -7421,6 +7421,31 @@ export default function App() {
 
             
 
+            {/* Disambiguation Pill Banner across all query states */}
+            {activeDisambiguationPills && activeDisambiguationPills.length > 0 && (
+              <div className="w-full mt-2 mb-4 p-3 rounded-2xl bg-teal-50/90 border border-teal-200/90 flex items-center justify-between flex-wrap gap-2.5 shadow-xs">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-bold text-teal-900 flex items-center gap-1">
+                    <span>💡</span> {lang === 'bn' ? 'সম্ভাব্য সঠিক মডেল বা ব্র্যান্ড:' : 'Did you mean:'}
+                  </span>
+                  {activeDisambiguationPills.map((pill, pIdx) => {
+                    const text = typeof pill === 'string' ? pill : (pill.text || pill.title || '');
+                    const cat = (typeof pill === 'object' && pill.category_id) ? pill.category_id : 'all';
+                    return (
+                      <button
+                        key={pIdx}
+                        type="button"
+                        onClick={() => handleSelectSuggestion(text, cat)}
+                        className="px-3 py-1 rounded-full text-xs font-bold bg-white text-teal-800 border border-teal-300 shadow-xs hover:bg-teal-100 transition cursor-pointer flex items-center gap-1.5"
+                      >
+                        <span>{text}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-teal-600" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {/* Kinetic Scanning State */}
 
 

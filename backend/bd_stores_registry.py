@@ -1352,6 +1352,7 @@ CATEGORY_REGISTRY_MAP: Dict[str, Dict[str, Any]] = {
         "display_bn": "মোবাইল ও গ্যাজেট",
         "vertical": "MOBILE_GADGET",
         "keywords": [
+            "redmi", "xiaomi", "pixel", "iphone", "samsung", "oneplus", "realme", "vivo", "oppo", "motorola", "infinix", "tecno", "honor", "nothing phone", "poco", "iqoo", "huawei",
             "mobile phone", "smartphone", "cell phone", "touch phone", "android mobile", "ios phone",
             "5g smartphone", "4g mobile", "budget phone", "flagship smartphone", "gaming phone",
             "camera phone", "iphone 15", "iphone 15 pro", "iphone 15 pro max", "iphone 14", "iphone 14 pro",
