@@ -1423,6 +1423,12 @@ VERIFIED_RECONDITIONED_MERCHANTS: Dict[str, List[Tuple[str, str, str, float]]] =
         ("Swiss Time Pre-Owned Vault", "crawler", "https://swisstimebd.com", 0.75),
         ("Time Zone Certified Pre-Owned", "crawler", "https://timezonebd.com", 0.72),
     ],
+    "gaming-consoles": [
+        ("Gamers World BD (Pre-Owned Consoles)", "crawler", "https://gamersworldbd.com", 0.70),
+        ("Swap Bangladesh (Certified Pre-Owned PS5 & Xbox)", "crawler", "https://swap.com.bd", 0.72),
+        ("Console Freak BD (Pre-Owned & Exchange)", "f_commerce", "https://www.facebook.com/consolefreakbd", 0.68),
+        ("Star Tech Certified Refurbished", "crawler", "https://www.startech.com.bd", 0.75),
+    ],
 }
 
 
@@ -2461,20 +2467,32 @@ async def live_meta_search_and_persist(
                         filters.append(Product.title_en.ilike(f"%{v_str}%"))
                     existing = db.query(Product).options(joinedload(Product.offers)).filter(and_(*filters)).first()
 
-                if existing and existing.id not in seen_ids and len(existing.offers) >= 1:
+                card_to_add = None
+                master_card = build_master_product_card(mm, db)
+
+                if existing and getattr(existing, "offers", None):
                     clean_offers = [
                         o for o in existing.offers
                         if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
                     ]
-                    if clean_offers:
+                    if len(clean_offers) >= 3:
                         existing.offers = clean_offers
-                        cards.append(existing)
-                        seen_ids.add(existing.id)
-                elif not existing or len(existing.offers) == 0:
-                    card = build_master_product_card(mm, db)
-                    if card and getattr(card, "offers", None) and len(card.offers) >= 1 and card.id not in seen_ids:
-                        cards.append(card)
-                        seen_ids.add(card.id)
+                        card_to_add = existing
+                    elif master_card and getattr(master_card, "offers", None) and len(master_card.offers) >= 1:
+                        seen_stores = {o.store_name.lower().strip() for o in clean_offers}
+                        for mo in master_card.offers:
+                            if mo.store_name.lower().strip() not in seen_stores:
+                                clean_offers.append(mo)
+                                seen_stores.add(mo.store_name.lower().strip())
+                        existing.offers = clean_offers
+                        card_to_add = existing
+
+                if not card_to_add and master_card and getattr(master_card, "offers", None) and len(master_card.offers) >= 1:
+                    card_to_add = master_card
+
+                if card_to_add and card_to_add.id not in seen_ids:
+                    cards.append(card_to_add)
+                    seen_ids.add(card_to_add.id)
 
             if cards:
                 cards = fuse_sibling_variant_offers(cards, cat_id)
