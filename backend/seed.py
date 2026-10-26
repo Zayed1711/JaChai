@@ -808,15 +808,35 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু / ভরি",
         "icon_name": "Sparkles",
         "display_order": 1,
-        "latest_release_name": "24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori • 21K: ৳135,400/Vori (BAJUS Official)",
+        "latest_release_name": "24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori (BAJUS Benchmark)",
         "latest_release_price": 154700,
         "latest_release_badge": "24K Benchmark",
         "latest_release_url": "https://www.bajus.org/",
         "stores": [
-            {"name": "BAJUS Official Benchmark", "price": 141800, "url": "https://www.bajus.org/", "status": "National Hallmark"},
-            {"name": "Diamond World BD", "price": 141800, "url": "https://diamondworldbd.com/", "status": "Certified 22K/24K"},
-            {"name": "Apan Jewellers", "price": 141800, "url": "https://apanjewellers.com/", "status": "Certified 22K/24K"},
-            {"name": "Al-Amin Jewellers", "price": 142000, "url": "https://alaminjewellers.com/", "status": "In Stock"}
+            {
+                "name": "BAJUS Official Benchmark",
+                "price": 141800,
+                "url": "https://www.bajus.org/",
+                "status": "National Hallmark"
+            },
+            {
+                "name": "Diamond World BD",
+                "price": 141800,
+                "url": "https://diamondworldbd.com/",
+                "status": "Certified 22K/24K"
+            },
+            {
+                "name": "Apan Jewellers",
+                "price": 141800,
+                "url": "https://apanjewellers.com/",
+                "status": "Certified 22K/24K"
+            },
+            {
+                "name": "Al-Amin Jewellers",
+                "price": 142000,
+                "url": "https://alaminjewellers.com/",
+                "status": "In Stock"
+            }
         ]
     },
     {
@@ -833,22 +853,37 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু / লিটার",
         "icon_name": "Fuel",
         "display_order": 2,
-        "latest_release_name": "Octane: ৳125/Litre • Diesel: ৳105/Litre • Petrol: ৳120/Litre (Government Regulated)",
+        "latest_release_name": "Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated Rates)",
         "latest_release_price": 125,
-        "latest_release_badge": "Octane / Diesel",
+        "latest_release_badge": "BPC Regulated",
         "latest_release_url": "https://padmaoil.gov.bd/",
         "stores": [
-            {"name": "Padma Oil Company Ltd", "price": 105, "url": "https://padmaoil.gov.bd/", "status": "Regulated Retail"},
-            {"name": "Meghna Petroleum Ltd", "price": 105, "url": "https://mpl.gov.bd/", "status": "Regulated Retail"},
-            {"name": "Jamuna Oil Company Ltd", "price": 105, "url": "https://jamunaoil.gov.bd/", "status": "Regulated Retail"}
+            {
+                "name": "Padma Oil Company Ltd",
+                "price": 105,
+                "url": "https://padmaoil.gov.bd/",
+                "status": "Regulated Retail"
+            },
+            {
+                "name": "Meghna Petroleum Ltd",
+                "price": 105,
+                "url": "https://mpl.gov.bd/",
+                "status": "Regulated Retail"
+            },
+            {
+                "name": "Jamuna Oil Company Ltd",
+                "price": 105,
+                "url": "https://jamunaoil.gov.bd/",
+                "status": "Regulated Retail"
+            }
         ]
     },
     {
         "slug": "iphones",
         "title_en": "iPhones (Apple Flagship Series)",
         "title_bn": "আইফোন (অ্যাপল ফ্ল্যাগশিপ সিরিজ)",
-        "subtitle_en": "Apple iPhone 13, 14, 15, 16 Pro & Pro Max Flagships",
-        "subtitle_bn": "অ্যাপল আইফোন ১৩, ১৪, ১৫, ১৬ প্রো এবং প্রো ম্যাক্স",
+        "subtitle_en": "Apple iPhone 14, 15, 16 Pro & iPhone 17 Flagship Lineup",
+        "subtitle_bn": "অ্যাপল আইফোন ১৪, ১৫, ১৬ প্রো এবং আইফোন ১৭ ফ্ল্যাগশিপ",
         "category_id": "mobile-gadgets",
         "search_query": "iphone",
         "current_price": 68500,
@@ -857,24 +892,49 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "Smartphone",
         "display_order": 3,
-        "latest_release_name": "Apple iPhone 16 Pro Max 256GB Desert Titanium",
-        "latest_release_price": 172500,
+        "latest_release_name": "Apple iPhone 17 256GB (A19 Bionic, ProMotion Display)",
+        "latest_release_price": 140000,
         "latest_release_badge": "Latest Flagship",
-        "latest_release_url": "https://www.applegadgetsbd.com/",
+        "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Apple Gadgets BD", "price": 68500, "url": "https://www.applegadgetsbd.com/", "status": "In Stock"},
-            {"name": "Star Tech", "price": 69999, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Ryans Computers", "price": 70500, "url": "https://www.ryans.com/", "status": "In Stock"},
-            {"name": "Dazzle BD", "price": 68900, "url": "https://dazzle.com.bd/", "status": "In Stock"},
-            {"name": "Kite9 BD", "price": 69500, "url": "https://kite9.com.bd/", "status": "Limited Stock"}
+            {
+                "name": "Apple Gadgets BD",
+                "price": 68500,
+                "url": "https://www.applegadgetsbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Star Tech",
+                "price": 69999,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ryans Computers",
+                "price": 70500,
+                "url": "https://www.ryans.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Dazzle BD",
+                "price": 68900,
+                "url": "https://dazzle.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Kite9 BD",
+                "price": 69500,
+                "url": "https://kite9.com.bd/",
+                "status": "Limited Stock"
+            }
         ]
     },
     {
         "slug": "samsung-galaxy-s-series",
         "title_en": "Samsung Galaxy S Series",
         "title_bn": "স্যামসাং গ্যালাক্সি এস সিরিজ",
-        "subtitle_en": "Galaxy S23, S24, S24 Ultra & FE Official Flagships",
-        "subtitle_bn": "স্যামসাং গ্যালাক্সি এস২৩, এস২৪ ও এস২৪ আল্ট্রা ফ্ল্যাগশিপ",
+        "subtitle_en": "Galaxy S23, S24, S25 & S25 Ultra Official Flagships",
+        "subtitle_bn": "স্যামসাং গ্যালাক্সি এস২৩, এস২৪, এস২৫ ও এস২৫ আল্ট্রা ফ্ল্যাগশিপ",
         "category_id": "mobile-gadgets",
         "search_query": "samsung galaxy s",
         "current_price": 79500,
@@ -883,24 +943,49 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "Smartphone",
         "display_order": 4,
-        "latest_release_name": "Samsung Galaxy S24 Ultra 12GB/256GB Titanium Gray",
-        "latest_release_price": 148000,
+        "latest_release_name": "Samsung Galaxy S25 Ultra 12GB/256GB Titanium (Snapdragon 8 Elite, Galaxy AI)",
+        "latest_release_price": 185000,
         "latest_release_badge": "Latest Flagship",
-        "latest_release_url": "https://samsungplaza.com.bd/",
+        "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Star Tech", "price": 79500, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Apple Gadgets BD", "price": 80999, "url": "https://www.applegadgetsbd.com/", "status": "In Stock"},
-            {"name": "Samsung Plaza BD", "price": 82500, "url": "https://samsungplaza.com.bd/", "status": "Official BD Warranty"},
-            {"name": "Pickaboo", "price": 81500, "url": "https://www.pickaboo.com/", "status": "In Stock"},
-            {"name": "Daraz Mall", "price": 83000, "url": "https://www.daraz.com.bd/", "status": "In Stock"}
+            {
+                "name": "Star Tech",
+                "price": 79500,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Apple Gadgets BD",
+                "price": 80999,
+                "url": "https://www.applegadgetsbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Samsung Plaza BD",
+                "price": 82500,
+                "url": "https://samsungplaza.com.bd/",
+                "status": "Official BD Warranty"
+            },
+            {
+                "name": "Pickaboo",
+                "price": 81500,
+                "url": "https://www.pickaboo.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Daraz Mall",
+                "price": 83000,
+                "url": "https://www.daraz.com.bd/",
+                "status": "In Stock"
+            }
         ]
     },
     {
         "slug": "ram-ddr4-ddr5-modules",
         "title_en": "RAM (DDR4 / DDR5 Modules)",
         "title_bn": "র‌্যাম (ডিডিআর৪ ও ডিডিআর৫)",
-        "subtitle_en": "Desktop & Laptop 8GB, 16GB, 32GB High-Speed RAM",
-        "subtitle_bn": "ডেস্কটপ ও ল্যাপটপ ৮জিবি, ১৬জিবি, ৩২জিবি মেমোরি মডিউল",
+        "subtitle_en": "Desktop & Laptop 8GB, 16GB, 32GB High-Speed DDR4/DDR5 RAM",
+        "subtitle_bn": "ডেস্কটপ ও ল্যাপটপ ৮জিবি, ১৬জিবি, ৩২জিবি ডিডিআর৪ ও ডিডিআর৫ মেমোরি",
         "category_id": "desktop-components",
         "search_query": "ram ddr4 ddr5",
         "current_price": 2450,
@@ -909,23 +994,43 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "Cpu",
         "display_order": 5,
-        "latest_release_name": "Corsair Dominator Titanium RGB DDR5 32GB (2x16GB) 6000MHz CL30",
+        "latest_release_name": "TEAM T-FORCE DELTA RGB 32GB (2x16GB) 7200MHz DDR5 Desktop RAM",
         "latest_release_price": 19800,
-        "latest_release_badge": "Latest DDR5",
+        "latest_release_badge": "Latest 7200MHz DDR5",
         "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Star Tech", "price": 2450, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Ryans Computers", "price": 2500, "url": "https://www.ryans.com/", "status": "In Stock"},
-            {"name": "Tech Land BD", "price": 2480, "url": "https://www.techlandbd.com/", "status": "In Stock"},
-            {"name": "Skyland BD", "price": 2550, "url": "https://www.skyland.com.bd/", "status": "In Stock"}
+            {
+                "name": "Star Tech",
+                "price": 2450,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ryans Computers",
+                "price": 2500,
+                "url": "https://www.ryans.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Tech Land BD",
+                "price": 2480,
+                "url": "https://www.techlandbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Skyland BD",
+                "price": 2550,
+                "url": "https://www.skyland.com.bd/",
+                "status": "In Stock"
+            }
         ]
     },
     {
         "slug": "ssd-nvme-sata-storage",
         "title_en": "SSD (NVMe M.2 & SATA Drives)",
         "title_bn": "এসএসডি (এনভিএমই ও সাটা)",
-        "subtitle_en": "256GB, 512GB, 1TB & 2TB PCIe Gen3/Gen4 Solid State Drives",
-        "subtitle_bn": "২৫৬জিবি, ৫১২জিবি, ১টিবি ও ২টিবি হাই-স্পিড এসএসডি স্টোরেজ",
+        "subtitle_en": "PCIe Gen4 & Next-Gen Gen5 High-Speed NVMe Solid State Drives",
+        "subtitle_bn": "পিসিআইই জেন৪ এবং দ্রুততম জেন৫ হাই-স্পিড এনভিএমই স্টোরেজ",
         "category_id": "desktop-components",
         "search_query": "ssd nvme m.2",
         "current_price": 2850,
@@ -934,23 +1039,43 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "HardDrive",
         "display_order": 6,
-        "latest_release_name": "Samsung 990 PRO 1TB PCIe 4.0 NVMe M.2 (7450 MB/s Read)",
-        "latest_release_price": 14500,
-        "latest_release_badge": "Latest Gen4",
+        "latest_release_name": "Silicon Power XPOWER XS90 2TB PCIe Gen5 NVMe M.2 SSD (10,000+ MB/s Read)",
+        "latest_release_price": 68500,
+        "latest_release_badge": "Latest PCIe Gen5",
         "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Star Tech", "price": 2850, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Ryans Computers", "price": 2900, "url": "https://www.ryans.com/", "status": "In Stock"},
-            {"name": "Tech Land BD", "price": 2890, "url": "https://www.techlandbd.com/", "status": "In Stock"},
-            {"name": "Computer Village", "price": 2950, "url": "https://www.computervillage.com.bd/", "status": "In Stock"}
+            {
+                "name": "Star Tech",
+                "price": 2850,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ryans Computers",
+                "price": 2900,
+                "url": "https://www.ryans.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Tech Land BD",
+                "price": 2890,
+                "url": "https://www.techlandbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Computer Village",
+                "price": 2950,
+                "url": "https://www.computervillage.com.bd/",
+                "status": "In Stock"
+            }
         ]
     },
     {
         "slug": "gpu-rtx-radeon-graphics",
         "title_en": "GPU (Graphics Cards)",
         "title_bn": "জিপিইউ (গ্রাফিক্স কার্ড)",
-        "subtitle_en": "NVIDIA GeForce RTX 3060/4060/4070 & AMD Radeon Series",
-        "subtitle_bn": "গেমিং ও এআই রেন্ডারিং এনভিডিয়া আরটিএক্স ও এএমডি রেডিয়ন কার্ড",
+        "subtitle_en": "NVIDIA GeForce RTX 5080/5090 & RTX 40 Series / AMD Radeon",
+        "subtitle_bn": "এনভিডিয়া নতুন আরটিএক্স ৫০৮০/৫০৯০ এবং ৪০ সিরিজ / এএমডি রেডিয়ন গ্রাফিক্স",
         "category_id": "desktop-components",
         "search_query": "gpu graphics card rtx",
         "current_price": 28500,
@@ -959,23 +1084,43 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "Zap",
         "display_order": 7,
-        "latest_release_name": "Gigabyte GeForce RTX 4070 SUPER WINDFORCE OC 12GB GDDR6X",
-        "latest_release_price": 79500,
-        "latest_release_badge": "Latest RTX Super",
+        "latest_release_name": "NVIDIA GeForce RTX 5080 16GB GDDR7 Graphics Card (Star Tech Official)",
+        "latest_release_price": 182900,
+        "latest_release_badge": "Latest RTX 5080",
         "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Star Tech", "price": 28500, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Ryans Computers", "price": 29200, "url": "https://www.ryans.com/", "status": "In Stock"},
-            {"name": "Tech Land BD", "price": 28990, "url": "https://www.techlandbd.com/", "status": "In Stock"},
-            {"name": "Ultra Technology", "price": 29500, "url": "https://ultratech.com.bd/", "status": "In Stock"}
+            {
+                "name": "Star Tech",
+                "price": 28500,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ryans Computers",
+                "price": 29200,
+                "url": "https://www.ryans.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Tech Land BD",
+                "price": 28990,
+                "url": "https://www.techlandbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ultra Technology",
+                "price": 29500,
+                "url": "https://ultratech.com.bd/",
+                "status": "In Stock"
+            }
         ]
     },
     {
         "slug": "processors-intel-amd-cpus",
         "title_en": "Processors (Intel & AMD CPUs)",
         "title_bn": "প্রসেসর (ইন্টেল ও এএমডি সিপিইউ)",
-        "subtitle_en": "Intel Core i3/i5/i7/i9 12th-14th Gen & AMD Ryzen 5000/7000/9000",
-        "subtitle_bn": "ইন্টেল কোর এবং এএমডি রাইজেন লেটেস্ট জেনারেশন ডেস্কটপ প্রসেসর",
+        "subtitle_en": "Intel Core Ultra 9 285K & AMD Ryzen 9000 / 9800X3D Processors",
+        "subtitle_bn": "ইন্টেল কোর আল্ট্রা ৯ এবং এএমডি রাইজেন ৯৮০০এক্সথ্রিডি গেমিং প্রসেসর",
         "category_id": "desktop-components",
         "search_query": "processor intel core amd ryzen",
         "current_price": 9800,
@@ -984,15 +1129,35 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু",
         "icon_name": "CircuitBoard",
         "display_order": 8,
-        "latest_release_name": "AMD Ryzen 7 9800X3D Desktop Gaming Processor (8 Cores, 16 Threads, 5.2GHz)",
-        "latest_release_price": 64500,
+        "latest_release_name": "AMD Ryzen 7 9800X3D (8C/16T 5.2GHz, 96MB 3D V-Cache) / Intel Ultra 9 285K",
+        "latest_release_price": 46000,
         "latest_release_badge": "Latest Zen 5 3D",
         "latest_release_url": "https://www.startech.com.bd/",
         "stores": [
-            {"name": "Star Tech", "price": 9800, "url": "https://www.startech.com.bd/", "status": "In Stock"},
-            {"name": "Ryans Computers", "price": 9990, "url": "https://www.ryans.com/", "status": "In Stock"},
-            {"name": "Tech Land BD", "price": 9850, "url": "https://www.techlandbd.com/", "status": "In Stock"},
-            {"name": "Computer Village", "price": 10200, "url": "https://www.computervillage.com.bd/", "status": "In Stock"}
+            {
+                "name": "Star Tech",
+                "price": 9800,
+                "url": "https://www.startech.com.bd/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Ryans Computers",
+                "price": 9990,
+                "url": "https://www.ryans.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Tech Land BD",
+                "price": 9850,
+                "url": "https://www.techlandbd.com/",
+                "status": "In Stock"
+            },
+            {
+                "name": "Computer Village",
+                "price": 10200,
+                "url": "https://www.computervillage.com.bd/",
+                "status": "In Stock"
+            }
         ]
     }
 ]

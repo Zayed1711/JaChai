@@ -2369,7 +2369,7 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'increase',
     price_change_amount: 3300,
     price_change_percent: 2.4,
-    latest_release_name: '24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori • 21K: ৳135,400/Vori (BAJUS Official)',
+    latest_release_name: '24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori (BAJUS Benchmark)',
     latest_release_price: 154700,
     latest_release_badge: '24K Benchmark',
     latest_release_url: 'https://www.bajus.org/',
@@ -2397,9 +2397,9 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'stable',
     price_change_amount: 0,
     price_change_percent: 0.0,
-    latest_release_name: 'Octane: ৳125/Litre • Diesel: ৳105/Litre • Petrol: ৳120/Litre (Government Regulated)',
+    latest_release_name: 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated Rates)',
     latest_release_price: 125,
-    latest_release_badge: 'Octane / Diesel',
+    latest_release_badge: 'BPC Regulated',
     latest_release_url: 'https://padmaoil.gov.bd/',
     stores: [
       { name: 'Padma Oil Company Ltd', price: 105, url: 'https://padmaoil.gov.bd/', status: 'Regulated Retail' },
@@ -2412,8 +2412,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'iphones',
     title_en: 'iPhones (Apple Flagship Series)',
     title_bn: 'আইফোন (অ্যাপল ফ্ল্যাগশিপ সিরিজ)',
-    subtitle_en: 'Apple iPhone 13, 14, 15, 16 Pro & Pro Max Flagships',
-    subtitle_bn: 'অ্যাপল আইফোন ১৩, ১৪, ১৫, ১৬ প্রো এবং প্রো ম্যাক্স',
+    subtitle_en: 'Apple iPhone 14, 15, 16 Pro & iPhone 17 Flagship Lineup',
+    subtitle_bn: 'অ্যাপল আইফোন ১৪, ১৫, ১৬ প্রো এবং আইফোন ১৭ ফ্ল্যাগশিপ',
     category_id: 'mobile-gadgets',
     search_query: 'iphone',
     current_price: 68500,
@@ -2424,10 +2424,10 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 3500,
     price_change_percent: 4.9,
-    latest_release_name: 'Apple iPhone 16 Pro Max 256GB Desert Titanium',
-    latest_release_price: 172500,
+    latest_release_name: 'Apple iPhone 17 256GB (A19 Bionic, ProMotion Display)',
+    latest_release_price: 140000,
     latest_release_badge: 'Latest Flagship',
-    latest_release_url: 'https://www.applegadgetsbd.com/',
+    latest_release_url: 'https://www.startech.com.bd/',
     stores: [
       { name: 'Apple Gadgets BD', price: 68500, url: 'https://www.applegadgetsbd.com/', status: 'In Stock' },
       { name: 'Star Tech', price: 69999, url: 'https://www.startech.com.bd/', status: 'In Stock' },
@@ -2441,8 +2441,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'samsung-galaxy-s-series',
     title_en: 'Samsung Galaxy S Series',
     title_bn: 'স্যামসাং গ্যালাক্সি এস সিরিজ',
-    subtitle_en: 'Galaxy S23, S24, S24 Ultra & FE Official Flagships',
-    subtitle_bn: 'স্যামসাং গ্যালাক্সি এস২৩, এস২৪ ও এস২৪ আল্ট্রা ফ্ল্যাগশিপ',
+    subtitle_en: 'Galaxy S23, S24, S25 & S25 Ultra Official Flagships',
+    subtitle_bn: 'স্যামসাং গ্যালাক্সি এস২৩, এস২৪, এস২৫ ও এস২৫ আল্ট্রা ফ্ল্যাগশিপ',
     category_id: 'mobile-gadgets',
     search_query: 'samsung galaxy s',
     current_price: 79500,
@@ -2453,10 +2453,10 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 4500,
     price_change_percent: 5.4,
-    latest_release_name: 'Samsung Galaxy S24 Ultra 12GB/256GB Titanium Gray',
-    latest_release_price: 148000,
+    latest_release_name: 'Samsung Galaxy S25 Ultra 12GB/256GB Titanium (Snapdragon 8 Elite, Galaxy AI)',
+    latest_release_price: 185000,
     latest_release_badge: 'Latest Flagship',
-    latest_release_url: 'https://samsungplaza.com.bd/',
+    latest_release_url: 'https://www.startech.com.bd/',
     stores: [
       { name: 'Star Tech', price: 79500, url: 'https://www.startech.com.bd/', status: 'In Stock' },
       { name: 'Apple Gadgets BD', price: 80999, url: 'https://www.applegadgetsbd.com/', status: 'In Stock' },
@@ -2470,8 +2470,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'ram-ddr4-ddr5-modules',
     title_en: 'RAM (DDR4 / DDR5 Modules)',
     title_bn: 'র‌্যাম (ডিডিআর৪ ও ডিডিআর৫)',
-    subtitle_en: 'Desktop & Laptop 8GB, 16GB, 32GB High-Speed RAM',
-    subtitle_bn: 'ডেস্কটপ ও ল্যাপটপ ৮জিবি, ১৬জিবি, ৩২জিবি মেমোরি মডিউল',
+    subtitle_en: 'Desktop & Laptop 8GB, 16GB, 32GB High-Speed DDR4/DDR5 RAM',
+    subtitle_bn: 'ডেস্কটপ ও ল্যাপটপ ৮জিবি, ১৬জিবি, ৩২জিবি ডিডিআর৪ ও ডিডিআর৫ মেমোরি',
     category_id: 'desktop-components',
     search_query: 'ram ddr4 ddr5',
     current_price: 2450,
@@ -2482,9 +2482,9 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 300,
     price_change_percent: 10.9,
-    latest_release_name: 'Corsair Dominator Titanium RGB DDR5 32GB (2x16GB) 6000MHz CL30',
+    latest_release_name: 'TEAM T-FORCE DELTA RGB 32GB (2x16GB) 7200MHz DDR5 Desktop RAM',
     latest_release_price: 19800,
-    latest_release_badge: 'Latest DDR5',
+    latest_release_badge: 'Latest 7200MHz DDR5',
     latest_release_url: 'https://www.startech.com.bd/',
     stores: [
       { name: 'Star Tech', price: 2450, url: 'https://www.startech.com.bd/', status: 'In Stock' },
@@ -2498,8 +2498,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'ssd-nvme-sata-storage',
     title_en: 'SSD (NVMe M.2 & SATA Drives)',
     title_bn: 'এসএসডি (এনভিএমই ও সাটা)',
-    subtitle_en: '256GB, 512GB, 1TB & 2TB PCIe Gen3/Gen4 Solid State Drives',
-    subtitle_bn: '২৫৬জিবি, ৫১২জিবি, ১টিবি ও ২টিবি হাই-স্পিড এসএসডি স্টোরেজ',
+    subtitle_en: 'PCIe Gen4 & Next-Gen Gen5 High-Speed NVMe Solid State Drives',
+    subtitle_bn: 'পিসিআইই জেন৪ এবং দ্রুততম জেন৫ হাই-স্পিড এনভিএমই স্টোরেজ',
     category_id: 'desktop-components',
     search_query: 'ssd nvme m.2',
     current_price: 2850,
@@ -2510,9 +2510,9 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 350,
     price_change_percent: 10.9,
-    latest_release_name: 'Samsung 990 PRO 1TB PCIe 4.0 NVMe M.2 (7450 MB/s Read)',
-    latest_release_price: 14500,
-    latest_release_badge: 'Latest Gen4',
+    latest_release_name: 'Silicon Power XPOWER XS90 2TB PCIe Gen5 NVMe M.2 SSD (10,000+ MB/s Read)',
+    latest_release_price: 68500,
+    latest_release_badge: 'Latest PCIe Gen5',
     latest_release_url: 'https://www.startech.com.bd/',
     stores: [
       { name: 'Star Tech', price: 2850, url: 'https://www.startech.com.bd/', status: 'In Stock' },
@@ -2526,8 +2526,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'gpu-rtx-radeon-graphics',
     title_en: 'GPU (Graphics Cards)',
     title_bn: 'জিপিইউ (গ্রাফিক্স কার্ড)',
-    subtitle_en: 'NVIDIA GeForce RTX 3060/4060/4070 & AMD Radeon Series',
-    subtitle_bn: 'গেমিং ও এআই রেন্ডারিং এনভিডিয়া আরটিএক্স ও এএমডি রেডিয়ন কার্ড',
+    subtitle_en: 'NVIDIA GeForce RTX 5080/5090 & RTX 40 Series / AMD Radeon',
+    subtitle_bn: 'এনভিডিয়া নতুন আরটিএক্স ৫০৮০/৫০৯০ এবং ৪০ সিরিজ / এএমডি রেডিয়ন গ্রাফিক্স',
     category_id: 'desktop-components',
     search_query: 'gpu graphics card rtx',
     current_price: 28500,
@@ -2538,9 +2538,9 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 2500,
     price_change_percent: 8.1,
-    latest_release_name: 'Gigabyte GeForce RTX 4070 SUPER WINDFORCE OC 12GB GDDR6X',
-    latest_release_price: 79500,
-    latest_release_badge: 'Latest RTX Super',
+    latest_release_name: 'NVIDIA GeForce RTX 5080 16GB GDDR7 Graphics Card (Star Tech Official)',
+    latest_release_price: 182900,
+    latest_release_badge: 'Latest RTX 5080',
     latest_release_url: 'https://www.startech.com.bd/',
     stores: [
       { name: 'Star Tech', price: 28500, url: 'https://www.startech.com.bd/', status: 'In Stock' },
@@ -2554,8 +2554,8 @@ const INITIAL_HOT_PRODUCTS = [
     slug: 'processors-intel-amd-cpus',
     title_en: 'Processors (Intel & AMD CPUs)',
     title_bn: 'প্রসেসর (ইন্টেল ও এএমডি সিপিইউ)',
-    subtitle_en: 'Intel Core i3/i5/i7/i9 12th-14th Gen & AMD Ryzen 5000/7000/9000',
-    subtitle_bn: 'ইন্টেল কোর এবং এএমডি রাইজেন লেটেস্ট জেনারেশন ডেস্কটপ প্রসেসর',
+    subtitle_en: 'Intel Core Ultra 9 285K & AMD Ryzen 9000 / 9800X3D Processors',
+    subtitle_bn: 'ইন্টেল কোর আল্ট্রা ৯ এবং এএমডি রাইজেন ৯৮০০এক্সথ্রিডি গেমিং প্রসেসর',
     category_id: 'desktop-components',
     search_query: 'processor intel core amd ryzen',
     current_price: 9800,
@@ -2566,8 +2566,8 @@ const INITIAL_HOT_PRODUCTS = [
     price_change_type: 'drop',
     price_change_amount: 700,
     price_change_percent: 6.7,
-    latest_release_name: 'AMD Ryzen 7 9800X3D Desktop Gaming Processor (8 Cores, 16 Threads, 5.2GHz)',
-    latest_release_price: 64500,
+    latest_release_name: 'AMD Ryzen 7 9800X3D (8C/16T 5.2GHz, 96MB 3D V-Cache) / Intel Ultra 9 285K',
+    latest_release_price: 46000,
     latest_release_badge: 'Latest Zen 5 3D',
     latest_release_url: 'https://www.startech.com.bd/',
     stores: [
@@ -8070,98 +8070,86 @@ const renderHubIcon = (iconName) => {
                     key={hp.id || hp.slug}
                     className="bg-[#FFFFFF] border border-[#DDE3EA] hover:border-[#14B8A6]/70 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
                   >
-                    {/* Horizontal Bar Content */}
+                    {/* Horizontal Bar Content (Entire bar is clickable with animated dropdown chevron) */}
                     <div
                       onClick={() => setExpandedHotProductId(isExpanded ? null : (hp.id || hp.slug))}
-                      className="p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-pointer select-none bg-white"
+                      className="p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-pointer select-none bg-white group hover:bg-[#FAFDFB] transition-colors"
                     >
                       {/* Left: Icon & Product Identity */}
-                      <div className="flex items-center gap-3.5 min-w-[260px] sm:min-w-[300px]">
-                        <div className="w-11 h-11 rounded-xl bg-[#F8FAFC] border border-[#DDE3EA] flex items-center justify-center shrink-0">
+                      <div className="flex items-center gap-3.5 min-w-0 sm:min-w-[240px] shrink-0">
+                        <div className="w-11 h-11 rounded-xl bg-[#F8FAFC] border border-[#DDE3EA] flex items-center justify-center shrink-0 group-hover:border-[#14B8A6]/60 transition-colors">
                           {renderHotProductIcon(hp.icon_name)}
                         </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-display text-base sm:text-lg font-bold text-[#101B2D] leading-tight">
-                              {lang === 'bn' ? (hp.title_bn || hp.title_en) : (hp.title_en || hp.title_bn)}
-                            </h3>
-                          </div>
-                          <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5">
+                        <div className="min-w-0">
+                          <h3 className="font-display text-base sm:text-lg font-bold text-[#101B2D] leading-tight group-hover:text-[#0F766E] transition-colors">
+                            {lang === 'bn' ? (hp.title_bn || hp.title_en) : (hp.title_en || hp.title_bn)}
+                          </h3>
+                          <p className="text-xs text-[#64748B] mt-0.5">
                             {lang === 'bn' ? (hp.subtitle_bn || hp.subtitle_en) : (hp.subtitle_en || hp.subtitle_bn)}
                           </p>
                         </div>
                       </div>
 
-                      {/* Center: Specialized Detail Badges */}
+                      {/* Center: Specialized Detail Badges (Zero cut-off, clean typography) */}
                       {isGold ? (
-                        /* Gold Hallmark Detail (22K & 24K breakdown) */
-                        <div className="flex-1 xl:max-w-xl bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
+                        /* Gold Hallmark Detail (22K & 24K benchmark) */
+                        <div className="flex-1 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
                               ✨ {lang === 'bn' ? 'বাজুস হলমার্ক রেট' : 'BAJUS Benchmark'}
                             </span>
-                            <span className="text-xs font-bold text-[#92400E] truncate">
+                            <span className="text-xs font-bold text-[#92400E]">
                               {lang === 'bn'
-                                ? '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি • ২১ ক্যারেট: ৳১৩৫,৪০০/ভরি'
-                                : '24K: ৳154,700/Vori • 22K: ৳141,800/Vori • 21K: ৳135,400/Vori'}
+                                ? '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি'
+                                : '24K: ৳154,700/Vori • 22K: ৳141,800/Vori'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-xs font-black text-[#B45309] font-mono">
-                              24K: ৳154,700
-                            </span>
-                            <a
-                              href="https://www.bajus.org/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#F59E0B] hover:text-white text-[#92400E] border border-[#FDE68A] transition flex items-center gap-1"
-                            >
-                              <span>{lang === 'bn' ? 'বাজুস ↗' : 'BAJUS ↗'}</span>
-                            </a>
-                          </div>
+                          <a
+                            href="https://www.bajus.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[11px] font-bold px-2.5 py-1 rounded-md bg-[#FEF3C7] hover:bg-[#F59E0B] hover:text-white text-[#92400E] border border-[#FDE68A] transition flex items-center gap-1 shrink-0"
+                          >
+                            <span>{lang === 'bn' ? 'বাজুস ↗' : 'BAJUS ↗'}</span>
+                          </a>
                         </div>
                       ) : isFuel ? (
-                        /* Fuel Energy Detail (Octane & Diesel separate prices) */
-                        <div className="flex-1 xl:max-w-xl bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
+                        /* Fuel Energy Detail (Octane, Diesel, Petrol) */
+                        <div className="flex-1 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="px-2 py-0.5 rounded-md bg-[#2563EB] text-white text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-md bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
                               ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC Regulated'}
                             </span>
-                            <span className="text-xs font-bold text-[#1E40AF] truncate">
+                            <span className="text-xs font-bold text-[#1E40AF]">
                               {lang === 'bn'
-                                ? 'অকটেন: ৳১২৫/লিটার • ডিজেল: ৳১০৫/লিটার • পেট্রোল: ৳১২০/লিটার'
+                                ? 'অকটেন: ৳১২৫/লি • ডিজেল: ৳১০৫/লি • পেট্রোল: ৳১২০/লি'
                                 : 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-xs font-black text-[#1E3A8A] font-mono">
-                              Octane ৳125 • Diesel ৳105
-                            </span>
-                            <a
-                              href="https://padmaoil.gov.bd/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#DBEAFE] hover:bg-[#2563EB] hover:text-white text-[#1E40AF] border border-[#BFDBFE] transition flex items-center gap-1"
-                            >
-                              <span>{lang === 'bn' ? 'বিপিসি ↗' : 'BPC ↗'}</span>
-                            </a>
-                          </div>
+                          <a
+                            href="https://padmaoil.gov.bd/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[11px] font-bold px-2.5 py-1 rounded-md bg-[#DBEAFE] hover:bg-[#2563EB] hover:text-white text-[#1E40AF] border border-[#BFDBFE] transition flex items-center gap-1 shrink-0"
+                          >
+                            <span>{lang === 'bn' ? 'বিপিসি ↗' : 'BPC ↗'}</span>
+                          </a>
                         </div>
                       ) : hp.latest_release_name ? (
                         /* Tech Item Latest Release Badge */
-                        <div className="flex-1 xl:max-w-xl bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
+                        <div className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] hover:border-[#CBD5E1] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs transition">
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="px-2 py-0.5 rounded-md bg-[#F59E0B] text-black text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-md bg-[#F59E0B] text-black text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
                               🔥 {hp.latest_release_badge || (lang === 'bn' ? 'লেটেস্ট রিলিজ' : 'Latest Release')}
                             </span>
-                            <span className="text-xs font-bold text-[#78350F] truncate">
+                            <span className="text-xs font-semibold text-[#1E293B]">
                               {hp.latest_release_name}
                             </span>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-xs font-black text-[#B45309] font-mono">
+                            <span className="text-xs font-black text-[#0F766E] font-mono">
                               ৳{Number(hp.latest_release_price || 0).toLocaleString()}
                             </span>
                             {hp.latest_release_url && (
@@ -8170,7 +8158,7 @@ const renderHubIcon = (iconName) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#F59E0B] hover:text-white text-[#92400E] border border-[#FDE68A] transition flex items-center gap-1"
+                                className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-white hover:bg-[#0F766E] hover:text-white text-[#0F766E] border border-[#CBD5E1] hover:border-[#0F766E] transition flex items-center gap-1"
                               >
                                 <span>{lang === 'bn' ? 'দেখুন' : 'View'}</span>
                                 <ArrowUpRight className="w-3 h-3" />
@@ -8182,7 +8170,7 @@ const renderHubIcon = (iconName) => {
                         <div className="hidden xl:block flex-1" />
                       )}
 
-                      {/* Right: Starts From, Prev Price, Price Drop/Increase Pill & Expand Action */}
+                      {/* Right: Starts From, Prev Price, Price Drop/Increase Pill & Animated Chevron Indicator */}
                       <div className="flex items-center justify-between xl:justify-end gap-3.5 shrink-0 border-t xl:border-t-0 pt-3 xl:pt-0 border-[#F1F5F9]">
                         <div className="text-left xl:text-right">
                           <div className="text-[11px] font-semibold text-[#64748B]">
@@ -8201,37 +8189,35 @@ const renderHubIcon = (iconName) => {
                         {/* Price Change Highlighting Pill */}
                         <div className="flex items-center gap-2.5">
                           {hp.price_change_type === 'drop' && (
-                            <span className="px-2.5 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#047857] text-xs font-black flex items-center gap-1 shadow-2xs">
+                            <span className="px-2.5 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#047857] text-xs font-black flex items-center gap-1 shadow-2xs whitespace-nowrap">
                               <span>▼</span>
                               <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} ({hp.price_change_percent}%)</span>
                             </span>
                           )}
                           {hp.price_change_type === 'increase' && (
-                            <span className="px-2.5 py-1 rounded-full bg-[#FFF1F2] border border-[#FECDD3] text-[#BE123C] text-xs font-black flex items-center gap-1 shadow-2xs">
+                            <span className="px-2.5 py-1 rounded-full bg-[#FFF1F2] border border-[#FECDD3] text-[#BE123C] text-xs font-black flex items-center gap-1 shadow-2xs whitespace-nowrap">
                               <span>▲</span>
                               <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} (+{hp.price_change_percent}%)</span>
                             </span>
                           )}
                           {hp.price_change_type === 'stable' && (
-                            <span className="px-2.5 py-1 rounded-full bg-[#F1F5F9] border border-[#E2E8F0] text-[#475569] text-xs font-bold flex items-center gap-1">
+                            <span className="px-2.5 py-1 rounded-full bg-[#F1F5F9] border border-[#E2E8F0] text-[#475569] text-xs font-bold flex items-center gap-1 whitespace-nowrap">
                               <span>●</span>
                               <span>{lang === 'bn' ? 'দর অপরিবর্তিত' : 'Market Stable'}</span>
                             </span>
                           )}
 
-                          {/* Reveal Stores Button */}
-                          <button
-                            type="button"
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer border ${
+                          {/* Sleek Animated Dropdown Chevron (replaces bulky button) */}
+                          <div
+                            title={isExpanded ? 'Click to collapse stores' : 'Click to view selling stores'}
+                            className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-200 ${
                               isExpanded
-                                ? 'bg-[#0F766E] text-white border-transparent shadow'
-                                : 'bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#1E293B] border-[#DDE3EA]'
+                                ? 'bg-[#0F766E] text-white border-[#0F766E] shadow-sm'
+                                : 'bg-[#F8FAFC] text-[#64748B] group-hover:text-[#0F766E] group-hover:border-[#14B8A6] border-[#DDE3EA]'
                             }`}
                           >
-                            <span>{isExpanded ? (lang === 'bn' ? 'লুকান' : 'Hide Stores') : (lang === 'bn' ? 'স্টোর দেখুন' : 'Stores')}</span>
-                            <span className="text-[10px] opacity-70">({(hp.stores || []).length})</span>
-                            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
-                          </button>
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                          </div>
                         </div>
                       </div>
                     </div>
