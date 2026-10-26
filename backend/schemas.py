@@ -538,10 +538,14 @@ class SpiderRunStatusResponse(BaseModel):
     progress: int
     current_store: Optional[str] = None
     total_checked: int = 0
+    total_stores: int = 361
+    completed_stores: int = 0
     healthy_count: int = 0
     slow_count: int = 0
     broken_count: int = 0
     completed_at: Optional[str] = None
+    started_at: Optional[float] = None
+    error: Optional[str] = None
 
 
 class CrawlerSummaryResponse(BaseModel):

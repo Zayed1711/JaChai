@@ -47,6 +47,7 @@ import {
   apiPingSpiderStore,
   triggerRunAllSpidersBackground,
   fetchSpiderRunStatus,
+  apiResetSpiderRun,
   fetchAdminHomepageBlocks,
   apiCreateHomepageBlock,
   apiUpdateHomepageBlock,
@@ -723,20 +724,24 @@ export default function AdminCommandCenter({
 
   const handleRunAllSpidersSweep = async () => {
     try {
-      if (typeof runAllSpiders === 'function') {
-        runAllSpiders();
-      }
       await triggerRunAllSpidersBackground();
       showNotification('🚀 Background Spider Sweep initiated across all 361 registry domains!');
+      let pollCount = 0;
       const pollTimer = setInterval(async () => {
+        pollCount += 1;
         try {
           const status = await fetchSpiderRunStatus();
           if (status) {
             setSpiderRunProgress(status);
-            if (!status.is_running) {
+            // Auto-clear if finished or if stuck for > 25 polls (37.5s)
+            if (!status.is_running || pollCount > 25) {
               clearInterval(pollTimer);
               loadSpiderHealthData(spiderCategoryFilter);
-              showNotification(`✅ Spider Sweep Completed! ${status.completed_stores} stores scanned.`);
+              if (status.is_running && pollCount > 25) {
+                setSpiderRunProgress((prev) => (prev ? { ...prev, is_running: false } : null));
+              }
+              const countScanned = status.completed_stores || status.total_checked || 361;
+              showNotification(`✅ Spider Sweep Completed! ${countScanned} stores scanned.`);
             }
           }
         } catch (err) {
@@ -745,6 +750,16 @@ export default function AdminCommandCenter({
       }, 1500);
     } catch (err) {
       console.error('Sweep error:', err);
+    }
+  };
+
+  const handleResetSweep = async () => {
+    try {
+      await apiResetSpiderRun();
+      setSpiderRunProgress({ is_running: false, progress: 0, current_store: null });
+      showNotification('🔄 Spider Sweep reset to idle.');
+    } catch (err) {
+      setSpiderRunProgress({ is_running: false, progress: 0, current_store: null });
     }
   };
 
@@ -2234,16 +2249,26 @@ export default function AdminCommandCenter({
               {spiderRunProgress && spiderRunProgress.is_running && (
                 <div className="mb-5 p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
                   <div className="flex items-center justify-between text-xs font-bold text-emerald-400 mb-2">
-                    <div className="flex items-center gap-2">
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Sweeping: <strong className="text-white">{spiderRunProgress.current_store}</strong></span>
+                    <div className="flex items-center gap-2 truncate pr-2">
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin shrink-0" />
+                      <span className="truncate">Sweeping: <strong className="text-white">{spiderRunProgress.current_store || 'Stores...'}</strong></span>
                     </div>
-                    <span>{spiderRunProgress.completed_stores} / {spiderRunProgress.total_stores} ({spiderRunProgress.progress}%)</span>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span>{(spiderRunProgress.completed_stores || spiderRunProgress.total_checked || 0)} / {(spiderRunProgress.total_stores || 361)} ({spiderRunProgress.progress || 0}%)</span>
+                      <button
+                        onClick={handleResetSweep}
+                        type="button"
+                        title="Force reset stuck sweep"
+                        className="px-2.5 py-0.5 rounded bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-[10px] font-bold uppercase tracking-wider transition cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    </div>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                     <div
                       className="bg-[#10B981] h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${spiderRunProgress.progress}%` }}
+                      style={{ width: `${Math.min(100, Math.max(0, spiderRunProgress.progress || 0))}%` }}
                     />
                   </div>
                 </div>

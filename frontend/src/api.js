@@ -301,6 +301,20 @@ export async function fetchSpiderRunStatus() {
   }
 }
 
+export async function apiResetSpiderRun() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/run-reset`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[JaChai API] apiResetSpiderRun error:', err.message);
+    return null;
+  }
+}
+
 export async function triggerRunAllSpiders(simulate = true) {
   try {
     const res = await fetch(`${API_BASE_URL}/api/v1/admin/crawler/run?simulate=${simulate}`, {

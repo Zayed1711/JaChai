@@ -2017,10 +2017,14 @@ SPIDER_RUN_STATE = {
     "progress": 0,
     "current_store": None,
     "total_checked": 0,
+    "total_stores": 361,
+    "completed_stores": 0,
     "healthy_count": 0,
     "slow_count": 0,
     "broken_count": 0,
     "completed_at": None,
+    "started_at": None,
+    "error": None,
 }
 
 STORE_HEALTH_CACHE: dict = {}
@@ -2190,55 +2194,76 @@ async def admin_ping_single_store(
 async def _sweep_spiders_background_task():
     global SPIDER_RUN_STATE
     from bd_stores_registry import ALL_STORES_REGISTRY
-    SPIDER_RUN_STATE["is_running"] = True
-    SPIDER_RUN_STATE["progress"] = 0
-    SPIDER_RUN_STATE["total_checked"] = 0
-    SPIDER_RUN_STATE["healthy_count"] = 0
-    SPIDER_RUN_STATE["slow_count"] = 0
-    SPIDER_RUN_STATE["broken_count"] = 0
-
     total = len(ALL_STORES_REGISTRY)
-    for idx, s in enumerate(ALL_STORES_REGISTRY, 1):
-        s_name = s.get("name") or s.get("Name") or f"Store #{idx}"
-        domain = s.get("domain") or s.get("website") or "facebook.com"
-        SPIDER_RUN_STATE["current_store"] = s_name
-        SPIDER_RUN_STATE["total_checked"] = idx
-        SPIDER_RUN_STATE["progress"] = int(round((idx / total) * 100))
+    now_ts = time.time()
+    SPIDER_RUN_STATE.update({
+        "is_running": True,
+        "progress": 0,
+        "current_store": "Initializing sweep...",
+        "total_checked": 0,
+        "total_stores": total,
+        "completed_stores": 0,
+        "healthy_count": 0,
+        "slow_count": 0,
+        "broken_count": 0,
+        "completed_at": None,
+        "started_at": now_ts,
+        "error": None,
+    })
 
-        is_slow = any(sl in domain.lower() for sl in ("gadgetandgear", "daraz"))
-        if is_slow:
-            SPIDER_RUN_STATE["slow_count"] += 1
-            sp_status = "slow"
-        else:
-            SPIDER_RUN_STATE["healthy_count"] += 1
-            sp_status = "healthy"
+    try:
+        for idx, s in enumerate(ALL_STORES_REGISTRY, 1):
+            s_name = s.get("name") or s.get("Name") or f"Store #{idx}"
+            domain = s.get("domain") or s.get("website") or "facebook.com"
+            SPIDER_RUN_STATE["current_store"] = s_name
+            SPIDER_RUN_STATE["total_checked"] = idx
+            SPIDER_RUN_STATE["completed_stores"] = idx
+            SPIDER_RUN_STATE["progress"] = int(round((idx / total) * 100))
 
-        STORE_HEALTH_CACHE[domain.lower()] = {
-            "store_name": s_name,
-            "domain": domain,
-            "status": "200 OK" if sp_status == "healthy" else "SLOW",
-            "spider_status": sp_status,
-            "latency_ms": 110 if sp_status == "healthy" else 220,
-            "last_synced": "Just now",
-            "selector": ".product-price, .price",
-        }
-        if idx % 20 == 0:
-            await asyncio.sleep(0.02)
+            is_slow = any(sl in domain.lower() for sl in ("gadgetandgear", "daraz"))
+            if is_slow:
+                SPIDER_RUN_STATE["slow_count"] += 1
+                sp_status = "slow"
+            else:
+                SPIDER_RUN_STATE["healthy_count"] += 1
+                sp_status = "healthy"
 
-    SPIDER_RUN_STATE["is_running"] = False
-    SPIDER_RUN_STATE["progress"] = 100
-    SPIDER_RUN_STATE["current_store"] = "Completed"
-    SPIDER_RUN_STATE["completed_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            STORE_HEALTH_CACHE[domain.lower()] = {
+                "store_name": s_name,
+                "domain": domain,
+                "status": "200 OK" if sp_status == "healthy" else "SLOW",
+                "spider_status": sp_status,
+                "latency_ms": 110 if sp_status == "healthy" else 220,
+                "last_synced": "Just now",
+                "selector": ".product-price, .price",
+            }
+            if idx % 15 == 0:
+                await asyncio.sleep(0.01)
+
+        SPIDER_RUN_STATE["progress"] = 100
+        SPIDER_RUN_STATE["current_store"] = "Sweep Complete"
+        SPIDER_RUN_STATE["completed_at"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    except Exception as exc:
+        SPIDER_RUN_STATE["error"] = str(exc)
+        SPIDER_RUN_STATE["current_store"] = "Sweep Interrupted"
+    finally:
+        SPIDER_RUN_STATE["is_running"] = False
 
 
 @app.post("/api/v1/admin/crawler/run-all-background", response_model=SpiderRunStatusResponse)
 async def admin_run_all_spiders_background(
-    background_tasks: BackgroundTasks,
     admin_auth: dict = Depends(verify_admin_access),
 ):
     global SPIDER_RUN_STATE
-    if not SPIDER_RUN_STATE["is_running"]:
-        background_tasks.add_task(_sweep_spiders_background_task)
+    now_ts = time.time()
+    started = SPIDER_RUN_STATE.get("started_at")
+    # Auto-recover watchdog: if previous sweep has been running for > 30s, force clear is_running
+    if SPIDER_RUN_STATE.get("is_running") and started and (now_ts - started > 30):
+        SPIDER_RUN_STATE["is_running"] = False
+
+    if not SPIDER_RUN_STATE.get("is_running"):
+        import asyncio
+        asyncio.create_task(_sweep_spiders_background_task())
     return SPIDER_RUN_STATE
 
 
@@ -2246,6 +2271,35 @@ async def admin_run_all_spiders_background(
 def admin_get_spider_run_status(
     admin_auth: dict = Depends(verify_admin_access),
 ):
+    global SPIDER_RUN_STATE
+    # Auto-recovery watchdog: if stuck running for over 30 seconds, force-clear is_running
+    started = SPIDER_RUN_STATE.get("started_at")
+    if SPIDER_RUN_STATE.get("is_running") and started and (time.time() - started > 30):
+        SPIDER_RUN_STATE["is_running"] = False
+        SPIDER_RUN_STATE["error"] = "Auto-recovered from timeout"
+    return SPIDER_RUN_STATE
+
+
+@app.post("/api/v1/admin/crawler/run-reset", response_model=SpiderRunStatusResponse)
+def admin_reset_spider_run(
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    global SPIDER_RUN_STATE
+    from bd_stores_registry import ALL_STORES_REGISTRY
+    SPIDER_RUN_STATE = {
+        "is_running": False,
+        "progress": 0,
+        "current_store": None,
+        "total_checked": 0,
+        "total_stores": len(ALL_STORES_REGISTRY),
+        "completed_stores": 0,
+        "healthy_count": 0,
+        "slow_count": 0,
+        "broken_count": 0,
+        "completed_at": None,
+        "started_at": None,
+        "error": None,
+    }
     return SPIDER_RUN_STATE
 
 
