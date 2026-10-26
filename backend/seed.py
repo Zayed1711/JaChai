@@ -795,9 +795,58 @@ def seed_database(db: Session) -> None:
 
 DEFAULT_HOT_PRODUCTS = [
     {
+        "slug": "gold-hallmark-pricing",
+        "title_en": "Gold (22K & 24K Hallmark Benchmark)",
+        "title_bn": "স্বর্ণ (২২ ও ২৪ ক্যারেট হলমার্ক রেট)",
+        "subtitle_en": "24K: ৳154,700/Vori • 22K: ৳141,800/Vori • 21K: ৳135,400/Vori",
+        "subtitle_bn": "২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি • ২১ ক্যারেট: ৳১৩৫,৪০০/ভরি",
+        "category_id": "jewelry-watches",
+        "search_query": "gold",
+        "current_price": 141800,
+        "previous_price": 138500,
+        "unit_en": "Starts from / Vori",
+        "unit_bn": "শুরু / ভরি",
+        "icon_name": "Sparkles",
+        "display_order": 1,
+        "latest_release_name": "24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori • 21K: ৳135,400/Vori (BAJUS Official)",
+        "latest_release_price": 154700,
+        "latest_release_badge": "24K Benchmark",
+        "latest_release_url": "https://www.bajus.org/",
+        "stores": [
+            {"name": "BAJUS Official Benchmark", "price": 141800, "url": "https://www.bajus.org/", "status": "National Hallmark"},
+            {"name": "Diamond World BD", "price": 141800, "url": "https://diamondworldbd.com/", "status": "Certified 22K/24K"},
+            {"name": "Apan Jewellers", "price": 141800, "url": "https://apanjewellers.com/", "status": "Certified 22K/24K"},
+            {"name": "Al-Amin Jewellers", "price": 142000, "url": "https://alaminjewellers.com/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "fuel-oil-energy",
+        "title_en": "Fuel (Octane, Diesel, Petrol)",
+        "title_bn": "জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)",
+        "subtitle_en": "Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated)",
+        "subtitle_bn": "অকটেন: ৳১২৫/লিটার • ডিজেল: ৳১০৫/লিটার • পেট্রোল: ৳১২০/লিটার",
+        "category_id": "groceries-daily",
+        "search_query": "fuel octane diesel",
+        "current_price": 105,
+        "previous_price": 105,
+        "unit_en": "Starts from / Litre",
+        "unit_bn": "শুরু / লিটার",
+        "icon_name": "Fuel",
+        "display_order": 2,
+        "latest_release_name": "Octane: ৳125/Litre • Diesel: ৳105/Litre • Petrol: ৳120/Litre (Government Regulated)",
+        "latest_release_price": 125,
+        "latest_release_badge": "Octane / Diesel",
+        "latest_release_url": "https://padmaoil.gov.bd/",
+        "stores": [
+            {"name": "Padma Oil Company Ltd", "price": 105, "url": "https://padmaoil.gov.bd/", "status": "Regulated Retail"},
+            {"name": "Meghna Petroleum Ltd", "price": 105, "url": "https://mpl.gov.bd/", "status": "Regulated Retail"},
+            {"name": "Jamuna Oil Company Ltd", "price": 105, "url": "https://jamunaoil.gov.bd/", "status": "Regulated Retail"}
+        ]
+    },
+    {
         "slug": "iphones",
-        "title_en": "iPhones",
-        "title_bn": "আইফোন",
+        "title_en": "iPhones (Apple Flagship Series)",
+        "title_bn": "আইফোন (অ্যাপল ফ্ল্যাগশিপ সিরিজ)",
         "subtitle_en": "Apple iPhone 13, 14, 15, 16 Pro & Pro Max Flagships",
         "subtitle_bn": "অ্যাপল আইফোন ১৩, ১৪, ১৫, ১৬ প্রো এবং প্রো ম্যাক্স",
         "category_id": "mobile-gadgets",
@@ -807,7 +856,7 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_en": "Starts from",
         "unit_bn": "শুরু",
         "icon_name": "Smartphone",
-        "display_order": 1,
+        "display_order": 3,
         "latest_release_name": "Apple iPhone 16 Pro Max 256GB Desert Titanium",
         "latest_release_price": 172500,
         "latest_release_badge": "Latest Flagship",
@@ -833,7 +882,7 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_en": "Starts from",
         "unit_bn": "শুরু",
         "icon_name": "Smartphone",
-        "display_order": 2,
+        "display_order": 4,
         "latest_release_name": "Samsung Galaxy S24 Ultra 12GB/256GB Titanium Gray",
         "latest_release_price": 148000,
         "latest_release_badge": "Latest Flagship",
@@ -844,55 +893,6 @@ DEFAULT_HOT_PRODUCTS = [
             {"name": "Samsung Plaza BD", "price": 82500, "url": "https://samsungplaza.com.bd/", "status": "Official BD Warranty"},
             {"name": "Pickaboo", "price": 81500, "url": "https://www.pickaboo.com/", "status": "In Stock"},
             {"name": "Daraz Mall", "price": 83000, "url": "https://www.daraz.com.bd/", "status": "In Stock"}
-        ]
-    },
-    {
-        "slug": "gold-hallmark-pricing",
-        "title_en": "Gold (22K Hallmark Benchmark)",
-        "title_bn": "স্বর্ণ (২২ ক্যারেট হলমার্ক)",
-        "subtitle_en": "BAJUS Official Hallmark 22-Karat per Vori (11.664g)",
-        "subtitle_bn": "বাজুস অফিসিয়াল হলমার্ক রেট প্রতি ভরি (১১.৬৬৪ গ্রাম)",
-        "category_id": "jewelry-watches",
-        "search_query": "gold",
-        "current_price": 141800,
-        "previous_price": 138500,
-        "unit_en": "Starts from / Vori",
-        "unit_bn": "শুরু / ভরি",
-        "icon_name": "Sparkles",
-        "display_order": 3,
-        "latest_release_name": None,
-        "latest_release_price": None,
-        "latest_release_badge": None,
-        "latest_release_url": None,
-        "stores": [
-            {"name": "BAJUS Official Benchmark", "price": 141800, "url": "https://www.bajus.org/", "status": "National Benchmark"},
-            {"name": "Diamond World BD", "price": 141800, "url": "https://diamondworldbd.com/", "status": "Certified 22K"},
-            {"name": "Apan Jewellers", "price": 141800, "url": "https://apanjewellers.com/", "status": "Certified 22K"},
-            {"name": "Al-Amin Jewellers", "price": 142000, "url": "https://alaminjewellers.com/", "status": "In Stock"}
-        ]
-    },
-    {
-        "slug": "fuel-oil-energy",
-        "title_en": "Fuel (Octane, Diesel, Petrol)",
-        "title_bn": "জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)",
-        "subtitle_en": "BPC Regulated National Retail Price per Litre",
-        "subtitle_bn": "বিপিসি সরকারি নির্ধারিত জাতীয় খুচরা মূল্য প্রতি লিটার",
-        "category_id": "groceries-daily",
-        "search_query": "fuel octane diesel",
-        "current_price": 105,
-        "previous_price": 105,
-        "unit_en": "Starts from / Litre",
-        "unit_bn": "শুরু / লিটার",
-        "icon_name": "Fuel",
-        "display_order": 4,
-        "latest_release_name": None,
-        "latest_release_price": None,
-        "latest_release_badge": None,
-        "latest_release_url": None,
-        "stores": [
-            {"name": "Padma Oil Company Ltd", "price": 105, "url": "https://padmaoil.gov.bd/", "status": "Regulated Retail"},
-            {"name": "Meghna Petroleum Ltd", "price": 105, "url": "https://mpl.gov.bd/", "status": "Regulated Retail"},
-            {"name": "Jamuna Oil Company Ltd", "price": 105, "url": "https://jamunaoil.gov.bd/", "status": "Regulated Retail"}
         ]
     },
     {
@@ -996,7 +996,6 @@ DEFAULT_HOT_PRODUCTS = [
         ]
     }
 ]
-
 
 def seed_hot_products(db: Session) -> None:
     """Guarantee all 8 Hot Products benchmarks exist and are populated with verified store pricing and latest releases."""

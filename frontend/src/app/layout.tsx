@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0B0E",
+  themeColor: "#0F766E",
 };
 
 export default function RootLayout({
@@ -34,12 +34,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#0A0B0E] text-white selection:bg-[#10B981] selection:text-black overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#F5F7FA] text-[#101B2D] selection:bg-[#14B8A6] selection:text-white overflow-x-hidden`}
       >
         {children}
         <script
@@ -51,11 +51,6 @@ export default function RootLayout({
                     for (let registration of registrations) {
                       registration.unregister();
                     }
-                  });
-                }
-                if ('caches' in window) {
-                  caches.keys().then(function(names) {
-                    for (let name of names) caches.delete(name);
                   });
                 }
               }

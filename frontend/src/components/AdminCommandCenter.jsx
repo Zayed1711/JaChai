@@ -74,7 +74,9 @@ import {
   apiUpdateOffer,
   apiDeleteOffer,
   fetchSearchTelemetryDataset,
-  fetchAdminHotProducts
+  fetchAdminHotProducts,
+  apiUpdateHotProduct,
+  apiRecalibrateHotProducts
 } from '../api';
 
 export default function AdminCommandCenter({

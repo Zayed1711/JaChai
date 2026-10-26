@@ -2354,6 +2354,61 @@ const INITIAL_INBOX = [
 const INITIAL_HOT_PRODUCTS = [
   {
     id: 1,
+    slug: 'gold-hallmark-pricing',
+    title_en: 'Gold (22K & 24K Hallmark Benchmark)',
+    title_bn: 'স্বর্ণ (২২ ও ২৪ ক্যারেট হলমার্ক রেট)',
+    subtitle_en: '24K: ৳154,700/Vori • 22K: ৳141,800/Vori • 21K: ৳135,400/Vori',
+    subtitle_bn: '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি • ২১ ক্যারেট: ৳১৩৫,৪০০/ভরি',
+    category_id: 'jewelry-watches',
+    search_query: 'gold',
+    current_price: 141800,
+    previous_price: 138500,
+    unit_en: 'Starts from / Vori',
+    unit_bn: 'শুরু / ভরি',
+    icon_name: 'Sparkles',
+    price_change_type: 'increase',
+    price_change_amount: 3300,
+    price_change_percent: 2.4,
+    latest_release_name: '24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori • 21K: ৳135,400/Vori (BAJUS Official)',
+    latest_release_price: 154700,
+    latest_release_badge: '24K Benchmark',
+    latest_release_url: 'https://www.bajus.org/',
+    stores: [
+      { name: 'BAJUS Official Benchmark', price: 141800, url: 'https://www.bajus.org/', status: 'National Hallmark' },
+      { name: 'Diamond World BD', price: 141800, url: 'https://diamondworldbd.com/', status: 'Certified 22K/24K' },
+      { name: 'Apan Jewellers', price: 141800, url: 'https://apanjewellers.com/', status: 'Certified 22K/24K' },
+      { name: 'Al-Amin Jewellers', price: 142000, url: 'https://alaminjewellers.com/', status: 'In Stock' }
+    ]
+  },
+  {
+    id: 2,
+    slug: 'fuel-oil-energy',
+    title_en: 'Fuel (Octane, Diesel, Petrol)',
+    title_bn: 'জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)',
+    subtitle_en: 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated)',
+    subtitle_bn: 'অকটেন: ৳১২৫/লিটার • ডিজেল: ৳১০৫/লিটার • পেট্রোল: ৳১২০/লিটার',
+    category_id: 'groceries-daily',
+    search_query: 'fuel octane diesel',
+    current_price: 105,
+    previous_price: 105,
+    unit_en: 'Starts from / Litre',
+    unit_bn: 'শুরু / লিটার',
+    icon_name: 'Fuel',
+    price_change_type: 'stable',
+    price_change_amount: 0,
+    price_change_percent: 0.0,
+    latest_release_name: 'Octane: ৳125/Litre • Diesel: ৳105/Litre • Petrol: ৳120/Litre (Government Regulated)',
+    latest_release_price: 125,
+    latest_release_badge: 'Octane / Diesel',
+    latest_release_url: 'https://padmaoil.gov.bd/',
+    stores: [
+      { name: 'Padma Oil Company Ltd', price: 105, url: 'https://padmaoil.gov.bd/', status: 'Regulated Retail' },
+      { name: 'Meghna Petroleum Ltd', price: 105, url: 'https://mpl.gov.bd/', status: 'Regulated Retail' },
+      { name: 'Jamuna Oil Company Ltd', price: 105, url: 'https://jamunaoil.gov.bd/', status: 'Regulated Retail' }
+    ]
+  },
+  {
+    id: 3,
     slug: 'iphones',
     title_en: 'iPhones (Apple Flagship Series)',
     title_bn: 'আইফোন (অ্যাপল ফ্ল্যাগশিপ সিরিজ)',
@@ -2382,7 +2437,7 @@ const INITIAL_HOT_PRODUCTS = [
     ]
   },
   {
-    id: 2,
+    id: 4,
     slug: 'samsung-galaxy-s-series',
     title_en: 'Samsung Galaxy S Series',
     title_bn: 'স্যামসাং গ্যালাক্সি এস সিরিজ',
@@ -2408,61 +2463,6 @@ const INITIAL_HOT_PRODUCTS = [
       { name: 'Samsung Plaza BD', price: 82500, url: 'https://samsungplaza.com.bd/', status: 'Official BD Warranty' },
       { name: 'Pickaboo', price: 81500, url: 'https://www.pickaboo.com/', status: 'In Stock' },
       { name: 'Daraz Mall', price: 83000, url: 'https://www.daraz.com.bd/', status: 'In Stock' }
-    ]
-  },
-  {
-    id: 3,
-    slug: 'gold-hallmark-pricing',
-    title_en: 'Gold (22K Hallmark Benchmark)',
-    title_bn: 'স্বর্ণ (২২ ক্যারেট হলমার্ক)',
-    subtitle_en: 'BAJUS Official Hallmark 22-Karat per Vori (11.664g)',
-    subtitle_bn: 'বাজুস অফিসিয়াল হলমার্ক রেট প্রতি ভরি (১১.৬৬৪ গ্রাম)',
-    category_id: 'jewelry-watches',
-    search_query: 'gold',
-    current_price: 141800,
-    previous_price: 138500,
-    unit_en: 'Starts from / Vori',
-    unit_bn: 'শুরু / ভরি',
-    icon_name: 'Sparkles',
-    price_change_type: 'increase',
-    price_change_amount: 3300,
-    price_change_percent: 2.4,
-    latest_release_name: null,
-    latest_release_price: null,
-    latest_release_badge: null,
-    latest_release_url: null,
-    stores: [
-      { name: 'BAJUS Official Benchmark', price: 141800, url: 'https://www.bajus.org/', status: 'National Benchmark' },
-      { name: 'Diamond World BD', price: 141800, url: 'https://diamondworldbd.com/', status: 'Certified 22K' },
-      { name: 'Apan Jewellers', price: 141800, url: 'https://apanjewellers.com/', status: 'Certified 22K' },
-      { name: 'Al-Amin Jewellers', price: 142000, url: 'https://alaminjewellers.com/', status: 'In Stock' }
-    ]
-  },
-  {
-    id: 4,
-    slug: 'fuel-oil-energy',
-    title_en: 'Fuel (Octane, Diesel, Petrol)',
-    title_bn: 'জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)',
-    subtitle_en: 'BPC Regulated National Retail Price per Litre',
-    subtitle_bn: 'বিপিসি সরকারি নির্ধারিত জাতীয় খুচরা মূল্য প্রতি লিটার',
-    category_id: 'groceries-daily',
-    search_query: 'fuel octane diesel',
-    current_price: 105,
-    previous_price: 105,
-    unit_en: 'Starts from / Litre',
-    unit_bn: 'শুরু / লিটার',
-    icon_name: 'Fuel',
-    price_change_type: 'stable',
-    price_change_amount: 0,
-    price_change_percent: 0.0,
-    latest_release_name: null,
-    latest_release_price: null,
-    latest_release_badge: null,
-    latest_release_url: null,
-    stores: [
-      { name: 'Padma Oil Company Ltd', price: 105, url: 'https://padmaoil.gov.bd/', status: 'Regulated Retail' },
-      { name: 'Meghna Petroleum Ltd', price: 105, url: 'https://mpl.gov.bd/', status: 'Regulated Retail' },
-      { name: 'Jamuna Oil Company Ltd', price: 105, url: 'https://jamunaoil.gov.bd/', status: 'Regulated Retail' }
     ]
   },
   {
@@ -4824,38 +4824,26 @@ export default function App() {
 
 
   const handleResetToHome = () => {
-
-
-
+    handleLogoTap();
     setSearchQuery('');
-
-
-
     setActiveSearchQuery('');
-
-
-
     setSearchResults([]);
     setActiveDisambiguationPills([]);
     setShowSuggestions(false);
-
-
-
     setSelectedCategory('all');
-
-
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-
-
+    if (typeof setSelectedSubcategory === 'function') {
+      setSelectedSubcategory('all');
+    }
+    setIsSearching(false);
+    setExpandedHotProductId(null);
+    setSelectedOfferProduct(null);
+    if (typeof window !== 'undefined') {
+      if (window.location.search) {
+        window.history.pushState({}, '', window.location.pathname);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
-
-
-
-
-
-
 
   const handleSearchSubmit = (e) => {
 
@@ -5687,33 +5675,7 @@ const renderHubIcon = (iconName) => {
 
 
             <JaChaiLogo
-
-
-
-              onTap={() => {
-
-
-
-                handleLogoTap();
-
-
-
-                setSelectedCategory('all');
-
-
-
-                setSearchQuery('');
-
-
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
-
-
-              }}
-
-
-
+              onTap={handleResetToHome}
               showMotto={true}
 
 
@@ -8074,73 +8036,132 @@ const renderHubIcon = (iconName) => {
 
           /* =================================================================
              MODE B: HOT PRODUCTS LIVE PRICING & MARKET TRACKER
-             Horizontal benchmark cards with historical price comparison,
-             latest released tech items, and direct verified store links.
+             High contrast, professional border-card theme matching other cards.
           ================================================================= */
           <div className="space-y-6">
-            {/* Section Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#DDE3EA] dark:border-white/10 pb-4">
+            {/* Section Header with Maximum Contrast */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#DDE3EA] pb-4">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0F766E] dark:text-[#10B981] block mb-1">
+                <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#0F766E] block mb-1">
                   {lang === 'bn' ? '🔥 বাংলাদেশ লাইভ মার্কেট বেঞ্চমার্ক' : '🔥 BANGLADESH LIVE MARKET BENCHMARKS'}
                 </span>
-                <h2 className="font-display text-xl sm:text-2xl font-bold uppercase text-[#101B2D] dark:text-white tracking-tight">
+                <h2 className="font-display text-xl sm:text-2xl font-black uppercase text-[#101B2D] tracking-tight">
                   {lang === 'bn'
-                    ? 'হট প্রোডাক্টস লাইভ প্রাইসিং — বাজার দর ও ট্রেন্ড'
+                    ? 'হট প্রোডাক্টস লাইভ প্রাইসিং — মার্কেট ট্র্যাকার'
                     : 'HOT PRODUCTS LIVE PRICING — MARKET TRACKER'}
                 </h2>
               </div>
-              <p className="text-xs text-[#334155] dark:text-white/60 max-w-md font-medium">
+              <p className="text-xs text-[#334155] max-w-md font-medium leading-relaxed">
                 {lang === 'bn'
-                  ? 'আইফোন, স্যামসাং, স্বর্ণ, জ্বালানি তেল, র‌্যাম, এসএসডি, জিপিইউ ও প্রসেসরের শুরু থেকে সর্বনিম্ন দর ও ভেরিফায়েড স্টোর তালিকা।'
-                  : 'Live benchmark rates for iPhones, Samsung S Series, Gold, Fuel, RAM, SSD, GPU & Processors with verified direct store links.'}
+                  ? 'স্বর্ণ, জ্বালানি তেল, আইফোন, স্যামসাং, র‌্যাম, এসএসডি, জিপিইউ ও প্রসেসরের শুরু থেকে সর্বনিম্ন লাইভ বাজার দর ও ভেরিফায়েড স্টোর তালিকা।'
+                  : 'Live benchmark rates for Gold, Fuel, iPhones, Samsung S Series, RAM, SSD, GPU & Processors with verified direct store links.'}
               </p>
             </div>
 
-            {/* Horizontal Benchmark Bars List */}
+            {/* Horizontal Benchmark Bars List (Border-card Theme matching other cards) */}
             <div className="flex flex-col space-y-3.5">
               {(hotProducts || INITIAL_HOT_PRODUCTS).map((hp) => {
                 const isExpanded = expandedHotProductId === (hp.id || hp.slug);
+                const isGold = hp.slug === 'gold-hallmark-pricing';
+                const isFuel = hp.slug === 'fuel-oil-energy';
+
                 return (
                   <div
                     key={hp.id || hp.slug}
-                    className="bg-white dark:bg-[#12141C] border border-[#DDE3EA] dark:border-white/10 hover:border-[#0F766E]/50 dark:hover:border-[#10B981]/50 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
+                    className="bg-[#FFFFFF] border border-[#DDE3EA] hover:border-[#14B8A6]/70 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
                   >
                     {/* Horizontal Bar Content */}
                     <div
                       onClick={() => setExpandedHotProductId(isExpanded ? null : (hp.id || hp.slug))}
-                      className="p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-pointer select-none"
+                      className="p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-pointer select-none bg-white"
                     >
                       {/* Left: Icon & Product Identity */}
                       <div className="flex items-center gap-3.5 min-w-[260px] sm:min-w-[300px]">
-                        <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                        <div className="w-11 h-11 rounded-xl bg-[#F8FAFC] border border-[#DDE3EA] flex items-center justify-center shrink-0">
                           {renderHotProductIcon(hp.icon_name)}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-display text-base sm:text-lg font-bold text-[#101B2D] dark:text-white leading-tight">
+                            <h3 className="font-display text-base sm:text-lg font-bold text-[#101B2D] leading-tight">
                               {lang === 'bn' ? (hp.title_bn || hp.title_en) : (hp.title_en || hp.title_bn)}
                             </h3>
                           </div>
-                          <p className="text-xs text-slate-500 dark:text-white/60 line-clamp-1 mt-0.5">
+                          <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5">
                             {lang === 'bn' ? (hp.subtitle_bn || hp.subtitle_en) : (hp.subtitle_en || hp.subtitle_bn)}
                           </p>
                         </div>
                       </div>
 
-                      {/* Center: Latest Released Tech Item (All tech products except oil and gold) */}
-                      {hp.latest_release_name ? (
-                        <div className="flex-1 xl:max-w-xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5">
+                      {/* Center: Specialized Detail Badges */}
+                      {isGold ? (
+                        /* Gold Hallmark Detail (22K & 24K breakdown) */
+                        <div className="flex-1 xl:max-w-xl bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="px-2 py-0.5 rounded-md bg-amber-500 text-black text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                              ✨ {lang === 'bn' ? 'বাজুস হলমার্ক রেট' : 'BAJUS Benchmark'}
+                            </span>
+                            <span className="text-xs font-bold text-[#92400E] truncate">
+                              {lang === 'bn'
+                                ? '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি • ২১ ক্যারেট: ৳১৩৫,৪০০/ভরি'
+                                : '24K: ৳154,700/Vori • 22K: ৳141,800/Vori • 21K: ৳135,400/Vori'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-xs font-black text-[#B45309] font-mono">
+                              24K: ৳154,700
+                            </span>
+                            <a
+                              href="https://www.bajus.org/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#F59E0B] hover:text-white text-[#92400E] border border-[#FDE68A] transition flex items-center gap-1"
+                            >
+                              <span>{lang === 'bn' ? 'বাজুস ↗' : 'BAJUS ↗'}</span>
+                            </a>
+                          </div>
+                        </div>
+                      ) : isFuel ? (
+                        /* Fuel Energy Detail (Octane & Diesel separate prices) */
+                        <div className="flex-1 xl:max-w-xl bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="px-2 py-0.5 rounded-md bg-[#2563EB] text-white text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                              ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC Regulated'}
+                            </span>
+                            <span className="text-xs font-bold text-[#1E40AF] truncate">
+                              {lang === 'bn'
+                                ? 'অকটেন: ৳১২৫/লিটার • ডিজেল: ৳১০৫/লিটার • পেট্রোল: ৳১২০/লিটার'
+                                : 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-xs font-black text-[#1E3A8A] font-mono">
+                              Octane ৳125 • Diesel ৳105
+                            </span>
+                            <a
+                              href="https://padmaoil.gov.bd/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#DBEAFE] hover:bg-[#2563EB] hover:text-white text-[#1E40AF] border border-[#BFDBFE] transition flex items-center gap-1"
+                            >
+                              <span>{lang === 'bn' ? 'বিপিসি ↗' : 'BPC ↗'}</span>
+                            </a>
+                          </div>
+                        </div>
+                      ) : hp.latest_release_name ? (
+                        /* Tech Item Latest Release Badge */
+                        <div className="flex-1 xl:max-w-xl bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-2.5 shadow-2xs">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="px-2 py-0.5 rounded-md bg-[#F59E0B] text-black text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
                               🔥 {hp.latest_release_badge || (lang === 'bn' ? 'লেটেস্ট রিলিজ' : 'Latest Release')}
                             </span>
-                            <span className="text-xs font-bold text-[#101B2D] dark:text-white truncate">
+                            <span className="text-xs font-bold text-[#78350F] truncate">
                               {hp.latest_release_name}
                             </span>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-xs font-black text-amber-700 dark:text-amber-300 font-mono">
+                            <span className="text-xs font-black text-[#B45309] font-mono">
                               ৳{Number(hp.latest_release_price || 0).toLocaleString()}
                             </span>
                             {hp.latest_release_url && (
@@ -8149,7 +8170,7 @@ const renderHubIcon = (iconName) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-500/20 hover:bg-amber-500 hover:text-black text-amber-700 dark:text-amber-300 border border-amber-500/30 transition flex items-center gap-1"
+                                className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#F59E0B] hover:text-white text-[#92400E] border border-[#FDE68A] transition flex items-center gap-1"
                               >
                                 <span>{lang === 'bn' ? 'দেখুন' : 'View'}</span>
                                 <ArrowUpRight className="w-3 h-3" />
@@ -8162,16 +8183,16 @@ const renderHubIcon = (iconName) => {
                       )}
 
                       {/* Right: Starts From, Prev Price, Price Drop/Increase Pill & Expand Action */}
-                      <div className="flex items-center justify-between xl:justify-end gap-3.5 shrink-0 border-t xl:border-t-0 pt-3 xl:pt-0 border-slate-100 dark:border-white/5">
+                      <div className="flex items-center justify-between xl:justify-end gap-3.5 shrink-0 border-t xl:border-t-0 pt-3 xl:pt-0 border-[#F1F5F9]">
                         <div className="text-left xl:text-right">
-                          <div className="text-[11px] font-medium text-slate-500 dark:text-white/50">
+                          <div className="text-[11px] font-semibold text-[#64748B]">
                             {lang === 'bn' ? (hp.unit_bn || 'শুরু') : (hp.unit_en || 'Starts from')}
                           </div>
-                          <div className="text-lg sm:text-xl font-black text-[#0F766E] dark:text-[#10B981] leading-tight">
+                          <div className="text-xl sm:text-2xl font-black text-[#0F766E] leading-tight">
                             ৳{Number(hp.current_price || 0).toLocaleString()}
                           </div>
                           {hp.previous_price > 0 && (
-                            <div className="text-[11px] text-slate-400 dark:text-white/40 line-through">
+                            <div className="text-[11px] text-[#94A3B8] line-through font-medium">
                               {lang === 'bn' ? 'পূর্বের: ' : 'Prev: '}৳{Number(hp.previous_price || 0).toLocaleString()}
                             </div>
                           )}
@@ -8180,19 +8201,19 @@ const renderHubIcon = (iconName) => {
                         {/* Price Change Highlighting Pill */}
                         <div className="flex items-center gap-2.5">
                           {hp.price_change_type === 'drop' && (
-                            <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-black flex items-center gap-1 shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#047857] text-xs font-black flex items-center gap-1 shadow-2xs">
                               <span>▼</span>
                               <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} ({hp.price_change_percent}%)</span>
                             </span>
                           )}
                           {hp.price_change_type === 'increase' && (
-                            <span className="px-2.5 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-700 dark:text-rose-400 text-xs font-black flex items-center gap-1 shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full bg-[#FFF1F2] border border-[#FECDD3] text-[#BE123C] text-xs font-black flex items-center gap-1 shadow-2xs">
                               <span>▲</span>
                               <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} (+{hp.price_change_percent}%)</span>
                             </span>
                           )}
                           {hp.price_change_type === 'stable' && (
-                            <span className="px-2.5 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-600 dark:text-white/60 text-xs font-bold flex items-center gap-1">
+                            <span className="px-2.5 py-1 rounded-full bg-[#F1F5F9] border border-[#E2E8F0] text-[#475569] text-xs font-bold flex items-center gap-1">
                               <span>●</span>
                               <span>{lang === 'bn' ? 'দর অপরিবর্তিত' : 'Market Stable'}</span>
                             </span>
@@ -8203,8 +8224,8 @@ const renderHubIcon = (iconName) => {
                             type="button"
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer border ${
                               isExpanded
-                                ? 'bg-[#0F766E] dark:bg-[#10B981] text-white dark:text-black border-transparent shadow'
-                                : 'bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-white border-slate-200 dark:border-white/10'
+                                ? 'bg-[#0F766E] text-white border-transparent shadow'
+                                : 'bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#1E293B] border-[#DDE3EA]'
                             }`}
                           >
                             <span>{isExpanded ? (lang === 'bn' ? 'লুকান' : 'Hide Stores') : (lang === 'bn' ? 'স্টোর দেখুন' : 'Stores')}</span>
@@ -8217,9 +8238,9 @@ const renderHubIcon = (iconName) => {
 
                     {/* Inline Stores Drawer */}
                     {isExpanded && (
-                      <div className="border-t border-slate-100 dark:border-white/10 bg-slate-50/70 dark:bg-[#0A0B0E] p-4 sm:p-5">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 pb-2.5 border-b border-slate-200/60 dark:border-white/5">
-                          <div className="text-xs font-bold text-slate-700 dark:text-white/80 uppercase tracking-wider flex items-center gap-2">
+                      <div className="border-t border-[#E2E8F0] bg-[#F8FAFC] p-4 sm:p-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 pb-2.5 border-b border-[#E2E8F0]">
+                          <div className="text-xs font-bold text-[#334155] uppercase tracking-wider flex items-center gap-2">
                             <span>🏪</span>
                             <span>
                               {lang === 'bn'
@@ -8234,7 +8255,7 @@ const renderHubIcon = (iconName) => {
                                 e.stopPropagation();
                                 executeLiveSearch(hp.search_query);
                               }}
-                              className="text-xs font-bold text-[#0F766E] dark:text-[#10B981] hover:underline flex items-center gap-1 cursor-pointer"
+                              className="text-xs font-bold text-[#0F766E] hover:underline flex items-center gap-1 cursor-pointer"
                             >
                               <span>{lang === 'bn' ? 'যাচাই-এ সব মডেল লাইভ সার্চ করুন' : 'Search All Live Models on JaChai'}</span>
                               <ArrowUpRight className="w-3 h-3" />
@@ -8246,18 +8267,18 @@ const renderHubIcon = (iconName) => {
                           {(hp.stores || []).map((store, sIdx) => (
                             <div
                               key={sIdx}
-                              className="bg-white dark:bg-[#12141C] border border-slate-200 dark:border-white/10 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:border-[#0F766E]/40 dark:hover:border-[#10B981]/40 transition group"
+                              className="bg-[#FFFFFF] border border-[#DDE3EA] hover:border-[#0F766E]/50 rounded-xl p-3.5 flex flex-col justify-between shadow-2xs transition group"
                             >
                               <div>
                                 <div className="flex items-center justify-between gap-1 mb-1">
-                                  <span className="font-bold text-sm text-[#101B2D] dark:text-white truncate">
+                                  <span className="font-bold text-sm text-[#101B2D] truncate">
                                     {store.name}
                                   </span>
-                                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] shrink-0">
                                     {store.status || 'In Stock'}
                                   </span>
                                 </div>
-                                <div className="text-base font-black text-[#0F766E] dark:text-[#10B981]">
+                                <div className="text-base font-black text-[#0F766E]">
                                   ৳{Number(store.price || 0).toLocaleString()}
                                 </div>
                               </div>
@@ -8267,10 +8288,10 @@ const renderHubIcon = (iconName) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="mt-3 w-full py-2 px-3 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 hover:bg-[#0F766E] dark:hover:bg-[#10B981] transition cursor-pointer shadow-xs group-hover:scale-[1.02]"
+                                className="mt-3 w-full py-2 px-3 rounded-lg bg-[#101B2D] hover:bg-[#0F766E] text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs group-hover:scale-[1.02]"
                               >
                                 <span>{lang === 'bn' ? 'স্টোর হোমপেজে যান' : 'Visit Store Homepage'}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5" />
+                                <ArrowUpRight className="w-3 h-3" />
                               </a>
                             </div>
                           ))}
