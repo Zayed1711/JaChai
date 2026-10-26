@@ -606,5 +606,60 @@ class SponsorAnalyticsResponse(BaseModel):
     top_stores: List[StoreOfferResponse]
     recent_clicks: List[ClickLogResponse]
 
+# ==========================================
+# HOT PRODUCTS PRICING SCHEMAS
+# ==========================================
+class HotProductStoreOffer(BaseModel):
+    name: str
+    price: int
+    url: str
+    status: str = "In Stock"
 
+
+class HotProductResponse(BaseModel):
+    id: int
+    slug: str
+    title_en: str
+    title_bn: str
+    subtitle_en: Optional[str] = None
+    subtitle_bn: Optional[str] = None
+    category_id: str
+    search_query: str
+    current_price: int
+    previous_price: int
+    unit_en: str
+    unit_bn: str
+    icon_name: str
+    price_change_type: str  # "drop", "increase", "stable"
+    price_change_amount: int
+    price_change_percent: float
+    stores: List[HotProductStoreOffer] = []
+    latest_release_name: Optional[str] = None
+    latest_release_price: Optional[int] = None
+    latest_release_badge: Optional[str] = None
+    latest_release_url: Optional[str] = None
+    is_active: bool
+    display_order: int
+    last_calibrated_at: Optional[str] = None
+
+
+class HotProductUpdate(BaseModel):
+    title_en: Optional[str] = None
+    title_bn: Optional[str] = None
+    subtitle_en: Optional[str] = None
+    subtitle_bn: Optional[str] = None
+    current_price: Optional[int] = None
+    previous_price: Optional[int] = None
+    unit_en: Optional[str] = None
+    unit_bn: Optional[str] = None
+    icon_name: Optional[str] = None
+    search_query: Optional[str] = None
+    category_id: Optional[str] = None
+    stores: Optional[List[HotProductStoreOffer]] = None
+    latest_release_name: Optional[str] = None
+    latest_release_price: Optional[int] = None
+    latest_release_badge: Optional[str] = None
+    latest_release_url: Optional[str] = None
+    is_active: Optional[bool] = None
+    display_order: Optional[int] = None
 

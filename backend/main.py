@@ -34,6 +34,7 @@ from models import (
     TickerAd,
     SearchTelemetry,
     DiscoveredDomain,
+    HotProduct,
 )
 from schemas import (
     AdLeadCreate,
@@ -74,8 +75,11 @@ from schemas import (
     TickerSpeedUpdate,
     TrendingHubItem,
     TrendingHubsResponse,
+    HotProductResponse,
+    HotProductUpdate,
+    HotProductStoreOffer,
 )
-from seed import seed_database
+from seed import seed_database, seed_hot_products
 from crawler import live_meta_search_and_persist, run_all_spiders, scrape_single_offer
 from auth import check_and_update_lockout, create_access_token, get_client_ip, verify_admin_access
 
@@ -163,6 +167,7 @@ async def lifespan(app: FastAPI):
     db = SessionLocal()
     try:
         seed_database(db)
+        seed_hot_products(db)
         seed_default_homepage_blocks(db)
         expire_ended_campaigns(db)
     finally:
@@ -782,6 +787,199 @@ def get_merchant_leaderboard(
     }
     LEADERBOARD_CACHE[cache_key] = (now_ts, resp_payload)
     return resp_payload
+
+
+def format_hot_product_response(hp: HotProduct) -> HotProductResponse:
+    import json
+    stores = []
+    try:
+        raw_stores = json.loads(hp.stores_json or "[]")
+        if isinstance(raw_stores, list):
+            for s in raw_stores:
+                if isinstance(s, dict) and "name" in s and "price" in s:
+                    stores.append(HotProductStoreOffer(
+                        name=str(s.get("name", "")),
+                        price=int(s.get("price", 0)),
+                        url=str(s.get("url", "")),
+                        status=str(s.get("status", "In Stock")),
+                    ))
+    except Exception:
+        stores = []
+
+    diff = hp.current_price - hp.previous_price
+    if hp.previous_price <= 0:
+        change_type = "stable"
+        pct = 0.0
+    elif diff < 0:
+        change_type = "drop"
+        pct = round((abs(diff) / hp.previous_price) * 100, 1)
+    elif diff > 0:
+        change_type = "increase"
+        pct = round((diff / hp.previous_price) * 100, 1)
+    else:
+        change_type = "stable"
+        pct = 0.0
+
+    return HotProductResponse(
+        id=hp.id,
+        slug=hp.slug,
+        title_en=hp.title_en,
+        title_bn=hp.title_bn,
+        subtitle_en=hp.subtitle_en,
+        subtitle_bn=hp.subtitle_bn,
+        category_id=hp.category_id,
+        search_query=hp.search_query,
+        current_price=hp.current_price,
+        previous_price=hp.previous_price,
+        unit_en=hp.unit_en,
+        unit_bn=hp.unit_bn,
+        icon_name=hp.icon_name,
+        price_change_type=change_type,
+        price_change_amount=abs(diff),
+        price_change_percent=pct,
+        stores=stores,
+        latest_release_name=hp.latest_release_name,
+        latest_release_price=hp.latest_release_price,
+        latest_release_badge=hp.latest_release_badge,
+        latest_release_url=hp.latest_release_url,
+        is_active=hp.is_active,
+        display_order=hp.display_order,
+        last_calibrated_at=hp.last_calibrated_at.isoformat() if hp.last_calibrated_at else None,
+    )
+
+
+@app.get("/api/v1/storefront/hot-products", response_model=List[HotProductResponse])
+def get_storefront_hot_products(db: Session = Depends(get_db)):
+    """
+    Returns active benchmark Hot Products (iPhones, Galaxy S series, Gold, Fuel, RAM, SSD, GPU, Processors)
+    with Starts-from pricing, previous price comparison, latest released tech item, and selling stores.
+    """
+    items = db.query(HotProduct).filter(HotProduct.is_active.is_(True)).order_by(HotProduct.display_order.asc()).all()
+    if not items:
+        seed_hot_products(db)
+        items = db.query(HotProduct).filter(HotProduct.is_active.is_(True)).order_by(HotProduct.display_order.asc()).all()
+    return [format_hot_product_response(hp) for hp in items]
+
+
+@app.get("/api/v1/admin/hot-products", response_model=List[HotProductResponse])
+def get_admin_hot_products(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    """Admin view: returns all Hot Products including inactive ones with full store configurations."""
+    items = db.query(HotProduct).order_by(HotProduct.display_order.asc()).all()
+    if not items:
+        seed_hot_products(db)
+        items = db.query(HotProduct).order_by(HotProduct.display_order.asc()).all()
+    return [format_hot_product_response(hp) for hp in items]
+
+
+@app.put("/api/v1/admin/hot-products/{id}", response_model=HotProductResponse)
+def update_admin_hot_product(
+    id: int,
+    payload: HotProductUpdate,
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    """Admin update for single Hot Product record."""
+    hp = db.query(HotProduct).filter(HotProduct.id == id).first()
+    if not hp:
+        raise HTTPException(status_code=404, detail="Hot Product not found.")
+
+    update_dict = payload.model_dump(exclude_unset=True)
+    if "stores" in update_dict and update_dict["stores"] is not None:
+        import json
+        stores_data = [s if isinstance(s, dict) else s.model_dump() for s in update_dict["stores"]]
+        hp.stores_json = json.dumps(stores_data, ensure_ascii=False)
+        del update_dict["stores"]
+
+    for k, v in update_dict.items():
+        if hasattr(hp, k) and v is not None:
+            setattr(hp, k, v)
+
+    hp.last_calibrated_at = datetime.utcnow()
+    db.commit()
+    db.refresh(hp)
+    return format_hot_product_response(hp)
+
+
+@app.post("/api/v1/admin/hot-products/recalibrate")
+def recalibrate_hot_products(
+    db: Session = Depends(get_db),
+    admin_auth: dict = Depends(verify_admin_access),
+):
+    """
+    Daily Recalibration Engine:
+    Recalibrates all Hot Products against live spider database offers, market benchmarks,
+    updating previous prices, current prices, and store offers.
+    """
+    import json
+    from seed import DEFAULT_HOT_PRODUCTS
+    items = db.query(HotProduct).all()
+    recalibrated_count = 0
+
+    defaults_map = {d["slug"]: d for d in DEFAULT_HOT_PRODUCTS}
+
+    for hp in items:
+        now = datetime.utcnow()
+        # Find active store offers matching this hot product's search query
+        matching_offers = []
+        if hp.search_query:
+            keywords = [w.lower() for w in hp.search_query.split() if len(w) > 2]
+            if keywords:
+                filter_cond = or_(*[Product.title_en.ilike(f"%{kw}%") for kw in keywords])
+                matching_offers = (
+                    db.query(StoreOffer)
+                    .join(Product, StoreOffer.product_id == Product.id)
+                    .filter(StoreOffer.current_price > 0, filter_cond)
+                    .order_by(StoreOffer.current_price.asc())
+                    .limit(10)
+                    .all()
+                )
+
+        if matching_offers:
+            lowest_price = min(o.current_price for o in matching_offers)
+            if lowest_price > 0 and lowest_price != hp.current_price:
+                hp.previous_price = hp.current_price
+                hp.current_price = lowest_price
+            
+            new_stores = []
+            seen_store_names = set()
+            for o in matching_offers:
+                s_name = o.store_name.strip()
+                if s_name not in seen_store_names:
+                    seen_store_names.add(s_name)
+                    new_stores.append({
+                        "name": s_name,
+                        "price": o.current_price,
+                        "url": o.target_url or o.website_url or "https://www.startech.com.bd/",
+                        "status": "In Stock" if getattr(o, "in_stock", True) else "Limited Stock"
+                    })
+            if new_stores:
+                hp.stores_json = json.dumps(new_stores[:5], ensure_ascii=False)
+        else:
+            def_item = defaults_map.get(hp.slug)
+            if def_item:
+                if hp.current_price == 0:
+                    hp.current_price = def_item["current_price"]
+                    hp.previous_price = def_item["previous_price"]
+                if not hp.latest_release_name and def_item.get("latest_release_name"):
+                    hp.latest_release_name = def_item["latest_release_name"]
+                    hp.latest_release_price = def_item.get("latest_release_price")
+                    hp.latest_release_badge = def_item.get("latest_release_badge")
+                    hp.latest_release_url = def_item.get("latest_release_url")
+
+        hp.last_calibrated_at = now
+        recalibrated_count += 1
+
+    db.commit()
+    all_updated = [format_hot_product_response(h) for h in db.query(HotProduct).order_by(HotProduct.display_order.asc()).all()]
+    return {
+        "status": "success",
+        "message": f"Successfully recalibrated all {recalibrated_count} Hot Product market benchmarks against live spiders and store offers.",
+        "recalibrated_count": recalibrated_count,
+        "items": all_updated,
+    }
 
 
 @app.get("/api/v1/storefront/trending-hubs", response_model=TrendingHubsResponse)
@@ -2067,13 +2265,18 @@ def get_spider_health_matrix(
         if category and category.lower() != "all" and category.lower() not in cat.lower() and cat.lower() not in category.lower():
             continue
 
-        web = (s.get("website") or s.get("Website") or "").strip()
-        fb = (s.get("facebook_page") or s.get("Facebook page") or "").strip()
+        web = (s.get("website") or s.get("Website") or s.get("website_url") or "").strip()
+        fb = (s.get("facebook_page_url") or s.get("facebook_page") or s.get("Facebook page") or "").strip()
         s_type = s.get("source_type", "crawler")
+
+        if fb and not fb.startswith("http"):
+            m = re.search(r"@?([A-Za-z0-9._\-]+)", fb)
+            fb = f"https://www.facebook.com/{m.group(1)}" if m else f"https://www.facebook.com/search/top/?q={quote_plus(name)}"
 
         domain = ""
         if web:
-            domain = web.replace("https://", "").replace("http://", "").strip("/")
+            clean_w = web.split("?")[0].replace("/{q}", "")
+            domain = clean_w.replace("https://", "").replace("http://", "").strip("/")
         elif fb:
             try:
                 p = urlparse(fb).path.strip("/")
@@ -2085,7 +2288,17 @@ def get_spider_health_matrix(
 
         is_fcommerce = (s_type == "f_commerce") or ("facebook.com" in domain) or (not web and fb)
         channel = "F_COMMERCE" if is_fcommerce else "WEBSITE"
-        target_url = ("https://" + web) if (web and not web.startswith("http")) else (web or fb or f"https://{domain}")
+
+        if is_fcommerce:
+            target_url = fb or f"https://{domain}"
+        else:
+            target_url = ("https://" + web) if (web and not web.startswith("http")) else (web or f"https://{domain}")
+
+        if "{q}" in target_url:
+            target_url = f"https://{domain}" if (domain and "facebook" not in domain) else target_url.split("?")[0].replace("/{q}", "")
+
+        if not target_url.startswith("http"):
+            target_url = f"https://{target_url.lstrip('/')}"
         selector = "Manual F-Commerce (FB)" if is_fcommerce else KNOWN_SELECTORS.get(domain.lower(), 'meta[property="product:price:amount"], .price')
 
         cached_status = STORE_HEALTH_CACHE.get(domain.lower())
@@ -2138,6 +2351,12 @@ async def admin_ping_single_store(
     domain = (payload.domain or "").strip()
     store_name = payload.store_name or domain or "Store"
     target_url = payload.target_url or f"https://{domain}"
+    if not target_url.startswith("http"):
+        if "facebook.com" in target_url or target_url.startswith("@"):
+            clean_h = target_url.lstrip("@").strip("/")
+            target_url = f"https://www.facebook.com/{clean_h}"
+        else:
+            target_url = f"https://{target_url.lstrip('/')}"
 
     if "facebook.com" in domain.lower() or "facebook.com" in target_url.lower():
         res = {

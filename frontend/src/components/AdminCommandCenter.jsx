@@ -15,6 +15,14 @@ import {
   LogOut,
   CheckCircle2,
   Sparkles,
+  ChevronUp,
+  ChevronDown,
+  Save,
+  Zap,
+  HardDrive,
+  Cpu,
+  Fuel,
+  Flame,
   MessageCircle,
   Eye,
   X,
@@ -65,7 +73,8 @@ import {
   apiSyncMerchantFeeds,
   apiUpdateOffer,
   apiDeleteOffer,
-  fetchSearchTelemetryDataset
+  fetchSearchTelemetryDataset,
+  fetchAdminHotProducts
 } from '../api';
 
 export default function AdminCommandCenter({
@@ -90,6 +99,8 @@ export default function AdminCommandCenter({
   setAdvertiserInbox,
   trendingHubs,
   setTrendingHubs,
+  hotProducts = [],
+  setHotProducts,
   onClose,
   onLogout,
   formatBDT
@@ -294,6 +305,113 @@ export default function AdminCommandCenter({
   const showNotification = (msg) => {
     setActionNotice(msg);
     setTimeout(() => setActionNotice(null), 3500);
+  };
+
+  
+  // --- TAB 5: HOT PRODUCTS BENCHMARK PRICING MANAGER STATE ---
+  const [hotProductsList, setHotProductsList] = useState(hotProducts || []);
+  const [recalibratingHot, setRecalibratingHot] = useState(false);
+  const [expandedAdminHpId, setExpandedAdminHpId] = useState(null);
+
+  React.useEffect(() => {
+    async function loadAdminHotProducts() {
+      try {
+        const data = await fetchAdminHotProducts();
+        if (data && data.length > 0) {
+          setHotProductsList(data);
+          if (setHotProducts) setHotProducts(data);
+        }
+      } catch (err) {
+        console.warn('Failed to load admin hot products:', err);
+      }
+    }
+    loadAdminHotProducts();
+  }, []);
+
+  const handleRecalibrateHotProducts = async () => {
+    setRecalibratingHot(true);
+    try {
+      const res = await apiRecalibrateHotProducts();
+      if (res && res.items) {
+        setHotProductsList(res.items);
+        if (setHotProducts) setHotProducts(res.items);
+        showNotification(res.message || 'Successfully recalibrated all Hot Products pricing!');
+      }
+    } catch (err) {
+      showNotification('Recalibration failed: ' + err.message);
+    } finally {
+      setRecalibratingHot(false);
+    }
+  };
+
+  const updateHotProductField = (id, field, value) => {
+    setHotProductsList((prev) =>
+      prev.map((hp) => (hp.id === id ? { ...hp, [field]: value } : hp))
+    );
+  };
+
+  const updateHotProductStoreField = (hpId, storeIdx, field, value) => {
+    setHotProductsList((prev) =>
+      prev.map((hp) => {
+        if (hp.id !== hpId) return hp;
+        const newStores = [...(hp.stores || [])];
+        newStores[storeIdx] = { ...newStores[storeIdx], [field]: value };
+        return { ...hp, stores: newStores };
+      })
+    );
+  };
+
+  const addHotProductStore = (hpId) => {
+    setHotProductsList((prev) =>
+      prev.map((hp) => {
+        if (hp.id !== hpId) return hp;
+        const newStores = [
+          ...(hp.stores || []),
+          { name: 'New Verified Store', price: hp.current_price || 0, url: 'https://', status: 'In Stock' }
+        ];
+        return { ...hp, stores: newStores };
+      })
+    );
+  };
+
+  const removeHotProductStore = (hpId, storeIdx) => {
+    setHotProductsList((prev) =>
+      prev.map((hp) => {
+        if (hp.id !== hpId) return hp;
+        const newStores = (hp.stores || []).filter((_, i) => i !== storeIdx);
+        return { ...hp, stores: newStores };
+      })
+    );
+  };
+
+  const handleSaveHotProduct = async (hp) => {
+    try {
+      const payload = {
+        title_en: hp.title_en,
+        title_bn: hp.title_bn,
+        subtitle_en: hp.subtitle_en,
+        subtitle_bn: hp.subtitle_bn,
+        current_price: Number(hp.current_price || 0),
+        previous_price: Number(hp.previous_price || 0),
+        unit_en: hp.unit_en,
+        unit_bn: hp.unit_bn,
+        search_query: hp.search_query,
+        category_id: hp.category_id,
+        latest_release_name: hp.latest_release_name || null,
+        latest_release_price: hp.latest_release_price ? Number(hp.latest_release_price) : null,
+        latest_release_badge: hp.latest_release_badge || null,
+        latest_release_url: hp.latest_release_url || null,
+        stores: hp.stores || [],
+        is_active: hp.is_active
+      };
+      const res = await apiUpdateHotProduct(hp.id, payload);
+      showNotification(`Saved changes for ${hp.title_en}`);
+      const updated = hotProductsList.map((item) => (item.id === hp.id ? res : item));
+      setHotProductsList(updated);
+      if (setHotProducts) setHotProducts(updated);
+    } catch (err) {
+      showNotification('Failed to update hot product: ' + err.message);
+    }
   };
 
   // --- REGISTRY DYNAMIC CSV STATE ---
@@ -1441,7 +1559,7 @@ export default function AdminCommandCenter({
               icon: BarChart3,
               badge: advertiserInbox.filter((i) => i.status === 'Pending').length
             },
-            { id: 'homepage', label: '5. Homepage Blocks (4-6 Slots)', icon: Compass, count: homepageBlocks.length }
+            { id: 'hotproducts', label: '5. Hot Products Pricing Manager', icon: Flame, count: hotProductsList.length }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -2938,276 +3056,337 @@ export default function AdminCommandCenter({
         )}
 
         {/* ===================================================================
-            TAB 5: HOMEPAGE 6-BLOCK CURATION (SLOTS 1-6)
+            TAB 5: HOT PRODUCTS PRICING & MARKET TRACKER MANAGER
         =================================================================== */}
-        {activeTab === 'homepage' && (
-          <div className="space-y-8">
+        {activeTab === 'hotproducts' && (
+          <div className="space-y-6">
             <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
+              {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-6">
                 <div>
-                  <span className="text-[10px] font-black tracking-widest uppercase text-[#F59E0B]">
-                    TIER 00 · SEARCH-PORTAL DISCOVERY HUBS
+                  <span className="text-[10px] font-black tracking-widest uppercase text-[#10B981] flex items-center gap-1.5">
+                    <Flame className="w-3.5 h-3.5 text-amber-500" />
+                    TIER 00 · LIVE MARKET BENCHMARKS & SPIDER RECALIBRATION
                   </span>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5">
-                    Homepage 6-Block Curation & Search Triggers
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-1">
+                    Hot Products Pricing & Tech Tracker Manager
                   </h3>
-                  <p className="text-xs text-white/50 mt-1">
-                    Control the 4–6 discovery blocks rendered on the initial search homepage. Clicking a block triggers the live meta-search spider.
+                  <p className="text-xs text-white/50 mt-1 max-w-2xl">
+                    Authoritative benchmark manager for iPhones, Samsung Galaxy S series, Gold, Fuel, RAM, SSD, GPU, and Processors.
+                    Recalibrate daily prices against fresh spiders, edit starts-from baselines, manage verified store links, and track latest tech releases.
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowAddBlockModal(true)}
-                  className="px-4 py-2.5 rounded-xl bg-[#10B981] hover:bg-[#059669] text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-lg shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>+ Add Discovery Block</span>
-                </button>
+                <div className="flex items-center gap-3 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleRecalibrateHotProducts}
+                    disabled={recalibratingHot}
+                    className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 transition cursor-pointer shadow-lg disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${recalibratingHot ? 'animate-spin' : ''}`} />
+                    <span>{recalibratingHot ? 'Recalibrating Spiders...' : '⚡ Recalibrate All Prices from Spiders'}</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Instant Product Pinning Tool */}
-              <div className="bg-[#0A0B0E] border border-white/10 rounded-xl p-4 mb-6 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <span className="text-[10px] font-black uppercase text-[#10B981] tracking-wider">
-                      🎯 Instant Product Pinning Tool
-                    </span>
-                    <h4 className="text-sm font-bold text-white uppercase">
-                      Search & Pin Catalog Product to a Homepage Slot (1 to 6)
-                    </h4>
-                    <p className="text-xs text-white/50">
-                      Search any product from the catalog and pin it to Slot #1 through #6 with one click.
-                    </p>
-                  </div>
-                  <div className="w-full sm:w-72">
-                    <input
-                      type="text"
-                      placeholder="Type to search products (e.g. iPhone, Saree)..."
-                      value={catalogSearchQuery}
-                      onChange={(e) => setCatalogSearchQuery(e.target.value)}
-                      className="w-full bg-[#141722] border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-white/30 font-bold focus:outline-none focus:border-[#10B981]"
-                    />
-                  </div>
-                </div>
+              {/* List of 8 Hot Products Cards */}
+              <div className="space-y-5">
+                {hotProductsList.map((hp) => {
+                  const isTechItem = hp.category_id !== 'jewelry-watches' && hp.category_id !== 'groceries-daily';
+                  const priceDiff = (hp.current_price || 0) - (hp.previous_price || 0);
+                  const isDrop = priceDiff < 0;
+                  const isIncrease = priceDiff > 0;
+                  const diffPct = hp.previous_price > 0 ? Math.round((Math.abs(priceDiff) / hp.previous_price) * 1000) / 10 : 0;
+                  const isStoresOpen = expandedAdminHpId === hp.id;
 
-                {catalogSearchQuery.trim() && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto p-1 bg-black/40 rounded-xl border border-white/5">
-                    {filteredCatalogProducts.slice(0, 6).map((prod) => (
-                      <div
-                        key={prod.id || prod.key}
-                        className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#12141C] border border-white/10 text-xs"
-                      >
-                        <div className="flex items-center gap-2 overflow-hidden">
-                          <img
-                            src={prod.image || prod.image_url}
-                            alt=""
-                            className="w-9 h-9 rounded object-cover shrink-0 bg-stone-900"
-                          />
-                          <div className="truncate">
-                            <div className="text-white font-bold truncate text-[11px]">
-                              {prod.titleEn || prod.title_en || prod.nameEn}
+                  return (
+                    <div
+                      key={hp.id || hp.slug}
+                      className="bg-[#0A0B0E] border border-white/10 rounded-2xl p-5 shadow-lg space-y-4 hover:border-white/20 transition"
+                    >
+                      {/* Top Row: Icon, Title, Status & Toggle */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                            {hp.icon_name === 'Smartphone' && <Smartphone className="w-5 h-5 text-sky-400" />}
+                            {hp.icon_name === 'Sparkles' && <Sparkles className="w-5 h-5 text-amber-400" />}
+                            {hp.icon_name === 'Fuel' && <Fuel className="w-5 h-5 text-rose-400" />}
+                            {hp.icon_name === 'Cpu' && <Cpu className="w-5 h-5 text-emerald-400" />}
+                            {hp.icon_name === 'HardDrive' && <HardDrive className="w-5 h-5 text-blue-400" />}
+                            {hp.icon_name === 'Zap' && <Zap className="w-5 h-5 text-purple-400" />}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-base font-bold text-white uppercase">{hp.title_en}</h4>
+                              <span className="text-[10px] text-white/40 font-mono">({hp.title_bn})</span>
+                              <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-white/10 text-white/60 uppercase">
+                                {hp.category_id}
+                              </span>
                             </div>
-                            <div className="text-[#10B981] font-mono text-[10px]">
-                              ৳{(prod.lowestPrice || prod.todayPrice || prod.price || 0).toLocaleString()}
-                            </div>
+                            <span className="text-xs text-white/40 block mt-0.5">
+                              Search Query: <code className="text-[#10B981]">{hp.search_query}</code>
+                              {hp.last_calibrated_at && (
+                                <span className="ml-3 text-[10px] text-white/30">
+                                  Last Calibrated: {new Date(hp.last_calibrated_at).toLocaleTimeString()}
+                                </span>
+                              )}
+                            </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 shrink-0">
-                          <span className="text-[9px] text-white/40 uppercase font-bold">Pin:</span>
-                          {[1, 2, 3, 4, 5, 6].map((slotNum) => (
-                            <button
-                              key={slotNum}
-                              type="button"
-                              onClick={() => pinProductToSlot(prod, slotNum)}
-                              className="px-1.5 py-0.5 rounded bg-white/10 hover:bg-[#10B981] hover:text-black text-white text-[10px] font-bold transition cursor-pointer"
-                              title={`Pin to Slot #${slotNum}`}
-                            >
-                              #{slotNum}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    {filteredCatalogProducts.length === 0 && (
-                      <div className="col-span-full py-4 text-center text-xs text-white/40">
-                        No matching products found for &quot;{catalogSearchQuery}&quot;.
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
 
-              {/* Grid of Homepage Blocks (ordered by slotOrder) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {homepageBlocks.map((block, idx) => (
-                  <div
-                    key={block.id || idx}
-                    className="bg-[#0A0B0E] border border-white/15 rounded-2xl p-4 flex flex-col justify-between space-y-4 shadow-lg group relative overflow-hidden"
-                  >
-                    <div className="space-y-3">
-                      {/* Top Bar: Slot Order, Move Up/Down, Status Toggle, Delete */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="px-2 py-0.5 rounded bg-[#C2410C] text-white text-[10px] font-black uppercase">
-                            Slot #{block.slotOrder || idx + 1}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => moveBlockSlot(block.id, 'up')}
-                            disabled={idx === 0}
-                            className="p-1 text-white/40 hover:text-white disabled:opacity-20 cursor-pointer rounded"
-                            title="Move Slot Up"
-                          >
-                            <ArrowUp className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => moveBlockSlot(block.id, 'down')}
-                            disabled={idx === homepageBlocks.length - 1}
-                            className="p-1 text-white/40 hover:text-white disabled:opacity-20 cursor-pointer rounded"
-                            title="Move Slot Down"
-                          >
-                            <ArrowDown className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          {/* Price Trend Pill Preview */}
+                          {isDrop && (
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-black">
+                              ▼ ৳{Math.abs(priceDiff).toLocaleString()} Drop (-{diffPct}%)
+                            </span>
+                          )}
+                          {isIncrease && (
+                            <span className="px-2.5 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-black">
+                              ▲ ৳{priceDiff.toLocaleString()} Increase (+{diffPct}%)
+                            </span>
+                          )}
+                          {!isDrop && !isIncrease && (
+                            <span className="px-2.5 py-1 rounded-full bg-slate-500/20 text-slate-400 text-xs font-bold">
+                              ● Stable (0.0%)
+                            </span>
+                          )}
 
-                        <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => toggleBlockActive(block.id)}
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase transition cursor-pointer ${
-                              block.isActive !== false
-                                ? 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40'
-                                : 'bg-stone-800 text-stone-400 border border-white/10'
+                            onClick={() => updateHotProductField(hp.id, 'is_active', !hp.is_active)}
+                            className={`px-3 py-1 rounded-lg text-xs font-bold uppercase transition cursor-pointer ${
+                              hp.is_active
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                : 'bg-red-500/20 text-red-400 border border-red-500/30'
                             }`}
                           >
-                            {block.isActive !== false ? 'Active' : 'Paused'}
+                            {hp.is_active ? 'Active' : 'Paused'}
                           </button>
+                        </div>
+                      </div>
+
+                      {/* Row 1: Prices & Baselines */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <div>
+                          <label className="text-[10px] font-bold text-white/50 uppercase block mb-1">
+                            Current Price (৳ BDT)
+                          </label>
+                          <input
+                            type="number"
+                            value={hp.current_price || ''}
+                            onChange={(e) => updateHotProductField(hp.id, 'current_price', Number(e.target.value))}
+                            className="w-full bg-[#141722] border border-white/15 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm focus:border-[#10B981] outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-white/50 uppercase block mb-1">
+                            Previous Price (৳ BDT)
+                          </label>
+                          <input
+                            type="number"
+                            value={hp.previous_price || ''}
+                            onChange={(e) => updateHotProductField(hp.id, 'previous_price', Number(e.target.value))}
+                            className="w-full bg-[#141722] border border-white/15 rounded-xl px-3 py-2 text-white/80 font-mono text-sm focus:border-[#10B981] outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-white/50 uppercase block mb-1">
+                            Unit / Pricing Format (EN)
+                          </label>
+                          <input
+                            type="text"
+                            value={hp.unit_en || 'Starts from'}
+                            onChange={(e) => updateHotProductField(hp.id, 'unit_en', e.target.value)}
+                            className="w-full bg-[#141722] border border-white/15 rounded-xl px-3 py-2 text-white text-xs focus:border-[#10B981] outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-white/50 uppercase block mb-1">
+                            Unit / Pricing Format (BN)
+                          </label>
+                          <input
+                            type="text"
+                            value={hp.unit_bn || 'শুরু'}
+                            onChange={(e) => updateHotProductField(hp.id, 'unit_bn', e.target.value)}
+                            className="w-full bg-[#141722] border border-white/15 rounded-xl px-3 py-2 text-white text-xs focus:border-[#10B981] outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Row 2: Latest Released Tech Item (All tech products except oil & gold) */}
+                      {isTechItem ? (
+                        <div className="bg-[#141722]/60 border border-amber-500/20 rounded-xl p-3.5 space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+                              🔥 Latest Flagship Tech Release in Bangladesh
+                            </span>
+                            <span className="text-[10px] text-white/40">Visible to users in horizontal pricing bar</span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                            <div className="sm:col-span-2">
+                              <label className="text-[10px] font-bold text-white/40 uppercase block mb-1">
+                                Latest Release Model Name
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="e.g. Corsair Dominator Titanium RGB DDR5 32GB"
+                                value={hp.latest_release_name || ''}
+                                onChange={(e) => updateHotProductField(hp.id, 'latest_release_name', e.target.value)}
+                                className="w-full bg-[#0A0B0E] border border-white/10 rounded-lg px-2.5 py-1.5 text-white text-xs"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-white/40 uppercase block mb-1">
+                                Latest Release Price (৳ BDT)
+                              </label>
+                              <input
+                                type="number"
+                                placeholder="19800"
+                                value={hp.latest_release_price || ''}
+                                onChange={(e) => updateHotProductField(hp.id, 'latest_release_price', Number(e.target.value))}
+                                className="w-full bg-[#0A0B0E] border border-white/10 rounded-lg px-2.5 py-1.5 text-amber-400 font-mono font-bold text-xs"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold text-white/40 uppercase block mb-1">
+                                Badge Tag (e.g. Latest DDR5)
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Latest Flagship"
+                                value={hp.latest_release_badge || ''}
+                                onChange={(e) => updateHotProductField(hp.id, 'latest_release_badge', e.target.value)}
+                                className="w-full bg-[#0A0B0E] border border-white/10 rounded-lg px-2.5 py-1.5 text-white text-xs"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-white/40 uppercase block mb-1">
+                              Store URL for Latest Release
+                            </label>
+                            <input
+                              type="url"
+                              placeholder="https://www.startech.com.bd/..."
+                              value={hp.latest_release_url || ''}
+                              onChange={(e) => updateHotProductField(hp.id, 'latest_release_url', e.target.value)}
+                              className="w-full bg-[#0A0B0E] border border-white/10 rounded-lg px-2.5 py-1.5 text-white/80 font-mono text-xs"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="bg-[#141722]/30 border border-white/5 rounded-xl p-2.5 text-xs text-white/40 italic flex items-center gap-2">
+                          <span>ℹ️</span>
+                          <span>Commodity benchmark category (Oil & Gold are exempt from individual tech releases as specified).</span>
+                        </div>
+                      )}
+
+                      {/* Row 3: Selling Stores Management (Drawer Toggle) */}
+                      <div className="bg-[#141722]/40 border border-white/10 rounded-xl p-3.5 space-y-3">
+                        <div className="flex items-center justify-between">
                           <button
                             type="button"
-                            onClick={() => deleteBlock(block.id)}
-                            className="p-1 text-white/40 hover:text-red-400 rounded transition cursor-pointer"
-                            title="Delete Block"
+                            onClick={() => setExpandedAdminHpId(isStoresOpen ? null : hp.id)}
+                            className="text-xs font-bold text-white uppercase flex items-center gap-2 hover:text-[#10B981] transition cursor-pointer"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>🏪 Active Selling Stores ({ (hp.stores || []).length })</span>
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isStoresOpen ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => addHotProductStore(hp.id)}
+                            className="px-2.5 py-1 rounded bg-white/10 hover:bg-[#10B981] hover:text-black text-white text-[10px] font-bold uppercase transition cursor-pointer"
+                          >
+                            + Add Store Offer
                           </button>
                         </div>
+
+                        {isStoresOpen && (
+                          <div className="space-y-2 pt-2 border-t border-white/5">
+                            {(hp.stores || []).map((store, sIdx) => (
+                              <div
+                                key={sIdx}
+                                className="grid grid-cols-1 sm:grid-cols-12 gap-2 bg-[#0A0B0E] border border-white/10 p-2 rounded-lg items-center text-xs"
+                              >
+                                <div className="sm:col-span-3">
+                                  <input
+                                    type="text"
+                                    placeholder="Store Name (e.g. Star Tech)"
+                                    value={store.name || ''}
+                                    onChange={(e) => updateHotProductStoreField(hp.id, sIdx, 'name', e.target.value)}
+                                    className="w-full bg-[#141722] border border-white/10 rounded px-2 py-1 text-white font-bold text-xs"
+                                  />
+                                </div>
+                                <div className="sm:col-span-2">
+                                  <input
+                                    type="number"
+                                    placeholder="Price ৳"
+                                    value={store.price || ''}
+                                    onChange={(e) => updateHotProductStoreField(hp.id, sIdx, 'price', Number(e.target.value))}
+                                    className="w-full bg-[#141722] border border-white/10 rounded px-2 py-1 text-white font-mono text-xs"
+                                  />
+                                </div>
+                                <div className="sm:col-span-4">
+                                  <input
+                                    type="url"
+                                    placeholder="Store Homepage URL"
+                                    value={store.url || ''}
+                                    onChange={(e) => updateHotProductStoreField(hp.id, sIdx, 'url', e.target.value)}
+                                    className="w-full bg-[#141722] border border-white/10 rounded px-2 py-1 text-white/80 font-mono text-xs"
+                                  />
+                                </div>
+                                <div className="sm:col-span-2">
+                                  <input
+                                    type="text"
+                                    placeholder="Status (In Stock)"
+                                    value={store.status || 'In Stock'}
+                                    onChange={(e) => updateHotProductStoreField(hp.id, sIdx, 'status', e.target.value)}
+                                    className="w-full bg-[#141722] border border-white/10 rounded px-2 py-1 text-white text-xs"
+                                  />
+                                </div>
+                                <div className="sm:col-span-1 flex justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeHotProductStore(hp.id, sIdx)}
+                                    className="p-1 rounded hover:bg-red-500/20 text-red-400 transition cursor-pointer"
+                                    title="Remove Store"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {/* Image Preview & PC Upload Button */}
-                      <div className="relative h-28 w-full rounded-xl overflow-hidden bg-black/60 border border-white/10">
-                        <img
-                          src={block.image}
-                          alt={block.titleEn}
-                          className="w-full h-full object-cover opacity-70"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2.5">
-                          <span className="text-[10px] font-bold text-[#F59E0B] uppercase">
-                            {block.badgeEn || 'HOT COMPARE'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <label className="w-full py-1 px-2.5 rounded-lg bg-white/5 hover:bg-white/15 text-white/90 text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer transition border border-white/10 shadow-sm">
-                        <Upload className="w-3 h-3 text-[#10B981]" />
-                        <span>{uploadingTarget === `homepage-block-${block.id}` ? 'Uploading...' : 'Upload Image from PC'}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => handleBannerFileUpload(e, 'homepage-block', block.id)}
-                        />
-                      </label>
-
-                      {/* Form inputs for live editing */}
-                      <div className="space-y-2 text-xs">
-                        <div>
-                          <label className="text-[10px] font-bold text-white/40 uppercase block mb-0.5">
-                            Title (EN)
-                          </label>
-                          <input
-                            type="text"
-                            value={block.titleEn || ''}
-                            onChange={(e) => updateBlockField(block.id, 'titleEn', e.target.value)}
-                            onBlur={() => saveBlockChanges(block)}
-                            className="w-full bg-[#141722] border border-white/10 rounded-lg px-2.5 py-1 text-white font-bold"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[10px] font-bold text-white/40 uppercase block mb-0.5">
-                            Title (BN)
-                          </label>
-                          <input
-                            type="text"
-                            value={block.titleBn || ''}
-                            onChange={(e) => updateBlockField(block.id, 'titleBn', e.target.value)}
-                            onBlur={() => saveBlockChanges(block)}
-                            className="w-full bg-[#141722] border border-white/10 rounded-lg px-2.5 py-1 text-white font-bold"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[10px] font-bold text-white/40 uppercase block mb-0.5">
-                            Target Search Query (Trigger)
-                          </label>
-                          <input
-                            type="text"
-                            value={block.queryTrigger || ''}
-                            onChange={(e) => updateBlockField(block.id, 'queryTrigger', e.target.value)}
-                            onBlur={() => saveBlockChanges(block)}
-                            placeholder="e.g. Smartphone, Panjabi, Laptop"
-                            className="w-full bg-[#141722] border border-white/10 rounded-lg px-2.5 py-1 text-[#10B981] font-mono font-bold"
-                          />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="text-[10px] font-bold text-white/40 uppercase block mb-0.5">
-                              Starting BDT
-                            </label>
-                            <input
-                              type="number"
-                              value={block.startingPrice || 0}
-                              onChange={(e) => updateBlockField(block.id, 'startingPrice', Number(e.target.value))}
-                              onBlur={() => saveBlockChanges(block)}
-                              className="w-full bg-[#141722] border border-white/10 rounded-lg px-2.5 py-1 text-white font-bold"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="text-[10px] font-bold text-white/40 uppercase block mb-0.5">
-                              Category
-                            </label>
-                            <input
-                              type="text"
-                              value={block.category || 'All'}
-                              onChange={(e) => updateBlockField(block.id, 'category', e.target.value)}
-                              onBlur={() => saveBlockChanges(block)}
-                              className="w-full bg-[#141722] border border-white/10 rounded-lg px-2.5 py-1 text-white"
-                            />
-                          </div>
-                        </div>
+                      {/* Card Footer Action */}
+                      <div className="flex justify-end pt-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSaveHotProduct(hp)}
+                          className="px-4 py-2 rounded-xl bg-[#10B981] hover:bg-[#059669] text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-md"
+                        >
+                          <Save className="w-3.5 h-3.5" />
+                          <span>Save Changes for {hp.title_en}</span>
+                        </button>
                       </div>
                     </div>
-
-                    <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-white/40">
-                      <span>Query: &quot;{block.queryTrigger}&quot;</span>
-                      <button
-                        type="button"
-                        onClick={() => saveBlockChanges(block)}
-                        className="px-2.5 py-1 rounded bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] font-bold uppercase transition cursor-pointer"
-                      >
-                        Save Block
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
-        )}
+                )}
       </main>
 
       {/* =====================================================================

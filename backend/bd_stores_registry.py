@@ -378,12 +378,14 @@ def _normalize_store_row(row: Dict[str, str], detected_cols: Set[str]) -> Dict[s
         "category": category,
         "domain": domain,
         "website_url": website_url,
+        "facebook_page": facebook_page_url,
+        "Facebook page": facebook_page_url,
         "facebook_page_url": facebook_page_url,
         "architecture_mode": arch_mode,
         "engine": engine_val,
         "search_url_template": search_url_template,
         "source_type": source_type,
-        "fb_page": fb_raw or name,
+        "fb_page": facebook_page_url,
         "fb_verified": "/search/" not in facebook_page_url and "/marketplace/" not in facebook_page_url,
     })
 
@@ -734,15 +736,16 @@ def get_store_facebook_fallback_url(store_name: str, query: str = "") -> str:
     return f"https://www.facebook.com/search/top/?q={quote_plus((store_name or '').strip())}"
 
 
-def build_store_target_url(store_name: str, query: str, vertical: Optional[str] = None) -> str:
+def build_store_target_url(store_name: str, query: str = "", vertical: Optional[str] = None) -> str:
     """
     Merchant-specific search URL for a store. Resolves the store by identity (see _find_store) and
     falls back to a Facebook search link, never to another merchant's site.
+    Guaranteed never to return raw unrendered template placeholders like {q} or bare handles.
     """
     check_and_reload_if_modified()
 
-    clean_term = sanitize_search_query_for_store(query)
-    clean_q = quote_plus(clean_term) if clean_term else quote_plus((query or "").strip())
+    clean_term = sanitize_search_query_for_store(query) if query else ""
+    clean_q = quote_plus(clean_term) if clean_term else (quote_plus(query.strip()) if query else "")
 
     store = _find_store(store_name)
     if store:
@@ -752,32 +755,41 @@ def build_store_target_url(store_name: str, query: str, vertical: Optional[str] 
             from url_healer import STORE_CATEGORY_PAGES
             cat_id, _ = resolve_category_from_query(query, vertical)
             if dom in STORE_CATEGORY_PAGES and cat_id in STORE_CATEGORY_PAGES[dom]:
-                # If query is a broad category term or domain has no search template, use exact Category Page!
                 from llm_reasoner import classify_comparison_mode
-                if dom not in MERCHANT_SEARCH_TEMPLATES or classify_comparison_mode(query, cat_id) == "price_range":
+                if not clean_q or dom not in MERCHANT_SEARCH_TEMPLATES or classify_comparison_mode(query, cat_id) == "price_range":
                     return STORE_CATEGORY_PAGES[dom][cat_id]
         except Exception:
             pass
-        if store.get("website_url"):
-            w = store["website_url"]
+
+        # Check website_url or merchant search template
+        w = store.get("website_url") or (MERCHANT_SEARCH_TEMPLATES.get(dom) if dom else "")
+        if w:
+            if "{q}" in w:
+                if clean_q:
+                    return w.format(q=clean_q)
+                return f"https://{dom}" if dom else w.split("?")[0].replace("/{q}", "")
             return w if w.startswith("http") else f"https://{w}"
+
         if dom:
             return f"https://{dom}"
-        try:
-            from url_healer import STORE_CATEGORY_PAGES
-            cat_id, _ = resolve_category_from_query(query, vertical)
-            if dom in STORE_CATEGORY_PAGES and cat_id in STORE_CATEGORY_PAGES[dom]:
-                return STORE_CATEGORY_PAGES[dom][cat_id]
-        except Exception:
-            pass
-        if store.get("website_url"):
-            return store["website_url"].format(q=clean_q)
-        if store.get("facebook_page_url"):
-            return store["facebook_page_url"]
 
-    alias_dom = MERCHANT_ALIASES.get(_name_key(store_name))  # e.g. 'daraz' is templated but not in the CSVs
+        fb = store.get("facebook_page_url") or store.get("facebook_page")
+        if fb:
+            if fb.startswith("http"):
+                return fb
+            m = re.search(r"@?([A-Za-z0-9._\-]+)", fb)
+            if m:
+                return f"https://www.facebook.com/{m.group(1)}"
+
+    alias_dom = MERCHANT_ALIASES.get(_name_key(store_name))
     if alias_dom in MERCHANT_SEARCH_TEMPLATES:
-        return MERCHANT_SEARCH_TEMPLATES[alias_dom].format(q=clean_q)
+        tmpl = MERCHANT_SEARCH_TEMPLATES[alias_dom]
+        if clean_q:
+            return tmpl.format(q=clean_q)
+        return f"https://{alias_dom}"
+    elif alias_dom:
+        return f"https://{alias_dom}"
+
     return get_store_facebook_fallback_url(store_name, query)
 
 

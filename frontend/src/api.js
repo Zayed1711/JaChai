@@ -1079,9 +1079,44 @@ export async function fetchSearchTelemetryDataset(limit = 100) {
   }
 }
 
+// ==============================================================================
+// HOT PRODUCTS LIVE BENCHMARK & TECH MARKET TRACKER API
+// ==============================================================================
 
+export async function fetchHotProducts() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/storefront/hot-products`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[JaChai API] fetchHotProducts error:', err.message);
+    return [];
+  }
+}
 
+export async function fetchAdminHotProducts() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/hot-products`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
 
+export async function apiUpdateHotProduct(id, updateData) {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/hot-products/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(updateData),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
 
-
-
+export async function apiRecalibrateHotProducts() {
+  const res = await fetch(`${API_BASE_URL}/api/v1/admin/hot-products/recalibrate`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}

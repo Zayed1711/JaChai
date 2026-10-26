@@ -223,6 +223,33 @@ class DiscoveredDomain(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
 
+class HotProduct(Base):
+    """Authoritative Hot Products live pricing benchmark table with historical comparison and seller directory."""
+    __tablename__ = "hot_products"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(100), unique=True, index=True, nullable=False)
+    title_en = Column(String(255), nullable=False)
+    title_bn = Column(String(255), nullable=False)
+    subtitle_en = Column(String(255), nullable=True)
+    subtitle_bn = Column(String(255), nullable=True)
+    category_id = Column(String(100), default="mobile-gadgets", nullable=False)
+    search_query = Column(String(255), nullable=False)
+    current_price = Column(Integer, default=0, nullable=False)
+    previous_price = Column(Integer, default=0, nullable=False)
+    unit_en = Column(String(50), default="Starts from", nullable=False)
+    unit_bn = Column(String(50), default="শুরু", nullable=False)
+    icon_name = Column(String(50), default="Smartphone", nullable=False)
+    stores_json = Column(Text, default="[]", nullable=False)  # JSON-serialized list of {name, price, url, status}
+    latest_release_name = Column(String(255), nullable=True)  # Latest flagship/tech release in BD
+    latest_release_price = Column(Integer, nullable=True)      # Price in BDT of latest release
+    latest_release_badge = Column(String(100), nullable=True)  # e.g. "Latest Gen", "New 2024-2025"
+    latest_release_url = Column(String(500), nullable=True)    # Verified store link for the latest release
+    is_active = Column(Boolean, default=True, nullable=False)
+    display_order = Column(Integer, default=1, nullable=False)
+    last_calibrated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 def ensure_schema_migrations():
     """Auto-adds missing columns and performance indexes to existing SQLite DBs without losing data."""
     try:
@@ -233,6 +260,17 @@ def ensure_schema_migrations():
             if "is_sponsored" not in cols:
                 with engine.begin() as conn:
                     conn.execute(text("ALTER TABLE store_offers ADD COLUMN is_sponsored BOOLEAN NOT NULL DEFAULT 0"))
+        if "hot_products" in insp.get_table_names():
+            hp_cols = {c["name"] for c in insp.get_columns("hot_products")}
+            with engine.begin() as conn:
+                if "latest_release_name" not in hp_cols:
+                    conn.execute(text("ALTER TABLE hot_products ADD COLUMN latest_release_name VARCHAR(255)"))
+                if "latest_release_price" not in hp_cols:
+                    conn.execute(text("ALTER TABLE hot_products ADD COLUMN latest_release_price INTEGER"))
+                if "latest_release_badge" not in hp_cols:
+                    conn.execute(text("ALTER TABLE hot_products ADD COLUMN latest_release_badge VARCHAR(100)"))
+                if "latest_release_url" not in hp_cols:
+                    conn.execute(text("ALTER TABLE hot_products ADD COLUMN latest_release_url VARCHAR(500)"))
         with engine.begin() as conn:
             conn.execute(text("CREATE INDEX IF NOT EXISTS idx_products_title_en ON products(title_en)"))
             conn.execute(text("CREATE INDEX IF NOT EXISTS idx_store_offers_store_name ON store_offers(store_name)"))

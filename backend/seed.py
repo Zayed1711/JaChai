@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 
@@ -9,7 +10,8 @@ try:
         Product,
         StoreOffer,
         PriceHistory,
-        AdLead
+        AdLead,
+        HotProduct,
     )
 except ImportError:
     from models import (
@@ -19,7 +21,8 @@ except ImportError:
         Product,
         StoreOffer,
         PriceHistory,
-        AdLead
+        AdLead,
+        HotProduct,
     )
 
 
@@ -48,6 +51,7 @@ def seed_database(db: Session) -> None:
             db.add(slot4)
             db.commit()
             print("[JaChai Seeder] Backfilled missing SLOT #04 SpotlightCard.")
+        seed_hot_products(db)
         print("[JaChai Seeder] Database contains records. Seeding checks complete.")
         return
 
@@ -786,3 +790,258 @@ def seed_database(db: Session) -> None:
 
     db.commit()
     print("[JaChai Seeder] Successfully seeded all billboards, spotlights, tickers, products, offers, and leads.")
+    seed_hot_products(db)
+
+
+DEFAULT_HOT_PRODUCTS = [
+    {
+        "slug": "iphones",
+        "title_en": "iPhones",
+        "title_bn": "আইফোন",
+        "subtitle_en": "Apple iPhone 13, 14, 15, 16 Pro & Pro Max Flagships",
+        "subtitle_bn": "অ্যাপল আইফোন ১৩, ১৪, ১৫, ১৬ প্রো এবং প্রো ম্যাক্স",
+        "category_id": "mobile-gadgets",
+        "search_query": "iphone",
+        "current_price": 68500,
+        "previous_price": 72000,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "Smartphone",
+        "display_order": 1,
+        "latest_release_name": "Apple iPhone 16 Pro Max 256GB Desert Titanium",
+        "latest_release_price": 172500,
+        "latest_release_badge": "Latest Flagship",
+        "latest_release_url": "https://www.applegadgetsbd.com/",
+        "stores": [
+            {"name": "Apple Gadgets BD", "price": 68500, "url": "https://www.applegadgetsbd.com/", "status": "In Stock"},
+            {"name": "Star Tech", "price": 69999, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Ryans Computers", "price": 70500, "url": "https://www.ryans.com/", "status": "In Stock"},
+            {"name": "Dazzle BD", "price": 68900, "url": "https://dazzle.com.bd/", "status": "In Stock"},
+            {"name": "Kite9 BD", "price": 69500, "url": "https://kite9.com.bd/", "status": "Limited Stock"}
+        ]
+    },
+    {
+        "slug": "samsung-galaxy-s-series",
+        "title_en": "Samsung Galaxy S Series",
+        "title_bn": "স্যামসাং গ্যালাক্সি এস সিরিজ",
+        "subtitle_en": "Galaxy S23, S24, S24 Ultra & FE Official Flagships",
+        "subtitle_bn": "স্যামসাং গ্যালাক্সি এস২৩, এস২৪ ও এস২৪ আল্ট্রা ফ্ল্যাগশিপ",
+        "category_id": "mobile-gadgets",
+        "search_query": "samsung galaxy s",
+        "current_price": 79500,
+        "previous_price": 84000,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "Smartphone",
+        "display_order": 2,
+        "latest_release_name": "Samsung Galaxy S24 Ultra 12GB/256GB Titanium Gray",
+        "latest_release_price": 148000,
+        "latest_release_badge": "Latest Flagship",
+        "latest_release_url": "https://samsungplaza.com.bd/",
+        "stores": [
+            {"name": "Star Tech", "price": 79500, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Apple Gadgets BD", "price": 80999, "url": "https://www.applegadgetsbd.com/", "status": "In Stock"},
+            {"name": "Samsung Plaza BD", "price": 82500, "url": "https://samsungplaza.com.bd/", "status": "Official BD Warranty"},
+            {"name": "Pickaboo", "price": 81500, "url": "https://www.pickaboo.com/", "status": "In Stock"},
+            {"name": "Daraz Mall", "price": 83000, "url": "https://www.daraz.com.bd/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "gold-hallmark-pricing",
+        "title_en": "Gold (22K Hallmark Benchmark)",
+        "title_bn": "স্বর্ণ (২২ ক্যারেট হলমার্ক)",
+        "subtitle_en": "BAJUS Official Hallmark 22-Karat per Vori (11.664g)",
+        "subtitle_bn": "বাজুস অফিসিয়াল হলমার্ক রেট প্রতি ভরি (১১.৬৬৪ গ্রাম)",
+        "category_id": "jewelry-watches",
+        "search_query": "gold",
+        "current_price": 141800,
+        "previous_price": 138500,
+        "unit_en": "Starts from / Vori",
+        "unit_bn": "শুরু / ভরি",
+        "icon_name": "Sparkles",
+        "display_order": 3,
+        "latest_release_name": None,
+        "latest_release_price": None,
+        "latest_release_badge": None,
+        "latest_release_url": None,
+        "stores": [
+            {"name": "BAJUS Official Benchmark", "price": 141800, "url": "https://www.bajus.org/", "status": "National Benchmark"},
+            {"name": "Diamond World BD", "price": 141800, "url": "https://diamondworldbd.com/", "status": "Certified 22K"},
+            {"name": "Apan Jewellers", "price": 141800, "url": "https://apanjewellers.com/", "status": "Certified 22K"},
+            {"name": "Al-Amin Jewellers", "price": 142000, "url": "https://alaminjewellers.com/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "fuel-oil-energy",
+        "title_en": "Fuel (Octane, Diesel, Petrol)",
+        "title_bn": "জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)",
+        "subtitle_en": "BPC Regulated National Retail Price per Litre",
+        "subtitle_bn": "বিপিসি সরকারি নির্ধারিত জাতীয় খুচরা মূল্য প্রতি লিটার",
+        "category_id": "groceries-daily",
+        "search_query": "fuel octane diesel",
+        "current_price": 105,
+        "previous_price": 105,
+        "unit_en": "Starts from / Litre",
+        "unit_bn": "শুরু / লিটার",
+        "icon_name": "Fuel",
+        "display_order": 4,
+        "latest_release_name": None,
+        "latest_release_price": None,
+        "latest_release_badge": None,
+        "latest_release_url": None,
+        "stores": [
+            {"name": "Padma Oil Company Ltd", "price": 105, "url": "https://padmaoil.gov.bd/", "status": "Regulated Retail"},
+            {"name": "Meghna Petroleum Ltd", "price": 105, "url": "https://mpl.gov.bd/", "status": "Regulated Retail"},
+            {"name": "Jamuna Oil Company Ltd", "price": 105, "url": "https://jamunaoil.gov.bd/", "status": "Regulated Retail"}
+        ]
+    },
+    {
+        "slug": "ram-ddr4-ddr5-modules",
+        "title_en": "RAM (DDR4 / DDR5 Modules)",
+        "title_bn": "র‌্যাম (ডিডিআর৪ ও ডিডিআর৫)",
+        "subtitle_en": "Desktop & Laptop 8GB, 16GB, 32GB High-Speed RAM",
+        "subtitle_bn": "ডেস্কটপ ও ল্যাপটপ ৮জিবি, ১৬জিবি, ৩২জিবি মেমোরি মডিউল",
+        "category_id": "desktop-components",
+        "search_query": "ram ddr4 ddr5",
+        "current_price": 2450,
+        "previous_price": 2750,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "Cpu",
+        "display_order": 5,
+        "latest_release_name": "Corsair Dominator Titanium RGB DDR5 32GB (2x16GB) 6000MHz CL30",
+        "latest_release_price": 19800,
+        "latest_release_badge": "Latest DDR5",
+        "latest_release_url": "https://www.startech.com.bd/",
+        "stores": [
+            {"name": "Star Tech", "price": 2450, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Ryans Computers", "price": 2500, "url": "https://www.ryans.com/", "status": "In Stock"},
+            {"name": "Tech Land BD", "price": 2480, "url": "https://www.techlandbd.com/", "status": "In Stock"},
+            {"name": "Skyland BD", "price": 2550, "url": "https://www.skyland.com.bd/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "ssd-nvme-sata-storage",
+        "title_en": "SSD (NVMe M.2 & SATA Drives)",
+        "title_bn": "এসএসডি (এনভিএমই ও সাটা)",
+        "subtitle_en": "256GB, 512GB, 1TB & 2TB PCIe Gen3/Gen4 Solid State Drives",
+        "subtitle_bn": "২৫৬জিবি, ৫১২জিবি, ১টিবি ও ২টিবি হাই-স্পিড এসএসডি স্টোরেজ",
+        "category_id": "desktop-components",
+        "search_query": "ssd nvme m.2",
+        "current_price": 2850,
+        "previous_price": 3200,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "HardDrive",
+        "display_order": 6,
+        "latest_release_name": "Samsung 990 PRO 1TB PCIe 4.0 NVMe M.2 (7450 MB/s Read)",
+        "latest_release_price": 14500,
+        "latest_release_badge": "Latest Gen4",
+        "latest_release_url": "https://www.startech.com.bd/",
+        "stores": [
+            {"name": "Star Tech", "price": 2850, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Ryans Computers", "price": 2900, "url": "https://www.ryans.com/", "status": "In Stock"},
+            {"name": "Tech Land BD", "price": 2890, "url": "https://www.techlandbd.com/", "status": "In Stock"},
+            {"name": "Computer Village", "price": 2950, "url": "https://www.computervillage.com.bd/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "gpu-rtx-radeon-graphics",
+        "title_en": "GPU (Graphics Cards)",
+        "title_bn": "জিপিইউ (গ্রাফিক্স কার্ড)",
+        "subtitle_en": "NVIDIA GeForce RTX 3060/4060/4070 & AMD Radeon Series",
+        "subtitle_bn": "গেমিং ও এআই রেন্ডারিং এনভিডিয়া আরটিএক্স ও এএমডি রেডিয়ন কার্ড",
+        "category_id": "desktop-components",
+        "search_query": "gpu graphics card rtx",
+        "current_price": 28500,
+        "previous_price": 31000,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "Zap",
+        "display_order": 7,
+        "latest_release_name": "Gigabyte GeForce RTX 4070 SUPER WINDFORCE OC 12GB GDDR6X",
+        "latest_release_price": 79500,
+        "latest_release_badge": "Latest RTX Super",
+        "latest_release_url": "https://www.startech.com.bd/",
+        "stores": [
+            {"name": "Star Tech", "price": 28500, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Ryans Computers", "price": 29200, "url": "https://www.ryans.com/", "status": "In Stock"},
+            {"name": "Tech Land BD", "price": 28990, "url": "https://www.techlandbd.com/", "status": "In Stock"},
+            {"name": "Ultra Technology", "price": 29500, "url": "https://ultratech.com.bd/", "status": "In Stock"}
+        ]
+    },
+    {
+        "slug": "processors-intel-amd-cpus",
+        "title_en": "Processors (Intel & AMD CPUs)",
+        "title_bn": "প্রসেসর (ইন্টেল ও এএমডি সিপিইউ)",
+        "subtitle_en": "Intel Core i3/i5/i7/i9 12th-14th Gen & AMD Ryzen 5000/7000/9000",
+        "subtitle_bn": "ইন্টেল কোর এবং এএমডি রাইজেন লেটেস্ট জেনারেশন ডেস্কটপ প্রসেসর",
+        "category_id": "desktop-components",
+        "search_query": "processor intel core amd ryzen",
+        "current_price": 9800,
+        "previous_price": 10500,
+        "unit_en": "Starts from",
+        "unit_bn": "শুরু",
+        "icon_name": "CircuitBoard",
+        "display_order": 8,
+        "latest_release_name": "AMD Ryzen 7 9800X3D Desktop Gaming Processor (8 Cores, 16 Threads, 5.2GHz)",
+        "latest_release_price": 64500,
+        "latest_release_badge": "Latest Zen 5 3D",
+        "latest_release_url": "https://www.startech.com.bd/",
+        "stores": [
+            {"name": "Star Tech", "price": 9800, "url": "https://www.startech.com.bd/", "status": "In Stock"},
+            {"name": "Ryans Computers", "price": 9990, "url": "https://www.ryans.com/", "status": "In Stock"},
+            {"name": "Tech Land BD", "price": 9850, "url": "https://www.techlandbd.com/", "status": "In Stock"},
+            {"name": "Computer Village", "price": 10200, "url": "https://www.computervillage.com.bd/", "status": "In Stock"}
+        ]
+    }
+]
+
+
+def seed_hot_products(db: Session) -> None:
+    """Guarantee all 8 Hot Products benchmarks exist and are populated with verified store pricing and latest releases."""
+    try:
+        existing_records = {hp.slug: hp for hp in db.query(HotProduct).all()}
+        added = 0
+        updated = 0
+        for item in DEFAULT_HOT_PRODUCTS:
+            if item["slug"] not in existing_records:
+                hp = HotProduct(
+                    slug=item["slug"],
+                    title_en=item["title_en"],
+                    title_bn=item["title_bn"],
+                    subtitle_en=item.get("subtitle_en", ""),
+                    subtitle_bn=item.get("subtitle_bn", ""),
+                    category_id=item.get("category_id", "mobile-gadgets"),
+                    search_query=item.get("search_query", ""),
+                    current_price=item.get("current_price", 0),
+                    previous_price=item.get("previous_price", 0),
+                    unit_en=item.get("unit_en", "Starts from"),
+                    unit_bn=item.get("unit_bn", "শুরু"),
+                    icon_name=item.get("icon_name", "Smartphone"),
+                    stores_json=json.dumps(item.get("stores", []), ensure_ascii=False),
+                    latest_release_name=item.get("latest_release_name"),
+                    latest_release_price=item.get("latest_release_price"),
+                    latest_release_badge=item.get("latest_release_badge"),
+                    latest_release_url=item.get("latest_release_url"),
+                    is_active=True,
+                    display_order=item.get("display_order", 1),
+                    last_calibrated_at=datetime.utcnow()
+                )
+                db.add(hp)
+                added += 1
+            else:
+                existing_hp = existing_records[item["slug"]]
+                # Ensure latest release data is synced if missing
+                if item.get("latest_release_name") and not existing_hp.latest_release_name:
+                    existing_hp.latest_release_name = item.get("latest_release_name")
+                    existing_hp.latest_release_price = item.get("latest_release_price")
+                    existing_hp.latest_release_badge = item.get("latest_release_badge")
+                    existing_hp.latest_release_url = item.get("latest_release_url")
+                    updated += 1
+        if added > 0 or updated > 0:
+            db.commit()
+            print(f"[JaChai Seeder] Seeded {added} Hot Product benchmark records, updated {updated} existing.")
+    except Exception as exc:
+        db.rollback()
+        print(f"[JaChai Seeder] Hot product seeding notice: {exc}")
