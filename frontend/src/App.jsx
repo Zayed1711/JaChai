@@ -3580,12 +3580,17 @@ export default function App() {
 
 
           ]);
-
-
-
         }
 
-
+        // Live Hot Products Hydration from backend
+        try {
+          const liveHot = await fetchHotProducts();
+          if (isMounted && Array.isArray(liveHot) && liveHot.length > 0) {
+            setHotProducts(liveHot);
+          }
+        } catch (hpErr) {
+          console.warn('Hot products live fetch failed, using benchmark defaults:', hpErr);
+        }
 
       } catch (err) {
 

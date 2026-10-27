@@ -884,6 +884,9 @@ def update_admin_hot_product(
     """Admin update for single Hot Product record."""
     hp = db.query(HotProduct).filter(HotProduct.id == id).first()
     if not hp:
+        # Fallback check by display_order
+        hp = db.query(HotProduct).filter(HotProduct.display_order == id).first()
+    if not hp:
         raise HTTPException(status_code=404, detail="Hot Product not found.")
 
     update_dict = payload.model_dump(exclude_unset=True)
