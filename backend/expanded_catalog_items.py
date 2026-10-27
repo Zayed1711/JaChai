@@ -684,3 +684,12 @@ EXPANDED_CATALOG_ITEMS: List[Dict[str, Any]] = [
     },
 ]
 
+# Authoritative Redmi and Xiaomi Phones (Bangladesh verified dealer pricing & specs)
+try:
+    from .redmi_xiaomi_catalog import REDMI_XIAOMI_CATALOG_ITEMS
+except ImportError:
+    from redmi_xiaomi_catalog import REDMI_XIAOMI_CATALOG_ITEMS
+
+EXPANDED_CATALOG_ITEMS.extend(REDMI_XIAOMI_CATALOG_ITEMS)
+
+

@@ -740,7 +740,7 @@ async def scrape_startech_search(query: str, client: httpx.AsyncClient, max_budg
                         "store_name": "Star Tech",
                         "source_type": "crawler",
                         "in_stock": "out of stock" not in item.get_text().lower(),
-                        "category": "Laptops & PC",
+                        "category": "Mobiles & Gadgets" if any(k in query.lower() for k in ("phone", "mobile", "note", "redmi", "xiaomi", "galaxy", "iphone", "pixel", "watch", "airpods", "earbuds", "poco")) else "Laptops & PC",
                     })
     except Exception as e:
         print(f"[Spider] Star Tech error for '{query}': {e}")
@@ -784,8 +784,8 @@ async def scrape_store_search(
         deadline=5.5,
     )
 
-    # Also run dedicated Star Tech scraper if in LAPTOP_PC
-    if (category_id == "laptops-pc" or vertical == "LAPTOP_PC") and not any(r.get("store_name") == "Star Tech" for r in combined):
+    # Also run dedicated Star Tech scraper if in LAPTOP_PC or MOBILES_GADGETS
+    if (category_id in ("laptops-pc", "mobile-gadgets") or vertical in ("LAPTOP_PC", "MOBILES_GADGETS")) and not any(r.get("store_name") == "Star Tech" for r in combined):
         try:
             async with httpx.AsyncClient(timeout=httpx.Timeout(3.5), follow_redirects=True) as client:
                 st_rows = await scrape_startech_search(en_query, client, max_budget_bdt=max_budget_bdt)

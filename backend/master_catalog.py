@@ -601,6 +601,27 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         ]
     },
     {
+        "slug": "nvidia-geforce-rtx-4070-12gb",
+        "model_code": "GeForce RTX 4070 (12GB)",
+        "aliases": ["rtx 4070", "rtx 4070 12gb", "nvidia rtx 4070", "geforce rtx 4070", "rtx 4070 gpu", "rtx 4070 super"],
+        "title_en": "NVIDIA GeForce RTX 4070 (12GB GDDR6X · Dual/Triple Fan OC Edition)",
+        "title_bn": "এনভিডিয়া জিফোর্স আরটিএক্স ৪০৭০ (১২জিবি জিডিডিআর৬এক্স গ্রাফিক্স কার্ড)",
+        "category": "Laptops & PC",
+        "subcategory": "Graphics Cards",
+        "brand": "NVIDIA",
+        "specs_summary": "Ada Lovelace Architecture · 5888 CUDA Cores · 12GB GDDR6X 192-bit · DLSS 3 Frame Generation · 3rd Gen RT Cores · 200W TGP · 3x DisplayPort 1.4a, 1x HDMI 2.1a",
+        "starting_price": 72500,
+        "max_price": 82000,
+        "image_url": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=600&q=80",
+        "variant": "12GB GDDR6X · DLSS 3",
+        "stores": [
+            {"name": "Star Tech", "price": 72500, "url": "https://www.startech.com.bd/component/graphics-card/rtx-4070"},
+            {"name": "Ryans Computers", "price": 73500, "url": "https://www.ryans.com/component/graphics-card/rtx-4070"},
+            {"name": "Tech Land BD", "price": 74000, "url": "https://www.techlandbd.com/graphics-card/rtx-4070"},
+            {"name": "Nexus Technologies", "price": 75000, "url": "https://www.nexustech.com.bd/rtx-4070"},
+        ]
+    },
+    {
         "slug": "samsung-990-pro-1tb-nvme-pcie-4",
         "model_code": "Samsung 990 Pro (1TB)",
         "aliases": ["samsung 990 pro 1tb", "samsung 990 pro", "990 pro 1tb", "samsung 990 pro nvme 1tb"],
@@ -679,6 +700,26 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
             {"name": "Star Tech", "price": 20800, "url": "https://www.startech.com.bd/amd-ryzen-5-7600-processor"},
             {"name": "Ryans Computers", "price": 21500, "url": "https://www.ryans.com/amd-ryzen-5-7600-processor"},
             {"name": "Tech Land BD", "price": 21000, "url": "https://www.techlandbd.com/amd-ryzen-5-7600-processor"},
+        ]
+    },
+    {
+        "slug": "amd-ryzen-7-7800x3d-processor",
+        "model_code": "Ryzen 7 7800X3D",
+        "aliases": ["ryzen 7 7800x3d", "amd ryzen 7 7800x3d", "7800x3d", "r7 7800x3d", "ryzen 7800x3d"],
+        "title_en": "AMD Ryzen 7 7800X3D Gaming Processor (8 Cores · 16 Threads · 3D V-Cache 104MB · AM5)",
+        "title_bn": "এএমডি রাইজেন ৭ ৭৮০০এক্স৩ডি গেমিং প্রসেসর (৮ কোর · ১৬ থ্রেড · ১০৪এমবি ক্যাশ)",
+        "category": "Laptops & PC",
+        "subcategory": "Processors",
+        "brand": "AMD",
+        "specs_summary": "World's #1 Gaming CPU · 8 Cores, 16 Threads · 5nm Zen 4 · 96MB 3D V-Cache + 8MB L2 (104MB Total) · Up to 5.0GHz Max Boost · Socket AM5 · 120W TDP",
+        "starting_price": 46500,
+        "max_price": 52000,
+        "image_url": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=600&q=80",
+        "variant": "8 Cores · 16 Threads · 104MB Cache",
+        "stores": [
+            {"name": "Star Tech", "price": 46500, "url": "https://www.startech.com.bd/amd-ryzen-7-7800x3d-processor"},
+            {"name": "Ryans Computers", "price": 47500, "url": "https://www.ryans.com/amd-ryzen-7-7800x3d-processor"},
+            {"name": "Tech Land BD", "price": 48000, "url": "https://www.techlandbd.com/amd-ryzen-7-7800x3d-processor"},
         ]
     },
 
@@ -1270,6 +1311,72 @@ def match_master_catalog(query: str) -> Optional[Dict[str, Any]]:
             return _MASTER_ALIASES_INDEX.get("ps5 slim digital edition")
         return _MASTER_ALIASES_INDEX.get("ps5 slim disc edition")
 
+    # Redmi, Xiaomi & POCO Model Disambiguation
+    if any(k in q_norm for k in ("redmi", "xiaomi", "poco", "পোকো", "রেডমি", "শাওমি")):
+        if "poco x6" in q_norm:
+            return _MASTER_ALIASES_INDEX.get("xiaomi-poco-x6-pro-256gb")
+        if "poco f6" in q_norm:
+            return _MASTER_ALIASES_INDEX.get("xiaomi-poco-f6-256gb")
+
+        if "xiaomi 14" in q_norm:
+            if "ultra" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("xiaomi-14-ultra-512gb")
+            elif "14t" in q_norm or "t pro" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("xiaomi-14t-pro-512gb")
+            return _MASTER_ALIASES_INDEX.get("xiaomi-14-256gb")
+
+        if "note 14" in q_norm or "নোট ১৪" in q_norm:
+            if "pro+" in q_norm or "pro plus" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-14-pro-plus-5g-512gb")
+            elif "pro" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-14-pro-5g-256gb")
+            elif has_256:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-14-5g-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-note-14-5g-128gb")
+
+        if "note 13" in q_norm or "নোট ১৩" in q_norm:
+            if "pro+" in q_norm or "pro plus" in q_norm:
+                if has_256:
+                    return _MASTER_ALIASES_INDEX.get("xiaomi-redmi-note-13-pro-plus-256gb")
+                return _MASTER_ALIASES_INDEX.get("redmi-note-13-pro-plus-5g-512gb")
+            elif "pro 5g" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-13-pro-5g-256gb")
+            elif "pro" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-13-pro-4g-256gb")
+            elif has_256:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-13-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-note-13-128gb")
+
+        if "note 12" in q_norm or "নোট ১২" in q_norm:
+            if "pro" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-note-12-pro-5g-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-note-12-128gb")
+
+        if "14c" in q_norm or "১৪সি" in q_norm:
+            if has_256:
+                return _MASTER_ALIASES_INDEX.get("redmi-14c-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-14c-128gb")
+
+        if "13c" in q_norm or "১৩সি" in q_norm:
+            if has_256:
+                return _MASTER_ALIASES_INDEX.get("redmi-13c-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-13c-128gb")
+
+        if "a3" in q_norm or "এ৩" in q_norm:
+            if "a3x" in q_norm:
+                return _MASTER_ALIASES_INDEX.get("redmi-a3x-64gb")
+            elif has_128:
+                return _MASTER_ALIASES_INDEX.get("redmi-a3-128gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-a3-64gb")
+
+        if re.search(r"\b13\b", q_norm) and "note" not in q_norm and "নোট" not in q_norm:
+            return _MASTER_ALIASES_INDEX.get("redmi-13-128gb")
+
+        if re.search(r"\b12\b", q_norm) and "note" not in q_norm and "নোট" not in q_norm:
+            if has_256:
+                return _MASTER_ALIASES_INDEX.get("redmi-12-256gb")
+            return _MASTER_ALIASES_INDEX.get("redmi-12-128gb")
+
     return None
 
 
@@ -1327,11 +1434,28 @@ def search_master_catalog(query: str, limit: int = 6) -> List[Dict[str, Any]]:
             seen_slugs.add(slug)
             if len(matches) >= limit:
                 break
-        elif sig_words and all(w in t_en or w in m_code or any(w in al for al in aliases) for w in sig_words):
-            matches.append(item)
-            seen_slugs.add(slug)
-            if len(matches) >= limit:
-                break
+        elif sig_words:
+            # Word token matching: for digit tokens (e.g. '12', '13', '14', '16') and tier modifiers
+            # (e.g. 'ultra', 'pro', 'max'), ensure they match model identifiers or whole word tokens,
+            # not substring technical specs (e.g. '12GB' in Note 13 or 'Dimensity Ultra' in Note 14)
+            item_model_words = set(re.findall(r"[a-z]+|\d+", (t_en.split("(")[0] + " " + m_code + " " + " ".join(aliases)).lower()))
+            item_all_words = set(re.findall(r"[a-z]+|\d+", (t_en + " " + m_code + " " + " ".join(aliases)).lower()))
+            tier_modifiers = {"ultra", "pro", "plus", "max", "mini", "lite", "note"}
+
+            def word_matches(w: str) -> bool:
+                if w.isdigit():
+                    if len(w) <= 2:
+                        return w in item_model_words
+                    return w in item_all_words
+                if w in tier_modifiers:
+                    return w in item_model_words
+                return w in item_all_words or w in t_en
+
+            if all(word_matches(w) for w in sig_words):
+                matches.append(item)
+                seen_slugs.add(slug)
+                if len(matches) >= limit:
+                    break
 
     return matches[:limit]
 

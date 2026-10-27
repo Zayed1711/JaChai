@@ -579,3 +579,4 @@ The platform is continuously audited with dedicated verification suites:
 ---
 
 *Authored for the JaChai Engineering Team — 2026.*
+
