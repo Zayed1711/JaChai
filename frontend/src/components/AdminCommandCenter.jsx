@@ -15,6 +15,7 @@ import {
   LogOut,
   CheckCircle2,
   Sparkles,
+  Smartphone,
   ChevronUp,
   ChevronDown,
   Save,
