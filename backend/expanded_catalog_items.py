@@ -692,4 +692,13 @@ except ImportError:
 
 EXPANDED_CATALOG_ITEMS.extend(REDMI_XIAOMI_CATALOG_ITEMS)
 
+# Authoritative Retro & Previous Gen Consoles (PS4, PS3, PS2, PSP, Vita, Xbox 360, Anbernic, Miyoo)
+try:
+    from .retro_gaming_catalog import RETRO_GAMING_CATALOG_ITEMS
+except ImportError:
+    from retro_gaming_catalog import RETRO_GAMING_CATALOG_ITEMS
+
+EXPANDED_CATALOG_ITEMS.extend(RETRO_GAMING_CATALOG_ITEMS)
+
+
 

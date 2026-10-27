@@ -1311,6 +1311,49 @@ def match_master_catalog(query: str) -> Optional[Dict[str, Any]]:
             return _MASTER_ALIASES_INDEX.get("ps5 slim digital edition")
         return _MASTER_ALIASES_INDEX.get("ps5 slim disc edition")
 
+    # PlayStation Previous Gen & Retro Handhelds
+    if "ps4" in q_norm or "playstation 4" in q_norm or "প্লেস্টেশন ৪" in q_norm or "পিএস৪" in q_norm:
+        if "pro" in q_norm:
+            return _MASTER_ALIASES_INDEX.get("ps4 pro") or _MASTER_ALIASES_INDEX.get("sony-playstation-4-pro-1tb")
+        elif "500" in q_norm:
+            return _MASTER_ALIASES_INDEX.get("ps4 slim 500gb") or _MASTER_ALIASES_INDEX.get("sony-playstation-4-slim-500gb")
+        return _MASTER_ALIASES_INDEX.get("ps4 slim") or _MASTER_ALIASES_INDEX.get("sony-playstation-4-slim-1tb")
+
+    if "ps3" in q_norm or "playstation 3" in q_norm or "প্লেস্টেশন ৩" in q_norm or "পিএস৩" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("ps3") or _MASTER_ALIASES_INDEX.get("sony-playstation-3-super-slim-500gb")
+
+    if "ps2" in q_norm or "playstation 2" in q_norm or "প্লেস্টেশন ২" in q_norm or "পিএস২" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("ps2") or _MASTER_ALIASES_INDEX.get("sony-playstation-2-slim")
+
+    if "psp" in q_norm or "playstation portable" in q_norm or "পিএসপি" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("psp") or _MASTER_ALIASES_INDEX.get("sony-psp-3000-handheld")
+
+    if "vita" in q_norm or "psvita" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("ps vita") or _MASTER_ALIASES_INDEX.get("sony-ps-vita-slim-pch2000-128gb")
+
+    # Retro & Classic Consoles (Xbox, Nintendo, Handhelds)
+    if "xbox 360" in q_norm or "৩৬০" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("xbox 360") or _MASTER_ALIASES_INDEX.get("microsoft-xbox-360-e-500gb-rgh")
+
+    if "xbox one" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("xbox one s") or _MASTER_ALIASES_INDEX.get("microsoft-xbox-one-s-1tb")
+
+    if "3ds" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("nintendo 3ds") or _MASTER_ALIASES_INDEX.get("nintendo-3ds-xl-handheld")
+
+    if any(k in q_norm for k in ("game boy", "gameboy", "gba", "গেমবয়", "গেম বয়")):
+        return _MASTER_ALIASES_INDEX.get("game boy") or _MASTER_ALIASES_INDEX.get("nintendo-game-boy-advance-sp-ips")
+
+    if "anbernic" in q_norm or "rg35xx" in q_norm or "অ্যানবারনিক" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("anbernic") or _MASTER_ALIASES_INDEX.get("anbernic-rg35xx-plus-retro-handheld")
+
+    if "miyoo" in q_norm or "মিউ মিনি" in q_norm:
+        return _MASTER_ALIASES_INDEX.get("miyoo mini") or _MASTER_ALIASES_INDEX.get("miyoo-mini-plus-retro-handheld-64gb")
+
+    if any(k in q_norm for k in ("sega", "genesis", "mega drive", "সেগা")):
+        return _MASTER_ALIASES_INDEX.get("sega") or _MASTER_ALIASES_INDEX.get("sega-genesis-mini-classic-console")
+
+
     # Redmi, Xiaomi & POCO Model Disambiguation
     if any(k in q_norm for k in ("redmi", "xiaomi", "poco", "পোকো", "রেডমি", "শাওমি")):
         if "poco x6" in q_norm:
@@ -1440,7 +1483,7 @@ def search_master_catalog(query: str, limit: int = 6) -> List[Dict[str, Any]]:
             # not substring technical specs (e.g. '12GB' in Note 13 or 'Dimensity Ultra' in Note 14)
             item_model_words = set(re.findall(r"[a-z]+|\d+", (t_en.split("(")[0] + " " + m_code + " " + " ".join(aliases)).lower()))
             item_all_words = set(re.findall(r"[a-z]+|\d+", (t_en + " " + m_code + " " + " ".join(aliases)).lower()))
-            tier_modifiers = {"ultra", "pro", "plus", "max", "mini", "lite", "note"}
+            tier_modifiers = {"ultra", "pro", "plus", "max", "mini", "lite", "note", "slim"}
 
             def word_matches(w: str) -> bool:
                 if w.isdigit():
