@@ -2287,59 +2287,10 @@ const INITIAL_SPIDERS = [
 
 
 
-const INITIAL_ANALYTICS = [
-
-
-
-  { id: 'an-1', name: 'Aarohi Artisan Weaves', slot: 'Primary Hero Billboard #01', impressions: 42800, clicks: 1840 },
-
-
-
-  { id: 'an-2', name: 'Chronos Swiss Horology', slot: 'Primary Hero Billboard #02', impressions: 38400, clicks: 1420 },
-
-
-
-  { id: 'an-3', name: 'KeyCraft Labs Bangladesh', slot: 'Partner Spotlight Slot #03', impressions: 24500, clicks: 980 },
-
-
-
-  { id: 'an-4', name: 'Urban Sole Footwear BD', slot: 'Partner Spotlight Slot #04', impressions: 19800, clicks: 760 },
-
-
-
-  { id: 'an-5', name: 'BAJUS Live Gold Rate Index', slot: 'Dual Continuous Marquee', impressions: 56700, clicks: 2340 },
-
-
-
-  { id: 'an-6', name: 'Atelier Dhaka Drip', slot: 'Primary Hero Billboard #04', impressions: 18200, clicks: 650 }
-
-
-
-];
-
-
-
-
-
-
+const INITIAL_ANALYTICS = [];
 
 // --- INITIAL ADVERTISER LEADS INBOX ---
-
-
-
-const INITIAL_INBOX = [
-
-
-
-  { id: 'lead-1', brandName: 'Shwapno Superstores', phone: '+8801711223344', requestedTier: 'Primary Kinetic Billboard', submittedAt: 'Today, 08:30 AM', status: 'Paid via bKash/Nagad' },
-
-
-
-  { id: 'lead-2', brandName: 'Kicks BD Vault', phone: '+8801822334455', requestedTier: 'Product Spotlight Placement', submittedAt: 'Yesterday, 04:15 PM', status: 'Pending' }
-
-
-
-];
+const INITIAL_INBOX = [];
 
 
 
@@ -4851,29 +4802,17 @@ export default function App() {
   };
 
   const handleSearchSubmit = (e) => {
-
-
-
     if (e) e.preventDefault();
-
-
-
-    if (searchQuery.trim()) {
-
-
-
+    const query = searchQuery.trim();
+    if (query) {
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'search', {
+          search_term: query
+        });
+      }
       setSelectedCategory('all');
-
-
-
-      executeLiveSearch(searchQuery.trim(), 'all');
-
-
-
+      executeLiveSearch(query, 'all');
     }
-
-
-
   };
 
 

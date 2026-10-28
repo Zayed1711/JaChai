@@ -144,8 +144,18 @@ export async function submitAdvertiserLead(leadData) {
 }
 
 // Outbound /go/ Redirect & Click Tracking
-export async function trackOutboundClick(type, id) {
+export async function trackOutboundClick(type, id, extra = {}) {
   try {
+    // 1. Dispatch event to Google Analytics 4
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'select_content', {
+        content_type: type,
+        item_id: String(id),
+        ...extra
+      });
+    }
+
+    // 2. Dispatch to JaChai internal ClickLog database
     const endpoint =
       type === 'offer'
         ? `${API_BASE_URL}/api/v1/track/offer/${id}`

@@ -143,6 +143,8 @@ export default function AdminCommandCenter({
   });
   const [telemetryData, setTelemetryData] = useState([]);
   const [isLoadingTelemetry, setIsLoadingTelemetry] = useState(false);
+  const [sponsorRawAnalytics, setSponsorRawAnalytics] = useState(null);
+  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
 
   React.useEffect(() => {
     apiFetchMacroTicker()
@@ -489,10 +491,22 @@ export default function AdminCommandCenter({
     try {
       const data = await fetchAdminRegistryStatus();
       setRegistryStatus(data);
+      if (data?.ad_leads && setAdvertiserInbox) {
+        const mappedLeads = data.ad_leads.map((l) => ({
+          id: l.id,
+          brandName: l.brand_name,
+          phone: l.contact_phone,
+          requestedTier: l.selected_tier,
+          budgetNote: l.budget_note,
+          submittedAt: l.created_at,
+          status: l.status || 'Pending'
+        }));
+        setAdvertiserInbox(mappedLeads);
+      }
     } catch (e) {
       console.warn('Failed to fetch registry status:', e);
     }
-  }, []);
+  }, [setAdvertiserInbox]);
 
   const handleForceReloadRegistry = async () => {
     setIsReloadingRegistry(true);
@@ -781,38 +795,45 @@ export default function AdminCommandCenter({
 
   // Tab Data Synchronization Effects
   React.useEffect(() => {
-    if (activeTab === 'analytics' && setAnalytics) {
-      fetchSearchTelemetryDataset(50)
-        .then((data) => {
-          if (Array.isArray(data)) setTelemetryData(data);
-        })
-        .catch(() => {});
+    if (activeTab === 'analytics') {
+      setIsLoadingAnalytics(true);
 
+      // 1. Fetch real customer search telemetry
+      fetchSearchTelemetryDataset(100)
+        .then((data) => {
+          const list = Array.isArray(data) ? data : (data?.examples || []);
+          setTelemetryData(list);
+        })
+        .catch((err) => console.warn('Telemetry fetch error:', err));
+
+      // 2. Fetch real sponsor performance, top stores, and live click logs
       fetchSponsorAnalytics()
         .then((res) => {
-          if (res?.billboards || res?.spotlights) {
-            const list = [
-              ...(res.billboards || []).map((b) => ({
-                id: `an-bb-${b.id}`,
-                name: b.sponsor_en,
-                slot: `Hero Billboard #${b.id}`,
-                impressions: b.impressions || 0,
-                clicks: b.clicks || 0
-              })),
-              ...(res.spotlights || []).map((s) => ({
-                id: `an-sp-${s.id}`,
-                name: s.brand_title_en,
-                slot: `Spotlight (${s.slot_code})`,
-                impressions: s.impressions || 0,
-                clicks: s.clicks || 0
-              }))
-            ];
-            if (list.length > 0) setAnalytics(list);
+          if (res) {
+            setSponsorRawAnalytics(res);
+            const campaigns = res.campaigns || [];
+            const list = campaigns.map((c) => ({
+              id: `an-${c.tier}-${c.id}`,
+              name: c.brand_name,
+              slot: c.tier,
+              impressions: c.impressions || 0,
+              clicks: c.clicks || 0,
+              ctr: c.ctr_percent,
+              status: c.status,
+              whatsappReport: c.whatsapp_report_text
+            }));
+            if (setAnalytics) {
+              setAnalytics(list);
+            }
           }
         })
-        .catch((err) => console.warn('Analytics fetch error:', err));
+        .catch((err) => console.warn('Analytics fetch error:', err))
+        .finally(() => setIsLoadingAnalytics(false));
+
+      // 3. Sync real advertiser leads
+      loadRegistryInfo();
     }
-  }, [activeTab, setAnalytics]);
+  }, [activeTab, setAnalytics, loadRegistryInfo]);
 
   const loadSpiderHealthData = React.useCallback((cat = 'all') => {
     if (setSpiders) {
@@ -1526,9 +1547,12 @@ export default function AdminCommandCenter({
     }
   };
 
-  const totalClicks = analytics.reduce((acc, curr) => acc + curr.clicks, 0);
-  const totalImpressions = analytics.reduce((acc, curr) => acc + curr.impressions, 0);
-  const globalCtr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : '0.00';
+  const liveOutboundClicks = sponsorRawAnalytics?.total_outbound_clicks ?? (analytics || []).reduce((acc, curr) => acc + (curr.clicks || 0), 0);
+  const liveImpressions = sponsorRawAnalytics?.total_impressions ?? (analytics || []).reduce((acc, curr) => acc + (curr.impressions || 0), 0);
+  const liveSearches = sponsorRawAnalytics?.total_searches ?? (telemetryData || []).reduce((acc, curr) => acc + (curr.search_count || 1), 0);
+  const globalCtr = liveImpressions > 0
+    ? ((liveOutboundClicks / liveImpressions) * 100).toFixed(2)
+    : (liveOutboundClicks > 0 ? '100.00' : '0.00');
 
   return (
     <div className="min-h-screen bg-[#0A0B0E] text-white flex flex-col font-sans-clean">
@@ -2848,11 +2872,24 @@ export default function AdminCommandCenter({
                 </span>
                 <div className="flex items-baseline justify-between">
                   <span className="text-3xl font-black text-[#10B981]">
-                    {totalClicks.toLocaleString()}
+                    {liveOutboundClicks.toLocaleString()}
                   </span>
                   <ArrowUpRight className="w-5 h-5 text-[#10B981]" />
                 </div>
-                <span className="text-[11px] text-white/40 mt-1 block">Live tracked clicks</span>
+                <span className="text-[11px] text-white/40 mt-1 block">Live tracked clicks in DB</span>
+              </div>
+
+              <div className="bg-[#12141C] border border-white/15 rounded-2xl p-5 shadow-lg">
+                <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block mb-1">
+                  Customer Searches Logged
+                </span>
+                <div className="flex items-baseline justify-between">
+                  <span className="text-3xl font-black text-[#38BDF8]">
+                    {liveSearches.toLocaleString()}
+                  </span>
+                  <Search className="w-5 h-5 text-[#38BDF8]" />
+                </div>
+                <span className="text-[11px] text-white/40 mt-1 block">Real search queries in DB</span>
               </div>
 
               <div className="bg-[#12141C] border border-white/15 rounded-2xl p-5 shadow-lg">
@@ -2861,7 +2898,7 @@ export default function AdminCommandCenter({
                 </span>
                 <div className="flex items-baseline justify-between">
                   <span className="text-3xl font-black text-white">
-                    {totalImpressions.toLocaleString()}
+                    {liveImpressions.toLocaleString()}
                   </span>
                   <Eye className="w-5 h-5 text-white/50" />
                 </div>
@@ -2870,91 +2907,169 @@ export default function AdminCommandCenter({
 
               <div className="bg-[#12141C] border border-white/15 rounded-2xl p-5 shadow-lg">
                 <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block mb-1">
-                  Average Sponsor CTR
-                </span>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-3xl font-black text-[#F59E0B]">{globalCtr}%</span>
-                  <Sparkles className="w-5 h-5 text-[#F59E0B]" />
-                </div>
-                <span className="text-[11px] text-white/40 mt-1 block">Industry high conversion</span>
-              </div>
-
-              <div className="bg-[#12141C] border border-white/15 rounded-2xl p-5 shadow-lg">
-                <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block mb-1">
                   Active Partner Campaigns
                 </span>
                 <div className="flex items-baseline justify-between">
-                  <span className="text-3xl font-black text-white">{analytics.length}</span>
+                  <span className="text-3xl font-black text-white">{(analytics || []).length}</span>
                   <Shield className="w-5 h-5 text-[#38BDF8]" />
                 </div>
-                <span className="text-[11px] text-white/40 mt-1 block">Tier 1, 2 & 3 sponsors</span>
+                <span className="text-[11px] text-white/40 mt-1 block">Tier 1 & 2 live sponsors</span>
               </div>
             </div>
 
             {/* SPONSOR PERFORMANCE TABLE & 1-CLICK WHATSAPP REPORT */}
             <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
-              <div className="border-b border-white/10 pb-4 mb-5">
-                <span className="text-[10px] font-black tracking-widest uppercase text-[#10B981]">
-                  REAL-TIME ADVERTISER AUDIT
-                </span>
-                <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5">
-                  Sponsor Performance & 1-Click WhatsApp Report
-                </h3>
+              <div className="border-b border-white/10 pb-4 mb-5 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-black tracking-widest uppercase text-[#10B981]">
+                    REAL-TIME ADVERTISER AUDIT
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5">
+                    Sponsor Performance & 1-Click WhatsApp Report
+                  </h3>
+                </div>
+                <button
+                  onClick={() => {
+                    fetchSponsorAnalytics().then((res) => {
+                      if (res) {
+                        setSponsorRawAnalytics(res);
+                        const campaigns = res.campaigns || [];
+                        setAnalytics(campaigns.map((c) => ({
+                          id: `an-${c.tier}-${c.id}`,
+                          name: c.brand_name,
+                          slot: c.tier,
+                          impressions: c.impressions || 0,
+                          clicks: c.clicks || 0,
+                          ctr: c.ctr_percent,
+                          status: c.status,
+                          whatsappReport: c.whatsapp_report_text
+                        })));
+                      }
+                    });
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Refresh Realtime</span>
+                </button>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#0A0B0E] text-white/50 text-[10px] font-bold uppercase tracking-wider border-b border-white/10">
-                    <tr>
-                      <th className="p-3.5">Sponsor / Brand</th>
-                      <th className="p-3.5">Slot Tier</th>
-                      <th className="p-3.5">Impressions</th>
-                      <th className="p-3.5">Outbound Clicks</th>
-                      <th className="p-3.5">CTR</th>
-                      <th className="p-3.5 text-right">WhatsApp Report</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {analytics.map((item) => {
-                      const ctr =
-                        item.impressions > 0
-                          ? ((item.clicks / item.impressions) * 100).toFixed(2)
-                          : '0.00';
-                      return (
-                        <tr key={item.id} className="hover:bg-white/[0.02] transition">
-                          <td className="p-3.5 font-bold text-white">{item.name}</td>
-                          <td className="p-3.5 text-white/70 font-semibold">{item.slot}</td>
-                          <td className="p-3.5 font-mono text-white/80">
-                            {item.impressions.toLocaleString()}
+              {(!analytics || analytics.length === 0) ? (
+                <div className="text-center py-8 text-white/40 text-xs">
+                  No active sponsor campaigns configured yet. Campaigns added in the Billboards & Spotlights tab will automatically report real impressions and clicks here.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#0A0B0E] text-white/50 text-[10px] font-bold uppercase tracking-wider border-b border-white/10">
+                      <tr>
+                        <th className="p-3.5">Sponsor / Brand</th>
+                        <th className="p-3.5">Slot Tier</th>
+                        <th className="p-3.5">Impressions</th>
+                        <th className="p-3.5">Outbound Clicks</th>
+                        <th className="p-3.5">CTR</th>
+                        <th className="p-3.5 text-right">WhatsApp Report</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {analytics.map((item) => {
+                        const ctr =
+                          item.impressions > 0
+                            ? ((item.clicks / item.impressions) * 100).toFixed(2)
+                            : '0.00';
+                        return (
+                          <tr key={item.id} className="hover:bg-white/[0.02] transition">
+                            <td className="p-3.5 font-bold text-white">{item.name}</td>
+                            <td className="p-3.5 text-white/70 font-semibold">{item.slot}</td>
+                            <td className="p-3.5 font-mono text-white/80">
+                              {item.impressions.toLocaleString()}
+                            </td>
+                            <td className="p-3.5 font-mono font-bold text-[#10B981]">
+                              {item.clicks.toLocaleString()}
+                            </td>
+                            <td className="p-3.5 font-mono font-bold text-[#F59E0B]">{ctr}%</td>
+                            <td className="p-3.5 text-right">
+                              <button
+                                onClick={() => handleCopyWhatsAppReport(item)}
+                                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#10B981] hover:text-black text-white text-[10px] font-extrabold uppercase transition cursor-pointer inline-flex items-center gap-1.5"
+                              >
+                                {copyFeedback === item.id ? (
+                                  <>
+                                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                    <span>Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <MessageCircle className="w-3.5 h-3.5 text-[#10B981]" />
+                                    <span>Copy Weekly Report</span>
+                                  </>
+                                )}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* LIVE OUTBOUND STORE CONVERSIONS & REDIRECTS STREAM */}
+            <div className="bg-[#12141C] border border-white/15 rounded-2xl p-6 shadow-xl">
+              <div className="border-b border-white/10 pb-4 mb-5 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-black tracking-widest uppercase text-[#10B981]">
+                    LIVE OUTBOUND STORE TRAFFIC STREAM (/GO/ REDIRECTS)
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-0.5">
+                    Recent Customer Store Clicks & Outbound Conversions
+                  </h3>
+                  <p className="text-xs text-white/50 mt-1">
+                    Real-time log of shoppers clicking out to verified Bangladeshi stores (Star Tech, Apple Gadgets BD, Pickaboo, Daraz).
+                  </p>
+                </div>
+                <span className="text-xs font-mono font-bold text-[#10B981] bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30">
+                  {(sponsorRawAnalytics?.recent_clicks || []).length} Logged Clicks
+                </span>
+              </div>
+
+              {(!sponsorRawAnalytics?.recent_clicks || sponsorRawAnalytics.recent_clicks.length === 0) ? (
+                <div className="text-center py-8 text-white/40 text-xs">
+                  Awaiting outbound store clicks. When shoppers click on prices to visit retailer websites, they appear here live.
+                </div>
+              ) : (
+                <div className="overflow-x-auto max-h-72 overflow-y-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#0e121a] text-white/70 text-[10px] font-black uppercase tracking-wider border-b border-white/15 sticky top-0 z-10 backdrop-blur-md">
+                      <tr>
+                        <th className="p-3">Store Name</th>
+                        <th className="p-3">Type</th>
+                        <th className="p-3">Device</th>
+                        <th className="p-3">Target Retailer URL</th>
+                        <th className="p-3 text-right">Clicked Time</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {sponsorRawAnalytics.recent_clicks.map((clk, cIdx) => (
+                        <tr key={cIdx} className="hover:bg-white/[0.02] transition">
+                          <td className="p-3 font-bold text-[#10B981]">{clk.brand_or_store_name}</td>
+                          <td className="p-3 text-white/70 uppercase text-[10px] font-mono">{clk.target_type}</td>
+                          <td className="p-3 text-white/60 capitalize">{clk.device_type}</td>
+                          <td className="p-3 text-white/50 font-mono text-[11px] truncate max-w-xs">
+                            <a href={clk.destination_url} target="_blank" rel="noreferrer" className="hover:text-cyan-400 underline">
+                              {clk.destination_url}
+                            </a>
                           </td>
-                          <td className="p-3.5 font-mono font-bold text-[#10B981]">
-                            {item.clicks.toLocaleString()}
-                          </td>
-                          <td className="p-3.5 font-mono font-bold text-[#F59E0B]">{ctr}%</td>
-                          <td className="p-3.5 text-right">
-                            <button
-                              onClick={() => handleCopyWhatsAppReport(item)}
-                              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#10B981] hover:text-black text-white text-[10px] font-extrabold uppercase transition cursor-pointer inline-flex items-center gap-1.5"
-                            >
-                              {copyFeedback === item.id ? (
-                                <>
-                                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                  <span>Copied!</span>
-                                </>
-                              ) : (
-                                <>
-                                  <MessageCircle className="w-3.5 h-3.5 text-[#10B981]" />
-                                  <span>Copy Weekly Report</span>
-                                </>
-                              )}
-                            </button>
+                          <td className="p-3 text-right font-mono text-white/60">
+                            {new Date(clk.clicked_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                           </td>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* SEARCH INTELLIGENCE & EMERGING QUERIES TELEMETRY */}

@@ -605,6 +605,9 @@ class SponsorAnalyticsResponse(BaseModel):
     campaigns: List[SponsorCampaignAnalytics]
     top_stores: List[StoreOfferResponse]
     recent_clicks: List[ClickLogResponse]
+    total_outbound_clicks: int = 0
+    total_searches: int = 0
+    total_impressions: int = 0
 
 # ==========================================
 # HOT PRODUCTS PRICING SCHEMAS

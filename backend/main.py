@@ -2152,10 +2152,18 @@ def get_sponsor_analytics(
         .all()
     )
 
+    from sqlalchemy import func
+    total_outbound_clicks = db.query(func.count(ClickLog.id)).scalar() or 0
+    total_searches = db.query(func.count(SearchTelemetry.id)).scalar() or 0
+    total_impressions = sum(b.impressions for b in billboards) + sum(s.impressions for s in spotlights)
+
     return {
         "campaigns": campaign_list,
         "top_stores": top_stores,
         "recent_clicks": recent_clicks,
+        "total_outbound_clicks": total_outbound_clicks,
+        "total_searches": total_searches,
+        "total_impressions": total_impressions,
     }
 
 

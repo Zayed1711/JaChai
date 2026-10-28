@@ -365,3 +365,4 @@ RETRO_GAMING_CATALOG_ITEMS: List[Dict[str, Any]] = [
         ]
     },
 ]
+
