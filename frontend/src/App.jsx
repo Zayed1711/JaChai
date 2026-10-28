@@ -4961,38 +4961,37 @@ export default function App() {
 
 
 
-    // Auto-correct known legacy corruptions
-
-
-
+    // Auto-correct known legacy corruptions and 404 fake slugs
     if (destUrl) {
-
-
-
       if (destUrl.includes('taketalkbd.com')) {
-
-
-
         destUrl = 'https://www.facebook.com/takeNtalkBD';
-
-
-
       }
-
-
-
       if (destUrl.includes('&merchant=')) {
-
-
-
         destUrl = destUrl.split('&merchant=')[0];
-
-
-
       }
 
-
-
+      // Auto-heal known 404 fake direct slugs into verified merchant search endpoints
+      const lowerDest = destUrl.toLowerCase();
+      const isSearchUrl = lowerDest.includes('/search') || lowerDest.includes('catalogsearch') || lowerDest.includes('/catalog/?q=') || lowerDest.includes('?s=');
+      if (!isSearchUrl) {
+        const queryTerm = searchQuery.trim() || activeSearchQuery.trim() || '';
+        if (queryTerm) {
+          const encQuery = encodeURIComponent(queryTerm);
+          if (lowerDest.includes('startech.com.bd') && (lowerDest.includes('playstation') || lowerDest.includes('ps4') || lowerDest.includes('ps3') || lowerDest.includes('ps2') || lowerDest.includes('xbox') || lowerDest.includes('nintendo') || lowerDest.includes('sega') || lowerDest.includes('anbernic') || lowerDest.includes('miyoo') || lowerDest.includes('vita') || lowerDest.includes('psp'))) {
+            destUrl = `https://www.startech.com.bd/product/search?search=${encQuery}`;
+          } else if (lowerDest.includes('custommacbd.com') && (lowerDest.includes('playstation') || lowerDest.includes('ps4') || lowerDest.includes('ps3') || lowerDest.includes('ps2') || lowerDest.includes('xbox') || lowerDest.includes('nintendo') || lowerDest.includes('sega') || lowerDest.includes('anbernic') || lowerDest.includes('miyoo') || lowerDest.includes('vita') || lowerDest.includes('psp'))) {
+            destUrl = `https://custommacbd.com/search?q=${encQuery}`;
+          } else if (lowerDest.includes('ryans.com') && (lowerDest.includes('playstation') || lowerDest.includes('ps4') || lowerDest.includes('xbox') || lowerDest.includes('nintendo') || lowerDest.includes('console'))) {
+            destUrl = `https://www.ryans.com/search?q=${encQuery}`;
+          } else if (lowerDest.includes('techlandbd.com') && (lowerDest.includes('playstation') || lowerDest.includes('ps4') || lowerDest.includes('xbox') || lowerDest.includes('nintendo') || lowerDest.includes('anbernic'))) {
+            destUrl = `https://www.techlandbd.com/index.php?route=product/search&search=${encQuery}`;
+          } else if (lowerDest.includes('applegadgetsbd.com') && (lowerDest.includes('psp') || lowerDest.includes('anbernic') || lowerDest.includes('miyoo') || lowerDest.includes('playstation'))) {
+            destUrl = `https://www.applegadgetsbd.com/?s=${encQuery}`;
+          } else if (lowerDest.includes('pickaboo.com') && (lowerDest.includes('ps3') || lowerDest.includes('anbernic') || lowerDest.includes('playstation') || lowerDest.includes('console'))) {
+            destUrl = `https://www.pickaboo.com/search-result/${encQuery}`;
+          }
+        }
+      }
     }
 
 
@@ -7706,6 +7705,11 @@ const renderHubIcon = (iconName) => {
                               {product.variant}
                             </span>
                           )}
+                          {product.isDiscontinued && (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/40 text-amber-700 text-[10px] font-black tracking-wide uppercase">
+                              {lang === 'bn' ? 'মার্কেট-আউট' : 'Market-Out'}
+                            </span>
+                          )}
 
 
 
@@ -7820,6 +7824,17 @@ const renderHubIcon = (iconName) => {
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#E6FFFA] text-[#0F766E] border border-[#0D9488]/30 shadow-xs">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] shrink-0"></span>
                             <span>{lang === 'bn' ? 'ভ্যারিয়েন্ট / কোয়ালিটি:' : 'Variant / Quality:'} <strong className="font-extrabold text-[#0D9488]">{product.variant}</strong></span>
+                          </span>
+                        </div>
+                      )}
+
+                      {product.isDiscontinued && (
+                        <div className="mt-2.5 p-2 rounded-lg bg-amber-50 border border-amber-200/80 text-amber-900 text-[11px] font-semibold flex items-center gap-2 leading-tight">
+                          <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span>
+                            {lang === 'bn'
+                              ? 'অফিসিয়াল উৎপাদন বন্ধ — বাজারে প্রি-ওউনড/ডিলার স্টকে মিলছে'
+                              : 'Production Ended — Available via pre-owned/dealer stock'}
                           </span>
                         </div>
                       )}
@@ -8373,6 +8388,20 @@ const renderHubIcon = (iconName) => {
                         <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] shrink-0"></span>
                         <span>{lang === 'bn' ? 'ভ্যারিয়েন্ট / কোয়ালিটি: ' : 'Variant / Quality: '}<strong>{inspectProduct.variant}</strong></span>
                       </span>
+                    </div>
+                  )}
+
+                  {inspectProduct.isDiscontinued && (
+                    <div className="mt-3.5 p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-100 flex items-start gap-2.5 shadow-sm">
+                      <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-[11px] font-black uppercase tracking-wider text-amber-400">
+                          {lang === 'bn' ? '⚠️ অফিসিয়াল উৎপাদন বন্ধ / মার্কেট-আউট' : '⚠️ Officially Discontinued / Out of Production'}
+                        </div>
+                        <p className="text-xs text-amber-200/90 mt-1 leading-relaxed font-medium">
+                          {lang === 'bn' ? inspectProduct.discontinuedNoteBn : inspectProduct.discontinuedNoteEn}
+                        </p>
+                      </div>
                     </div>
                   )}
 

@@ -57,10 +57,16 @@ export interface ProductOffersResponse {
   brand: string | null;
   offers_count: number;
   lowest_price: number | null;
+  is_discontinued?: boolean;
+  discontinued_note_en?: string | null;
+  discontinued_note_bn?: string | null;
   offers: StoreOfferItem[];
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+const RAW_API = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || "";
+const API_BASE = RAW_API
+  ? (RAW_API.endsWith("/api/v1") ? RAW_API : `${RAW_API.replace(/\/+$/, '')}/api/v1`)
+  : "/api/v1";
 
 const BENGALI_DIGITS: Record<string, string> = {
   "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",

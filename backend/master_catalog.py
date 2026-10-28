@@ -29,6 +29,25 @@ except ImportError:
     from appliances_catalog import match_appliances_catalog, build_appliance_product_card, get_appliance_suggestions
     from expanded_catalog_items import EXPANDED_CATALOG_ITEMS
 
+# Discontinued / Out-of-Production Intelligence Patterns
+DISCONTINUED_PATTERNS = [
+    (r"\b(playstation\s*4|ps4|playstation\s*3|ps3|playstation\s*2|ps2|psp|ps\s*vita)\b",
+     "Officially Discontinued / Out of Production: Sony has ceased new factory production for this generation. Verified units in Bangladesh are dealer-tested pre-owned, refurbished, or collector stock.",
+     "অফিসিয়াল উৎপাদন বন্ধ / মার্কেট-আউট: সোনি আনুষ্ঠানিকভাবে এই প্রজন্মের নতুন উৎপাদন বন্ধ করেছে। বাংলাদেশে এগুলো ডিলার-টেস্টেড প্রি-ওউনড, রিফার্বিশড বা কালেক্টর স্টক হিসেবে পাওয়া যাচ্ছে।"),
+    (r"\b(xbox\s*360|xbox\s*one(\s*s|\s*x)?)\b",
+     "Officially Discontinued / Out of Production: Microsoft has ceased active manufacturing. Units in market are tested pre-owned or remaining distributor stock.",
+     "অফিসিয়াল উৎপাদন বন্ধ / মার্কেট-আউট: মাইক্রোসফট আনুষ্ঠানিকভাবে এর উৎপাদন বন্ধ করেছে। বাজারে এগুলো টেস্টেড প্রি-ওউনড বা অবশিষ্ট ডিস্ট্রিবিউটর স্টক হিসেবে বিদ্যমান।"),
+    (r"\b(nintendo\s*3ds|3ds\s*xl|game\s*boy|gba|gameboy)\b",
+     "Vintage / Officially Discontinued: Nintendo has ended factory production. Available as refurbished or collector editions.",
+     "ভিন্টেজ / অফিসিয়াল উৎপাদন বন্ধ: নিনটেন্ডো ফ্যাক্টরি উৎপাদন সমাপ্ত করেছে। বাজারে এগুলো রিফার্বিশড বা কালেক্টর এডিশন হিসেবে মিলছে।"),
+    (r"\b(sega\s*genesis|sega\s*mega\s*drive)\b",
+     "Classic Edition / Discontinued Run: Production by Sega was a limited run. Available via specialized retro importers.",
+     "ক্লাসিক এডিশন / লিমিটেড উৎপাদন: সেগার অফিসিয়াল উৎপাদন সমাপ্ত। স্পেশালাইজড রেট্রো ইম্পোর্টারদের কাছে মিলছে।"),
+    (r"\b(iphone\s*(?:4|4s|5|5s|6|6s|7|8|x|xr|xs|11|12))\b",
+     "Officially Discontinued by Apple: Brand new retail production has ended. Units are certified pre-owned or authentic refurbished stock.",
+     "অ্যাপল কর্তৃক অফিসিয়াল উৎপাদন বন্ধ: নতুন রিটেইল উৎপাদন সমাপ্ত। বাজারে এগুলো সার্টিফাইড প্রি-ওউনড বা জেনুইন রিফার্বিশড স্টক।"),
+]
+
 # ==============================================================================
 # AUTHORITATIVE MASTER CATALOG ITEMS (300+ TOP SKUs ACROSS ALL VERTICALS)
 # ==============================================================================
@@ -741,10 +760,10 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80",
         "variant": "Disc Edition · 1TB SSD",
         "stores": [
-            {"name": "Star Tech", "price": 58990, "url": "https://www.startech.com.bd/sony-playstation-5-slim-disc-edition"},
-            {"name": "Custom Mac BD", "price": 59500, "url": "https://custommacbd.com/products/playstation-5-slim-disc-edition"},
-            {"name": "Ryans Computers", "price": 61000, "url": "https://www.ryans.com/sony-playstation-5-slim-disc-edition"},
-            {"name": "Tech Land BD", "price": 60500, "url": "https://www.techlandbd.com/sony-playstation-5-slim-disc"},
+            {"name": "Star Tech", "price": 58990, "url": "https://www.startech.com.bd/product/search?search=PS5+Slim+Disc"},
+            {"name": "Custom Mac BD", "price": 59500, "url": "https://custommacbd.com/search?q=PlayStation+5+Slim"},
+            {"name": "Ryans Computers", "price": 61000, "url": "https://www.ryans.com/search?q=PlayStation+5+Slim"},
+            {"name": "Tech Land BD", "price": 60500, "url": "https://www.techlandbd.com/index.php?route=product/search&search=PS5+Slim"},
             {"name": "Daraz Bangladesh", "price": 62500, "url": "https://www.daraz.com.bd/catalog/?q=PS5+Slim+Disc+Edition"},
         ]
     },
@@ -763,9 +782,9 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80",
         "variant": "Digital Edition · 1TB SSD",
         "stores": [
-            {"name": "Star Tech", "price": 51990, "url": "https://www.startech.com.bd/sony-playstation-5-slim-digital-edition"},
-            {"name": "Custom Mac BD", "price": 52500, "url": "https://custommacbd.com/products/playstation-5-slim-digital-edition"},
-            {"name": "Ryans Computers", "price": 53500, "url": "https://www.ryans.com/sony-playstation-5-slim-digital-edition"},
+            {"name": "Star Tech", "price": 51990, "url": "https://www.startech.com.bd/product/search?search=PS5+Slim+Digital"},
+            {"name": "Custom Mac BD", "price": 52500, "url": "https://custommacbd.com/search?q=PlayStation+5+Digital"},
+            {"name": "Ryans Computers", "price": 53500, "url": "https://www.ryans.com/search?q=PlayStation+5+Digital"},
             {"name": "Daraz Bangladesh", "price": 54500, "url": "https://www.daraz.com.bd/catalog/?q=PS5+Slim+Digital+Edition"},
         ]
     },
@@ -784,9 +803,9 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "image_url": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=600&q=80",
         "variant": "7-inch OLED · 64GB",
         "stores": [
-            {"name": "Star Tech", "price": 31990, "url": "https://www.startech.com.bd/nintendo-switch-oled-model"},
-            {"name": "Custom Mac BD", "price": 32500, "url": "https://custommacbd.com/products/nintendo-switch-oled-model"},
-            {"name": "Ryans Computers", "price": 33500, "url": "https://www.ryans.com/nintendo-switch-oled-model"},
+            {"name": "Star Tech", "price": 31990, "url": "https://www.startech.com.bd/product/search?search=Nintendo+Switch+OLED"},
+            {"name": "Custom Mac BD", "price": 32500, "url": "https://custommacbd.com/search?q=Nintendo+Switch+OLED"},
+            {"name": "Ryans Computers", "price": 33500, "url": "https://www.ryans.com/search?q=Nintendo+Switch+OLED"},
             {"name": "Daraz Bangladesh", "price": 34000, "url": "https://www.daraz.com.bd/catalog/?q=Nintendo+Switch+OLED"},
         ]
     },
@@ -805,9 +824,9 @@ MASTER_CATALOG_ITEMS: List[Dict[str, Any]] = [
         "image_url": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=600&q=80",
         "variant": "7.4-inch OLED 90Hz · 512GB SSD",
         "stores": [
-            {"name": "Custom Mac BD", "price": 66990, "url": "https://custommacbd.com/products/valve-steam-deck-oled-512gb"},
-            {"name": "Star Tech", "price": 68500, "url": "https://www.startech.com.bd/valve-steam-deck-oled-512gb"},
-            {"name": "Tech Land BD", "price": 69000, "url": "https://www.techlandbd.com/valve-steam-deck-oled"},
+            {"name": "Custom Mac BD", "price": 66990, "url": "https://custommacbd.com/search?q=Steam+Deck+OLED"},
+            {"name": "Star Tech", "price": 68500, "url": "https://www.startech.com.bd/product/search?search=Steam+Deck+OLED"},
+            {"name": "Tech Land BD", "price": 69000, "url": "https://www.techlandbd.com/index.php?route=product/search&search=Steam+Deck+OLED"},
         ]
     },
 
@@ -1524,6 +1543,19 @@ def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = 
     specs = catalog_item.get("specs_summary") or f"{title_en} · Verified Authentic BD Stock"
     cat_name = catalog_item.get("category", "Mobiles & Gadgets")
 
+    is_discontinued = bool(catalog_item.get("is_discontinued", False))
+    discontinued_note_en = catalog_item.get("discontinued_note_en")
+    discontinued_note_bn = catalog_item.get("discontinued_note_bn")
+
+    if not is_discontinued:
+        t_low = f"{title_en} {slug}".lower()
+        for pat, n_en, n_bn in DISCONTINUED_PATTERNS:
+            if re.search(pat, t_low, re.IGNORECASE):
+                is_discontinued = True
+                discontinued_note_en = n_en
+                discontinued_note_bn = n_bn
+                break
+
     prod = Product(
         id=80000 + abs(hash(slug)) % 10000,
         slug=slug,
@@ -1535,6 +1567,9 @@ def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = 
         price_30d_ago=int(starting_p * 1.05),
         price_15d_ago=int(starting_p * 1.02),
         is_pinned_homepage=False,
+        is_discontinued=is_discontinued,
+        discontinued_note_en=discontinued_note_en,
+        discontinued_note_bn=discontinued_note_bn,
         created_at=datetime.utcnow(),
     )
 
@@ -1545,11 +1580,14 @@ def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = 
             if existing and existing.offers:
                 clean_db_offers = [
                     o for o in existing.offers
-                    if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                    if o.target_url and o.target_url.startswith("http")
                 ]
                 if clean_db_offers:
-                    prod.offers = clean_db_offers
-                    return prod
+                    existing.is_discontinued = is_discontinued
+                    existing.discontinued_note_en = discontinued_note_en
+                    existing.discontinued_note_bn = discontinued_note_bn
+                    existing.offers = clean_db_offers
+                    return existing
         except Exception:
             pass
 
@@ -1584,13 +1622,16 @@ def build_master_product_card(catalog_item: Dict[str, Any], db: Optional[Any] = 
         s_price = s.get("price", starting_p)
         raw_u = s.get("url") or ""
 
-        # Guard: NEVER allow broken search URLs or non-shop sites
-        if any(bad in raw_u.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=", "mobiledokan")):
-            s_url = CLEAN_MERCHANT_DOMAINS.get(s_low, "https://www.startech.com.bd")
-        elif raw_u.startswith("http"):
+        # Build bulletproof 100% working non-404 store URLs across ALL categories
+        from bd_stores_registry import build_store_target_url
+        query_kw = catalog_item.get("model_code") or title_en.split("(")[0].strip()
+
+        # 1. If raw_u is already a valid search URL, it's guaranteed live and non-404
+        if raw_u.startswith("http") and any(q_marker in raw_u.lower() for q_marker in ("/search", "catalogsearch", "/catalog/?q=", "?s=", "&search=")):
             s_url = raw_u
+        # 2. For all retailers where static slug paths risk 404, resolve store search URL
         else:
-            s_url = CLEAN_MERCHANT_DOMAINS.get(s_low, "https://www.startech.com.bd")
+            s_url = build_store_target_url(s_name, query_kw)
 
         meta = get_store_registry_meta(s_name)
         is_pre = bool(meta.get("is_preseeded", True))

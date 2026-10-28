@@ -285,6 +285,9 @@ class ProductBase(BaseModel):
     variant: Optional[str] = None
     is_pinned_homepage: Optional[bool] = True
     homepage_slot_order: Optional[int] = 0
+    is_discontinued: Optional[bool] = False
+    discontinued_note_en: Optional[str] = None
+    discontinued_note_bn: Optional[str] = None
 
 
 class ProductCreate(ProductBase):

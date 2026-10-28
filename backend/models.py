@@ -81,6 +81,9 @@ class Product(Base):
     price_15d_ago = Column(Integer, default=0, nullable=False)
     is_pinned_homepage = Column(Boolean, default=True, nullable=False)
     homepage_slot_order = Column(Integer, default=0, nullable=False)
+    is_discontinued = Column(Boolean, default=False, nullable=True)
+    discontinued_note_en = Column(String(500), nullable=True)
+    discontinued_note_bn = Column(String(500), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     offers = relationship(

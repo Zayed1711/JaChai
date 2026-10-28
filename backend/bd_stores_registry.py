@@ -109,6 +109,7 @@ MERCHANT_SEARCH_TEMPLATES: Dict[str, str] = {
     'khaasfood.com': 'https://khaasfood.com/search?q={q}',
     'kryinternational.com': 'https://kryinternational.com/?s={q}&post_type=product',
     'pcbstorebd.com': 'https://pcbstorebd.com/search?q={q}',
+    'mobiledokan.com': 'https://www.mobiledokan.com/?s={q}',
     'pickaboo.com': 'https://www.pickaboo.com/search-result/{q}',
     'ryans.com': 'https://www.ryans.com/search?q={q}',
     'sailor.clothing': 'https://sailor.clothing/search?q={q}',
@@ -175,6 +176,10 @@ MERCHANT_ALIASES: Dict[str, str] = {
     'sailor bd': 'sailor.clothing',
     'daraz': 'daraz.com.bd',
     'daraz mall': 'daraz.com.bd',
+    'daraz bangladesh': 'daraz.com.bd',
+    'mobile dukan': 'mobiledokan.com',
+    'mobile dukan bd': 'mobiledokan.com',
+    'mobiledokan': 'mobiledokan.com',
 }
 
 # Category name to vertical key mapping

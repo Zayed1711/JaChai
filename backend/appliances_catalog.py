@@ -732,7 +732,7 @@ def build_appliance_product_card(catalog_item: Dict[str, Any], db: Optional[Any]
             if existing and existing.offers:
                 clean_db_offers = [
                     o for o in existing.offers
-                    if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                    if o.target_url and o.target_url.startswith("http")
                 ]
                 if clean_db_offers:
                     prod.offers = clean_db_offers
@@ -763,12 +763,15 @@ def build_appliance_product_card(catalog_item: Dict[str, Any], db: Optional[Any]
         s_price = s.get("price", starting_p)
         raw_u = s.get("url") or ""
 
-        if any(bad in raw_u.lower() for bad in ("/search", "catalogsearch", "/catalog/?q=")):
-            s_url = CLEAN_APPLIANCE_DOMAINS.get(s_low, "https://transcomdigital.com")
-        elif raw_u.startswith("http"):
+        from bd_stores_registry import build_store_target_url
+        query_kw = catalog_item.get("model_code") or title_en.split("(")[0].strip()
+
+        if raw_u.startswith("http") and any(q_marker in raw_u.lower() for q_marker in ("/search", "catalogsearch", "/catalog/?q=", "?s=", "&search=")):
+            s_url = raw_u
+        elif raw_u.startswith("http") and not any(bad in raw_u.lower() for bad in ("mobiledokan", "gsmarena")):
             s_url = raw_u
         else:
-            s_url = CLEAN_APPLIANCE_DOMAINS.get(s_low, "https://transcomdigital.com")
+            s_url = build_store_target_url(s_name, query_kw)
 
         meta = get_store_registry_meta(s_name)
         is_pre = bool(meta.get("is_preseeded", True))

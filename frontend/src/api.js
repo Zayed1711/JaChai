@@ -972,6 +972,9 @@ export function mapProductItem(p) {
     image: p.image_url,
     isPinned: p.is_pinned_homepage !== false,
     isBrowse,
+    isDiscontinued: Boolean(p.is_discontinued),
+    discontinuedNoteEn: p.discontinued_note_en || (p.is_discontinued ? 'Officially Discontinued / Out of Production: Factory production has ceased. Units in the market are dealer-tested pre-owned, refurbished, or remaining distributor stock.' : null),
+    discontinuedNoteBn: p.discontinued_note_bn || (p.is_discontinued ? 'অফিসিয়াল উৎপাদন বন্ধ / মার্কেট-আউট: প্রস্তুতকারক কোম্পানি এর উৎপাদন বন্ধ করেছে। বাজারে এগুলো ডিলার-ভেরিফায়েড প্রি-ওউনড, রিফার্বিশড বা অবশিষ্ট ডিস্ট্রিবিউটর স্টক হিসেবে পাওয়া যাচ্ছে।' : null),
     pastPrices,
     offers,
   };

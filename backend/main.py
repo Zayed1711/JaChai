@@ -1013,6 +1013,7 @@ async def search_suggestions(q: Optional[str] = Query(None, description="Prefix 
 
 
 @app.get("/api/v1/search/live", response_model=List[ProductResponse])
+@app.get("/api/v1/search", response_model=List[ProductResponse])
 async def search_products_live(
     request: Request,
     q: Optional[str] = Query(None, description="Product query to search and scrape dynamically"),
@@ -1279,6 +1280,15 @@ def get_product_offers(slug: str, db: Session = Depends(get_db)):
         .first()
     )
     if not product:
+        try:
+            from master_catalog import match_master_catalog, build_master_product_card
+            cat_item = match_master_catalog(slug)
+            if cat_item:
+                product = build_master_product_card(cat_item, db)
+        except Exception:
+            pass
+
+    if not product:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Product with slug '{slug}' not found.",
@@ -1405,12 +1415,12 @@ async def track_offer_click(
             db.commit()
             target_url = healed_url
         elif should_failover:
-            from bd_stores_registry import get_store_facebook_fallback_url
-            fb_url = get_store_facebook_fallback_url(offer.store_name, prod_title)
-            offer.target_url = fb_url
-            offer.spider_status = "fb_fallback"
+            from bd_stores_registry import build_store_target_url
+            target_store_url = build_store_target_url(offer.store_name, prod_title)
+            offer.target_url = target_store_url
+            offer.spider_status = "search_failover"
             db.commit()
-            target_url = fb_url
+            target_url = target_store_url
 
     safe_target = sanitize_redirect_url(target_url, fallback="https://www.google.com")
 

@@ -23,7 +23,7 @@ REDMI_XIAOMI_CATALOG_ITEMS = [
             {"name": "Star Tech", "price": 18499, "url": "https://www.startech.com.bd/redmi-note-13"},
             {"name": "Apple Gadgets BD", "price": 18990, "url": "https://www.applegadgetsbd.com/product/redmi-note-13"},
             {"name": "Pickaboo", "price": 19499, "url": "https://www.pickaboo.com/product/redmi-note-13"},
-            {"name": "Daraz Bangladesh", "price": 19990, "url": "https://www.daraz.com.bd/products/redmi-note-13"},
+            {"name": "Daraz Bangladesh", "price": 19990, "url": "https://www.daraz.com.bd/catalog/?q=Redmi+Note+13"},
         ]
     },
     {
@@ -231,7 +231,7 @@ REDMI_XIAOMI_CATALOG_ITEMS = [
             {"name": "Pickaboo", "price": 12990, "url": "https://www.pickaboo.com/product/xiaomi-redmi-13c"},
             {"name": "Star Tech", "price": 13200, "url": "https://www.startech.com.bd/redmi-13c"},
             {"name": "Apple Gadgets BD", "price": 13500, "url": "https://www.applegadgetsbd.com/product/redmi-13c"},
-            {"name": "Daraz Bangladesh", "price": 13499, "url": "https://www.daraz.com.bd/products/redmi-13c"},
+            {"name": "Daraz Bangladesh", "price": 13499, "url": "https://www.daraz.com.bd/catalog/?q=Redmi+13C"},
         ]
     },
     {
@@ -342,7 +342,7 @@ REDMI_XIAOMI_CATALOG_ITEMS = [
         "stores": [
             {"name": "Pickaboo", "price": 13990, "url": "https://www.pickaboo.com/product/xiaomi-redmi-12"},
             {"name": "Star Tech", "price": 14200, "url": "https://www.startech.com.bd/redmi-12"},
-            {"name": "Daraz Bangladesh", "price": 14499, "url": "https://www.daraz.com.bd/products/redmi-12"},
+            {"name": "Daraz Bangladesh", "price": 14499, "url": "https://www.daraz.com.bd/catalog/?q=Redmi+12"},
         ]
     },
     {
@@ -386,7 +386,7 @@ REDMI_XIAOMI_CATALOG_ITEMS = [
         "stores": [
             {"name": "Star Tech", "price": 9490, "url": "https://www.startech.com.bd/redmi-a3"},
             {"name": "Pickaboo", "price": 9800, "url": "https://www.pickaboo.com/product/redmi-a3"},
-            {"name": "Daraz Bangladesh", "price": 9990, "url": "https://www.daraz.com.bd/products/redmi-a3"},
+            {"name": "Daraz Bangladesh", "price": 9990, "url": "https://www.daraz.com.bd/catalog/?q=Redmi+A3"},
         ]
     },
     {
@@ -430,7 +430,7 @@ REDMI_XIAOMI_CATALOG_ITEMS = [
         "stores": [
             {"name": "Star Tech", "price": 8990, "url": "https://www.startech.com.bd/redmi-a3x"},
             {"name": "Pickaboo", "price": 9200, "url": "https://www.pickaboo.com/product/redmi-a3x"},
-            {"name": "Daraz Bangladesh", "price": 9499, "url": "https://www.daraz.com.bd/products/redmi-a3x"},
+            {"name": "Daraz Bangladesh", "price": 9499, "url": "https://www.daraz.com.bd/catalog/?q=Redmi+A3x"},
         ]
     },
     {

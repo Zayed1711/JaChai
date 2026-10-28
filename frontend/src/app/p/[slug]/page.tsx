@@ -11,7 +11,7 @@ import {
 } from "@/lib/api";
 import OfferCard from "@/components/OfferCard";
 import PriceHistoryChart from "@/components/PriceHistoryChart";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -107,6 +107,21 @@ export default function ProductDetailPage() {
         <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
           {data.product_name}
         </h1>
+
+        {data.is_discontinued && (
+          <div className="mt-4 p-4 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-100 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <div className="text-xs font-black uppercase tracking-wider text-amber-400">
+                Officially Discontinued / Out of Production (মার্কেট-আউট)
+              </div>
+              <p className="text-xs text-amber-200/90 mt-1 leading-relaxed font-medium">
+                {data.discontinued_note_en ||
+                  "Manufacturer factory production has ceased for this generation. Verified stock in Bangladesh is dealer-tested pre-owned, refurbished, or remaining collector stock."}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Lowest Price Callout */}

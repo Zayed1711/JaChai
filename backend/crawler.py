@@ -2107,7 +2107,21 @@ def rank_and_filter_serp_products(products: List[Product], query_str: str) -> Li
         scored.append((score, prod))
 
     scored.sort(key=lambda x: x[0], reverse=True)
-    return [p for s, p in scored if s > 0]
+    results = [p for s, p in scored if s > 0]
+    try:
+        from master_catalog import DISCONTINUED_PATTERNS
+        for prod in results:
+            if not getattr(prod, "is_discontinued", False):
+                t_low = f"{prod.title_en or ''} {prod.slug or ''}".lower()
+                for pat, n_en, n_bn in DISCONTINUED_PATTERNS:
+                    if re.search(pat, t_low, re.IGNORECASE):
+                        prod.is_discontinued = True
+                        prod.discontinued_note_en = n_en
+                        prod.discontinued_note_bn = n_bn
+                        break
+    except Exception:
+        pass
+    return results
 
 VERIFIED_REGISTRY_FALLBACKS = {
     "mobile-gadgets": [
@@ -2473,7 +2487,7 @@ async def live_meta_search_and_persist(
                 if existing and getattr(existing, "offers", None):
                     clean_offers = [
                         o for o in existing.offers
-                        if o.target_url and not any(sq in o.target_url.lower() for sq in ("/search?q=", "/catalog/?q=", "catalogsearch"))
+                        if o.target_url and o.target_url.startswith("http")
                     ]
                     if len(clean_offers) >= 3:
                         existing.offers = clean_offers
