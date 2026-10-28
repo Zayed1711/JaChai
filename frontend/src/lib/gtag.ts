@@ -3,11 +3,11 @@
  * Enables zero-latency event tracking and route change instrumentation.
  */
 
-export const getGAId = (): string | undefined => {
+export const getGAId = (): string => {
   return (
     (typeof process !== 'undefined' &&
       (process.env?.NEXT_PUBLIC_GA_MEASUREMENT_ID || process.env?.NEXT_PUBLIC_GA_ID)) ||
-    undefined
+    'G-XNKQ2NC3YG'
   );
 };
 
@@ -24,3 +24,4 @@ export const trackGAEvent = (action: string, params?: Record<string, any>) => {
     (window as any).gtag('event', action, params || {});
   }
 };
+

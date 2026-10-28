@@ -6,7 +6,8 @@ import Script from "next/script";
 export default function GoogleAnalytics() {
   const gaId =
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
-    process.env.NEXT_PUBLIC_GA_ID;
+    process.env.NEXT_PUBLIC_GA_ID ||
+    'G-XNKQ2NC3YG';
 
   if (!gaId) {
     return null;
@@ -36,3 +37,4 @@ export default function GoogleAnalytics() {
     </>
   );
 }
+
