@@ -161,6 +161,9 @@ def seed_default_homepage_blocks(db: Session):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Ensure schema migrations run before any database queries
+    from database import auto_migrate_schema
+    auto_migrate_schema(engine)
     # Ensure tables are created
     Base.metadata.create_all(bind=engine)
     # Automatically seed initial database if empty
