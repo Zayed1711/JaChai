@@ -60,7 +60,7 @@ except ImportError:
         CATEGORY_REGISTRY_MAP,
     )
     from slm_organizer import call_ollama_linguistic_router, slm_verify_candidate
-from llm_reasoner import (
+    from llm_reasoner import (
         analyze_search_intent,
         verify_and_filter_candidates,
         is_bangladesh_store_url,

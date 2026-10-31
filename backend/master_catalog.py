@@ -31,7 +31,7 @@ except ImportError:
 
 # Discontinued / Out-of-Production Intelligence Patterns
 DISCONTINUED_PATTERNS = [
-    (r"\b(playstation\s*4|ps4|playstation\s*3|ps3|playstation\s*2|ps2|psp|ps\s*vita)\b",
+    (r"\b(playstation\s*4|ps4|playstation\s*3|ps3|playstation\s*2|ps2|psp|playstation\s*vita|ps\s*vita)\b",
      "Officially Discontinued / Out of Production: Sony has ceased new factory production for this generation. Verified units in Bangladesh are dealer-tested pre-owned, refurbished, or collector stock.",
      "অফিসিয়াল উৎপাদন বন্ধ / মার্কেট-আউট: সোনি আনুষ্ঠানিকভাবে এই প্রজন্মের নতুন উৎপাদন বন্ধ করেছে। বাংলাদেশে এগুলো ডিলার-টেস্টেড প্রি-ওউনড, রিফার্বিশড বা কালেক্টর স্টক হিসেবে পাওয়া যাচ্ছে।"),
     (r"\b(xbox\s*360|xbox\s*one(\s*s|\s*x)?)\b",
