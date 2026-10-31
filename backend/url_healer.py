@@ -21,8 +21,9 @@ UA = (
     "Chrome/124.0.0.0 Safari/537.36"
 )
 
-# Soft-404 phrases commonly shown on Bangladeshi e-commerce sites when a product/search is empty
+# Soft-404 phrases commonly shown on Bangladeshi and international e-commerce sites when a product/search is empty
 SOFT_404_PATTERNS = (
+    # English footprints
     "page not found",
     "404 not found",
     "error 404",
@@ -32,11 +33,163 @@ SOFT_404_PATTERNS = (
     "there is no product that matches",
     "your search returned no results",
     "0 results for",
+    "0 products found",
     "nothing found",
     "oops! that page can",
     "sorry, no results",
     "we couldn't find any",
+    "this item is no longer available",
+    "this product is no longer available",
+    "item not found",
+    "item is discontinued",
+    "product unavailable",
+    "does not exist",
+    "not available in our store",
+    "currently unavailable",
+    # Bengali footprints (common on BD retail platforms)
+    "পণ্যটি পাওয়া যায়নি",
+    "পণ্যটি পাওয়া যায়নি",
+    "কোন পণ্য পাওয়া যায়নি",
+    "কোনো পণ্য পাওয়া যায়নি",
+    "কোনো পণ্য খুঁজে পাওয়া যায়নি",
+    "কোন পণ্য খুঁজে পাওয়া যায়নি",
+    "কোন পণ্য মেলেনি",
+    "স্টক আউট",
+    "স্টক শেষ",
+    "বর্তমানে পাওয়া যাচ্ছে না",
+    "বর্তমানে পাওয়া যাচ্ছে না",
+    "বর্তমানে পণ্যটি স্টকে নেই",
+    "পণ্যটি খুঁজে পাওয়া যায়নি",
+    "পণ্যটি খুঁজে পাওয়া যায়নি",
+    "পৃষ্ঠাটি পাওয়া যায়নি",
+    "পৃষ্ঠাটি পাওয়া যায়নি",
+    "ফলাফল পাওয়া যায়নি",
+    "ফলাফল পাওয়া যায়নি",
 )
+
+def classify_soft_404(
+    html_or_snippet: str,
+    title: Optional[str] = None,
+    h1: Optional[str] = None,
+) -> Tuple[bool, Optional[str]]:
+    """
+    Advanced Bilingual Soft-404 Classifier (Pillar 3):
+    Detects custom error pages and empty search results returning HTTP 200 OK.
+    Inspects <title>, <h1>, <h2>, and HTML body snippets for dead link patterns.
+    """
+    if not html_or_snippet:
+        return True, "empty_content"
+
+    text_low = html_or_snippet[:40000].lower()
+
+    # 1. Inspect title tag if available or extract from HTML
+    if title is None and "<title" in text_low:
+        m = re.search(r"<title[^>]*>(.*?)</title>", text_low, re.DOTALL | re.IGNORECASE)
+        if m:
+            title = m.group(1).strip()
+
+    if title:
+        t_low = title.lower()
+        if any(bad in t_low for bad in ("404", "not found", "paoya jayni", "পাওয়া যায়নি", "পাওয়া যায়নি", "page not found")):
+            return True, f"title_soft_404: {title[:60]}"
+
+    # 2. Inspect h1 / h2 tag if available or extract from snippet
+    if h1 is None and ("<h1" in text_low or "<h2" in text_low):
+        headers = re.findall(r"<h[12][^>]*>(.*?)</h[12]>", text_low, re.DOTALL | re.IGNORECASE)
+        h1 = " ".join(headers).strip()
+
+    if h1:
+        h_low = re.sub(r"<[^>]+>", " ", h1).lower()
+        if any(bad in h_low for bad in ("404", "not found", "no products", "no results", "পাওয়া যায়নি", "পাওয়া যায়নি", "খুঁজে পাওয়া যায়নি")):
+            return True, f"header_soft_404: {h_low[:60]}"
+
+    # 3. Check meta robots noindex
+    if '<meta name="robots" content="noindex' in text_low or "<meta name='robots' content='noindex" in text_low:
+        return True, "meta_robots_noindex"
+
+    # 4. Keyword scan across snippet
+    for bad in SOFT_404_PATTERNS:
+        if bad in text_low:
+            return True, f"body_soft_404_match: {bad}"
+
+    return False, None
+
+
+async def fast_preflight_check(
+    client: httpx.AsyncClient,
+    url: str,
+    timeout: float = 3.5,
+) -> Tuple[bool, int, str, Optional[str]]:
+    """
+    Pre-Flight Status & Soft-404 Validator (Pillars 1 & 3):
+    1. Sends HTTP HEAD request with browser headers.
+    2. If the server returns 405 (Method Not Allowed) or 403 (Cloudflare/WAF block on HEAD),
+       falls back to a Streaming GET reading only headers and the first 4KB of HTML,
+       then immediately terminates the connection without downloading heavy assets.
+    3. Detects redirects (301/302) and canonical destination URLs.
+    4. Evaluates the initial HTML buffer through the Bilingual Soft-404 Classifier.
+
+    Returns:
+        (is_alive: bool, status_code: int, final_url: str, html_snippet: Optional[str])
+    """
+    if not url or not url.startswith("http"):
+        return False, 400, url, None
+
+    headers = {
+        "User-Agent": UA,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9,bn;q=0.8",
+    }
+
+    # Step 1: Optimistic HTTP HEAD
+    try:
+        head_resp = await client.head(url, headers=headers, follow_redirects=True, timeout=timeout)
+        status = head_resp.status_code
+        final_url = str(head_resp.url)
+
+        # Standard hard errors
+        if status in (404, 410, 500, 502, 503, 504):
+            return False, status, final_url, None
+
+        # If HEAD succeeds with 200, we still need a small body snippet to verify Soft-404
+        if status == 200:
+            # Quick check if server sent content-length of 0
+            cl = head_resp.headers.get("content-length")
+            if cl == "0":
+                return False, status, final_url, ""
+            # Proceed to streaming snippet check below
+    except Exception:
+        # Fall through to Streaming GET fallback
+        pass
+
+    # Step 2: Streaming GET Fallback (reads up to 4KB of HTML then aborts)
+    try:
+        async with client.stream("GET", url, headers=headers, follow_redirects=True, timeout=timeout) as stream_resp:
+            status = stream_resp.status_code
+            final_url = str(stream_resp.url)
+
+            if status in (404, 410, 500, 502, 503, 504):
+                return False, status, final_url, None
+
+            # Read first 4KB chunks
+            chunks = []
+            total_bytes = 0
+            async for chunk in stream_resp.aiter_bytes():
+                chunks.append(chunk)
+                total_bytes += len(chunk)
+                if total_bytes >= 4096:
+                    break
+
+            snippet = b"".join(chunks).decode("utf-8", errors="ignore")
+
+            # Step 3: Run Soft-404 classifier on the snippet
+            is_soft, reason = classify_soft_404(snippet)
+            if is_soft:
+                return False, 200, final_url, snippet
+
+            return True, status, final_url, snippet
+    except Exception:
+        return False, 500, url, None
 
 # Curated Category Landing Pages for major Bangladeshi retailers
 STORE_CATEGORY_PAGES: Dict[str, Dict[str, str]] = {
@@ -226,17 +379,18 @@ def is_page_alive_and_has_products(
 ) -> bool:
     """
     Strict Product-Presence Validator for Tier 1 (Product URL) & Tier 2 (Search URL):
-      - Must return HTTP 200 OK (if a deep link returns 403/404/500, we heal to the Category Page!).
-      - Must NOT contain any Soft-404 text.
+      - Must return HTTP 200 OK.
+      - Must pass the Bilingual Soft-404 Classifier (title, h1/h2, body text).
       - Must contain actual BDT product prices AND at least 1 product card or JSON-LD Product matching the query!
     """
     if resp.status_code != 200 or not resp.text:
         return False
 
+    is_soft, _ = classify_soft_404(resp.text)
+    if is_soft:
+        return False
+
     text_low = resp.text[:50000].lower()
-    for bad in SOFT_404_PATTERNS:
-        if bad in text_low:
-            return False
 
     if is_search_or_product:
         from adapters import parse_prices, parse_cards, SPECS

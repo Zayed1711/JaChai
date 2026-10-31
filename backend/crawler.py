@@ -335,6 +335,15 @@ def extract_price_from_html(
     except Exception:
         soup = BeautifulSoup(html, "html.parser")
 
+    # Fast Soft-404 rejection: if page is a soft error, do not extract phantom prices
+    try:
+        from url_healer import classify_soft_404
+        is_soft, _ = classify_soft_404(html)
+        if is_soft:
+            return None, False
+    except Exception:
+        pass
+
     page_text_lower = soup.get_text().lower()
     out_of_stock_indicators = [
         "out of stock", "stock out", "upcoming", "sold out",
@@ -3302,24 +3311,46 @@ async def scrape_single_offer(
     if not is_placeholder and not simulate_live_market:
         try:
             start_t = time.time()
-            async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
-                resp = await client.get(url, headers=headers)
+            from url_healer import fast_preflight_check, classify_soft_404
+            async with httpx.AsyncClient(timeout=8.0, follow_redirects=True, verify=False) as client:
+                # Pillar 1 & 3: Resilient Pre-Flight Status & Soft-404 Check
+                is_alive, status_code, final_url, snippet = await fast_preflight_check(
+                    client=client, url=url, timeout=3.5
+                )
                 latency_ms = int((time.time() - start_t) * 1000)
 
-                if resp.status_code >= 400:
+                if not is_alive or status_code in (404, 410) or status_code >= 500:
                     spider_status = "broken"
+                    in_stock = False
                 else:
-                    extracted_price, in_stock = extract_price_from_html(
-                        resp.text, offer.css_selector
-                    )
-                    if extracted_price is None:
-                        spider_status = "selector_broken"
-                    elif latency_ms > 4000:
-                        spider_status = "slow"
+                    # Pillar 2: Follow & persist 301/302 redirects back into the database
+                    if final_url and final_url != url:
+                        offer.target_url = final_url
+                        url = final_url
+                        db.commit()
+
+                    # Fetch full HTML for verified live page
+                    resp = await client.get(url, headers=headers)
+                    latency_ms = int((time.time() - start_t) * 1000)
+
+                    # Soft-404 verification on full body
+                    is_soft, _ = classify_soft_404(resp.text)
+                    if is_soft:
+                        spider_status = "out_of_stock"
+                        in_stock = False
                     else:
-                        spider_status = "healthy"
+                        extracted_price, in_stock = extract_price_from_html(
+                            resp.text, offer.css_selector
+                        )
+                        if extracted_price is None:
+                            spider_status = "selector_broken"
+                        elif latency_ms > 4000:
+                            spider_status = "slow"
+                        else:
+                            spider_status = "healthy"
         except Exception:
             spider_status = "broken"
+            in_stock = False
 
     if (extracted_price is None or is_placeholder) and simulate_live_market:
         pct_delta = random.choice([-0.02, 0.0, 0.0, 0.03, -0.01])
@@ -3365,7 +3396,10 @@ async def run_all_spiders(
     db: Session, product_id: Optional[int] = None, simulate_live_market: bool = False
 ) -> dict:
     """
-    Crawls matched StoreOffer records using asyncio with Semaphore(5) concurrency.
+    Decoupled 3-Stage Pipeline (Google AI Search Architecture - Pillar 4):
+      Stage 1: Discovery Queue (Ingests target crawler offers).
+      Stage 2: Validation Workers (Optimistic HEAD / Stream GET & Soft-404 rejection).
+      Stage 3: Deep Extraction Workers (Price extraction & PriceHistory sync).
     Commits changes and returns comprehensive summary metrics.
     """
     query = db.query(StoreOffer).filter(StoreOffer.source_type == "crawler")
@@ -3373,35 +3407,143 @@ async def run_all_spiders(
         query = query.filter(StoreOffer.product_id == product_id)
 
     crawler_offers = query.all()
-    sem = asyncio.Semaphore(5)
+    if not crawler_offers:
+        return {
+            "total_checked": 0,
+            "updated_count": 0,
+            "healthy_count": 0,
+            "slow_count": 0,
+            "broken_count": 0,
+            "synced_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            "results": [],
+        }
 
-    async def _safe_scrape(off_id: int):
-        async with sem:
-            return await scrape_single_offer(
-                off_id, db, simulate_live_market=simulate_live_market
-            )
+    if simulate_live_market:
+        sem = asyncio.Semaphore(5)
+        async def _safe_scrape(off_id: int):
+            async with sem:
+                return await scrape_single_offer(
+                    off_id, db, simulate_live_market=True
+                )
+        tasks = [_safe_scrape(o.id) for o in crawler_offers]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        raw_results = [r for r in results if isinstance(r, dict)]
+        healthy_count = sum(1 for r in raw_results if r.get("spider_status") == "healthy")
+        slow_count = sum(1 for r in raw_results if r.get("spider_status") == "slow")
+        broken_count = sum(1 for r in raw_results if r.get("spider_status") in ("broken", "selector_broken"))
+        updated_count = sum(1 for r in raw_results if r.get("price_updated"))
+        return {
+            "total_checked": len(crawler_offers),
+            "updated_count": updated_count,
+            "healthy_count": healthy_count,
+            "slow_count": slow_count,
+            "broken_count": broken_count,
+            "synced_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            "results": raw_results,
+        }
 
-    tasks = [_safe_scrape(o.id) for o in crawler_offers]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
+    # =========================================================================
+    # DECOUPLED QUEUE ARCHITECTURE (STAGES 1, 2, 3)
+    # =========================================================================
+    from url_healer import fast_preflight_check
 
-    healthy_count = 0
-    slow_count = 0
-    broken_count = 0
-    updated_count = 0
+    discovery_queue: asyncio.Queue = asyncio.Queue()
+    verified_queue: asyncio.Queue = asyncio.Queue()
+    final_results: list = []
+    results_lock = asyncio.Lock()
 
-    for res in results:
-        if isinstance(res, dict):
-            status = res.get("spider_status")
-            if status == "healthy":
-                healthy_count += 1
-            elif status == "slow":
-                slow_count += 1
-            elif status in ("broken", "selector_broken"):
-                broken_count += 1
+    # Stage 1: Load Discovery Queue with all candidates
+    for off in crawler_offers:
+        await discovery_queue.put(off.id)
 
-            if res.get("price_updated"):
-                updated_count += 1
+    # Stage 2: Validation Workers (Fast Pre-Flight + Soft-404 Filtering)
+    async def validation_worker():
+        while not discovery_queue.empty():
+            try:
+                off_id = discovery_queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
 
+            off = db.query(StoreOffer).filter(StoreOffer.id == off_id).first()
+            if not off or not off.target_url or not off.target_url.startswith("http"):
+                discovery_queue.task_done()
+                continue
+
+            try:
+                async with httpx.AsyncClient(timeout=4.0, follow_redirects=True, verify=False) as client:
+                    is_alive, status_code, final_url, snippet = await fast_preflight_check(
+                        client=client, url=off.target_url, timeout=3.5
+                    )
+
+                if not is_alive or status_code in (404, 410) or status_code >= 500:
+                    off.spider_status = "broken"
+                    off.in_stock = False
+                    off.last_synced_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                    db.commit()
+                    async with results_lock:
+                        final_results.append({
+                            "offer_id": off.id,
+                            "store_name": off.store_name,
+                            "spider_status": "broken",
+                            "in_stock": False,
+                            "current_price": off.current_price,
+                            "price_updated": False,
+                        })
+                else:
+                    # Persist canonical redirect URL if link moved
+                    if final_url and final_url != off.target_url:
+                        off.target_url = final_url
+                        db.commit()
+
+                    # Hand off validated alive link to Stage 3 Extraction
+                    await verified_queue.put(off.id)
+            except Exception:
+                off.spider_status = "broken"
+                off.in_stock = False
+                off.last_synced_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                db.commit()
+                async with results_lock:
+                    final_results.append({
+                        "offer_id": off.id,
+                        "store_name": off.store_name,
+                        "spider_status": "broken",
+                        "in_stock": False,
+                        "current_price": off.current_price,
+                        "price_updated": False,
+                    })
+            finally:
+                discovery_queue.task_done()
+
+    # Stage 3: Extraction Workers (Deep Parsing & PriceHistory Sync)
+    async def extraction_worker():
+        while True:
+            try:
+                off_id = await asyncio.wait_for(verified_queue.get(), timeout=1.2)
+            except asyncio.TimeoutError:
+                if discovery_queue.empty() and verified_queue.empty():
+                    break
+                continue
+
+            try:
+                res = await scrape_single_offer(off_id, db, simulate_live_market=False)
+                async with results_lock:
+                    final_results.append(res)
+            except Exception:
+                pass
+            finally:
+                verified_queue.task_done()
+
+    # Spawn 4 validation workers and 3 extraction workers concurrently
+    val_workers = [asyncio.create_task(validation_worker()) for _ in range(4)]
+    ext_workers = [asyncio.create_task(extraction_worker()) for _ in range(3)]
+
+    await asyncio.gather(*val_workers)
+    await asyncio.gather(*ext_workers)
+
+    healthy_count = sum(1 for r in final_results if r.get("spider_status") == "healthy")
+    slow_count = sum(1 for r in final_results if r.get("spider_status") == "slow")
+    broken_count = sum(1 for r in final_results if r.get("spider_status") in ("broken", "selector_broken"))
+    updated_count = sum(1 for r in final_results if r.get("price_updated"))
     synced_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     return {
@@ -3411,7 +3553,7 @@ async def run_all_spiders(
         "slow_count": slow_count,
         "broken_count": broken_count,
         "synced_at": synced_at,
-        "results": [r for r in results if isinstance(r, dict)],
+        "results": final_results,
     }
 
 def enforce_device_price_floor(query: str, items: list) -> list:

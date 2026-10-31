@@ -1363,43 +1363,28 @@ async def track_offer_click(
         offer.facebook_url = healed_url
         target_url = healed_url
     elif not is_facebook_target and target_url and target_url.startswith("http"):
-        should_failover = False
+        from url_healer import fast_preflight_check, resolve_and_heal_offer_url
         is_broken_product_page = False
-        try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.9,bn;q=0.8",
-            }
-            async with httpx.AsyncClient(timeout=2.5, follow_redirects=True, headers=headers) as client:
-                status_code = None
-                resp_text = ""
-                try:
-                    res = await client.head(target_url)
-                    status_code = res.status_code
-                    if status_code in (405, 404):
-                        res = await client.get(target_url)
-                        status_code = res.status_code
-                        resp_text = getattr(res, "text", "") or ""
-                except Exception:
-                    res = await client.get(target_url)
-                    status_code = res.status_code
-                    resp_text = getattr(res, "text", "") or ""
 
-                if status_code in (404, 410):
-                    is_broken_product_page = True
-                elif not check_merchant_url_liveness(status_code=status_code):
-                    should_failover = True
-                elif resp_text and isinstance(resp_text, str):
-                    from url_healer import SOFT_404_PATTERNS
-                    t_low = resp_text[:30000].lower()
-                    if any(pat in t_low for pat in SOFT_404_PATTERNS):
-                        is_broken_product_page = True
+        try:
+            async with httpx.AsyncClient(verify=False) as client:
+                is_alive, status_code, final_url, snippet = await fast_preflight_check(
+                    client=client, url=target_url, timeout=3.5
+                )
+
+            if not is_alive or status_code in (404, 410) or not check_merchant_url_liveness(status_code=status_code):
+                is_broken_product_page = True
+            elif is_alive and final_url and final_url != target_url:
+                # Pillar 2: Persistent 301/302 Redirect Writeback
+                offer.target_url = final_url
+                if offer.website_url and "facebook.com" not in final_url:
+                    offer.website_url = final_url
+                db.commit()
+                target_url = final_url
         except Exception:
-            should_failover = True
+            is_broken_product_page = True
 
         if is_broken_product_page:
-            from url_healer import resolve_and_heal_offer_url
             healed_url, stage = await resolve_and_heal_offer_url(
                 store_name=offer.store_name,
                 current_url=target_url,
@@ -1417,13 +1402,6 @@ async def track_offer_click(
                 offer.spider_status = "fb_fallback"
             db.commit()
             target_url = healed_url
-        elif should_failover:
-            from bd_stores_registry import build_store_target_url
-            target_store_url = build_store_target_url(offer.store_name, prod_title)
-            offer.target_url = target_store_url
-            offer.spider_status = "search_failover"
-            db.commit()
-            target_url = target_store_url
 
     safe_target = sanitize_redirect_url(target_url, fallback="https://www.google.com")
 
