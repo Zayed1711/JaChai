@@ -112,7 +112,8 @@ class TickerAdUpdate(BaseModel):
 
 
 class TickerSpeedUpdate(BaseModel):
-    glide_speed_sec: int
+    glide_speed_sec: Optional[int] = None
+    speed_sec: Optional[int] = None
 
 
 class TickerAdResponse(TickerAdBase):
@@ -274,7 +275,7 @@ class PriceHistoryResponse(PriceHistoryBase):
 # 6. PRODUCT SCHEMAS (Catalog)
 # ==========================================
 class ProductBase(BaseModel):
-    slug: str
+    slug: Optional[str] = None
     title_en: str
     title_bn: str
     category: str

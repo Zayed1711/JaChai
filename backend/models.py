@@ -108,6 +108,10 @@ class Product(Base):
             return " · ".join(m.strip() for m in matches)
         return None
 
+    @variant.setter
+    def variant(self, val: Optional[str]) -> None:
+        pass
+
 
 class StoreOffer(Base):
     __tablename__ = "store_offers"

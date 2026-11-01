@@ -1514,6 +1514,7 @@ export default function AdminCommandCenter({
 
     try {
       const res = await apiCreateProduct({
+        slug: cleanKey,
         title_en: newProduct.nameEn,
         title_bn: newProduct.nameBn || newProduct.nameEn,
         category: newProduct.category,
@@ -1527,6 +1528,23 @@ export default function AdminCommandCenter({
         setProducts((prev) =>
           prev.map((p) => (p.id === tempId ? { ...p, id: res.id, key: res.slug || p.key } : p))
         );
+        if (newProduct.price) {
+          try {
+            await apiCreateOffer({
+              product_id: res.id,
+              store_name: 'Primary Verified Distributor',
+              current_price: Number(newProduct.price),
+              original_price: Number(newProduct.originalPrice || newProduct.price),
+              cod_terms_en: 'Cash on Delivery · Verified Courier',
+              warranty_text: 'Official Store Warranty',
+              source_type: 'f_commerce',
+              target_url: 'https://',
+              in_stock: true
+            });
+          } catch (offerErr) {
+            console.warn('Initial offer create note:', offerErr);
+          }
+        }
       }
     } catch (err) {
       console.warn('API create product error:', err);

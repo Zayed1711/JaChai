@@ -816,6 +816,7 @@ def get_merchant_leaderboard(
         "category": category,
         "pillar": pillar,
         "total_stores_ranked": len(unique_stores),
+        "total_ranked": len(unique_stores),
         "stores": ranked_list[:limit],
     }
     LEADERBOARD_CACHE[cache_key] = (now_ts, resp_payload)
@@ -1967,9 +1968,12 @@ def update_ticker_speed(
     db: Session = Depends(get_db),
     admin_auth: dict = Depends(verify_admin_access),
 ):
-    db.query(TickerAd).update({"glide_speed_sec": speed_in.glide_speed_sec})
+    speed = speed_in.glide_speed_sec if speed_in.glide_speed_sec is not None else speed_in.speed_sec
+    if speed is None or speed <= 0:
+        speed = 50
+    db.query(TickerAd).update({"glide_speed_sec": speed})
     db.commit()
-    return {"glide_speed_sec": speed_in.glide_speed_sec}
+    return {"glide_speed_sec": speed}
 
 
 @app.post("/api/v1/admin/products", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
@@ -1978,10 +1982,23 @@ def create_product(
     db: Session = Depends(get_db),
     admin_auth: dict = Depends(verify_admin_access),
 ):
-    existing = db.query(Product).filter(Product.slug == p_in.slug).first()
+    data = p_in.model_dump()
+    data.pop("variant", None)
+    slug = (data.get("slug") or "").strip()
+    if not slug:
+        slug = re.sub(r'[^a-z0-9]+', '-', (p_in.title_en or "product").lower()).strip('-')
+        data["slug"] = slug
+
+    existing = db.query(Product).filter(Product.slug == slug).first()
     if existing:
-        raise HTTPException(status_code=400, detail=f"Product with slug '{p_in.slug}' already exists.")
-    p = Product(**p_in.model_dump())
+        base_slug = slug
+        c = 1
+        while db.query(Product).filter(Product.slug == f"{base_slug}-{c}").first():
+            c += 1
+        slug = f"{base_slug}-{c}"
+        data["slug"] = slug
+
+    p = Product(**data)
     db.add(p)
     db.commit()
     db.refresh(p)
@@ -1999,6 +2016,8 @@ def update_product(
     if not p:
         raise HTTPException(status_code=404, detail="Product not found.")
     for field, val in p_in.model_dump(exclude_unset=True).items():
+        if field == "variant":
+            continue
         setattr(p, field, val)
     db.commit()
     db.refresh(p)

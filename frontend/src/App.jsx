@@ -4417,35 +4417,18 @@ export default function App() {
 
 
 
+    let backendId = null;
     try {
-
-
-
-      await submitAdvertiserLead(leadData);
-
-
-
+      const res = await submitAdvertiserLead(leadData);
+      if (res && res.id) {
+        backendId = res.id;
+      }
     } catch (err) {
-
-
-
       console.warn('API submit advertiser lead error:', err);
-
-
-
     }
 
-
-
-
-
-
-
     const lead = {
-
-
-
-      id: `lead-${Date.now()}`,
+      id: backendId || `lead-${Date.now()}`,
 
 
 
