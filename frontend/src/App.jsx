@@ -340,53 +340,17 @@ const INITIAL_TICKERS = [
 
 
     brandEn: 'BAJUS LIVE GOLD INDEX',
-
-
-
     brandBn: 'বাজুস লাইভ গোল্ড ইনডেক্স',
-
-
-
-    textEn: '22K Hallmarked Gold: ৳1,18,450 / Bhori (11.664g) · Live Rate Tracked Across Verified Jewellers',
-
-
-
-    textBn: '২২ ক্যারেট হলমার্কযুক্ত স্বর্ণের রেট: ৳১,১৮,৪৫০ / ভরি · ভেরিফাইড জুয়েলার্স লাইভ রেট ট্র্যাকড',
-
-
-
+    textEn: '22K Hallmarked Gold: ৳2,17,592 / Bhori (৳18,655/g) · 21K: ৳2,07,794 · 18K: ৳1,78,459 (Slashed by ৳5,481/bhori)',
+    textBn: '২২ ক্যারেট হলমার্ক স্বর্ণ: ৳২,১৭,৫৯২ / ভরি (১৮,৬৫৫ টাকা/গ্রাম) · ২১ ক্যারেট: ৳২,০৭,৭৯৪ (৫,৪৮১ টাকা হ্রাস)',
     targetKey: 'gold-jewellery'
-
-
-
   },
-
-
-
   {
-
-
-
     brandEn: 'LIVE OIL PRICE INDEX',
-
-
-
     brandBn: 'লাইভ তেল বাজার দর',
-
-
-
-    textEn: 'Bottled Soybean Oil: ৳175 / Litre (5L Jar ৳850) · Pure Mustard Oil: ৳260 / L · Fuel Octane: ৳125 / L · Diesel: ৳105 / L',
-
-
-
-    textBn: 'বোতলজাত সয়াবিন তেল: ৳১৭৫ / লিটার (৫ লিটার ৳৮৫০) · খাঁটি সরিষার তেল: ৳২৬০ / লিটার · অকটেন: ৳১২৫ · ডিজেল: ৳১০৫ / লিটার',
-
-
-
+    textEn: 'Bottled Soybean Oil: ৳175 / L (5L ৳850) · Octane: ৳165 / L · Petrol: ৳160 / L · Kerosene: ৳155 / L · Diesel: ৳135 / L',
+    textBn: 'বোতলজাত সয়াবিন তেল: ৳১৭৫ / লিটার (৫ লিটার ৳৮৫০) · অকটেন: ৳১৬৫ · পেট্রোল: ৳১৬০ · কেরোসিন: ৳১৫৫ · ডিজেল: ৳১৩৫ / লিটার',
     targetKey: 'pure-oil-index'
-
-
-
   },
 
 
@@ -2306,56 +2270,56 @@ const INITIAL_HOT_PRODUCTS = [
   {
     id: 1,
     slug: 'gold-hallmark-pricing',
-    title_en: 'Gold (22K & 24K Hallmark Benchmark)',
-    title_bn: 'স্বর্ণ (২২ ও ২৪ ক্যারেট হলমার্ক রেট)',
-    subtitle_en: '24K: ৳154,700/Vori • 22K: ৳141,800/Vori • 21K: ৳135,400/Vori',
-    subtitle_bn: '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি • ২১ ক্যারেট: ৳১৩৫,৪০০/ভরি',
+    title_en: 'Gold (22K & 21K Hallmark Benchmark)',
+    title_bn: 'স্বর্ণ (২২ ও ২১ ক্যারেট হলমার্ক রেট)',
+    subtitle_en: '22K: ৳2,17,592/Bhori • 21K: ৳2,07,794/Bhori • 18K: ৳1,78,459/Bhori (BAJUS Slashed Rate)',
+    subtitle_bn: '২২ ক্যারেট: ৳২,১৭,৫৯২/ভরি • ২১ ক্যারেট: ৳২,০৭,৭৯৪/ভরি • ১৮ ক্যারেট: ৳১,৭৮,৪৫৯/ভরি',
     category_id: 'jewelry-watches',
     search_query: 'gold',
-    current_price: 141800,
-    previous_price: 138500,
+    current_price: 217592,
+    previous_price: 224707,
     unit_en: 'Starts from / Vori',
     unit_bn: 'শুরু / ভরি',
     icon_name: 'Sparkles',
-    price_change_type: 'increase',
-    price_change_amount: 3300,
+    price_change_type: 'decrease',
+    price_change_amount: 5481,
     price_change_percent: 2.4,
-    latest_release_name: '24K Fine Gold: ৳154,700/Vori • 22K Hallmark: ৳141,800/Vori (BAJUS Benchmark)',
-    latest_release_price: 154700,
-    latest_release_badge: '24K Benchmark',
-    latest_release_url: 'https://www.bajus.org/',
+    latest_release_name: '22K Hallmark: ৳2,17,592/Bhori (Down by ৳5,481) • 21K: ৳2,07,794/Bhori',
+    latest_release_price: 217592,
+    latest_release_badge: 'BAJUS Slashed Rate',
+    latest_release_url: 'https://www.bajus.org/gold-price',
     stores: [
-      { name: 'BAJUS Official Benchmark', price: 141800, url: 'https://www.bajus.org/', status: 'National Hallmark' },
-      { name: 'Diamond World BD', price: 141800, url: 'https://diamondworldbd.com/', status: 'Certified 22K/24K' },
-      { name: 'Apan Jewellers', price: 141800, url: 'https://apanjewellers.com/', status: 'Certified 22K/24K' },
-      { name: 'Al-Amin Jewellers', price: 142000, url: 'https://alaminjewellers.com/', status: 'In Stock' }
+      { name: 'BAJUS Official Benchmark', price: 217592, url: 'https://www.bajus.org/gold-price', status: 'National Hallmark' },
+      { name: 'Diamond World BD', price: 217592, url: 'https://diamondworldltd.com/', status: 'Certified 22K/21K' },
+      { name: 'Apan Jewellers', price: 217592, url: 'https://apanjewellers.com/', status: 'Certified 22K/21K' },
+      { name: 'Al-Amin Jewellers', price: 217592, url: 'https://alaminjewellers.com/', status: 'In Stock' }
     ]
   },
   {
     id: 2,
     slug: 'fuel-oil-energy',
-    title_en: 'Fuel (Octane, Diesel, Petrol)',
-    title_bn: 'জ্বালানি তেল (অকটেন, ডিজেল, পেট্রোল)',
-    subtitle_en: 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated)',
-    subtitle_bn: 'অকটেন: ৳১২৫/লিটার • ডিজেল: ৳১০৫/লিটার • পেট্রোল: ৳১২০/লিটার',
+    title_en: 'Fuel (Octane, Diesel, Petrol, Kerosene)',
+    title_bn: 'জ্বালানি তেল (অকটেন, পেট্রোল, কেরোসিন, ডিজেল)',
+    subtitle_en: 'Octane: ৳165/L • Petrol: ৳160/L • Kerosene: ৳155/L • Diesel: ৳135/L (BPC Peak Freeze)',
+    subtitle_bn: 'অকটেন: ৳১৬৫/লিটার • পেট্রোল: ৳১৬০/লিটার • কেরোসিন: ৳১৫৫/লিটার • ডিজেল: ৳১৩৫/লিটার',
     category_id: 'groceries-daily',
-    search_query: 'fuel octane diesel',
-    current_price: 105,
-    previous_price: 105,
+    search_query: 'fuel octane diesel petrol',
+    current_price: 135,
+    previous_price: 135,
     unit_en: 'Starts from / Litre',
     unit_bn: 'শুরু / লিটার',
     icon_name: 'Fuel',
     price_change_type: 'stable',
     price_change_amount: 0,
     price_change_percent: 0.0,
-    latest_release_name: 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L (BPC Regulated Rates)',
-    latest_release_price: 125,
-    latest_release_badge: 'BPC Regulated',
-    latest_release_url: 'https://padmaoil.gov.bd/',
+    latest_release_name: 'Octane: ৳165/L • Petrol: ৳160/L • Kerosene: ৳155/L • Diesel: ৳135/L (BPC Regulated)',
+    latest_release_price: 165,
+    latest_release_badge: 'BPC Peak Freeze',
+    latest_release_url: 'https://bpc.gov.bd/',
     stores: [
-      { name: 'Padma Oil Company Ltd', price: 105, url: 'https://padmaoil.gov.bd/', status: 'Regulated Retail' },
-      { name: 'Meghna Petroleum Ltd', price: 105, url: 'https://mpl.gov.bd/', status: 'Regulated Retail' },
-      { name: 'Jamuna Oil Company Ltd', price: 105, url: 'https://jamunaoil.gov.bd/', status: 'Regulated Retail' }
+      { name: 'Padma Oil Company Ltd', price: 135, url: 'https://padmaoil.gov.bd/', status: 'Regulated Retail (Diesel)' },
+      { name: 'Meghna Petroleum Ltd', price: 160, url: 'https://mpl.gov.bd/', status: 'Regulated Retail (Petrol)' },
+      { name: 'Jamuna Oil Company Ltd', price: 165, url: 'https://jamunaoil.gov.bd/', status: 'Regulated Retail (Octane)' }
     ]
   },
   {
@@ -8051,20 +8015,20 @@ const renderHubIcon = (iconName) => {
 
                       {/* Center: Specialized Detail Badges (Zero cut-off, clean typography) */}
                       {isGold ? (
-                        /* Gold Hallmark Detail (22K & 24K benchmark) */
+                        /* Gold Hallmark Detail (22K, 21K, 18K BAJUS Slashed benchmark) */
                         <div className="flex-1 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
-                              ✨ {lang === 'bn' ? 'বাজুস হলমার্ক রেট' : 'BAJUS Benchmark'}
+                              ✨ {lang === 'bn' ? 'বাজুস হলমার্ক রেট' : 'BAJUS Slashed Rate'}
                             </span>
                             <span className="text-xs font-bold text-[#92400E]">
                               {lang === 'bn'
-                                ? '২৪ ক্যারেট: ৳১৫৪,৭০০/ভরি • ২২ ক্যারেট: ৳১৪১,৮০০/ভরি'
-                                : '24K: ৳154,700/Vori • 22K: ৳141,800/Vori'}
+                                ? (hp.subtitle_bn || '২২ ক্যারেট: ৳২,১৭,৫৯২/ভরি • ২১ ক্যারেট: ৳২,০৭,৭৯৪/ভরি')
+                                : (hp.subtitle_en || '22K: ৳2,17,592/Bhori • 21K: ৳2,07,794/Bhori')}
                             </span>
                           </div>
                           <a
-                            href="https://www.bajus.org/"
+                            href="https://www.bajus.org/gold-price"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
@@ -8074,20 +8038,20 @@ const renderHubIcon = (iconName) => {
                           </a>
                         </div>
                       ) : isFuel ? (
-                        /* Fuel Energy Detail (Octane, Diesel, Petrol) */
+                        /* Fuel Energy Detail (Octane, Petrol, Kerosene, Diesel) */
                         <div className="flex-1 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="px-2 py-0.5 rounded-md bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
-                              ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC Regulated'}
+                              ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC Peak Freeze'}
                             </span>
                             <span className="text-xs font-bold text-[#1E40AF]">
                               {lang === 'bn'
-                                ? 'অকটেন: ৳১২৫/লি • ডিজেল: ৳১০৫/লি • পেট্রোল: ৳১২০/লি'
-                                : 'Octane: ৳125/L • Diesel: ৳105/L • Petrol: ৳120/L'}
+                                ? (hp.subtitle_bn || 'অকটেন: ৳১৬৫/লি • পেট্রোল: ৳১৬০/লি • ডিজেল: ৳১৩৫/লি')
+                                : (hp.subtitle_en || 'Octane: ৳165/L • Petrol: ৳160/L • Diesel: ৳135/L')}
                             </span>
                           </div>
                           <a
-                            href="https://padmaoil.gov.bd/"
+                            href="https://bpc.gov.bd/"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}

@@ -114,16 +114,18 @@ export default function AdminCommandCenter({
 
   // --- MACRO COMMODITY SCRAPER (GOLD & OIL) STATE ---
   const [macroData, setMacroData] = useState({
-    gold_22k_price: '৳19,550 / g (৳2,28,030 / bhori)',
-    gold_21k_price: '৳18,670 / g (৳2,17,765 / bhori)',
-    gold_24k_price: '৳1,29,200 / bhori',
+    gold_22k_price: '৳2,17,592 / bhori (৳18,655 / g)',
+    gold_21k_price: '৳2,07,794 / bhori (৳17,815 / g)',
+    gold_18k_price: '৳1,78,459 / bhori (৳15,300 / g)',
+    gold_trad_price: '৳1,45,800 / bhori (৳12,500 / g)',
     soybean_oil_price: '৳175 / litre (5L ৳850)',
     mustard_oil_price: '৳260 / litre',
-    octane_price: '৳125 / litre',
-    diesel_price: '৳105 / litre',
-    petrol_price: '৳121 / litre',
+    octane_price: '৳165 / litre',
+    petrol_price: '৳160 / litre',
+    kerosene_price: '৳155 / litre',
+    diesel_price: '৳135 / litre',
     last_refreshed: 'Just now',
-    source: 'BAJUS Official Portal & BPC Index'
+    source: 'BAJUS Official Portal & BPC Petroleum Index'
   });
   const [isScrapingMacro, setIsScrapingMacro] = useState(false);
   const [spiderCategoryFilter, setSpiderCategoryFilter] = useState('all');
@@ -169,13 +171,13 @@ export default function AdminCommandCenter({
               if (low.includes('gold')) {
                 return {
                   ...t,
-                  textEn: `22K Hallmarked Gold: ${res.data.gold_22k_price} · 21K: ${res.data.gold_21k_price || '৳18,670/g'} · Live Rate Tracked Across Verified Jewellers`
+                  textEn: `22K Hallmarked Gold: ${res.data.gold_22k_price} · 21K: ${res.data.gold_21k_price || '৳2,07,794 / bhori'} · Live Rate Tracked Across Verified Jewellers`
                 };
               }
               if (low.includes('oil') || low.includes('soybean')) {
                 return {
                   ...t,
-                  textEn: `Bottled Soybean Oil: ${res.data.soybean_oil_price} · Pure Mustard Oil: ${res.data.mustard_oil_price} · Fuel Octane: ${res.data.octane_price} · Diesel: ${res.data.diesel_price}`
+                  textEn: `Bottled Soybean Oil: ${res.data.soybean_oil_price} · Octane: ${res.data.octane_price} · Petrol: ${res.data.petrol_price} · Diesel: ${res.data.diesel_price} · Kerosene: ${res.data.kerosene_price || '৳155 / litre'}`
                 };
               }
               return t;
@@ -2362,7 +2364,7 @@ export default function AdminCommandCenter({
                     <span className="text-base">👑</span>
                   </div>
                   <span className="text-lg font-black text-amber-300 block">{macroData.gold_22k_price}</span>
-                  <span className="text-[11px] text-white/50 block mt-1">21K: {macroData.gold_21k_price} · 24K: {macroData.gold_24k_price}</span>
+                  <span className="text-[11px] text-white/50 block mt-1">21K: {macroData.gold_21k_price} · 18K: {macroData.gold_18k_price}</span>
                 </div>
 
                 {/* 2. Edible Cooking Oil */}
@@ -2382,7 +2384,7 @@ export default function AdminCommandCenter({
                     <span className="text-base">⛽</span>
                   </div>
                   <span className="text-lg font-black text-cyan-300 block">Octane {macroData.octane_price}</span>
-                  <span className="text-[11px] text-white/50 block mt-1">Diesel {macroData.diesel_price} · Petrol {macroData.petrol_price}</span>
+                  <span className="text-[11px] text-white/50 block mt-1">Diesel {macroData.diesel_price} · Petrol {macroData.petrol_price} · Kerosene {macroData.kerosene_price}</span>
                 </div>
 
                 {/* 4. Telemetry & Sync State */}

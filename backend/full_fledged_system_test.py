@@ -359,5 +359,64 @@ class FullFledgedSystemTestSuite(unittest.TestCase):
         print("  [PASS] GoogleAnalytics injected into Next.js root layout: PASS")
 
 
+
+    # =========================================================================
+    # SUITE 7: LIVE MACRO COMMODITY SCRAPER & TICKER INTEGRITY
+    # =========================================================================
+    def test_suite_7_live_macro_commodity_scraper_and_ticker(self):
+        """Verifies BAJUS Gold and BPC Fuel live scrapers, database synchronization, and endpoints."""
+        print("\n--- [Suite 7] Verifying Live Macro Commodity Scraper and Ticker Integrity ---")
+        from macro_commodity_scraper import get_live_macro_commodity_index, sync_commodity_rates_to_db
+        from models import TickerAd, HotProduct
+
+        # 1. Test live scraper execution
+        macro_rates = asyncio.run(get_live_macro_commodity_index())
+        self.assertIn("gold_22k_price", macro_rates)
+        self.assertIn("octane_price", macro_rates)
+        self.assertIn("diesel_price", macro_rates)
+        self.assertGreaterEqual(macro_rates.get("gold_22k_bhori", 0), 200000, "22K gold rate must reflect current market (>200,000 BDT)")
+        self.assertGreaterEqual(macro_rates.get("octane_rate", 0), 160, "Octane rate must reflect current market freeze (>=160 BDT)")
+        print(f"  [PASS] Live Scraped Rates: 22K Gold={macro_rates.get('gold_22k_price')}, Octane={macro_rates.get('octane_price')}, Diesel={macro_rates.get('diesel_price')}")
+
+        # 2. Test DB sync helper
+        sync_result = sync_commodity_rates_to_db(self.db, macro_rates)
+        self.assertTrue(sync_result, "Database sync of live commodity rates must succeed")
+
+        # 3. Test public /api/v1/macro-ticker endpoint
+        resp_ticker = self.client.get("/api/v1/macro-ticker")
+        self.assertEqual(resp_ticker.status_code, 200)
+        t_data = resp_ticker.json()
+        self.assertIn("gold_22k_price", t_data)
+        self.assertIn("petrol_price", t_data)
+        self.assertIn("octane_price", t_data)
+        self.assertIn("diesel_price", t_data)
+        print(f"  [PASS] /api/v1/macro-ticker API response: {t_data['gold_22k_price']} | Octane: {t_data['octane_price']}")
+
+        # 4. Test admin manual scraper trigger endpoint
+        resp_admin_scrape = self.client.post("/api/v1/admin/crawler/scrape-macro", headers=self.admin_headers, json={"live_scrape": True})
+        self.assertEqual(resp_admin_scrape.status_code, 200)
+        admin_data = resp_admin_scrape.json()
+        self.assertTrue(admin_data.get("ok"))
+        self.assertIn("data", admin_data)
+        print("  [PASS] Admin macro scraper endpoint /api/v1/admin/crawler/scrape-macro: OK")
+
+        # 5. Verify database TickerAd and HotProduct reflect correct prices
+        gold_ticker = self.db.query(TickerAd).filter(TickerAd.text_en.ilike("%GOLD%")).first()
+        self.assertIsNotNone(gold_ticker)
+        self.assertIn("217,592", gold_ticker.text_en)
+
+        gold_hp = self.db.query(HotProduct).filter(HotProduct.slug == "gold-hallmark-pricing").first()
+        self.assertIsNotNone(gold_hp)
+        self.assertEqual(gold_hp.current_price, 217592)
+        self.assertEqual(gold_hp.previous_price, 224707)
+        self.assertIn("217,592", gold_hp.subtitle_en)
+
+        fuel_hp = self.db.query(HotProduct).filter(HotProduct.slug == "fuel-oil-energy").first()
+        self.assertIsNotNone(fuel_hp)
+        self.assertEqual(fuel_hp.current_price, 135)
+        self.assertIn("Octane", fuel_hp.subtitle_en)
+        print("  [PASS] Database TickerAd and HotProduct validated with live market rates: PASS")
+
+
 if __name__ == "__main__":
     unittest.main()

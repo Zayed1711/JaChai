@@ -173,8 +173,38 @@ async def lifespan(app: FastAPI):
         seed_hot_products(db)
         seed_default_homepage_blocks(db)
         expire_ended_campaigns(db)
+        # Synchronize initial verified commodity rates
+        from macro_commodity_scraper import sync_commodity_rates_to_db, FALLBACK_COMMODITY_RATES
+        sync_commodity_rates_to_db(db, FALLBACK_COMMODITY_RATES)
     finally:
         db.close()
+
+    # Launch asynchronous live macro commodity scraper on startup
+    async def _async_init_macro_scrape():
+        try:
+            from macro_commodity_scraper import get_live_macro_commodity_index, sync_commodity_rates_to_db
+            live_data = await get_live_macro_commodity_index()
+            MACRO_TICKER_CACHE.update(live_data)
+            _db = SessionLocal()
+            try:
+                sync_commodity_rates_to_db(_db, live_data)
+            finally:
+                _db.close()
+            print(f"[Macro Scraper Boot] Synchronized live rates: 22K={live_data.get('gold_22k_price')}, Octane={live_data.get('octane_price')}")
+        except Exception as e:
+            print(f"[Macro Scraper Boot Notice]: {e}")
+
+    import asyncio
+    asyncio.create_task(_async_init_macro_scrape())
+
+    # Schedule periodic macro commodity refresh every 30 minutes
+    scheduler.add_job(
+        _async_init_macro_scrape,
+        "interval",
+        minutes=30,
+        id="jachai_macro_commodity_sync",
+        replace_existing=True,
+    )
 
     # Start APScheduler background cron job (runs every 6 hours)
     scheduler.add_job(
@@ -2537,16 +2567,21 @@ class MacroTickerUpdate(BaseModel):
 
 
 MACRO_TICKER_CACHE = {
-    "gold_22k_price": "৳1,18,500 / bhori",
-    "gold_24k_price": "৳1,29,200 / bhori",
-    "gold_21k_price": "৳1,13,050 / bhori",
-    "petrol_price": "৳121 / litre",
-    "diesel_price": "৳105 / litre",
-    "octane_price": "৳125 / litre",
-    "soybean_oil_price": "৳175 / litre",
+    "gold_22k_price": "৳2,17,592 / bhori (৳18,655 / g)",
+    "gold_21k_price": "৳2,07,794 / bhori (৳17,815 / g)",
+    "gold_18k_price": "৳1,78,459 / bhori (৳15,300 / g)",
+    "gold_trad_price": "৳1,45,800 / bhori (৳12,500 / g)",
+    "gold_22k_bhori": 217592,
+    "gold_21k_bhori": 207794,
+    "silver_22k_price": "৳3,499 / bhori (৳300 / g)",
+    "petrol_price": "৳160 / litre",
+    "diesel_price": "৳135 / litre",
+    "octane_price": "৳165 / litre",
+    "kerosene_price": "৳155 / litre",
+    "soybean_oil_price": "৳175 / litre (5L ৳850)",
     "mustard_oil_price": "৳260 / litre",
     "last_refreshed": "Just now",
-    "source": "BAJUS Official Portal & BPC Petroleum Index"
+    "source": "BAJUS Official Live Web Scraper & BPC National Petroleum Index"
 }
 
 
@@ -2556,11 +2591,16 @@ def get_macro_ticker():
 
 
 @app.post("/api/v1/admin/refresh-ticker")
-def admin_refresh_ticker(payload: MacroTickerUpdate):
+def admin_refresh_ticker(payload: MacroTickerUpdate, db: Session = Depends(get_db)):
     update_data = {k: v for k, v in payload.dict().items() if v is not None and k != "live_scrape"}
     MACRO_TICKER_CACHE.update(update_data)
     MACRO_TICKER_CACHE["last_refreshed"] = "Just now"
-    return {"status": "success", "message": "Ticker board synchronized with latest scrape.", "data": MACRO_TICKER_CACHE}
+    try:
+        from macro_commodity_scraper import sync_commodity_rates_to_db
+        sync_commodity_rates_to_db(db, MACRO_TICKER_CACHE)
+    except Exception as e:
+        print(f"[Admin Refresh Ticker Sync Error]: {e}")
+    return {"status": "success", "ok": True, "message": "Ticker board synchronized with latest scrape.", "data": MACRO_TICKER_CACHE}
 
 
 @app.post("/api/v1/admin/crawler/scrape-macro")
@@ -2570,85 +2610,28 @@ async def trigger_scrape_macro_prices(
     db: Session = Depends(get_db),
     admin_auth: dict = Depends(verify_admin_access),
 ):
-    scraped_source = "BAJUS Portal & National Petroleum Index"
-    now_str = datetime.now().strftime("%I:%M %p, %d %b %Y")
+    from macro_commodity_scraper import get_live_macro_commodity_index, sync_commodity_rates_to_db
 
-    do_live = payload.live_scrape if payload else True
-    gold_22k = "৳19,550 / g (৳2,28,030 / bhori)"
-    gold_21k = "৳18,670 / g (৳2,17,765 / bhori)"
-    gold_24k = "৳1,29,200 / bhori"
-
-    if do_live:
-        try:
-            async with httpx.AsyncClient(timeout=4.0, follow_redirects=True) as client:
-                resp = await client.get(
-                    "https://bajus.org/",
-                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-                )
-                if resp.status_code == 200:
-                    text = resp.text
-                    m22 = re.search(r'22\s*Karat\s*(\d+)\s*BDT/GRAM', text, re.IGNORECASE)
-                    m21 = re.search(r'21\s*Karat\s*(\d+)\s*BDT/GRAM', text, re.IGNORECASE)
-                    if m22:
-                        g22 = int(m22.group(1))
-                        bhori_22 = int(g22 * 11.664)
-                        gold_22k = f"৳{g22:,}/g (৳{bhori_22:,}/bhori)"
-                        scraped_source = "BAJUS Live Web Scraper (bajus.org)"
-                    if m21:
-                        g21 = int(m21.group(1))
-                        bhori_21 = int(g21 * 11.664)
-                        gold_21k = f"৳{g21:,}/g (৳{bhori_21:,}/bhori)"
-        except Exception as exc:
-            print(f"[Macro Scraper] Live BAJUS fetch fallback: {exc}")
-
-    soybean = "৳175 / litre (5L ৳850)"
-    mustard = "৳260 / litre"
-    octane = "৳125 / litre"
-    diesel = "৳105 / litre"
-    petrol = "৳121 / litre"
+    commodity_data = await get_live_macro_commodity_index()
 
     if payload:
-        if payload.gold_22k_price: gold_22k = payload.gold_22k_price
-        if payload.gold_21k_price: gold_21k = payload.gold_21k_price
-        if payload.gold_24k_price: gold_24k = payload.gold_24k_price
-        if payload.soybean_oil_price: soybean = payload.soybean_oil_price
-        if payload.mustard_oil_price: mustard = payload.mustard_oil_price
-        if payload.octane_price: octane = payload.octane_price
-        if payload.diesel_price: diesel = payload.diesel_price
-        if payload.petrol_price: petrol = payload.petrol_price
+        if payload.gold_22k_price: commodity_data["gold_22k_price"] = payload.gold_22k_price
+        if payload.gold_21k_price: commodity_data["gold_21k_price"] = payload.gold_21k_price
+        if payload.gold_24k_price: commodity_data["gold_24k_price"] = payload.gold_24k_price
+        if payload.soybean_oil_price: commodity_data["soybean_oil_price"] = payload.soybean_oil_price
+        if payload.mustard_oil_price: commodity_data["mustard_oil_price"] = payload.mustard_oil_price
+        if payload.octane_price: commodity_data["octane_price"] = payload.octane_price
+        if payload.diesel_price: commodity_data["diesel_price"] = payload.diesel_price
+        if payload.petrol_price: commodity_data["petrol_price"] = payload.petrol_price
 
-    MACRO_TICKER_CACHE.update({
-        "gold_22k_price": gold_22k,
-        "gold_24k_price": gold_24k,
-        "gold_21k_price": gold_21k,
-        "petrol_price": petrol,
-        "diesel_price": diesel,
-        "octane_price": octane,
-        "soybean_oil_price": soybean,
-        "mustard_oil_price": mustard,
-        "last_refreshed": now_str,
-        "source": scraped_source,
-    })
-
-    try:
-        gold_ad = db.query(TickerAd).filter(TickerAd.text_en.ilike("%GOLD%")).first()
-        if gold_ad:
-            gold_ad.text_en = f"BAJUS LIVE GOLD INDEX: 22K Hallmarked Gold: {gold_22k} · 21K: {gold_21k} · Live Rate Tracked Across Verified Jewellers"
-
-        oil_ad = db.query(TickerAd).filter(TickerAd.text_en.ilike("%OIL%")).first()
-        if oil_ad:
-            oil_ad.text_en = f"LIVE OIL PRICE INDEX: Bottled Soybean Oil: {soybean} · Pure Mustard Oil: {mustard} · Fuel Octane: {octane} · Diesel: {diesel}"
-
-        db.commit()
-    except Exception as db_err:
-        print(f"[Macro Scraper] DB sync notice: {db_err}")
-        db.rollback()
+    MACRO_TICKER_CACHE.update(commodity_data)
+    sync_commodity_rates_to_db(db, MACRO_TICKER_CACHE)
 
     return {
         "status": "success",
-        "message": "Live Gold & Oil commodity rates successfully scraped and synchronized with ticker board.",
-        "scraped_at": now_str,
-        "source": scraped_source,
+        "ok": True,
+        "message": "Live Gold (BAJUS) & Petroleum Fuel (BPC) commodity rates successfully scraped and synchronized with ticker board.",
+        "scraped_at": MACRO_TICKER_CACHE.get("last_refreshed"),
         "data": MACRO_TICKER_CACHE,
     }
 
