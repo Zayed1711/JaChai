@@ -277,6 +277,13 @@ def sync_commodity_rates_to_db(db, commodity_data: Dict[str, Any]) -> bool:
             gold_hp.latest_release_name = f"22K Hallmark: ৳{gold_bhori_22:,}/Bhori (Down by ৳5,481) • 21K: ৳2,07,794"
             gold_hp.latest_release_price = gold_bhori_22
             gold_hp.latest_release_badge = "BAJUS Slashed Rate"
+            import json as _json
+            gold_hp.stores_json = _json.dumps([
+                {"name": "BAJUS Official Benchmark", "price": gold_bhori_22, "url": "https://www.bajus.org/gold-price", "status": "National Hallmark"},
+                {"name": "Diamond World BD", "price": gold_bhori_22, "url": "https://diamondworldltd.com/", "status": "Certified 22K/21K"},
+                {"name": "Apan Jewellers", "price": gold_bhori_22, "url": "https://apanjewellers.com/", "status": "Certified 22K/21K"},
+                {"name": "Al-Amin Jewellers", "price": gold_bhori_22, "url": "https://alaminjewellers.com/", "status": "In Stock"}
+            ], ensure_ascii=False)
 
         # 4. Update HotProduct: Fuel Energy
         fuel_hp = db.query(HotProduct).filter(HotProduct.slug == "fuel-oil-energy").first()
@@ -288,6 +295,15 @@ def sync_commodity_rates_to_db(db, commodity_data: Dict[str, Any]) -> bool:
             fuel_hp.latest_release_name = f"Octane: {octane} • Petrol: {petrol} • Kerosene: {kerosene} • Diesel: {diesel}"
             fuel_hp.latest_release_price = commodity_data.get("octane_rate", 165)
             fuel_hp.latest_release_badge = "BPC Peak Freeze"
+            import json as _json
+            d_rate = commodity_data.get("diesel_rate", 135)
+            p_rate = commodity_data.get("petrol_rate", 160)
+            o_rate = commodity_data.get("octane_rate", 165)
+            fuel_hp.stores_json = _json.dumps([
+                {"name": "Padma Oil Company Ltd", "price": d_rate, "url": "https://padmaoil.gov.bd/", "status": "Regulated Retail (Diesel)"},
+                {"name": "Meghna Petroleum Ltd", "price": p_rate, "url": "https://mpl.gov.bd/", "status": "Regulated Retail (Petrol)"},
+                {"name": "Jamuna Oil Company Ltd", "price": o_rate, "url": "https://jamunaoil.gov.bd/", "status": "Regulated Retail (Octane)"}
+            ], ensure_ascii=False)
 
         # 5. Update Product and StoreOffers: gold-jewellery
         gold_prod = db.query(Product).filter(Product.slug == "gold-jewellery").first()

@@ -815,7 +815,7 @@ DEFAULT_HOT_PRODUCTS = [
         "unit_bn": "শুরু / ভরি",
         "icon_name": "Sparkles",
         "display_order": 1,
-        "price_change_type": "decrease",
+        "price_change_type": "drop",
         "price_change_amount": 5481,
         "price_change_percent": 2.4,
         "latest_release_name": "22K Hallmark: ৳2,17,592/Bhori (Down by ৳5,481) • 21K: ৳2,07,794/Bhori",
@@ -1209,13 +1209,22 @@ def seed_hot_products(db: Session) -> None:
                 added += 1
             else:
                 existing_hp = existing_records[item["slug"]]
-                # Ensure latest release data is synced if missing
-                if item.get("latest_release_name") and not existing_hp.latest_release_name:
-                    existing_hp.latest_release_name = item.get("latest_release_name")
-                    existing_hp.latest_release_price = item.get("latest_release_price")
-                    existing_hp.latest_release_badge = item.get("latest_release_badge")
-                    existing_hp.latest_release_url = item.get("latest_release_url")
-                    updated += 1
+                existing_hp.title_en = item["title_en"]
+                existing_hp.title_bn = item["title_bn"]
+                existing_hp.subtitle_en = item.get("subtitle_en", "")
+                existing_hp.subtitle_bn = item.get("subtitle_bn", "")
+                existing_hp.current_price = item.get("current_price", 0)
+                existing_hp.previous_price = item.get("previous_price", 0)
+                existing_hp.unit_en = item.get("unit_en", "Starts from")
+                existing_hp.unit_bn = item.get("unit_bn", "শুরু")
+                existing_hp.icon_name = item.get("icon_name", "Smartphone")
+                existing_hp.stores_json = json.dumps(item.get("stores", []), ensure_ascii=False)
+                existing_hp.latest_release_name = item.get("latest_release_name")
+                existing_hp.latest_release_price = item.get("latest_release_price")
+                existing_hp.latest_release_badge = item.get("latest_release_badge")
+                existing_hp.latest_release_url = item.get("latest_release_url")
+                existing_hp.last_calibrated_at = datetime.utcnow()
+                updated += 1
         if added > 0 or updated > 0:
             db.commit()
             print(f"[JaChai Seeder] Seeded {added} Hot Product benchmark records, updated {updated} existing.")

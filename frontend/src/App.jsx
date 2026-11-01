@@ -1674,11 +1674,11 @@ const INITIAL_PRODUCTS = [
 
 
 
-    price: 118450,
+    price: 217592,
 
 
 
-    originalPrice: 121500,
+    originalPrice: 224707,
 
 
 
@@ -1710,15 +1710,15 @@ const INITIAL_PRODUCTS = [
 
 
 
-      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 115200 },
+      { labelEn: '30d Ago', labelBn: '৩০ দিন আগে', price: 228000 },
 
 
 
-      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 116800 },
+      { labelEn: '15d Ago', labelBn: '১৫ দিন আগে', price: 224707 },
 
 
 
-      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 118450 }
+      { labelEn: 'Today Lowest', labelBn: 'আজকে সর্বনিম্ন', price: 217592 }
 
 
 
@@ -1770,7 +1770,7 @@ const INITIAL_PRODUCTS = [
 
 
 
-        price: 118450,
+        price: 217592,
 
 
 
@@ -1826,7 +1826,7 @@ const INITIAL_PRODUCTS = [
 
 
 
-        price: 118450,
+        price: 217592,
 
 
 
@@ -1886,7 +1886,7 @@ const INITIAL_PRODUCTS = [
 
 
 
-        price: 118800,
+        price: 217592,
 
 
 
@@ -1942,7 +1942,7 @@ const INITIAL_PRODUCTS = [
 
 
 
-        price: 119200,
+        price: 218000,
 
 
 
@@ -2281,7 +2281,7 @@ const INITIAL_HOT_PRODUCTS = [
     unit_en: 'Starts from / Vori',
     unit_bn: 'শুরু / ভরি',
     icon_name: 'Sparkles',
-    price_change_type: 'decrease',
+    price_change_type: 'drop',
     price_change_amount: 5481,
     price_change_percent: 2.4,
     latest_release_name: '22K Hallmark: ৳2,17,592/Bhori (Down by ৳5,481) • 21K: ৳2,07,794/Bhori',
@@ -8019,12 +8019,12 @@ const renderHubIcon = (iconName) => {
                         <div className="flex-1 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
-                              ✨ {lang === 'bn' ? 'বাজুস হলমার্ক রেট' : 'BAJUS Slashed Rate'}
+                              ✦ {lang === 'bn' ? 'বাজুস বেঞ্চমার্ক' : 'BAJUS BENCHMARK'}
                             </span>
                             <span className="text-xs font-bold text-[#92400E]">
                               {lang === 'bn'
-                                ? (hp.subtitle_bn || '২২ ক্যারেট: ৳২,১৭,৫৯২/ভরি • ২১ ক্যারেট: ৳২,০৭,৭৯৪/ভরি')
-                                : (hp.subtitle_en || '22K: ৳2,17,592/Bhori • 21K: ৳2,07,794/Bhori')}
+                                ? '২২ ক্যারেট: ৳২,১৭,৫৯২/ভরি • ২১ ক্যারেট: ৳২,০৭,৭৯৪/ভরি'
+                                : '22K: ৳2,17,592/Vori • 21K: ৳2,07,794/Vori'}
                             </span>
                           </div>
                           <a
@@ -8038,16 +8038,16 @@ const renderHubIcon = (iconName) => {
                           </a>
                         </div>
                       ) : isFuel ? (
-                        /* Fuel Energy Detail (Octane, Petrol, Kerosene, Diesel) */
+                        /* Fuel Energy Detail (Octane, Diesel, Petrol) */
                         <div className="flex-1 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-3.5 py-2 flex items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="px-2 py-0.5 rounded-md bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
-                              ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC Peak Freeze'}
+                              ⛽ {lang === 'bn' ? 'বিপিসি নির্ধারিত দর' : 'BPC REGULATED'}
                             </span>
                             <span className="text-xs font-bold text-[#1E40AF]">
                               {lang === 'bn'
-                                ? (hp.subtitle_bn || 'অকটেন: ৳১৬৫/লি • পেট্রোল: ৳১৬০/লি • ডিজেল: ৳১৩৫/লি')
-                                : (hp.subtitle_en || 'Octane: ৳165/L • Petrol: ৳160/L • Diesel: ৳135/L')}
+                                ? 'অকটেন: ৳১৬৫/লি • ডিজেল: ৳১৩৫/লি • পেট্রোল: ৳১৬০/লি'
+                                : 'Octane: ৳165/L • Diesel: ৳135/L • Petrol: ৳160/L'}
                             </span>
                           </div>
                           <a
@@ -8111,10 +8111,10 @@ const renderHubIcon = (iconName) => {
 
                         {/* Price Change Highlighting Pill */}
                         <div className="flex items-center gap-2.5">
-                          {hp.price_change_type === 'drop' && (
+                          {(hp.price_change_type === 'drop' || hp.price_change_type === 'decrease') && (
                             <span className="px-2.5 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#047857] text-xs font-black flex items-center gap-1 shadow-2xs whitespace-nowrap">
                               <span>▼</span>
-                              <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} ({hp.price_change_percent}%)</span>
+                              <span>৳{Number(hp.price_change_amount || 0).toLocaleString()} (-{hp.price_change_percent}%)</span>
                             </span>
                           )}
                           {hp.price_change_type === 'increase' && (
